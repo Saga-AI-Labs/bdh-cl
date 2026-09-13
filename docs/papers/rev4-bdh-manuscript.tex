@@ -21,9 +21,9 @@
 \newcommand{\Xa}{\mathcal{X}_A}
 \newcommand{\TA}{\mathcal{T}_A}
 
-\title{\bfseries Append-Only Neural Memory: Storage, Addressing, and Growth\\ \large in a Depth-Recurrent Language Model \textnormal{(Revision 4.5)}}
+\title{\bfseries Append-Only Neural Memory: Storage, Addressing, and Growth\\ \large in a Depth-Recurrent Language Model \textnormal{(Revision 4.6)}}
 \author{Agon Sandro Buchholz\\\small Saga AI Labs}
-\date{September 12, 2026}
+\date{September 13, 2026}
 
 \begin{document}
 \maketitle
@@ -405,6 +405,10 @@ for fi (four crops lost to its Estonian neighbor) and family wanderings (cs/pl$\
 Romance$\to$ro); none of that remains. The family structure that governs \emph{error}
 modes (FCS oscillation, cross-script attraction) disappears when every territory exists:
 routing is exact. Because the router selects on the first 128 tokens of a crop and the serving evaluation uses the remaining 384 tokens of the same crop, this is an online-routing protocol, not a held-out split. At 20/20 domains with 40/40 crops each, the observed routing is therefore \emph{oracle serving} for this benchmark: per-sample selection buys nothing that a fixed correct assignment would not also give. That observation holds only where accuracy is 100\% and does not transfer to regimes whose routing falls below it.
+The assignment is not a same-crop artifact: in a separate eval-only run that chooses each route on crops
+disjoint from those served (a held-out byte window split in halves, selection crops never seen by the
+serving phase), the fixed route still resolves to the true acquisition width for all 20 domains
+(	exttt{docs/reports/2026-09-13\_quinn\_tier1-router-split-report.md}, bdh/2166c24).
 
 \begin{figure}[t]
 \centering
