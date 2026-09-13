@@ -5,6 +5,8 @@
 > [*The Dragon Hatchling: The Missing Link between the Transformer and Models of the Brain*](https://arxiv.org/abs/2509.26507)).
 > Everything about the base architecture, its paper, and its license lives there.
 > **This README describes only what this fork adds.**
+>
+> This fork lives at [**Saga-AI-Labs/bdh-cl**](https://github.com/Saga-AI-Labs/bdh-cl).
 
 ---
 
