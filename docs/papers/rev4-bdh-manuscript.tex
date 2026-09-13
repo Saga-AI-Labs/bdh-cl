@@ -953,6 +953,18 @@ that organizes routing and family structure is the natural candidate---territori
 byte statistics are similar carry similar likelihoods, so the prefix score has local
 minima by construction---but that link is a hypothesis here, not a result.
 
+(iv)~\emph{Architecture versus training objective.} The headline contrast between the
+fixed-capacity floor (destruction) and the growth ladder (preservation) moves two
+variables at once: the capacity mechanism \emph{and} the route-aware auxiliary loss
+($\alpha=0.9$, Section~\ref{sec:protocol}), which is present for the growth phases and
+absent for the floor. Each is disclosed in its own section, so the paper never juxtaposes
+them where the comparison is asserted---and therefore cannot separate how much of the
+recovered routed-serving competence is bought by the architecture and how much by the
+objective. We report the construction and the objective we actually trained, not a claim
+about either in isolation. Isolating them is a \emph{follow-up project}, not part of this
+one: the same growth, masking and restore, with \texttt{route\_aware=False}, read against
+this ladder.
+
 \textbf{Scope we did not cover.} Single seed per run (measured floor 2--4\%); one
 language ordering per ladder; byte-level models only; $100$M--$579$M parameters; twenty
 growth phases; all domains from parallel-corpus-adjacent registers. The addressing results
@@ -962,8 +974,8 @@ knowledge, code-versus-prose).
 
 \textbf{What would settle each.} Held-out unseen-language validation with thresholds
 frozen before the test set is touched (conformal calibration); a multi-seed repetition of
-the headline retention and routing numbers; a multi-order ladder; and the two probes our
-measurements motivate---a domain-continual-learning probe on non-parallel registers, and
+the headline retention and routing numbers; a multi-order ladder; the isolating arm above
+(architecture fixed, route-aware loss toggled); and the two probes our measurements motivate---a domain-continual-learning probe on non-parallel registers, and
 an embedding-level addresser that would extend addressing past byte geometry. None of
 these is a correction to what is reported here; each extends it.
 
