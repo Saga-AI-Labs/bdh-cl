@@ -37,12 +37,15 @@ superseded it to 17 / 88 GiB. Use 17 / 88 going forward.
 
 ## Open items (queued)
 
-1. **Phase-1b destination (operator ruling pending)** — replicate the 17 single-copy ladRA2 (88 GiB) to
-   either a second public dataset repo `Saga-AI-Labs/bdh-cl_phase-1b` (XET, ~1-2 h) or a copy to `.200`
-   (6.1 T free). Do NOT delete these from gx10 until that destination is confirmed and verified.
-2. **RA2b second copy (risk, operator ruling pending)** — RA2b (152 GiB) is now single-copy on HF after
-   the local delete. pi-50 (#296) recommends a re-download to `.200` (~6 h at ~7 MB/s) to remove the
-   single-point-of-failure. Queued behind the operator's replication decision.
+1. **phase-1b upload — destination ruled by operator (2026-09-15)** — the 17 single-copy ladRA2 files
+   (88 GiB) go to the HF dataset repo `Saga-AI-Labs/bdh-cl_phase-1b` (public, created via token).
+   Upload started 17:12 CEST (`upload_phase1b.py`, hardlink staging + card + XET). The 17 stay on
+   gx10 until remote verification; only after that will a deletion intent envelope name them
+   (HAK protocol — operator go #298-style).
+2. **RA2b second copy — RULED OUT by operator (2026-09-15)** — RA2b (152 GiB) stays single-copy on
+   HF; gx10 needs the space. Risk (pi-50 #296: single point of failure, damage-then-notice) is
+   explicitly accepted, not overlooked. If the repo is ever needed locally again, re-download
+   (~6 h) is the recovery path.
 3. **`.200` replication audit (pi-50, #290 §5)** — 380 unique files / 733 GiB live only on `.200`.
    Replication (not cleanup) to be scoped; untouched by me.
 4. **Paper + GitHub notes** — after the above settles: add notes in the manuscript and the GitHub README
