@@ -11,3 +11,7 @@ __pycache__/
 # HuggingFace upload staging (large hardlinked checkpoints) and token — never commit
 hf_phase1_upload/
 .hf_token
+
+# HuggingFace phase-1b upload staging and cache - never commit
+hf_phase1b_upload/
+.cache/
