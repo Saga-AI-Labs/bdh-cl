@@ -7,3 +7,7 @@ __pycache__/
 .kilocode/
 .skills/
 .venv/
+
+# HuggingFace upload staging (large hardlinked checkpoints) and token — never commit
+hf_phase1_upload/
+.hf_token
