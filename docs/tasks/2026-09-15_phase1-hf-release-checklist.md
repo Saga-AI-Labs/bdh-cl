@@ -55,6 +55,25 @@ superseded it to 17 / 88 GiB. Use 17 / 88 going forward.
 6. **Descriptions and tags** — HuggingFace (dataset page) and GitHub (repo topics) need proper
    descriptions and keyword tagging for Saga-AI-Labs pages.
 
+## gx10 cleanup round — operator rulings, 2026-09-15 (17:45)
+
+- **17 single-copy ladRA2 (+88 GiB)** — delete from gx10 only after phase-1b remote verification AND
+  an intent envelope naming the exact files with pi-50's ack (the #298 pattern). Upload started
+  17:12; measured ~2.9 MB/s across ~10 concurrent XET streams means real completion overnight, not
+  evening — correction to my earlier ~2 h ETA (RA2 is a different ladder family than phase-1, so
+  far less XET dedup; near-raw bytes go over the wire).
+- **`/test.img` (10 GiB)** — operator ruled it deletable ("not mine, can go"). BLOCKER: the file is
+  `root:root`, this agent runs as `a0-quinn` with no sudo; one `sudo rm /test.img` on gx10 frees it.
+  Verified not a loop device, not mounted, no fstab reference.
+- **`vllm/ple_cache` (27 GiB)** — operator ruled: KEEP. It is regenerated on the next local-model
+  start anyway, so deletion buys only transient space at the cost of a forced rebuild — not worth it.
+- **Qwen stock twin + gated keys twin (99+99 GiB)** — stay (operator: both Qwen models must remain;
+  the keys repo is "conserve" per pi-50 #290, gated and ~5 h to re-pull).
+- **Retrieval spot-check (pi-50 #303, agreed)** — after phase-1b `done`: pi-50 downloads 3 random
+  RA2b + 1 phase-1b files and hashes them against the committed tables (~15 GiB, ~40 min, run after
+  the upload so we do not compete for the uplink). Converts durable provenance into live restore
+  coverage (currently 1/40 proven end-to-end).
+
 ## Related (separate project)
 
 - **Skald** (working name, operator-liked) — consolidated eval-haus: suite adapters (BDH-CL, pi-50
