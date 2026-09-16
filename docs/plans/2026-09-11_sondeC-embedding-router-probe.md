@@ -21,7 +21,36 @@ or distill it from BDH itself. This probe tests the own-AI variant first.
 
 ## Design
 
-Three arms, all inference-only or offline-fitting; no ladder training.
+### Phase 0 — Multilingual Base (C0, prerequisite for family-adjacent arm)
+
+The Sonde B finding (§6, commit `6f6368d`) showed the base is English-prose-only
+(`BASE_SPEC = prose:wiki.train.raw` only; `de45.txt`/`parl45.txt`/`wiki45.txt` present on disk
+but never included). This invalidated the 'family-adjacent to base' explanation for legal's
+P-B3 leak (the base has no multilingual context). For Arm 1 to test the family-adjacent
+hypothesis meaningfully — and for the P-C4 OOD-consistency arm to have a natural base
+overlap source — C0 runs a multilingual base chain before any C arms.
+
+- **Base spec:** `prose:wiki.train.raw,de:de45.txt,wikide:wiki45.txt` (~630 MB total).
+  `parl45.txt` excluded: contents unverified, possible Europarl contamination risk per plan.
+- **CL phases:** identical to Sonde B (code/math/legal/ga, +32 each, route-aware α=0.9,
+  fresh optimizer, F-V9 step-end restore). Width ladder 128→160→192→224→256.
+- **Output prefix:** `bdh_textmix_ladC-*` (distinct from `ladB-*`; both ladders coexist).
+- **Instruments (run inside C0, no separate job):**
+  - P5 in-chain all 4 transitions (4/4 expected — mechanism is base-composition-blind)
+  - routing confusion (5 domains, 200 crops, window 128) — serves as labels for Arms 1–3
+  - legal depth (200 crops, own prefix vs neighbours) — direct comparison with Sonde B's
+    197/200 legal result: if C0 routes 200/200, B's leak was base-composition-induced;
+    if C0 also leaks ~3/200, the leak is byte-geometry-intrinsic (Sonde C premise confirmed
+    as domain-independent)
+- **Budget:** ~13 h GPU on .200, same as Sonde B.
+- **Script:** `scripts/quinn/ladder_sondeC.sh`.
+- **C0 exits become Arm 1 inputs:** the `ladC-ga_last.pt` checkpoint is the model for
+  residual extraction; the `ladC_routdiag_labels.txt` confusion matrix is the argmin-NLL
+  label table. No additional ladder training after C0 is complete.
+
+### Arms 1–3 (unchanged)
+
+Three arms, all inference-only or offline-fitting; no further ladder training beyond C0.
 
 ### Arm 1 — Self-distilled linear head on BDH early residuals (own-AI default)
 
@@ -91,13 +120,16 @@ This is the PoC addressing architecture if Arms 1–2 work.
 
 ## Budget
 
-- Label generation: 20 domains × 96 crops × 23 widths on RA2b-lt (already
-  exists as the r3b density run's persisted features, if pi-50's format is
-  reusable) — ~2 h GPU if regenerated.
+- **C0 (base + 4 phases + evals, .200/rtx4090):** ~13 h GPU — identical budget to Sonde B.
+  Script: `scripts/quinn/ladder_sondeC.sh`. C0 exits are the inputs for Arms 1–3; no
+  additional ladder training after C0.
+- Label generation (RA2b-lt fallback if C0 not yet done): 20 domains × 96 crops × 23 widths
+  — ~2 h GPU if regenerated. C0's built-in 200-crop eval_router run supersedes this
+  if C0 completes first.
 - Residual extraction + head fitting: minutes (CPU or one GPU pass).
-- External embedding control: one MiniLM pass over the same crops, ~minutes
-  on the 4090.
-- **Total: ≤ 3 h GPU.**
+- External embedding control: one MiniLM pass over the same crops, ~minutes on the 4090.
+- **Total: ≤ 16 h GPU** (C0 ≈ 13 h + Arms 1–3 ≤ 3 h; arms can run once C0's final
+  eval_router step completes).
 
 ## Relationship to prior work
 
@@ -110,7 +142,8 @@ that positioning.
 
 ## Non-goals
 
-- No new ladder training.
+- No new ladder training beyond C0 (§Phase 0). Arms 1–3 are inference-only or
+  offline-fitting; C0 is the one prerequisite exception, not an arm.
 - No own embedding-model pretraining (that is a Gate C-PARTIAL contingency,
   not this probe).
 - No serving integration (cascade design only; integration is PoC work).
