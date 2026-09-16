@@ -30,13 +30,34 @@ instantiation.
   train split (1340 crops, no refit tuning); per-language mean per-byte NLL and
   margin on OOD crops; calibration band from the 580 held-out trained crops.
 
-## Two-axis rule, byte instantiation (preregistered thresholds)
+## Two-axis rule, byte instantiation (preregistered construction)
 
-1. **Relative:** mixture-NLL / best-class-NLL < 5 → candidate in-support
-   (mixture = uniform over the 20 trained class models; byte analogue of the
-   joint/best ratio).
-2. **Absolute:** best-class per-byte NLL ≤ 10× the worst trained held-out
-   language mean (band from the 580 trained held-out crops).
+Amendment 2026-09-17 (same day, before any OOD number was measured): the
+relative axis originally read "mixture-NLL / best-class-NLL < 5". That
+construction is wrong for the byte side — a likelihood mixture is max-dominated
+(even trained languages would score ratio ≈ 1). The byte analogue of the
+likelihood joint-vs-routed ratio is ONE pooled class-agnostic byte model vs the
+best per-class model; direction as in Stage A (trained ⇒ high ratio, OOD ≈ 1).
+Amended construction, frozen before any OOD scoring:
+
+1. **Relative:** joint/best ratio per crop = NLL_joint / NLL_best_class, where
+   NLL_joint is the pooled byte-4-gram model fit on all 1340 train crops (one
+   model, byte analogue of the full-width model) and NLL_best_class is the best
+   of the 20 per-class models. A language is accepted on the relative axis iff
+   its mean crop ratio ≥ τ_rel, with τ_rel = min over the 20 trained languages
+   of their language-mean ratio (calibrated on the 580 trained held-out crops
+   only; the weakest trained language defines the bar).
+2. **Absolute:** a language is accepted on the absolute axis iff its mean
+   best-class per-byte NLL ≤ 10× the worst trained language mean (band from the
+   580 trained held-out crops; the Stage A factor, frozen).
+
+Accepted = both axes pass. Language-level means decide (as in Stage A X3);
+crop-level rates are reported descriptively with Wilson intervals. Under this
+calibration the trained-language falsifier direction is nearly vacuous by
+construction (τ_rel is the weakest trained mean); the teeth of the test are on
+the OOD side. Direction note for the record: Stage A rejected on LOW ratio
+(byte-near unseen had ratio ≈ 1, trained ≈ 5.7×); this byte instantiation
+keeps that direction — accept iff ratio ≥ τ_rel AND NLL within the band.
 
 ## Pre-registered predictions
 
