@@ -1,11 +1,11 @@
 # Sonde A — Scaling Probe (Territories × Model Size)
 
-Status: PRE-REGISTERED DRAFT v0.1 · 2026-09-16 · Quinn · Operator GO: pending
+Status: PRE-REGISTERED DRAFT v0.2 · 2026-09-16 · Quinn · Operator GO: pending
+Revision: v0.2 folds in the completed Sonde C0 (multilingual base, 999/1000 routing, byte-intrinsic legal leak); Arms 1-3 and their `TBD-C*` placeholders remain open.
 Position in roadmap: between Sonde C and the PoC full pretrain (first mentioned in
 the 2026-09-11 roadmap conversation; B plan: "Sonde A (scaling probe) is drafted
-separately"). Depends on: Sonde B (**B-PASS**) and Sonde C (**running** — every
-C-dependent parameter below is an explicit `TBD-C` placeholder, to be filled after C's
-final report).
+separately"). Depends on: Sonde B (**B-PASS**) and Sonde C (**C0 complete; Arms 1-3 pending**).
+Every C-dependent parameter below stays an explicit `TBD-C` placeholder until the arms run.
 
 ## Preconditions (one sentence each)
 
@@ -14,11 +14,16 @@ domain — all five pre-registered predictions P-B1..P-B5 PASS, the storage thes
 bit-exact through 4 growth transitions on non-language classes (P5 4/4), routing
 199/200 with the one legal leak confirmed real at 200-crop depth
 (`docs/reports/phase_2/2026-09-16_probe-b.md`, commits `6f6368d`/`b17de39`).
-- **Sonde C (started 2026-09-16 06:54, host .200):** C0 (multilingual base + 4 CL
-phases + P5 + 200-crop labels, ETA ≈ 19:54) then Arms 1–3 (≤ 3 h) — whether
-self-distilled residual addressing beats byte-n-gram on the non-distinct cells is
-**measured, not assumed**; until then A's serving-side configuration is undefined
-(`TBD-C1`, `TBD-C3`, `TBD-C-GATE`).
+- **Sonde C0 (2026-09-16 06:54-13:00, host .200):** the prerequisite multilingual-base
+  ladder is **complete** - base 2.33 ppl, 5/5 phases, P5 in-chain 4/4 PASS, routing
+  **999/1000** (200 crops/domain), legal depth **198/200**
+  (`docs/reports/phase_2/2026-09-16_probe-c.md`, commit `d8c2fe0`). Headline: the
+  multilingual base did **not** close legal’s leak (Sonde B 197/200 -> C0 198/200),
+  so the leak is **byte-geometry-intrinsic, not base-composition** - A’s hard cells
+  are therefore base-independent and the C0 label set is a valid anchor.
+- **Sonde C Arms 1-3 (P-C1..P-C4): not yet run** - whether a self-distilled residual
+  head beats byte-n-gram on those hard cells is **measured, not assumed**; until then
+  A’s serving-side configuration stays undefined (`TBD-C1`, `TBD-C3`, `TBD-C-GATE`).
 
 ## Purpose (the M4 bet)
 
@@ -142,7 +147,11 @@ roadmap's resource-planning leg; no overlap with B (existence) or C (addressabil
 - No full PoC pretrain (that is the next gate's consumer).
 - No new addressing mechanisms — A **scales** what C's gate endorses, it does not design it.
 
-## Open placeholders (fill after Sonde C final report)
+## Open placeholders (fill after Sonde C Arms 1-3)
+
+**Settled by C0 already (no longer pending):** the hard-cell target set is fixed - the legal leak is byte-geometry-intrinsic (Sonde B 197/200 -> C0 198/200 despite the multilingual base), so A’s `K=20`/`K=40` mixes exercise a base-independent regime. The C0 label table (`out_c/logs/ladC_routdiag_labels.txt`, 999/1000) is the anchor for any head-vs-n-gram comparison.
+
+**Still pending on Arms 1-3:**
 
 - `TBD-K` — PoC planning territory count (PoC charter).
 - `TBD-C1` — Arm 1 head-vs-byte-n-gram accuracy on hard cells (C final report §Arm1).
