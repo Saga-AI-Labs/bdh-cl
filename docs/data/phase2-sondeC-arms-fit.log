@@ -1,0 +1,68 @@
+[fit] npz=out_c/c_arms_ladC.npz N=1000 train=700 test=300 routes=[8192, 10240, 12288, 14336, 16384] layers=[0, 1] classes=5
+
+byte-n-gram (stage 1)      acc 296/300 = 0.9867  Wilson [0.966, 0.995]  per-domain:
+      code       57/60
+      ga         60/60
+      legal      60/60
+      math       59/60
+      prose      60/60
+
+arm1 L0 linear             acc 266/300 = 0.8867  Wilson [0.846, 0.918]  per-domain:
+      code       52/60
+      ga         60/60
+      legal      52/60
+      math       50/60
+      prose      52/60
+
+arm1 L0 mlp256             acc 262/300 = 0.8733  Wilson [0.831, 0.906]  per-domain:
+      code       55/60
+      ga         60/60
+      legal      47/60
+      math       48/60
+      prose      52/60
+
+[arm3 L0] stage2-frac=0.0 -> used 0/300 (0.000)  cascade acc 296/300=0.9867 Wilson [0.966, 0.995]
+
+[arm3 L0] stage2-frac=0.1 -> used 30/300 (0.100)  cascade acc 288/300=0.9600 Wilson [0.931, 0.977]
+
+[arm3 L0] stage2-frac=0.2 -> used 60/300 (0.200)  cascade acc 286/300=0.9533 Wilson [0.923, 0.972]
+
+[arm3 L0] stage2-frac=0.3 -> used 90/300 (0.300)  cascade acc 283/300=0.9433 Wilson [0.911, 0.964]
+
+arm1 L1 linear             acc 271/300 = 0.9033  Wilson [0.865, 0.932]  per-domain:
+      code       54/60
+      ga         60/60
+      legal      52/60
+      math       48/60
+      prose      57/60
+
+arm1 L1 mlp256             acc 280/300 = 0.9333  Wilson [0.899, 0.956]  per-domain:
+      code       58/60
+      ga         60/60
+      legal      53/60
+      math       52/60
+      prose      57/60
+
+[arm3 L1] stage2-frac=0.0 -> used 0/300 (0.000)  cascade acc 296/300=0.9867 Wilson [0.966, 0.995]
+
+[arm3 L1] stage2-frac=0.1 -> used 30/300 (0.100)  cascade acc 287/300=0.9567 Wilson [0.927, 0.975]
+
+[arm3 L1] stage2-frac=0.2 -> used 60/300 (0.200)  cascade acc 284/300=0.9467 Wilson [0.915, 0.967]
+
+[arm3 L1] stage2-frac=0.3 -> used 90/300 (0.300)  cascade acc 282/300=0.9400 Wilson [0.907, 0.962]
+
+[fit] summary -> out_c/c_arms_ladC.npz.fit.json
+  arm1 L0 linear         0.8867
+  arm1 L0 mlp256         0.8733
+  arm1 L1 linear         0.9033
+  arm1 L1 mlp256         0.9333
+  arm3 L0 s2=0.0         0.9867
+  arm3 L0 s2=0.1         0.9600
+  arm3 L0 s2=0.2         0.9533
+  arm3 L0 s2=0.3         0.9433
+  arm3 L1 s2=0.0         0.9867
+  arm3 L1 s2=0.1         0.9567
+  arm3 L1 s2=0.2         0.9467
+  arm3 L1 s2=0.3         0.9400
+  byte_ngram             0.9867
+FIT_DONE

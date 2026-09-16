@@ -1,0 +1,19 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 18687.31it/s]
+[arm2] model=sentence-transformers/all-MiniLM-L6-v2 emb=(1000, 384)
+
+arm2 all-MiniLM-L6-v2      acc 295/300 = 0.9833  Wilson [0.962, 0.993]  per-domain:
+      code       56/60
+      ga         60/60
+      legal      60/60
+      math       60/60
+      prose      59/60
+
+arm2 + mlp256              acc 298/300 = 0.9933  Wilson [0.976, 0.998]  per-domain:
+      code       58/60
+      ga         60/60
+      legal      60/60
+      math       60/60
+      prose      60/60
+ARM2_DONE
+ARM2_DONE
