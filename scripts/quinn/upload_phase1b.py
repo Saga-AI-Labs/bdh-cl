@@ -117,7 +117,11 @@ def main():
     open(card_path, "w").write(CARD)
     log("card written: " + card_path)
 
-    token = open(TOKEN_FILE).read().strip()
+    token = os.environ.get("HF_TOKEN", "").strip()
+    if not token and os.path.exists(TOKEN_FILE):
+        token = open(TOKEN_FILE).read().strip()
+    if not token:
+        raise ValueError("HF_TOKEN env unset and no token file at " + TOKEN_FILE)
     if not token:
         raise SystemExit("empty token file — aborting before upload")
     from huggingface_hub import HfApi
