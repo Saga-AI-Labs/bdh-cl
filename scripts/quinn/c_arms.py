@@ -46,8 +46,31 @@ def wilson(k, n, z=1.96):
     return max(0.0, c - h), min(1.0, c + h)
 
 
-def build_crops(dom_spec, mb, crops, bs):
-    """Byte-identical crop construction to eval_router.py (one shared generator)."""
+R3_SEQ = "en es pl fr de cs da pt fi hu bg it et el sk sv ro nl sl lt".split()
+
+
+def build_crops(dom_spec, mb, crops, bs, source="tail"):
+    """Crop construction.
+
+    source="tail" : byte-identical to scripts/eval_router.py (shared generator, seed 1234).
+    source="r3"   : byte-identical to scripts/pi50/r3_byte_addressing.py -- same loader
+                    test split, same per-language seeds (5000 + SEQ index) and same SEQ
+                    order. Use this for the apples-to-apples P-C1 test against the
+                    published P-R3 agreement (0.762; es/pl/sk at 0.00).
+    """
+    if source == "r3":
+        from pipeline.data import _europarl_blocks
+        names = [it.split(":", 1)[0]
+                 for it in filter(None, map(str.strip, dom_spec.split(",")))]
+        out = []
+        for name in names:
+            li = R3_SEQ.index(name)
+            raw = _europarl_blocks("data", 30_000_000, langs=(name,))[name]
+            d = torch.from_numpy(np.frombuffer(raw["test"], dtype=np.uint8).astype(np.int64))
+            g = torch.Generator().manual_seed(5000 + li)
+            idx = torch.randint(len(d) - bs - 1, (crops,), generator=g)
+            out.append((name, torch.stack([d[int(i):int(i) + bs] for i in idx]).numpy()))
+        return out
     g = torch.Generator().manual_seed(SEED)
     out = []
     for item in filter(None, map(str.strip, dom_spec.split(","))):
@@ -184,7 +207,7 @@ def cmd_extract(args):
     bs = cfg["block_size"]
     routes = [int(r) for r in args.routes.split(",")]
     layers = [int(x) for x in args.layers.split(",")]
-    doms = build_crops(args.domains, args.mb, args.crops, bs)
+    doms = build_crops(args.domains, args.mb, args.crops, bs, args.crop_source)
 
     enc_b = model.encoder.data.clone()
     encv_b = model.encoder_v.data.clone()
@@ -250,7 +273,8 @@ def cmd_extract(args):
                         dom=np.array(domn), crop=np.array(cropn),
                         raw=np.concatenate(raws).astype(np.uint8),
                         routes=np.array(routes), layers=np.array(layers),
-                        p0=args.p0, p1=args.p1, ckpt=args.ckpt)
+                        p0=args.p0, p1=args.p1, ckpt=args.ckpt,
+                        crop_source=args.crop_source)
     with open(args.out + ".labels.tsv", "w") as fh:
         fh.write("domain\tcrop\tchosen_width\t" +
                  "\t".join(f"score_{r}" for r in routes) + "\n")
@@ -373,6 +397,8 @@ def main():
     e.add_argument("--layers", default="0,1")
     e.add_argument("--p0", type=int, default=32)
     e.add_argument("--p1", type=int, default=96)
+    e.add_argument("--crop-source", default="tail", choices=["tail", "r3"],
+                   help="tail = eval_router crops (default); r3 = P-R3 loader crops")
 
     f = sub.add_parser("fit")
     f.add_argument("npz")

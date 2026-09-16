@@ -1,0 +1,142 @@
+[fit] npz=out_c/c_arms_ra2b_r3.npz N=1920 train=1340 test=580 routes=[2048, 4096, 6144, 8192, 10240, 12288, 14336, 16384, 18432, 20480, 22528, 24576, 26624, 28672, 30720, 32768, 34816, 36864, 38912, 40960, 43008, 45056, 47104] layers=[0, 1] classes=23
+
+byte-n-gram (stage 1)      acc 580/580 = 1.0000  Wilson [0.993, 1.000]  per-domain:
+      bg         29/29
+      cs         29/29
+      da         29/29
+      de         29/29
+      el         29/29
+      en         29/29
+      es         29/29
+      et         29/29
+      fi         29/29
+      fr         29/29
+      hu         29/29
+      it         29/29
+      lt         29/29
+      nl         29/29
+      pl         29/29
+      pt         29/29
+      ro         29/29
+      sk         29/29
+      sl         29/29
+      sv         29/29
+
+arm1 L0 linear             acc 524/580 = 0.9034  Wilson [0.877, 0.925]  per-domain:
+      bg         29/29
+      cs         23/29
+      da         25/29
+      de         28/29
+      el         29/29
+      en         23/29
+      es         26/29
+      et         25/29
+      fi         27/29
+      fr         25/29
+      hu         28/29
+      it         23/29
+      lt         27/29
+      nl         28/29
+      pl         29/29
+      pt         23/29
+      ro         27/29
+      sk         26/29
+      sl         28/29
+      sv         25/29
+
+arm1 L0 mlp256             acc 511/580 = 0.8810  Wilson [0.852, 0.905]  per-domain:
+      bg         29/29
+      cs         24/29
+      da         23/29
+      de         27/29
+      el         29/29
+      en         21/29
+      es         22/29
+      et         25/29
+      fi         25/29
+      fr         24/29
+      hu         28/29
+      it         25/29
+      lt         28/29
+      nl         28/29
+      pl         29/29
+      pt         23/29
+      ro         26/29
+      sk         24/29
+      sl         28/29
+      sv         23/29
+
+[arm3 L0] stage2-frac=0.0 -> used 0/580 (0.000)  cascade acc 580/580=1.0000 Wilson [0.993, 1.000]
+
+[arm3 L0] stage2-frac=0.1 -> used 58/580 (0.100)  cascade acc 569/580=0.9810 Wilson [0.966, 0.989]
+
+[arm3 L0] stage2-frac=0.2 -> used 116/580 (0.200)  cascade acc 562/580=0.9690 Wilson [0.951, 0.980]
+
+[arm3 L0] stage2-frac=0.3 -> used 174/580 (0.300)  cascade acc 556/580=0.9586 Wilson [0.939, 0.972]
+
+arm1 L1 linear             acc 538/580 = 0.9276  Wilson [0.904, 0.946]  per-domain:
+      bg         29/29
+      cs         26/29
+      da         26/29
+      de         27/29
+      el         29/29
+      en         26/29
+      es         25/29
+      et         27/29
+      fi         27/29
+      fr         26/29
+      hu         29/29
+      it         23/29
+      lt         27/29
+      nl         29/29
+      pl         29/29
+      pt         26/29
+      ro         28/29
+      sk         26/29
+      sl         29/29
+      sv         24/29
+
+arm1 L1 mlp256             acc 540/580 = 0.9310  Wilson [0.907, 0.949]  per-domain:
+      bg         29/29
+      cs         25/29
+      da         27/29
+      de         26/29
+      el         29/29
+      en         27/29
+      es         24/29
+      et         26/29
+      fi         26/29
+      fr         27/29
+      hu         29/29
+      it         24/29
+      lt         28/29
+      nl         29/29
+      pl         29/29
+      pt         26/29
+      ro         28/29
+      sk         25/29
+      sl         29/29
+      sv         27/29
+
+[arm3 L1] stage2-frac=0.0 -> used 0/580 (0.000)  cascade acc 580/580=1.0000 Wilson [0.993, 1.000]
+
+[arm3 L1] stage2-frac=0.1 -> used 58/580 (0.100)  cascade acc 572/580=0.9862 Wilson [0.973, 0.993]
+
+[arm3 L1] stage2-frac=0.2 -> used 116/580 (0.200)  cascade acc 562/580=0.9690 Wilson [0.951, 0.980]
+
+[arm3 L1] stage2-frac=0.3 -> used 174/580 (0.300)  cascade acc 559/580=0.9638 Wilson [0.945, 0.976]
+
+[fit] summary -> out_c/c_arms_ra2b_r3.npz.fit.json
+  arm1 L0 linear         0.9034
+  arm1 L0 mlp256         0.8810
+  arm1 L1 linear         0.9276
+  arm1 L1 mlp256         0.9310
+  arm3 L0 s2=0.0         1.0000
+  arm3 L0 s2=0.1         0.9810
+  arm3 L0 s2=0.2         0.9690
+  arm3 L0 s2=0.3         0.9586
+  arm3 L1 s2=0.0         1.0000
+  arm3 L1 s2=0.1         0.9862
+  arm3 L1 s2=0.2         0.9690
+  arm3 L1 s2=0.3         0.9638
+  byte_ngram             1.0000

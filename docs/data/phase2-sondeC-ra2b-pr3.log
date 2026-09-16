@@ -1,0 +1,27 @@
+[pr3] npz=out_c/c_arms_ra2b_r3.npz N=1920 classes=23 featurizer=hashed 1-4gram NB=262144 epochs=200 lr=0.5
+[pr3] X=(1920, 262144) nonzero_frac=0.00380
+
+P-R3 baseline on c_arms crops: 574/580 = 0.9897  Wilson [0.978, 0.995]
+per-domain:
+  bg   29/29
+  cs   29/29
+  da   29/29
+  de   29/29
+  el   29/29
+  en   29/29
+  es   29/29   <-- P-R3 hard cell
+  et   29/29   <-- P-R3 hard cell
+  fi   29/29
+  fr   29/29
+  hu   29/29
+  it   29/29
+  lt   29/29
+  nl   29/29
+  pl   29/29   <-- P-R3 hard cell
+  pt   29/29
+  ro   29/29
+  sk   23/29   <-- P-R3 hard cell
+  sl   29/29
+  sv   29/29
+
+[pr3] summary -> out_c/c_arms_ra2b_r3.npz.pr3.json
