@@ -1,0 +1,11 @@
+router ckpt=out/bdh_textmix_ladB-ga_last.pt | routes=[8192, 10240, 12288, 14336, 16384] n/head | window=128 tok | 200 crops/domain
+
+confusion (rows=true domain, cols=routed prefix width):
+               8192    10240    12288    14336    16384
+    legal         1        2        0      197        0
+
+   domain   routed
+    legal     2.21
+
+joint full-width reference: ppl 11.07  (served positions only)
+LEGAL_DEPTH_DONE
