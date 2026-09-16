@@ -1,6 +1,6 @@
 # Phase-1 HF release checklist
 
-Date: 2026-09-15 · Owner: Quinn (A0 seat) · Status: partially done, cleanup executed, design-doc queued
+Date: 2026-09-15 · Owner: Quinn (A0 seat) · Status: phase-1 verified+cleaned; phase-1b uploaded+VERIFIED (3-way PASS 18/18), deletion gated on pi-50 spot-check; design-doc queued
 
 Context: 40 RA2b checkpoints (best+last, 20 languages, 152 GiB) plus dataset card and
 acquisition metadata are being uploaded to `Saga-AI-Labs/bdh-cl_phase-1` (public).
@@ -37,11 +37,16 @@ superseded it to 17 / 88 GiB. Use 17 / 88 going forward.
 
 ## Open items (queued)
 
-1. **phase-1b upload — destination ruled by operator (2026-09-15)** — the 17 single-copy ladRA2 files
-   (88 GiB) go to the HF dataset repo `Saga-AI-Labs/bdh-cl_phase-1b` (public, created via token).
-   Upload started 17:12 CEST (`upload_phase1b.py`, hardlink staging + card + XET). The 17 stay on
-   gx10 until remote verification; only after that will a deletion intent envelope name them
-   (HAK protocol — operator go #298-style).
+1. **phase-1b — UPLOADED + FORMALLY VERIFIED (2026-09-16 01:4x CEST); deletion gated on pi-50 spot-check** —
+   the 17 single-copy ladRA2 files (88 GiB) are live in `Saga-AI-Labs/bdh-cl_phase-1b`: 19 remote files
+   (17 payload + `README.md` card + HF-generated `.gitattributes`), 94,240,313,535 B. Three-way sha256
+   join = **PASS 18/18 byte-identical** (committed 17:30 pre-upload digests / gx10 fresh re-read / HF side:
+   LFS oid ×16 + resolve-download sha256 ×2). Record `docs/data/phase1b-remote-verification.md`;
+   re-runnable `scripts/quinn/verify_phase1b.py`. The 17 stay on gx10. Two gates remain before deletion:
+   (a) pi-50's retrieval spot-check (#303 — download a sample, hash vs the committed tables, ack on the bus),
+   (b) an intent envelope naming the exact 17, posted only after that ack (#298 pattern). Requested from
+   pi-50 this turn. NOT deleted yet: operator sequenced "verify before delete"; the verify gate is met, the
+   ack+envelope gate is pending pi-50.
 2. **RA2b second copy — RULED OUT by operator (2026-09-15)** — RA2b (152 GiB) stays single-copy on
    HF; gx10 needs the space. Risk (pi-50 #296: single point of failure, damage-then-notice) is
    explicitly accepted, not overlooked. If the repo is ever needed locally again, re-download
