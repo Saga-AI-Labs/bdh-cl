@@ -1,6 +1,6 @@
 # Phase-1 HF release checklist
 
-Date: 2026-09-15 · Owner: Quinn (A0 seat) · Status: phase-1 verified+cleaned; phase-1b uploaded+VERIFIED (3-way PASS 18/18), deletion gated on pi-50 spot-check; design-doc queued
+Date: 2026-09-15 · Owner: Quinn (A0 seat) · Status: phase-1 verified+cleaned; phase-1b uploaded+VERIFIED (3-way PASS 18/18) + pi-50 retrieval spot-check 4/4 (#315/#316); deletion gated on pi-50's fresh pre-delete re-check + ack of intent envelope #317; design-doc queued
 
 Context: 40 RA2b checkpoints (best+last, 20 languages, 152 GiB) plus dataset card and
 acquisition metadata are being uploaded to `Saga-AI-Labs/bdh-cl_phase-1` (public).
@@ -37,16 +37,20 @@ superseded it to 17 / 88 GiB. Use 17 / 88 going forward.
 
 ## Open items (queued)
 
-1. **phase-1b — UPLOADED + FORMALLY VERIFIED (2026-09-16 01:4x CEST); deletion gated on pi-50 spot-check** —
+1. **phase-1b — UPLOADED + FORMALLY VERIFIED + spot-checked; deletion gated on pi-50's fresh re-check** —
    the 17 single-copy ladRA2 files (88 GiB) are live in `Saga-AI-Labs/bdh-cl_phase-1b`: 19 remote files
    (17 payload + `README.md` card + HF-generated `.gitattributes`), 94,240,313,535 B. Three-way sha256
    join = **PASS 18/18 byte-identical** (committed 17:30 pre-upload digests / gx10 fresh re-read / HF side:
    LFS oid ×16 + resolve-download sha256 ×2). Record `docs/data/phase1b-remote-verification.md`;
-   re-runnable `scripts/quinn/verify_phase1b.py`. The 17 stay on gx10. Two gates remain before deletion:
-   (a) pi-50's retrieval spot-check (#303 — download a sample, hash vs the committed tables, ack on the bus),
-   (b) an intent envelope naming the exact 17, posted only after that ack (#298 pattern). Requested from
-   pi-50 this turn. NOT deleted yet: operator sequenced "verify before delete"; the verify gate is met, the
-   ack+envelope gate is pending pi-50.
+   re-runnable `scripts/quinn/verify_phase1b.py`; committed+pushed bdh@4b0161d.
+   Gate (a) CLOSED — pi-50's retrieval spot-check ran end-to-end and passed **4/4 byte-identical** against
+   committed-table AND live HF LFS oid (seed 1789513418, 4.4–7.0 MB/s): 3 phase-1 + 1 phase-1b, #315/#316.
+   His sampler's earlier "2 bad" was its own sampling frame drawing never-uploaded ro_best/fr_best from the
+   42-row join table → fixed to a NOT_IN_REPO verdict; not archive damage. Gate (b) — I posted the **intent
+   envelope #317** naming the exact 17 (#298 pattern; unlink BOTH hardlink paths out/ + staging/). Remaining
+   before any unlink: pi-50's FRESH pre-delete re-check (existence / link-count→0 / open-handle / git-status)
+   and his ack on #317. The 17 are gx10-SINGLE-COPY (0 .200 counterparts) → HF is the only replica. NOT
+   deleted: operator sequenced "verify before delete", and pi-50's fresh ack is not mine to assume.
 2. **RA2b second copy — RULED OUT by operator (2026-09-15)** — RA2b (152 GiB) stays single-copy on
    HF; gx10 needs the space. Risk (pi-50 #296: single point of failure, damage-then-notice) is
    explicitly accepted, not overlooked. If the repo is ever needed locally again, re-download
