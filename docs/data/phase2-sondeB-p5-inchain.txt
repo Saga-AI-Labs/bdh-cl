@@ -1,0 +1,65 @@
+===== base -> code =====
+parent out/bdh_textmix_ladB-base_last.pt: mult 128 | child out/bdh_textmix_ladB-code_last.pt: mult 160
+P5[1] bit-exactness of the masked parent block through the child phase:
+  encoder                BIT-EXACT
+  encoder_v              BIT-EXACT
+  decoder                BIT-EXACT
+  embed                  BIT-EXACT
+  lm_head                BIT-EXACT
+  attn.freqs(shared)     BIT-EXACT
+P5[2] grown segment: nonzero=True max|w|=3.8632e-01
+P5[3] optimizer moments of the masked block in the child checkpoint:
+  state[0] (nh*N,D) decoder: step=10000.0 v(masked)==0:True m(masked)==0:True v(grown)!=0:True
+  state[1] (nh,D,N) enc/encv: step=10000.0 v(masked)==0:True m(masked)==0:True v(grown)!=0:True
+  state[2] (nh,D,N) enc/encv: step=10000.0 v(masked)==0:True m(masked)==0:True v(grown)!=0:True
+P5-VERDICT: PASS
+exit_rc=0
+===== code -> math =====
+parent out/bdh_textmix_ladB-code_last.pt: mult 160 | child out/bdh_textmix_ladB-math_last.pt: mult 192
+P5[1] bit-exactness of the masked parent block through the child phase:
+  encoder                BIT-EXACT
+  encoder_v              BIT-EXACT
+  decoder                BIT-EXACT
+  embed                  BIT-EXACT
+  lm_head                BIT-EXACT
+  attn.freqs(shared)     BIT-EXACT
+P5[2] grown segment: nonzero=True max|w|=4.1439e-01
+P5[3] optimizer moments of the masked block in the child checkpoint:
+  state[0] (nh*N,D) decoder: step=10000.0 v(masked)==0:True m(masked)==0:True v(grown)!=0:True
+  state[1] (nh,D,N) enc/encv: step=10000.0 v(masked)==0:True m(masked)==0:True v(grown)!=0:True
+  state[2] (nh,D,N) enc/encv: step=10000.0 v(masked)==0:True m(masked)==0:True v(grown)!=0:True
+P5-VERDICT: PASS
+exit_rc=0
+===== math -> legal =====
+parent out/bdh_textmix_ladB-math_last.pt: mult 192 | child out/bdh_textmix_ladB-legal_last.pt: mult 224
+P5[1] bit-exactness of the masked parent block through the child phase:
+  encoder                BIT-EXACT
+  encoder_v              BIT-EXACT
+  decoder                BIT-EXACT
+  embed                  BIT-EXACT
+  lm_head                BIT-EXACT
+  attn.freqs(shared)     BIT-EXACT
+P5[2] grown segment: nonzero=True max|w|=5.2298e-01
+P5[3] optimizer moments of the masked block in the child checkpoint:
+  state[0] (nh*N,D) decoder: step=10000.0 v(masked)==0:True m(masked)==0:True v(grown)!=0:True
+  state[1] (nh,D,N) enc/encv: step=10000.0 v(masked)==0:True m(masked)==0:True v(grown)!=0:True
+  state[2] (nh,D,N) enc/encv: step=10000.0 v(masked)==0:True m(masked)==0:True v(grown)!=0:True
+P5-VERDICT: PASS
+exit_rc=0
+===== legal -> ga =====
+parent out/bdh_textmix_ladB-legal_last.pt: mult 224 | child out/bdh_textmix_ladB-ga_last.pt: mult 256
+P5[1] bit-exactness of the masked parent block through the child phase:
+  encoder                BIT-EXACT
+  encoder_v              BIT-EXACT
+  decoder                BIT-EXACT
+  embed                  BIT-EXACT
+  lm_head                BIT-EXACT
+  attn.freqs(shared)     BIT-EXACT
+P5[2] grown segment: nonzero=True max|w|=5.6763e-01
+P5[3] optimizer moments of the masked block in the child checkpoint:
+  state[0] (nh*N,D) decoder: step=10000.0 v(masked)==0:True m(masked)==0:True v(grown)!=0:True
+  state[1] (nh,D,N) enc/encv: step=10000.0 v(masked)==0:True m(masked)==0:True v(grown)!=0:True
+  state[2] (nh,D,N) enc/encv: step=10000.0 v(masked)==0:True m(masked)==0:True v(grown)!=0:True
+P5-VERDICT: PASS
+exit_rc=0
+P5_SWEEP_DONE
