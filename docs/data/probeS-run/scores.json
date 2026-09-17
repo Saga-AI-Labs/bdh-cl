@@ -1,0 +1,38 @@
+{
+  "test_A": {
+    "a2_exact": 0.306640625,
+    "a2_route": 1.0,
+    "byte_exact": 0.306640625,
+    "byte_route": 1.0,
+    "full": 0.103515625,
+    "n": 512,
+    "oracle": 0.306640625
+  },
+  "test_B": {
+    "a2_exact": 0.009765625,
+    "a2_route": 0.0,
+    "byte_exact": 0.009765625,
+    "byte_route": 0.0,
+    "full": 0.005859375,
+    "n": 512,
+    "oracle": 0.078125
+  },
+  "train_A": {
+    "a2_exact": 1.0,
+    "a2_route": 1.0,
+    "byte_exact": 1.0,
+    "byte_route": 1.0,
+    "full": 0.6953125,
+    "n": 512,
+    "oracle": 1.0
+  },
+  "train_B": {
+    "a2_exact": 0.99609375,
+    "a2_route": 1.0,
+    "byte_exact": 0.01171875,
+    "byte_route": 0.0,
+    "full": 0.017578125,
+    "n": 512,
+    "oracle": 0.99609375
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "checkpoint": "/media/data/coding/bdh/out_c/probe_s/run-20260917T043829Z/bdh_probe_s_grown_last.pt",
+  "checkpoint_sha256": "5af6eff934d1980f7b1ff0005c469cd89994f64fdf1ff3a867ac381772384c4c",
+  "decay_observed": true,
+  "exact_checks": 2020,
+  "masked_gradient_checks": 2000,
+  "new_encoder_changed": true,
+  "steps": 2000
+}

@@ -1,0 +1,18 @@
+{
+  "P_S1": false,
+  "P_S2": false,
+  "P_S4": true,
+  "S_PASS": false,
+  "acquisition": true,
+  "failure_labels": [
+    "paraphrase_transfer_failure_not_storage_failure"
+  ],
+  "pooled": {
+    "a2_exact": 0.158203125,
+    "a2_route": 0.5,
+    "byte_exact": 0.158203125,
+    "byte_route": 0.5
+  },
+  "routing_falsifier": false,
+  "surface_baseline_no_advantage": true
+}

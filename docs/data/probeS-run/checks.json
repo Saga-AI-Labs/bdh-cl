@@ -1,0 +1,18 @@
+{
+  "delimiter_cap": true,
+  "full_answer_exact": true,
+  "full_answer_nll": true,
+  "passed": true,
+  "smoke": false,
+  "source_hashes": {
+    "bdh.py": "22d1d705f0b2318612fe7baf75fff88d2955a4e95f85e7f9bd63ee45f30effec",
+    "docs/plans/2026-09-17_probe-s-semantic-addressing.md": "8028be4a6e27f6bb7ac1edeaf14c828ec98c694fd39a8b3bcc3ecd62b56f19a6",
+    "pipeline/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pipeline/config.py": "ae26b6bd38f428eb7f2023cdd5627ce2563603e8c0b9e4360bd106a65fbaad2a",
+    "pipeline/data.py": "cd4bacf21e3677e2f7e99d9e48a7ce253bf81b954fda34248c63deda82cf8e5b",
+    "pipeline/run.py": "0df0fcad9f5004e98512e81d7f1bf953262527747b425437ee910c072ed1f8ee",
+    "pipeline/train.py": "fcab68aca327dffbc82021f3343a5eb4838dbd504c67dd134ab8429433b085f1",
+    "scripts/quinn/probe_s_semantic.py": "3506d45d8362f6754a1d4756d703ba5795faae8bde2079c0d3f5469d69af9ed1"
+  },
+  "uint8": true
+}

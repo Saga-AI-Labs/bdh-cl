@@ -1,0 +1,8 @@
+{
+  "checkpoint": "/media/data/coding/bdh/out_c/probe_s/run-20260917T043829Z/bdh_probe_s_base_last.pt",
+  "checkpoint_sha256": "a5ced218390f66fe9da297d2d35f09efe273b64b9bf8f2abeac2062626aefde7",
+  "decay_observed": false,
+  "exact_checks": 0,
+  "masked_gradient_checks": 0,
+  "steps": 4000
+}

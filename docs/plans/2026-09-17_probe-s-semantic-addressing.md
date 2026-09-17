@@ -1,58 +1,175 @@
-# Probe S — Semantic Addressing Under Identical Language Surface
+# Probe S — factual addressing under shared language templates
 
-Status: PREREGISTRATION, RUNNER PENDING · 2026-09-17 · Quinn
+Status: PREMEASUREMENT AMENDMENT A2, 2026-09-17. Operator-authorized implementation
+and launch only; no commits, pushes, installations, HAK messages, or R/J reruns.
 
-Operator GO: third approved follow-up probe. This document is written before any runner code is executed. No commits or pushes are authorized by this document.
+## Correction record
 
-## Question
+The committed draft at 3108ea7 was NOT execution-ready. This amendment replaces it
+and the malformed, unexecuted local A1 addition. No scientific S scoring preceded
+this amendment. The old draft remains recoverable from Git; no old claims survive
+by implication. Corrections: the primary byte router is content-aware, never a
+ceiling; routing is query-only; a byte is not a word; oracle A is old-only;
+arbitrary unseen bindings and underspecified Q-comp are removed; factual keys
+uniquely determine territory; budgets and evaluation are fixed below. Q-comp is
+explicitly deferred to a separate protocol establishing answerability.
 
-Can BDH-style growth addressing select the correct memory territory when language, script, style and topic template are identical and only the factual content differs? This is the chat-relevant open core named in the Sonde C report §7 — it is NOT tested by P-C4, R or J.
+## Question and interpretation
 
-## Design (minimal closed world)
+Can query likelihood select the territory containing an acquired fact when both
+territories share language, templates, and balanced component vocabularies?
+This is a closed-world recall/withheld-paraphrase test, not semantic-only evidence.
+Surface conjunction association can solve it. No guarantee excludes that solution.
+Two primary routes, equally many A/B queries: chance routing accuracy = 0.5.
 
-Synthetic byte-level fact corpora with identical language surface:
+## Deterministic facts and splits
 
-- Two territories A (base) and B (grown). Facts are short templated sentences, e.g. `the zubble of flarn is QUILT.` where the content word is drawn from a fixed closed vocabulary of 64 nonce content words per slot. Territory A and B share templates and function words exactly; only the fact–slot bindings differ.
-- Corpus A: 256 facts, corpus B: 256 facts, disjoint fact sets, no shared content bindings. A held-out split of 32 facts per territory is generated from the same templates with unseen slot bindings (composition generalization, not interpolation).
-- All text is lowercase ASCII, so the byte router is maximally competent on surface: this is deliberate — surface statistics MUST NOT be able to distinguish territories beyond arbitrary content-word frequency differences, which we measure and report as the byte router's honest ceiling on this task.
+All text is lowercase ASCII. Corpus seed 17092026; base model seed 17092027;
+growth seed 17092028. Sampling uses independent torch generators with model seed
++10 (train) and +20 (validation). Manifest order is deterministic.
 
-## Training
+Entity vocabulary is the 32 words `m` + two letters, from `maa` through `mbf`;
+relation vocabulary is the 16 words `r` + two letters, `raa` through `rap`;
+answer vocabulary is the 64 words `v` + two letters, `vaa` through `vcl`.
+Cartesian entity/relation pairs define 512 distinct factual keys. Seeded random
+permutations of entity and relation indices assign A when the sum of permuted
+indices is even, B otherwise. Each entity and each relation occurs equally often
+in A/B. There are 256 facts per territory. Each of the 64 answers occurs four
+times per territory, independently shuffled with the corpus RNG. Bindings have
+no compositional derivation. A fact has one answer globally and no territory token.
 
-1. Train a small BDH (n_layer=2, n_embd=256, n_head=4, block 512, mult 128) from scratch on corpus A to completion criterion: held-out A perplexity <= 1.15 or 4000 steps cap.
-2. Grow per Mechanism B exactly as `pipeline/train.py --grow-mult` implements: copy old segments, fresh tail, gradient masks, bit-exact frozen-path restore each step (F-decay-leak fix), embed/lm_head frozen. Train only on corpus B with `neuron_mask` prefix masking (route-aware alpha=1.0, no full-width mixing) so territory B lives in new neurons only.
-3. Growth criterion: held-out B perplexity under prefix-masked forward <= 1.15 or 2000 steps cap; A perplexity under full forward must not degrade by more than 0.05 from its post-A value (retention check).
+Every fact is trained in both templates (512 distinct rows per territory):
 
-## Query protocol (amended before any runner code exists)
+- T1: `the {relation} of {entity} is {answer}.`
+- T2: `for {entity}, {relation} has value {answer}.`
 
-Two query sets, both answerable and answer-free at routing time:
+Each row begins with a newline (context start) and ends at the period. Padding
+uses byte zero as input and target -100 (ignored loss); it never adds another fact.
+Batches sample rows uniformly with replacement. Every row and every model call
+has fresh state; no context is carried across facts.
 
-- **Q-trained (192 queries):** paraphrase-style prefixes of trained facts (word-order variants of the template, same trained fact-binding), prefix truncated before the content word. This tests recall of trained bindings under surface variation.
-- **Q-comp (64 queries):** compositional held-out queries — combinations of two trained bindings from the same territory never seen together in training (e.g. cross-slot recombination). This tests systematic combination, not arbitrary unseen facts.
+Calibration/validation: first 32 facts of each territory, template
+`{entity} has {relation} equal to {answer}.` (64 rows total). These are known
+bindings under a withheld template, NOT unseen facts. They are monitoring only;
+no thresholds, parameters, checkpoints or budgets are selected from them.
+Pipeline validation uses 4 batches every 500 steps and at phase end, always
+full-width, including during growth. This is descriptive, not the B oracle.
+No test data is exposed to the pipeline loader (`test=None`).
 
-Routing may use only the query text up to the truncation point. Route selection must not condition on the target word or use the answer in any form; a route-selection signal that requires the withheld answer is invalid and aborts the run.
+Test: all trained facts, each under two withheld templates (1024 queries total,
+512 per territory):
 
-1. **Oracle route:** the correct territory's mask (B: new-neuron prefix; A: full-width and old-masked variants both recorded).
-2. **A2 route:** argmin over candidate routes of the NLL the route assigns to the *complete query sentence minus its final content word*, using territory-internal likelihood only; then read that route's next-token prediction at the query position. Record route-choice agreement with oracle. Because both territories share the same surface, a wrong-territory route should assign the sentence higher NLL precisely when the bindings conflict — that is the quantity under test.
-3. **Byte baseline (fairness-critical):** a territory-association model trained ONLY on function words and template positions, blinded to content words (content-word tokens masked out of its input). A content-word-aware association baseline is reported separately as the surface-statistics ceiling; only the blinded variant is a fair address router.
+- P1: `for {entity}, the value of {relation} is `
+- P2: `the value for {relation} of {entity} is `
 
-Primary metric: next-token accuracy at the query position per routing condition, on Q-trained and Q-comp separately. Secondary: rank and NLL of the true token.
+Seen-template acquisition controls: T1/T2 prefixes for every fact (1024 queries).
+Calibration and test query strings are disjoint from each other and training
+prefixes. Test answers must exactly match manifest training bindings. No separate
+unseen-binding split is scored. Manifests persist full texts, prefixes, bindings,
+territories, template IDs and split labels before training.
 
-## Predictions and falsifiers (frozen)
+## Frozen training recipe
 
-- P-S1: oracle route accuracy >= 0.80 on held-out facts of both territories. If oracle fails, storage/acquisition fails first — stop, do not interpret routing. (Mechanism check, not address check.)
-- P-S2: A2-selected route equals oracle route on >= 0.85 of queries. Falsifier: A2 min-NLL route selection at or below chance-corrected floor (0.25 + 0.1) despite passing P-S1.
-- P-S3: byte-association baseline accuracy on this task is reported and must be compared honestly; if the byte baseline matches A2 routing, the addressing result does not demonstrate model-internal addressing.
-- P-S4 (retention): territory A accuracy >= 0.75 post-growth under full-width reading.
+Directly call `pipeline.train.train(Config(...))` twice. Only its imported
+`load_dataset` is replaced in-process by a one-fact-per-row adapter; model creation
+and checkpoint saving are wrapped for assertions, without altering updates.
+No copied growth implementation and no core edits. The byte-stream/MB loaders
+cannot enforce these row boundaries. This adapter deviation is explicit; it is
+not a claim of parity with the ordinary stream dataset or its learning curves.
 
-Gate S-PASS requires P-S1 AND P-S2. P-S3 failing (byte baseline high) downgrades the claim to surface-resolvable, reported as such.
+BDH: 2 layers, embedding 256, 4 heads, vocabulary 256, base multiplier 128;
+grow increment +32, final multiplier 160. Per-head routes: A indices [0,8192),
+B [8192,10240). Block budget 128; batch 8, dynamically right-padded within batch
+(no sequence exceeds the block budget). Dropout 0, k_sparse_ratio 0, ALiBi 0,
+no_bptt false, carry_state false, sequential_batches false, TBPTT horizon 1.
+CUDA bfloat16 autocast, float32 parameter storage; compile false; TF32 disabled.
+AdamW learning rate 0.001, cosine to 0.0001, warmup 100 steps, betas (0.9,0.95),
+weight decay 0.1, gradient clip 1.0. Cosine horizon equals phase budget.
+Base = exactly 4000 steps on A; grown = exactly 2000 steps on B. No early stop,
+no retry after scientific scoring, no tuning from real test or smoke acquisition.
+Use fixed `last` checkpoints only; pipeline `best` files are unused artifacts.
+Growth freezes embed/head and attention, preserves the old frequency lattice,
+uses gradient masks plus step-end restore. Route-aware alpha=1.0: B-only loss.
+The pipeline still computes a full-width loss multiplied by zero; this extra
+forward is retained for actual code-path reuse and must remain finite.
 
-## Known limits (declared up front)
+## Routing and full-answer scoring
 
-- Two territories, one template family: minimum viable demonstration, not scaling evidence.
-- A2 route selection here uses width-mask NLL, not the production likelihood router across languages.
-- Truncated-prefix queries are simpler than open chat; passing this does not establish chat-grade memory addressing.
-- Growth uses the exact audited Mechanism B code path; any deviation (e.g. skip frozen-path restore) aborts the run as invalid.
+Both routers receive IDENTICAL complete answer-free query bytes, including initial
+newline and trailing space. Neither receives the answer, label or territory.
+A2 minimizes mean next-byte NLL of query bytes 1..end conditioned on their preceding
+query bytes, over A and B only. Byte router: separate order-5 byte models (4-byte
+context, reset at each row), add-0.1 smoothing over all 256 bytes, trained on full
+training rows, scored on the same query positions; ties select A. All conversion
+into the byte router is explicitly numpy uint8. No content-blinded primary arm.
 
-## Execution
+After selecting routes, use the grown BDH under oracle, A2-selected and byte-selected
+masks to generate the full answer greedily. Full width is descriptive only. These
+are routing comparisons with a SHARED reader, not different language-model readers.
+Stop at the first `.` or after 16 generated bytes including delimiter; exact success
+requires the generated bytes to equal `answer + '.'`, with no stripping or case
+normalization. Missing delimiter, extra bytes or one correct initial byte is failure.
+No state leaks across queries; autoregressive generation may only use its own query
+and generated prefix. Conditional full-answer NLL (including period) is descriptive,
+computed AFTER routing and never used for route selection. Persist both candidate
+predictions/NLLs so wrong-route controls are available, plus full-width outputs.
 
-Runner `scripts/quinn/probe_s_semantic.py`, CPU/GPU on bdh-4090 under `out_c/followup_gpu.lock` after R completes. Smoke test with 8 facts, 200 steps on synthetic data first; assert exact-copy of Mechanism B semantics by comparing one optimizer step's frozen-region checksums against `pipeline/train.py` behavior. Persist corpora, seeds, checkpoints, per-query predictions and decisions under `out_c/probe_s/`. No threshold or recipe changes after launch; failures are reported as failures.
+## Gates and failure labels
+
+- Acquisition: seen-template oracle exact accuracy >=0.80 in EACH territory.
+  If base seen-template control fails, label base acquisition failure. If A passed
+  before growth but fails after growth, label retention failure. Failed B acquisition
+  cannot establish a routing failure.
+- P-S1 transfer/availability: oracle paraphrase exact accuracy >=0.80 per territory.
+  If acquisition passes but P-S1 fails, label paraphrase transfer failure, NOT storage
+  failure. Routing scores may still be reported descriptively, not interpreted as
+  an addressing failure despite available recall.
+- P-S2: A2 routing accuracy >=0.85 pooled, with per-territory values reported.
+  <=0.60 is a prespecified routing falsifier ONLY if acquisition and P-S1 pass.
+- P-S3: report byte routing and shared-reader exact accuracy alongside A2. If byte
+  routing >= A2 routing, or byte-routed exact accuracy >= A2-routed exact accuracy,
+  no advantage over this surface baseline is established (surface-resolvable caveat).
+- P-S4 retention: post-growth A seen-template oracle accuracy >=0.75. Also report
+  pre/post A seen-template and paraphrase accuracy, with full-width descriptive.
+- S-PASS requires acquisition, P-S1 and P-S2. It does not establish semantic-only,
+  scalable or chat-grade addressing. All failures remain results, not retry triggers.
+
+## Mechanics gates and bounded smoke
+
+Smoke uses ONLY separate toy vocabularies (`taa` entities, `uaa` relations, `waa`
+answers and following words), seed 717, 8 facts total. Two checks: tiny model
+(embedding 16, heads 2, base mult 4, growth +2) at 2 base +2 growth steps; then
+production shape/batch/dtype at 2+2 steps. Wall-clock cap for entire smoke =900 s.
+It checks mechanics, not accuracy or tuning. If production shape is infeasible,
+stop and report; do not silently downsize the scientific run.
+
+Required checks: full-answer exact scoring against a deterministic synthetic
+predictor (multi-byte wrong-answer and missing-delimiter negatives); full-answer NLL
+alignment; changed withheld answers cannot change either router; uint8 roundtrip
+and rejection of int64; exact mask coverage/disjointness; no train/test query
+intersection; every test answer justified by a training fact; finite losses;
+fresh-state calls; actual AdamW old-gradient masking, observable decay before
+restore, bit-exact old tensors after restore, changed new tensors; exact unchanged
+embed/head/frequencies. Assertions run on the actual pipeline path, including
+checking frozen tensors at subsequent batches/checkpoints. Old-route functional
+comparison is SEPARATE from tensor equality: float32 logits on fixed control
+prefixes before versus after growth, atol=0.0001, rtol=0.0001, with maximum absolute
+difference logged. Masks must not be assumed to yield bit-identical floating-point
+reductions. No exact pipeline parity claim beyond the directly tested code path.
+
+## Launch and artifacts
+
+Inspect remote GPU and processes; refuse duplicate S. Acquire nonblocking exclusive
+`out_c/followup_gpu.lock` before any model loading and retain it through training,
+evaluation and final artifacts. Smoke also holds this lock. Run with remote
+`bdh-4090:/media/data/coding/bdh/.venv/bin/python`.
+
+Before training freeze source/protocol hashes, Configs, corpus/query JSON manifests,
+uint8 corpus binaries, dependency inventory/hash, host/runtime details and original
+Git revision/dirty status under timestamped `out_c/probe_s/`. Verify successful
+smoke attestation binds the same source/protocol hashes before real launch.
+Store per-query JSONL incrementally, checkpoints, structured phase events, logs,
+checks JSON, PID, running status and final exit_status.txt. Exit 0 means execution
+completed, not scientific S-PASS. On failure persist traceback and nonzero exit.
+Verify a real worker PID AND increasing training steps after detached launch.
+Leave `out/`, HF uploads and R/J untouched. No commits, pushes or installations.

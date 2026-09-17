@@ -1,0 +1,29 @@
+{
+  "artifact_hashes": {
+    "configs.json": "dde59fc844334a95217f868530a2a3f884c20b42023e2d19e45f81b9d8a7c872",
+    "corpus_A.uint8": "af465cbd26e203a3ddc1724a7c3bbed90739e64746f794a0b61ecf0efaa5f51e",
+    "corpus_B.uint8": "f6bff9cfbfce9bf68e41e7e881687948d8f2bfd06e5829a8186429b4a673c1c1",
+    "dependencies.txt": "5ade4445dfe046e00a0c041f1de8418abecf747a7b19edd3d2681268fc0180ef",
+    "manifest.json": "ecb5068fa42677d0e8a163a03bb2d0504246c4f53bc9a439cb80c61930344962",
+    "pid": "19a718d6600debeb26501d5b16088d22dc2c79ab31d6d22a0d7160ae461bcf6b",
+    "status.txt": "a4ecc5c87d811bbff7a118c17ef8cf83318cb623a103c15b8549089aa2a7f0ac"
+  },
+  "cuda": "13.0",
+  "git_head": "e6bf35919d1ef453f94b017c0e51d2e6a49a7463",
+  "git_status": "?? .p2_manifest_done\n?? docs/papers/cl-bdh-manuscript.aux\n?? docs/papers/cl-bdh-manuscript.log\n?? docs/papers/cl-bdh-manuscript.out\n?? docs/plans/2026-09-17_probe-j-reject.md\n?? docs/plans/2026-09-17_probe-r-readout.md\n?? docs/plans/2026-09-17_probe-s-semantic-addressing.md\n?? out_c/\n?? out_local_hashes_phase2.err\n?? out_local_hashes_phase2.txt\n?? scripts/quinn/c_arms.py\n?? scripts/quinn/c_arms_pr3.py\n?? scripts/quinn/ladder_sondeB.sh\n?? scripts/quinn/ladder_sondeB_resume.sh\n?? scripts/quinn/ladder_sondeC.sh\n?? scripts/quinn/pc4_ood.py\n?? scripts/quinn/probe_j_reject.py\n?? scripts/quinn/probe_r_readout.py\n?? scripts/quinn/probe_s_semantic.py\n?? scripts/quinn/sondeB_dl.py\n?? scripts/quinn/sondeB_dl_code.py\n?? scripts/quinn/sondeB_dl_code2.py\n?? scripts/quinn/sondeB_dl_code3.py\n?? scripts/quinn/sondeB_watch.sh\n?? sondeB_dl.py\n",
+  "gpu": "NVIDIA GeForce RTX 4090",
+  "host": "ai",
+  "python": "3.12.6 | packaged by conda-forge | (main, Sep 22 2024, 14:16:49) [GCC 13.3.0]",
+  "source_hashes": {
+    "bdh.py": "22d1d705f0b2318612fe7baf75fff88d2955a4e95f85e7f9bd63ee45f30effec",
+    "docs/plans/2026-09-17_probe-s-semantic-addressing.md": "8028be4a6e27f6bb7ac1edeaf14c828ec98c694fd39a8b3bcc3ecd62b56f19a6",
+    "pipeline/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pipeline/config.py": "ae26b6bd38f428eb7f2023cdd5627ce2563603e8c0b9e4360bd106a65fbaad2a",
+    "pipeline/data.py": "cd4bacf21e3677e2f7e99d9e48a7ce253bf81b954fda34248c63deda82cf8e5b",
+    "pipeline/run.py": "0df0fcad9f5004e98512e81d7f1bf953262527747b425437ee910c072ed1f8ee",
+    "pipeline/train.py": "fcab68aca327dffbc82021f3343a5eb4838dbd504c67dd134ab8429433b085f1",
+    "scripts/quinn/probe_s_semantic.py": "3506d45d8362f6754a1d4756d703ba5795faae8bde2079c0d3f5469d69af9ed1"
+  },
+  "time": "2026-09-17T04:38:30.004454+00:00",
+  "torch": "2.13.0+cu130"
+}
