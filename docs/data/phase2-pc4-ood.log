@@ -1,0 +1,17 @@
+[byte] fitting 20 class models + pooled on 1340 train crops
+[calib] tau_rel=0.8139 (weakest trained: es)
+[calib] band=37.9314 (10x worst trained cs, mean 3.7931)
+[likelihood] starting lv: 96 crops, 24 forwards/crop
+[ood] lv: n=96 ratio=0.877 nll=4.947 rel=1 abs=1 agree=96/96=1.000
+[likelihood] starting ga: 96 crops, 24 forwards/crop
+[ood] ga: n=96 ratio=0.862 nll=5.227 rel=1 abs=1 agree=1/96=0.010
+[likelihood] starting zh: 96 crops, 24 forwards/crop
+[ood] zh: n=96 ratio=0.998 nll=5.500 rel=1 abs=1 agree=0/96=0.000
+[likelihood] starting ja: 96 crops, 24 forwards/crop
+[ood] ja: n=96 ratio=1.000 nll=5.513 rel=1 abs=1 agree=0/96=0.000
+[likelihood] starting hi: 96 crops, 24 forwards/crop
+[ood] hi: n=96 ratio=1.000 nll=5.512 rel=1 abs=1 agree=1/96=0.010
+[likelihood] starting iu: 96 crops, 24 forwards/crop
+[ood] iu: n=96 ratio=0.997 nll=5.500 rel=1 abs=1 agree=6/96=0.062
+[pc4] done: P-C4'-1=0.1806 P-C4'-2=FAIL ratio-only admits cross-script=True
+[pc4] summary -> out_c/pc4_ood.json

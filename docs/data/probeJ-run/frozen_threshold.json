@@ -1,0 +1,7 @@
+{
+  "tau": 4.038049050782653,
+  "method": "higher",
+  "percentile": 99,
+  "calibration_n": 1920,
+  "protocol_sha256": "f73170ee5f7555ff0c9602e0bae8809407ca49cb238de4ec48d65c7ed27badc7"
+}

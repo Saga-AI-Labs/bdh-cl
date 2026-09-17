@@ -15,3 +15,6 @@ hf_phase1_upload/
 # HuggingFace phase-1b upload staging and cache - never commit
 hf_phase1b_upload/
 .cache/
+
+# local probe run directories (raw artifacts stay on bdh-4090; curated copies live in docs/data/)
+out_c/

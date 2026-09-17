@@ -1,0 +1,584 @@
+{
+  "status": "complete",
+  "pid": 2430130,
+  "protocol_sha256": "f73170ee5f7555ff0c9602e0bae8809407ca49cb238de4ec48d65c7ed27badc7",
+  "runner_sha256": "9795f82ec7026a36cf6b3b5edf42a59ab3a45537a2b9996f7cc4feb084b34c2d",
+  "dependency_sha256": "6d7f98b500294323246333facf44a51aa128e59510aeae0f71f2afa0d0025312",
+  "limitations": [
+    "Known development languages, fresh byte regions only",
+    "Byte-disjoint regions do not guarantee document independence"
+  ],
+  "blocked": {
+    "iu": {
+      "reason": "No independent fixed-size head sample",
+      "source": "data/europarl/xscript_iu_syl.txt",
+      "source_sha256": "4f8419571484fd224fdea378b370b8850e3577561c87c0328cad44d098d6768d"
+    }
+  },
+  "tau": 4.038049050782653,
+  "calibration": {
+    "n": 1920,
+    "accepted": 1901,
+    "acceptance": 0.9901041666666667,
+    "wilson95": [
+      0.9845953200494342,
+      0.9936556960425353
+    ],
+    "mean_nll": 3.348958205481923,
+    "predicted_domains": {
+      "en": 96,
+      "es": 96,
+      "pl": 96,
+      "fr": 96,
+      "de": 96,
+      "cs": 96,
+      "da": 96,
+      "pt": 96,
+      "fi": 96,
+      "hu": 96,
+      "bg": 96,
+      "it": 96,
+      "et": 96,
+      "el": 96,
+      "sk": 96,
+      "sv": 96,
+      "ro": 96,
+      "nl": 96,
+      "sl": 96,
+      "lt": 96
+    },
+    "domain_mean_accepted": true,
+    "classification_correct": 1920,
+    "accepted_classification_correct": 1901,
+    "accepted_classification_accuracy": 1.0
+  },
+  "id_test": {
+    "overall": {
+      "n": 1920,
+      "accepted": 1919,
+      "acceptance": 0.9994791666666667,
+      "wilson95": [
+        0.9970555188039584,
+        0.9999080565756365
+      ],
+      "mean_nll": 3.3305868268318295,
+      "predicted_domains": {
+        "en": 96,
+        "es": 96,
+        "pl": 96,
+        "fr": 96,
+        "de": 96,
+        "cs": 96,
+        "da": 96,
+        "pt": 96,
+        "fi": 96,
+        "hu": 96,
+        "bg": 96,
+        "it": 96,
+        "et": 96,
+        "el": 96,
+        "sk": 96,
+        "sv": 96,
+        "ro": 96,
+        "nl": 96,
+        "sl": 96,
+        "lt": 96
+      },
+      "domain_mean_accepted": true,
+      "classification_correct": 1920,
+      "accepted_classification_correct": 1919,
+      "accepted_classification_accuracy": 1.0
+    },
+    "domains": {
+      "bg": {
+        "n": 96,
+        "accepted": 96,
+        "acceptance": 1.0,
+        "wilson95": [
+          0.9615230525151842,
+          1.0
+        ],
+        "mean_nll": 2.2294681947423007,
+        "predicted_domains": {
+          "bg": 96
+        },
+        "domain_mean_accepted": true,
+        "classification_correct": 96,
+        "accepted_classification_correct": 96,
+        "accepted_classification_accuracy": 1.0
+      },
+      "cs": {
+        "n": 96,
+        "accepted": 96,
+        "acceptance": 1.0,
+        "wilson95": [
+          0.9615230525151842,
+          1.0
+        ],
+        "mean_nll": 3.6824665426896934,
+        "predicted_domains": {
+          "cs": 96
+        },
+        "domain_mean_accepted": true,
+        "classification_correct": 96,
+        "accepted_classification_correct": 96,
+        "accepted_classification_accuracy": 1.0
+      },
+      "da": {
+        "n": 96,
+        "accepted": 96,
+        "acceptance": 1.0,
+        "wilson95": [
+          0.9615230525151842,
+          1.0
+        ],
+        "mean_nll": 3.349209833901804,
+        "predicted_domains": {
+          "da": 96
+        },
+        "domain_mean_accepted": true,
+        "classification_correct": 96,
+        "accepted_classification_correct": 96,
+        "accepted_classification_accuracy": 1.0
+      },
+      "de": {
+        "n": 96,
+        "accepted": 96,
+        "acceptance": 1.0,
+        "wilson95": [
+          0.9615230525151842,
+          1.0
+        ],
+        "mean_nll": 3.395928682573723,
+        "predicted_domains": {
+          "de": 96
+        },
+        "domain_mean_accepted": true,
+        "classification_correct": 96,
+        "accepted_classification_correct": 96,
+        "accepted_classification_accuracy": 1.0
+      },
+      "el": {
+        "n": 96,
+        "accepted": 96,
+        "acceptance": 1.0,
+        "wilson95": [
+          0.9615230525151842,
+          1.0
+        ],
+        "mean_nll": 2.342479499323027,
+        "predicted_domains": {
+          "el": 96
+        },
+        "domain_mean_accepted": true,
+        "classification_correct": 96,
+        "accepted_classification_correct": 96,
+        "accepted_classification_accuracy": 1.0
+      },
+      "en": {
+        "n": 96,
+        "accepted": 96,
+        "acceptance": 1.0,
+        "wilson95": [
+          0.9615230525151842,
+          1.0
+        ],
+        "mean_nll": 3.3707683144475027,
+        "predicted_domains": {
+          "en": 96
+        },
+        "domain_mean_accepted": true,
+        "classification_correct": 96,
+        "accepted_classification_correct": 96,
+        "accepted_classification_accuracy": 1.0
+      },
+      "es": {
+        "n": 96,
+        "accepted": 96,
+        "acceptance": 1.0,
+        "wilson95": [
+          0.9615230525151842,
+          1.0
+        ],
+        "mean_nll": 3.2762170312190064,
+        "predicted_domains": {
+          "es": 96
+        },
+        "domain_mean_accepted": true,
+        "classification_correct": 96,
+        "accepted_classification_correct": 96,
+        "accepted_classification_accuracy": 1.0
+      },
+      "et": {
+        "n": 96,
+        "accepted": 96,
+        "acceptance": 1.0,
+        "wilson95": [
+          0.9615230525151842,
+          1.0
+        ],
+        "mean_nll": 3.5142838939797443,
+        "predicted_domains": {
+          "et": 96
+        },
+        "domain_mean_accepted": true,
+        "classification_correct": 96,
+        "accepted_classification_correct": 96,
+        "accepted_classification_accuracy": 1.0
+      },
+      "fi": {
+        "n": 96,
+        "accepted": 96,
+        "acceptance": 1.0,
+        "wilson95": [
+          0.9615230525151842,
+          1.0
+        ],
+        "mean_nll": 3.3470293814679857,
+        "predicted_domains": {
+          "fi": 96
+        },
+        "domain_mean_accepted": true,
+        "classification_correct": 96,
+        "accepted_classification_correct": 96,
+        "accepted_classification_accuracy": 1.0
+      },
+      "fr": {
+        "n": 96,
+        "accepted": 96,
+        "acceptance": 1.0,
+        "wilson95": [
+          0.9615230525151842,
+          1.0
+        ],
+        "mean_nll": 3.2676873642342863,
+        "predicted_domains": {
+          "fr": 96
+        },
+        "domain_mean_accepted": true,
+        "classification_correct": 96,
+        "accepted_classification_correct": 96,
+        "accepted_classification_accuracy": 1.0
+      },
+      "hu": {
+        "n": 96,
+        "accepted": 96,
+        "acceptance": 1.0,
+        "wilson95": [
+          0.9615230525151842,
+          1.0
+        ],
+        "mean_nll": 3.574076376255224,
+        "predicted_domains": {
+          "hu": 96
+        },
+        "domain_mean_accepted": true,
+        "classification_correct": 96,
+        "accepted_classification_correct": 96,
+        "accepted_classification_accuracy": 1.0
+      },
+      "it": {
+        "n": 96,
+        "accepted": 96,
+        "acceptance": 1.0,
+        "wilson95": [
+          0.9615230525151842,
+          1.0
+        ],
+        "mean_nll": 3.2865445388207952,
+        "predicted_domains": {
+          "it": 96
+        },
+        "domain_mean_accepted": true,
+        "classification_correct": 96,
+        "accepted_classification_correct": 96,
+        "accepted_classification_accuracy": 1.0
+      },
+      "lt": {
+        "n": 96,
+        "accepted": 96,
+        "acceptance": 1.0,
+        "wilson95": [
+          0.9615230525151842,
+          1.0
+        ],
+        "mean_nll": 3.542411003780199,
+        "predicted_domains": {
+          "lt": 96
+        },
+        "domain_mean_accepted": true,
+        "classification_correct": 96,
+        "accepted_classification_correct": 96,
+        "accepted_classification_accuracy": 1.0
+      },
+      "nl": {
+        "n": 96,
+        "accepted": 96,
+        "acceptance": 1.0,
+        "wilson95": [
+          0.9615230525151842,
+          1.0
+        ],
+        "mean_nll": 3.2522143282861258,
+        "predicted_domains": {
+          "nl": 96
+        },
+        "domain_mean_accepted": true,
+        "classification_correct": 96,
+        "accepted_classification_correct": 96,
+        "accepted_classification_accuracy": 1.0
+      },
+      "pl": {
+        "n": 96,
+        "accepted": 95,
+        "acceptance": 0.9895833333333334,
+        "wilson95": [
+          0.9433324450728878,
+          0.9981588771815634
+        ],
+        "mean_nll": 3.6821916036853906,
+        "predicted_domains": {
+          "pl": 96
+        },
+        "domain_mean_accepted": true,
+        "classification_correct": 96,
+        "accepted_classification_correct": 95,
+        "accepted_classification_accuracy": 1.0
+      },
+      "pt": {
+        "n": 96,
+        "accepted": 96,
+        "acceptance": 1.0,
+        "wilson95": [
+          0.9615230525151842,
+          1.0
+        ],
+        "mean_nll": 3.31893935534605,
+        "predicted_domains": {
+          "pt": 96
+        },
+        "domain_mean_accepted": true,
+        "classification_correct": 96,
+        "accepted_classification_correct": 96,
+        "accepted_classification_accuracy": 1.0
+      },
+      "ro": {
+        "n": 96,
+        "accepted": 96,
+        "acceptance": 1.0,
+        "wilson95": [
+          0.9615230525151842,
+          1.0
+        ],
+        "mean_nll": 3.578646417701544,
+        "predicted_domains": {
+          "ro": 96
+        },
+        "domain_mean_accepted": true,
+        "classification_correct": 96,
+        "accepted_classification_correct": 96,
+        "accepted_classification_accuracy": 1.0
+      },
+      "sk": {
+        "n": 96,
+        "accepted": 96,
+        "acceptance": 1.0,
+        "wilson95": [
+          0.9615230525151842,
+          1.0
+        ],
+        "mean_nll": 3.6892586916999,
+        "predicted_domains": {
+          "sk": 96
+        },
+        "domain_mean_accepted": true,
+        "classification_correct": 96,
+        "accepted_classification_correct": 96,
+        "accepted_classification_accuracy": 1.0
+      },
+      "sl": {
+        "n": 96,
+        "accepted": 96,
+        "acceptance": 1.0,
+        "wilson95": [
+          0.9615230525151842,
+          1.0
+        ],
+        "mean_nll": 3.5561039552300513,
+        "predicted_domains": {
+          "sl": 96
+        },
+        "domain_mean_accepted": true,
+        "classification_correct": 96,
+        "accepted_classification_correct": 96,
+        "accepted_classification_accuracy": 1.0
+      },
+      "sv": {
+        "n": 96,
+        "accepted": 96,
+        "acceptance": 1.0,
+        "wilson95": [
+          0.9615230525151842,
+          1.0
+        ],
+        "mean_nll": 3.355811527252245,
+        "predicted_domains": {
+          "sv": 96
+        },
+        "domain_mean_accepted": true,
+        "classification_correct": 96,
+        "accepted_classification_correct": 96,
+        "accepted_classification_accuracy": 1.0
+      }
+    }
+  },
+  "ood": {
+    "overall": {
+      "n": 480,
+      "accepted": 0,
+      "acceptance": 0.0,
+      "wilson95": [
+        0.0,
+        0.00793978855890027
+      ],
+      "mean_nll": 5.3214046996666635,
+      "predicted_domains": {
+        "lt": 101,
+        "en": 246,
+        "fr": 9,
+        "pt": 18,
+        "es": 37,
+        "hu": 13,
+        "it": 2,
+        "de": 8,
+        "sk": 3,
+        "et": 4,
+        "el": 3,
+        "sv": 11,
+        "pl": 6,
+        "nl": 2,
+        "da": 3,
+        "bg": 1,
+        "fi": 3,
+        "cs": 5,
+        "sl": 1,
+        "ro": 4
+      },
+      "domain_mean_accepted": false
+    },
+    "domains": {
+      "ga": {
+        "n": 96,
+        "accepted": 0,
+        "acceptance": 0.0,
+        "wilson95": [
+          0.0,
+          0.03847694748481595
+        ],
+        "mean_nll": 5.174766466955071,
+        "predicted_domains": {
+          "en": 39,
+          "fr": 7,
+          "pt": 18,
+          "es": 28,
+          "hu": 1,
+          "it": 1,
+          "de": 1,
+          "sk": 1
+        },
+        "domain_mean_accepted": false
+      },
+      "hi": {
+        "n": 96,
+        "accepted": 0,
+        "acceptance": 0.0,
+        "wilson95": [
+          0.0,
+          0.03847694748481595
+        ],
+        "mean_nll": 5.511967796627668,
+        "predicted_domains": {
+          "es": 8,
+          "en": 76,
+          "sk": 1,
+          "ro": 3,
+          "de": 1,
+          "pl": 1,
+          "lt": 1,
+          "fi": 2,
+          "hu": 1,
+          "sv": 1,
+          "cs": 1
+        },
+        "domain_mean_accepted": false
+      },
+      "ja": {
+        "n": 96,
+        "accepted": 0,
+        "acceptance": 0.0,
+        "wilson95": [
+          0.0,
+          0.03847694748481595
+        ],
+        "mean_nll": 5.512408843643175,
+        "predicted_domains": {
+          "cs": 2,
+          "en": 86,
+          "hu": 4,
+          "fr": 1,
+          "de": 1,
+          "it": 1,
+          "sk": 1
+        },
+        "domain_mean_accepted": false
+      },
+      "lv": {
+        "n": 96,
+        "accepted": 0,
+        "acceptance": 0.0,
+        "wilson95": [
+          0.0,
+          0.03847694748481595
+        ],
+        "mean_nll": 4.89875482367466,
+        "predicted_domains": {
+          "lt": 96
+        },
+        "domain_mean_accepted": false
+      },
+      "zh": {
+        "n": 96,
+        "accepted": 0,
+        "acceptance": 0.0,
+        "wilson95": [
+          0.0,
+          0.03847694748481595
+        ],
+        "mean_nll": 5.509125567432747,
+        "predicted_domains": {
+          "en": 45,
+          "et": 4,
+          "el": 3,
+          "sv": 10,
+          "pl": 5,
+          "hu": 7,
+          "lt": 4,
+          "nl": 2,
+          "de": 5,
+          "da": 3,
+          "fr": 1,
+          "bg": 1,
+          "fi": 1,
+          "cs": 2,
+          "sl": 1,
+          "es": 1,
+          "ro": 1
+        },
+        "domain_mean_accepted": false
+      }
+    }
+  },
+  "J1": "PASS",
+  "J2": "PASS_ON_AVAILABLE_CELLS",
+  "suite_status": "INCOMPLETE"
+}
