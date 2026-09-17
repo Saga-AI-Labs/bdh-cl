@@ -1,11 +1,13 @@
 # Sonde A — Scaling Probe (Territories × Model Size)
 
-Status: PRE-REGISTERED DRAFT v0.2 · 2026-09-16 · Quinn · Operator GO: pending
-Revision: v0.2 folds in the completed Sonde C0 (multilingual base, 999/1000 routing, byte-intrinsic legal leak); Arms 1-3 and their `TBD-C*` placeholders remain open.
+Status: PRE-REGISTERED v0.3 · drafted 2026-09-16, updated 2026-09-17 · Quinn · Operator GO: granted (v0.3)
+Revision: v0.3 folds in the measured Sonde C arms and probes R/J/S/P-C4′. The serving
+router is fixed (likelihood scan); the head and the cascade are dismissed. Remaining
+placeholders: only `TBD-K` (PoC charter) and `TBD-GB` (A's own disk telemetry).
 Position in roadmap: between Sonde C and the PoC full pretrain (first mentioned in
 the 2026-09-11 roadmap conversation; B plan: "Sonde A (scaling probe) is drafted
-separately"). Depends on: Sonde B (**B-PASS**) and Sonde C (**C0 complete; Arms 1-3 pending**).
-Every C-dependent parameter below stays an explicit `TBD-C` placeholder until the arms run.
+separately"). Depends on: Sonde B (**B-PASS**) and Sonde C (**C0 complete; arms
+measured, Gate C-PARTIAL**). No probe outcome is a silent prerequisite of A's gates.
 
 ## Preconditions (one sentence each)
 
@@ -21,9 +23,18 @@ bit-exact through 4 growth transitions on non-language classes (P5 4/4), routing
   multilingual base did **not** close legal’s leak (Sonde B 197/200 -> C0 198/200),
   so the leak is **byte-geometry-intrinsic, not base-composition** - A’s hard cells
   are therefore base-independent and the C0 label set is a valid anchor.
-- **Sonde C Arms 1-3 (P-C1..P-C4): not yet run** - whether a self-distilled residual
-  head beats byte-n-gram on those hard cells is **measured, not assumed**; until then
-  A’s serving-side configuration stays undefined (`TBD-C1`, `TBD-C3`, `TBD-C-GATE`).
+- **Sonde C Arms 1-3: MEASURED (v0.3).** On RA2b-lt, **23 widths**, 580 held-out crops:
+  byte 4-gram **580/580 = 1.0000**; best self-distilled residual head (L1-mean-mlp256)
+  **540/580 = 0.9310**; MiniLM control **578/580 = 0.9966**; both cascade families fell
+  monotonically below the stage-1 baseline (`2026-09-16_probe-c-arms.md`, `0095ece`).
+- **Probe R (independent matched-input replication, v0.3):** 96-byte crops, matched
+  train crop set, 480 held-out: byte **479/480 = 0.9979**, best head **456/480 =
+  0.9500**, McNemar **23:0** — same conclusion as the arms under a different split and
+  crop length; the two protocols are not pooled (`2026-09-17_probe-r-j.md`, `3108ea7`).
+  Gate C is **C-PARTIAL**: the pre-registered P-C1 falsifier (head ≤ byte baseline)
+  triggered in both, so the serving-side configuration is no longer open — it is the
+  **likelihood scan** (`eval_router`); the head and the cascade are dismissed. A
+  stronger head may be re-armed only by new measurement, never by assumption.
 
 ## Purpose (the M4 bet)
 
@@ -47,8 +58,11 @@ difference is attributable to scale, never to protocol drift.
   it is the protocol-identity check, not a repeat experiment).
 - Arm A1-K20: twenty byte-distinct domains — the Europarl-20 set already proven on RA2b,
   **plus** the B/C classes (code/math/legal/ga) so the mix crosses script and register.
-  Router config at 20 widths follows `TBD-C-GATE` (likelihood scan is O(K); the cascade
-  from Arm 3 changes the serving math — A measures whichever router C's gate endorses).
+  Router config at 20 widths is **fixed to the likelihood scan** (`eval_router`, O(K)
+  scans per crop). Arm 3's cascade measured **dead** — monotonic degradation below the
+  stage-1 baseline in both pooling families — and is not part of any A arm. The O(K) eval
+  cost is still a measured quantity here: at K=40 the scan cost doubles and has never
+  been run at that width (see Budget).
 - Arm A1-K40: PoC planning value (double the 20; `TBD-K` from the PoC charter if it
   differs). Falsifier-relevant: at +32/phase, block 40 adds 40×32 neurons; at mult 128→256
   the grown block is ~12 % of width — A1 measures whether routing survives that thinning.
@@ -58,9 +72,10 @@ difference is attributable to scale, never to protocol drift.
 - Arm A2-W1024: n_embd 1024, nh 16 (params ≈ 4×100 M, still far from the PoC target);
   growth stays +32 **per head**, i.e. absolute block bytes double — tests whether
   territory separability is width-neutral.
-- Optional Arm A2-B (contingent): if `TBD-C1` shows the residual head dominates, repeat
-  A1-K20 at W1024 to measure head-fit cost scaling (GPU-seconds per domain) — the
-  production addressing overhead question.
+- **Arm A2-B: DISARMED (v0.3).** Its activation precondition — `TBD-C1` showing the
+  residual head dominates — was **falsified** twice (Arms and Probe R, both head < byte
+  baseline). Running it would re-train a dismissed object; it stays in the plan as a
+  disabled arm, re-armable only by new measurement.
 
 **Per arm (identical instrument suite, same invocation as B/C0):**
 - acquisition: best val ppl per phase (teacher-forced; logged, never compared across
@@ -96,10 +111,13 @@ difference is attributable to scale, never to protocol drift.
   territories through accumulated float-adjacent drift. Falsifier: monotone widening of
   deltas with ladder depth → PoC needs periodic re-anchor (restore) steps; that mechanism
   exists (F-V9) but its end-to-end cost is PoC budget.
-- **P-A5 (addressing scalability, placeholder):** the cascade endorsed by
-  `TBD-C-GATE` keeps its accuracy at `K` × sizes measured here, with stage-2 fraction
-  ≤ `TBD-C3`. **Not fillable before C's final report**; until then the serving cost of
-  addressing is treated as a single unknown, not assumed constant.
+- **P-A5 (addressing scalability, placeholder) — SUPERSEDED (v0.3).** It registered the
+  cascade endorsed by `TBD-C-GATE` keeping its accuracy at `K` × sizes, with stage-2
+  fraction ≤ `TBD-C3`. That condition was falsified before A ran: Arm 3 measured the
+  cascade **dead** (monotonic degradation below the stage-1 baseline, both pooling
+  families), so it cannot be endorsed. The registered text is kept verbatim for audit;
+  the addressing-scalability question now attaches to the **likelihood scan** (see Design).
+  Re-arm this prediction only by new measurement, never by assumption.
 
 ## Gates
 
@@ -123,14 +141,25 @@ difference is attributable to scale, never to protocol drift.
   per step, eager; 4090 24 GB holds the 400 M model with checkpoint headroom).
 - Evals/telemetry: included per phase (≤ 1 h/arm overhead); P5 is CPU-only and
   overlaps the upload/other ladders.
-- Hardware: .200 primary (6.1 T free on `/media/data` at 2026-09-16; checkpoint-byte
-  projection above must stay under it). GX10 reserved as the A2-W1024 fallback if the
-  4090 VRAM or queue binds; i7 there serves CPU-only instrument runs. No cloud, no API
-  cost — all local, matching the roadmap constraint (and the review-cost lesson).
+- Hardware: **.200 / RTX 4090 is the primary and sufficient host for A1 (K5, K20) and
+  A2-W512.** These arms are router-free for training; per B/C0 they fit the 24 GB card.
+  **The gx10 is NOT required to start A1 — the local Qwen3.8-Flash-Next serving on it
+  stays up, and no cloud (Deepseek) switch is needed for A1 or A2-W512.** gx10 becomes
+  relevant only for **A2-W1024** (~400 M, ~4× per-step compute) as the documented fallback
+  if the 4090 VRAM or queue binds; taking gx10 down (stopping Qwen, moving to a cloud
+  model) is an operator decision that will be requested **before** that arm launches, not
+  assumed. P5 is CPU-only and overlaps other ladders. No cloud, no API cost — all local,
+  matching the roadmap constraint (and the review-cost lesson).
+- **A1-K40 launch precondition (unmet, must not be skipped):** the K40 mix needs ~20
+  byte-distinct corpora beyond Europarl-20 plus the B/C classes. On `.200` the available
+  non-Europarl corpora (`textmix`, `textmix2`, `wikitext2`, `tinyshakespeare`) have not
+  been audited for count or byte-distinctness against the K20 set. **K40 must not launch
+  until that inventory is verified**; the `TBD-C-GATE` removal below does not remove this
+  gate.
 - **Total: 1–2 working weeks if A1 is gate-clean; A arms can be interleaved with PoC prep.**
-- Token note: Sonde C0 must be DONE and read out before A1-K20's serving config is fixed
-  (`TBD-C-GATE`); Axis 1 K5/K20 ladders themselves do not block on it (training is
-  router-free; only the routing **eval config** depends on C).
+- Token note: **FULFILLED (v0.3)** — Sonde C0 is done and read out, and the A1-K20
+  serving config is fixed to the likelihood scan. Axis 1 K5/K20 ladders remain
+  router-free for training; the routing **eval** config is settled rather than pending.
 
 ## Relationship to prior work
 
@@ -151,14 +180,27 @@ roadmap's resource-planning leg; no overlap with B (existence) or C (addressabil
 
 **Settled by C0 already (no longer pending):** the hard-cell target set is fixed - the legal leak is byte-geometry-intrinsic (Sonde B 197/200 -> C0 198/200 despite the multilingual base), so A’s `K=20`/`K=40` mixes exercise a base-independent regime. The C0 label table (`out_c/logs/ladC_routdiag_labels.txt`, 999/1000) is the anchor for any head-vs-n-gram comparison.
 
-**Still pending on Arms 1-3:**
+**Resolved by the measured arms and probes (v0.3):**
+
+- `TBD-C1` = **0.9310 (head) vs 1.0000 (byte baseline)** on the RA2b protocol — head does
+  not dominate; falsifier fired, head dismissed (re-armable only by new measurement).
+- `TBD-C3` — **moot**: the cascade was never endorsed (measured dead in both pooling
+  families), so no stage-2 fraction governs anything.
+- `TBD-C-GATE` = **likelihood scan (`eval_router`)** — the only surviving router; A2-B is
+  disarmed above.
+
+**Still open (do not block the A1 ladders on these):**
 
 - `TBD-K` — PoC planning territory count (PoC charter).
-- `TBD-C1` — Arm 1 head-vs-byte-n-gram accuracy on hard cells (C final report §Arm1).
-- `TBD-C3` — cascade stage-2 fraction (C final report §Arm3).
-- `TBD-C-GATE` — Gate C verdict (C final report §gates) → selects A's routing-eval
-  serving config (likelihood-scan vs cascade) and enables/disables A2-B.
 - `TBD-GB` — PoC ladder checkpoint volume projection (A's own bytes/phase telemetry,
   filled at end of A1-K20).
+
+**Probe context — recorded, explicitly NOT A gates or prerequisites:** R/J/S/P-C4′
+(`docs/reports/phase_2/`). J supports a calibrated byte-NLL reject rule for fresh text
+(ID 1919/1920; OOD false-accept 0/5 available cells; iu blocked). S records a paraphrase
+transfer failure (oracle-reader A 157/512, B 40/512; byte "always-A" was a tie-break under
+equal scores, S-PASS false) under its small scratch-model recipe. Neither is a
+prerequisite of any A gate; treating them as such re-imports exactly the silent
+prerequisite creep this plan prohibits.
 
 — Quinn, @quinn-the-builder, 2026-09-16
