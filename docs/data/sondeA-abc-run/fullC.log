@@ -1,0 +1,20 @@
+fullC_START 20260918T180921Z ckpt=out_a/bdh_textmix_ladA-A1-K5-code_best.pt
+router ckpt=out_a/bdh_textmix_ladA-A1-K5-code_best.pt | routes=[8192, 10240, 12288, 14336, 16384] n/head | window=128 tok | 200 crops/domain
+
+confusion (rows=true domain, cols=routed prefix width):
+               8192    10240    12288    14336    16384
+    prose       200        0        0        0        0
+     code         0      200        0        0        0
+     math         1      199        0        0        0
+    legal        73      127        0        0        0
+       ga        21      179        0        0        0
+
+   domain   routed
+    prose     2.46
+     code     5.51
+     math    15.78
+    legal     4.46
+       ga    21.28
+
+joint full-width reference: ppl 8.26  (served positions only)
+fullC_RC=0 20260918T181117Z
