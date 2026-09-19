@@ -78,10 +78,17 @@ legal      0    0     0   200    0     legal     1    0     0   199    0
 
 The committed ladder had zero cross-route mass on all five rows. Seed 2 loses
 **one legal crop (1/200 = 0.5 %)** into the prose width. This is not a ppl
-breach and it does not weaken the separability result — 9999/10000 crops route
+breach and it does not weaken the separability result — 999/1000 crops route
 correctly — but it is a seed-dependent event and it is reported rather than
 averaged away. Any claim worded as a perfect 200/200 across all domains is
 true of the committed run and true of seed 2 up to one crop.
+
+> *Correction added after commit (2026-09-19).* The two routing totals in this report
+> read `9999/10000`; both should have been `999/1000`. The confusion instrument has
+> five rows of 200 crops, so the cell count is 1000, not 10000, and one lost legal
+> crop makes it 999/1000. The `9999/10000` figure was mine, not the external
+> reviewer's — HAK #349 only quoted what §2 and §5 printed here. `iters=10000 per CL
+> phase` in §1 is a different quantity and is deliberately untouched.
 
 ## 3. Cold per-domain evaluation, seed 2 against the reference seed
 
@@ -217,7 +224,7 @@ this would have shipped a table with two cells from a broken invocation.
 
 **Supports:** the `A1-K5` ladder replicates across seeds on everything the run
 records — bit-exact growth, monotonic width, served ppl within 0.05, joint
-reference slightly improved, 9999/10000 crops routed correctly.
+reference slightly improved, 999/1000 crops routed correctly.
 
 **Does not support:**
 - A *quantified* retention claim. Per the probe §limitation, movements ≤0.61
