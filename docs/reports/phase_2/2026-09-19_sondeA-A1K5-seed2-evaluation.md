@@ -1,7 +1,11 @@
 # Sonde A — seed-replica `A1-K5 seed-2`: evaluation of the completed ladder
 
 Date: 2026-09-19 · Seat: Quinn (`saga`) · Host: `bdh-4090` / `192.168.178.200`
-Workdir: `/media/data/coding/bdh` · No new measurement was taken for this report.
+Workdir: `/media/data/coding/bdh` · §1–§3 and §5 are read-only, taken from the
+committed artifacts with no new measurement. §4b is the one exception: it is a
+new measurement, run under the operator's GO after this report's first version
+was already committed, and the sentence that used to stand here — "no new
+measurement was taken" — was by then false of its own document.
 
 ## 0. Provenance — what this evaluation reads and does not read
 
@@ -135,10 +139,79 @@ end** (§2, on `ga_last.pt`). The literal clause *"≤ acquisition"* wants each
 domain also routed at its own introduction checkpoint, and for seed 2 that
 measurement was never taken — the committed run has it only because the add-on
 probe A re-ran the scan per checkpoint. So §4 is seed 2 checked **against the
-reference**, not against its own acquisition point. Closing it is one add-on
-routing pass per phase, which is GPU work and therefore sits behind the
-operator's gate on new measurements. Within the existing artifacts the rule is
-not breached; the strict own-run form is outstanding, not passed.
+reference**, not against its own acquisition point. Closing it needed one
+add-on routing pass per phase -- GPU work, so it sat behind the operator's gate
+on new measurements. That pass was taken after the first version of this report
+had already been committed, under the operator's GO, and it is §4b: the strict
+own-run form is now measured and it holds. The sentence that closed this section
+on first writing read *"outstanding, not passed"*, which was true of the
+artifacts then and is not true of the document now -- so it is kept as a dated
+statement of what §4 alone could see, and §4b is the later measurement that
+closes it.
+
+## 4b. The gap closed — intra-run acquisition scan, five passes
+
+Operator GO taken for the missing measurement. Five `eval_router` passes over the
+five committed `…_last.pt`, each against the full accumulated five-domain spec,
+flags copied verbatim from the committed ladder's own routing call (`--routes
+8192,10240,12288,14336,16384 --crops 200 --window 128 --batch 4`). Read-only on
+the checkpoints, serial, no training, nothing written under `out/` or `out_a/`.
+Artifacts `out_c/logs/ladA-A1-K5-seed2_acqroute_{base,code,math,legal,ga}.txt`,
+sizes 719/718/719/719/717 B, one `acqroute_rc=0` each.
+
+Served own-width ppl, one column per checkpoint (the value each domain gets
+*routed to its own width* at that point in the ladder):
+
+| checkpoint (domain introduced) | prose | code | math | legal | ga |
+|---|---|---|---|---|---|
+| base (**prose**) | **2.48** | 159.77 | 59.14 | 4.85 | 27.97 |
+| code (**code**) | 2.48 | **4.95** | 15.06 | 4.27 | 20.17 |
+| math (**math**) | 2.48 | 4.95 | **1.46** | 4.27 | 20.17 |
+| legal (**legal**) | 2.48 | 4.95 | 1.46 | **2.29** | 20.17 |
+| ga (**ga**) | 2.48 | 4.95 | 1.46 | 2.29 | **2.34** |
+
+Bold = each domain at its own introduction checkpoint, i.e. its **acquisition
+point**. The rule's clause *post-introduction ≤ acquisition* compares every cell
+**at or right of** the bold one in its row against that bold value.
+
+**On the valid field the comparison is equality, not tolerance.** prose 2.48→2.48,
+code 4.95→4.95, math 1.46→1.46, legal 2.29→2.29 across every later checkpoint;
+ga is measured only at its own point, 2.34. Every post-introduction movement is
+**0.00** and no domain rises. The strict own-run form of the stop-rule is now
+measured and **holds**. It is not a near-miss absorbed into a ±0.05 band: a
+domain's served ppl does not move at all once introduced, because the phase that
+owns it stops being touched — which is the P5 `BIT-EXACT` result re-expressed
+through the router.
+
+**The lower triangle is not a decline and must not be read as one.** `code 159.77`
+at base is code *before it has ever been trained*, served at the prose width
+because at base the router sends all five rows to 8192. Its acquisition value is
+4.95 at the code checkpoint, not 159.77 at base. Reading `159.77 → 4.95` as a
+drop, or `20.17 → 2.34` for ga as a drop, would compare a domain's untrained
+pre-introduction state against its trained one — the same wrong-referent
+operation as reading `5.48 → 31.54` as forgetting, mirrored. Only the bold
+cell and the cells right of it are valid comparisons.
+
+**Addressing arrives with the phases, visible in the confusion matrices.** At
+base every row collapses onto 8192. Once code is introduced, code/math/ga move
+onto 10240 and legal splits 50/150; once math is introduced math takes 12288 and
+the split stays put; legal settles at 14336 and ga last at 16384. The one leak is
+the stable `legal 1@8192` (199/200), present identically at the legal and the
+final checkpoint — consistent with §2, seed-dependent, and not a ppl movement.
+
+**Independent validation of the measurement itself.** The `ga` pass reproduces the
+committed run's own final routing file line for line — 2.48 / 4.95 / 1.46 /
+2.29 / 2.34 and joint 22.92 vs the 10:19 `…_routdiag_final.txt`. A second, hand-
+run pass over the same checkpoints through a different script gives the committed
+numbers, so the plane being judged is the plane the ladder reported.
+
+**Method note, kept rather than tidied.** The first two tail passes (`legal`,
+`ga`) came back `acqroute_rc=2` at 0 B GPU. The cause was in *my* driver, not the
+data: a literal `\n` reached `argv` as `n n`, so `eval_router` got stray tokens and
+never saw its flags — a form defect that took no GPU time and damaged nothing, and
+the three completed passes were left untouched rather than re-run. They were
+re-taken inline, one line per call. A claim of "five passes" that had papered over
+this would have shipped a table with two cells from a broken invocation.
 
 ## 5. What this does and does not license
 
@@ -151,8 +224,13 @@ reference slightly improved, 9999/10000 crops routed correctly.
   are "no visible rise", not "retention ≥ x".
 - A perfect-diagonal claim carried over to seed 2 verbatim — one legal crop
   leaks.
-- An acquisition-vs-retention delta. Acquisition-time ppl is still not in these
-  logs (committed readout §3 makes the same reservation).
+- An acquisition-vs-retention *delta* read as a forgetting rate. §4b supplies the
+  acquisition column, so the comparison now exists — but its result is
+  **equality**, and equality here is a statement about the ladder's update
+  discipline (once a phase owns a width it stops being touched, hence P5
+  `BIT-EXACT`, hence the served value cannot move), not a measured bound on
+  forgetting dynamics. Movements ≤ 0.05 remain "no visible rise", not
+  "retention ≥ x".
 
 **seed 3.** The stop-rule's cheap-insurance arm is satisfied and the
 replication is tight enough that a third seed would mostly sharpen the noise
