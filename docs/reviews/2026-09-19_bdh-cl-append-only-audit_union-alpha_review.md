@@ -13,7 +13,7 @@ MD5 `fb8ed65cbede7ca63ee9e26d6ad79c9b`, 15911 bytes, 65 lines, mtime 2026-09-19 
 
 This is the same procedure applied an hour earlier to the companion audit of the Pathway paper (`2026-09-19_bdh-paper-audit_union-alpha_review.md`), which produced the failure mode this document watches for: an auditor performing correct arithmetic against the wrong referent.
 
-**Headline.** The audit is substantially right about our paper and wrong about its own arithmetic in one place we should not have accepted unchecked. Of seventeen claims: **ten hold**, **four hold only in part**, **two do not hold as stated**, and **one is right in substance while its stated number is wrong**. The single most consequential defect is **not** in the audit — it is something the audit could not have found and did not look for: the paper's marquee forgetting numbers have no artifact in this repository.
+**Headline.** The audit is substantially right about our paper and wrong about its own arithmetic in one place we should not have accepted unchecked. Of seventeen claims: **ten hold**, **four hold only in part**, **two do not hold as stated**, and **one is right in substance while its stated number is wrong**. The single most consequential defect is the one the audit did find and rank first — an unproved `[PROVED]` on `cor:prefix`. (An earlier draft of this review named a second, deeper defect, that the forgetting numbers had no artifact; that was my error, and it is corrected in §C.7 rather than erased.)
 
 ---
 
@@ -123,7 +123,7 @@ So there is a named dynamics, a norm, a realisation as finite differences, and a
 
 ## 3. C — internal inconsistencies
 
-### C.7 — "five orders of magnitude" is four. **HOLDS — and it is worse than the audit knows.**
+### C.7 — "five orders of magnitude" is four. **HOLDS — and its own source contains the refutation.**
 
 Recomputed from the numbers the audit quotes and our own acquisition floors:
 
@@ -134,7 +134,11 @@ el: log10(10928/1.59) = 3.8371   audit printed 3.84   match   reaches five: no
 
 The audit's arithmetic is exact and its reading is right: abstract, intro and `sec:fcs` all say "collapse by five orders of magnitude", and the paper's own values give four and just under four. The fix is to print "four orders, bg / 3.8 orders, el" or to say what denominator would make five true.
 
-But there is a second-order finding the audit could not have reached, because it read these figures out of the TeX and they are not in the TeX's evidence base. `18613` and `10928` appear in **no artifact** anywhere under `docs/data/` or `docs/reports/`, and the `21 x 20` perplexity matrix they are rows of has **no artifact at all** — nothing in `docs/data/` matching `fcs`, `forget`, `fixedcap`. The two most quoted numbers in the forgetting baseline, the ones that carry a headline claim, a figure caption and now this audit's verdict, have no locatable measurement behind them in this repository. The audit's "five vs four" is a real defect sitting on top of a missing measurement. Getting the exponent right without recovering the matrix would be polishing the caption of a plot whose data is not in the repo.
+**Correction.** An earlier draft of this section claimed these two figures had *no artifact at all*, and that nothing under `docs/data/` matched `fcs`/`forget`/`fixedcap`. That was false, and the error was mine, not the audit's. The FCS matrix is on disk at `docs/reports/data/2026-09-10_fcs_matrix.csv` — 20 data rows (one per phase) × 20 language columns — and `18,612.86` / `10,927.74` are exactly its row-20 (`trained=lt`) entries in the `bg` and `el` columns; the results report `docs/reports/2026-09-10_fixed-capacity-matrix-results.md:34` prints them as `bg 18,613 (×12,086), el 10,928 (×6,873)`. I searched under `docs/data/` and never opened `docs/reports/data/`, and I grepped the literal `18613` against a source that writes `18,613`. The failure is the exact shape this whole exercise watches for — the right question asked of the wrong referent — committed by me against our own paper, and it is written down here rather than quietly fixed.
+
+What the audit's finding actually rests on is sharper than "four": the report's own line refutes itself. `×12,086` is `10^4.08`, and that same sentence calls it *five orders of magnitude*. The mislabel does not originate in the abstract; it originates in the report the manuscript drew from.
+
+And one thing neither the audit nor the manuscript prose notes: the curve is not monotone. The final-phase values the manuscript quotes (four orders) are *smaller* than the column peaks — `bg 20,528,902.75` after `nl` (row 18) and `el 12,355,740.83` after `en` (row 1), i.e. `10^7.12` and `10^6.89` against their own acquisition floors, with `bg` dropping to `600` after `hu` and back to `2.05×10^7` after `nl`. So "by the final phase, five orders" is wrong where it is stated (four) and an understatement of the phenomenon it names (seven at the peak). The honest fix names the row it means.
 
 ### C.8 — "four independent confirmations", five enumerated. **HOLDS as a counting inconsistency; the audit's inventory is not verified by me.**
 
@@ -238,7 +242,7 @@ Two items in that column are worth keeping as the audit's own position, and neit
 Ranked by what they cost us unaddressed rather than by how easy they are to fix:
 
 1. **`cor:prefix` carries `[PROVED]` on an unproved sentence** (B.5) that is the sole bridge from the exact theory to the measured narrative. Relabel. Cheapest fix, largest exposure.
-2. **`18613` / `10928` and the `21x20` matrix have no artifact** (C.7). A headline forgetting claim whose data is not in the repository. Not the audit's finding, and the one here that would not survive a referee asking for the source.
+2. **The "five orders" claim contradicts the report it came from** (C.7). The FCS matrix is on disk (`docs/reports/data/2026-09-10_fcs_matrix.csv`), and the report that first printed these figures already refutes itself — `×12,086` labelled *five* orders — a label the manuscript then inherited. (An earlier draft of this review wrongly added "no artifact"; corrected in §C.7.)
 3. **Three "five-decimal / four-decimal / `~1e-5`" statements about one quantity** (A.2, D.14), none of them the one the abstract prints.
 4. **The OOD rule's third band has no derivation** (C.9) and its thresholds are fit on the six probes it separates (D.15).
 5. **`prop:soft` prints 4** (A.1), `rem:exp` prints a band its own table contradicts (C.11), `fig:fcs` prints two denominators and omits `lt` (A.3).
@@ -249,9 +253,9 @@ The audit is a strong read of our paper: fifteen of fifteen labels real, the aut
 
 It is also wrong in three places that share one shape. It says the agreement is four decimal places where the subtraction gives three. It says the amplification decays where the sequence is not monotone. It refutes a universal negative whose scope-limiting five words are in the sentence it transcribes. Each is a small error and all three are the same error: **a figure or a quote asserted, close to right, and not recomputed** — which is precisely the failure mode we charged the Pathway audit with an hour ago, and which this pass would have propagated into our own review had I accepted the audit's `four` instead of running the subtraction myself.
 
-So the answer to the question the operator asked is: yes, the errors it reports in our paper are mostly demonstrable, and the reason to read it carefully is the same reason not to paste it. It found a fifth-order defect in our theory section and got a decimal place wrong doing it, and the deepest thing wrong with the paper is something it did not look for because the paper never gave it an artifact to check.
+So the answer to the question the operator asked is: yes, the errors it reports in our paper are mostly demonstrable, and the reason to read it carefully is the same reason not to paste it. It found a fifth-order defect in our theory section and got a decimal place wrong doing it, and the deepest thing wrong with the paper is the pattern most of what it did find shares — printed numbers never recomputed against their own sources — a pattern this review's own first draft then reproduced, against the paper's forgetting matrix.
 
-**Diagnosis before prescription.** Four edits are mechanical and I would make them today: `=4` to `=1`; `[PROVED]` to `MEASURED` on `cor:prefix`; one denominator plus an `lt` row in `fig:fcs`; the range `0.60--1.47` into the abstract and conclusion beside the 83%. Two are not edits: the bg/el provenance, and the `lt` disposition, which is a question about a measurement and not about a sentence.
+**Diagnosis before prescription.** Four edits are mechanical and I would make them today: `=4` to `=1`; `[PROVED]` to `MEASURED` on `cor:prefix`; one denominator plus an `lt` row in `fig:fcs`; the range `0.60--1.47` into the abstract and conclusion beside the 83%. The `lt` disposition is not an edit — it is a question about a measurement, not a sentence. (The first draft listed the bg/el provenance as a second non-edit, on the belief that no artifact existed; that belief was wrong — see §C.7.)
 
 ---
 
