@@ -18,7 +18,7 @@ weights is not enough (we show it is not), what actually works?
 
 The full study is written up in
 [`docs/papers/rev4-bdh-manuscript.pdf`](docs/papers/rev4-bdh-manuscript.pdf)
-(*Append-Only Neural Memory: Storage, Addressing, and Growth in a Depth-Recurrent Language Model*, Revision 4.5, 2026),
+(*Append-Only Neural Memory: Storage, Addressing, and Growth in a Depth-Recurrent Language Model*, Revision 4.7, 2026),
 with complete intermediate tables in
 [`docs/reports/`](docs/reports/).
 

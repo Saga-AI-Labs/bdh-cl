@@ -1,6 +1,6 @@
 # Append-Only Neural Memory: Storage, Addressing, and Growth
 
-> **Rev 4.6 (post-external-review)** — generated from `rev4-bdh-manuscript.tex` (pandoc, 2026-09-12). The TeX/PDF pair in this directory is the source of truth; this Markdown is the readable sync copy. Full rewrite per operator GO: thesis (append-only substrate; addressing is the central problem), decay-confound closure, FCS baseline, RA2b preservation, readout mechanics (83% arithmetic, seven operators refuted), selection + OOD (20/20 data-free, two-axis rule), cross-script generalization, humanities-standard prior art (8 clusters), AI-participation disclosure. 24 pages, 6 figures, 25 refs.
+> **Rev 4.7 (post-audit errata)** — generated from `rev4-bdh-manuscript.tex` (pandoc, 2026-09-19). The TeX/PDF pair in this directory is the source of truth; this Markdown is the readable sync copy. Rev 4.7 applies the Union Alpha audit errata (map: `../plans/2026-09-19_rev4.7-errata-plan.md`): `prop:soft`'s constant, the soft-activity sentence moved out of the proved corollary into a measured remark, the `fig:fcs` denominator and `lt` disposition, "four orders of magnitude", the `0.60--1.47` range beside the 83% in the conclusion, and wording fixes across seats/hosts/scripts. No measurements changed.
 
 ---
 
@@ -10,7 +10,7 @@ How should a trained network remain trainable? The continual-learning literature
 
 This paper takes <span class="smallcaps">bdh</span>  as its instrument and reports a measurement arc that separates three concerns:
 
-1.  **Storage.** Under masked growth, is previously acquired computation physically preserved? We answer at the bit level for the tested configurations: yes, four independent confirmations, including cross-script.
+1.  **Storage.** Under masked growth, is previously acquired computation physically preserved? We answer at the bit level for the tested configurations: yes, confirmations across two seats, two hosts, and two scripts, including cross-script.
 
 2.  **Serving.** Given preserved storage, does the model still serve old tasks? We decompose the serving problem into *joint* (all neurons active) and *routed* (prefix-masked) regimes, and show the degradation in the former is 83% arithmetic on the log scale, 62% in perplexity units at the English-era checkpoint (reproduced by random untrained blocks; the mechanism holds in six of seven eras, the fraction does not) while the latter is exact.
 
@@ -24,9 +24,9 @@ The resulting thesis is not that <span class="smallcaps">bdh</span> solves conti
 
 Our experiments proceed from the simplest question to the hardest.
 
-**The forgetting baseline (Section <a href="#sec:fcs" data-reference-type="ref" data-reference="sec:fcs">4</a>).** A fixed-capacity 100M <span class="smallcaps">bdh</span> trained sequentially on 20 languages forgets catastrophically: by the final phase, nine of sixteen comparable languages serve at or below their English-only zero-shot level, two non-Latin scripts collapse by five orders of magnitude, and a two-arm re-acquisition probe finds no measurable re-acquisition advantage over a fresh model at the tested budget (forgetting is not access loss).
+**The forgetting baseline (Section <a href="#sec:fcs" data-reference-type="ref" data-reference="sec:fcs">4</a>).** A fixed-capacity 100M <span class="smallcaps">bdh</span> trained sequentially on 20 languages forgets catastrophically: by the final phase, nine of sixteen comparable languages serve at or below their English-only zero-shot level, two non-Latin scripts collapse by four orders of magnitude, and a two-arm re-acquisition probe finds no measurable re-acquisition advantage over a fresh model at the tested budget (forgetting is not access loss).
 
-**The decay confound (Section <a href="#sec:decay" data-reference-type="ref" data-reference="sec:decay">2.3</a>).** The original ladders carried a silent optimizer defect: AdamW’s decoupled weight decay eroded gradient-masked weights by a closed-form per-phase factor, invisible to loss curves. We derive the closed form, verify it to five decimal places, and repair it with a step-end bit-exact restore.
+**The decay confound (Section <a href="#sec:decay" data-reference-type="ref" data-reference="sec:decay">2.3</a>).** The original ladders carried a silent optimizer defect: AdamW’s decoupled weight decay eroded gradient-masked weights by a closed-form per-phase factor, invisible to loss curves. We derive the closed form, verify it to four decimal places, and repair it with a step-end bit-exact restore.
 
 **Preservation under growth (Section <a href="#sec:ra2b" data-reference-type="ref" data-reference="sec:ra2b">5</a>).** With the fix active, a 20-phase route-aware ladder (579M final) shows: position-dependent acquisition cost collapses, routing is perfectly diagonal (20/20 domains scored under all 20 prefix widths, 40 crops each; per-domain Wilson floor 0.91), retention equals acquisition (median $`+4.3\%`$, worst case $`+8.0\%`$, zero within-instrument drift across a full growth phase), and bit-exactness holds at every transition.
 
@@ -102,11 +102,11 @@ c \;=\; \prod_{t=1}^{T}\bigl(1-\mathrm{lr}_t\cdot\mathrm{wd}\bigr),
 \qquad
 p_{\text{exit}} = c\cdot p_{\text{entry}}
 ```
-*independent of data, loss, or routing*. Under the default lr schedule (warmup 30, decay 300, plateau at $`10^{-4}`$ for 97% of steps) the per-phase factor is $`c=0.8927`$; under the cosine schedule (warmup 1000, decay 10000) it is $`c=0.5798`$. The f32 realization of the product adds a deterministic offset of $`-1.4\times10^{-6}`$ per plateau phase (float rounding of $`1-\mathrm{lr}\cdot\mathrm{wd}`$), which reconciles the measured 0.892636 with the exact-precision 0.892752.
+*independent of data, loss, or routing* as a property of the schedule; this clause is derived rather than separately tested, since no experiment varies the data at a fixed schedule. Under the default lr schedule (warmup 30, decay 300, plateau at $`10^{-4}`$ for 97% of steps) the per-phase factor is $`c=0.8927`$; under the cosine schedule (warmup 1000, decay 10000) it is $`c=0.5798`$. The f32 realization of the product adds a deterministic offset of $`-1.4\times10^{-6}`$ per plateau phase (float rounding of $`1-\mathrm{lr}\cdot\mathrm{wd}`$), which reconciles the measured 0.892636 with the exact-precision 0.892752.
 
 **Verification.** The closed form matches measured per-segment scale factors on every checkpoint transition we tested: residuals $`\sim\!10^{-5}`$ across 1-, 4-, 18-, and 19-phase intervals, three independent instruments (torch c-fits, optimizer-moment census, weight-atlas spectral fingerprints) agree to four decimals. In the other direction, the leak is invisible where it matters most: single-phase acquisition is unaffected (bounded regime nulls at $`\le 2.5\%`$, within the 2–4% seed floor), because the erosion acts over *many* phases.
 
-**Repair.** A step-end restore re-establishes bit-exactness of the masked path after every optimizer step. Four independent confirmations (two seats, two hosts, two scripts) verify old-segment bit-identity across growth phases, $`c=1.000000`$ exactly. All fixed-regime numbers below (the RA2b chain, cross-script stages) run under this repair. The cost is measured: 8.7 ms per GiB restored at the final width (2.06 GiB snapshot, 17.9 ms against 3038 ms/step, 0.59% of step time; the snapshot is held resident for the phase, +2.06 GiB, which is the binding constraint on small-memory hardware).
+**Repair.** A step-end restore re-establishes bit-exactness of the masked path after every optimizer step. Confirmed independently on two seats, two hosts, and two scripts verify old-segment bit-identity across growth phases, $`c=1.000000`$ exactly. All fixed-regime numbers below (the RA2b chain, cross-script stages) run under this repair. The cost is measured: 8.7 ms per GiB restored at the final width (2.06 GiB snapshot, 17.9 ms against 3038 ms/step, 0.59% of step time; the snapshot is held resident for the phase, +2.06 GiB, which is the binding constraint on small-memory hardware).
 
 **Precedent.** The same failure signature—routed-expert norms falling toward zero under AdamW+weight decay while evaluations stay normal—has been observed independently in production MoE training (Marin project tracker, thread 8818) , suggesting a failure class, not an idiosyncrasy of our setup.
 
@@ -136,13 +136,19 @@ One clarification, because it is easy to misread the dissociation result: the co
 
 <div id="cor:prefix" class="corollary">
 
-**Corollary 1** (prefix growth constructs the structure). *<span class="smallcaps">proved.</span> Under hard suffix masking, the grown map restricted to masked forwards satisfies (C1)–(C2) identically. Hard selection therefore reproduces specialists exactly. Under *soft* activity, LayerNorm’s global statistics break (C1) at first order in the suffix magnitude.*
+**Corollary 1** (prefix growth constructs the structure). *<span class="smallcaps">proved.</span> Under hard suffix masking, the grown map restricted to masked forwards satisfies (C1)–(C2) identically. Hard selection therefore reproduces specialists exactly.*
+
+</div>
+
+<div id="rem:softln" class="remark">
+
+*Remark 1* (soft activity, measured not proved). <span class="smallcaps">measured/heuristic.</span> Under *soft* activity, LayerNorm’s global statistics break (C1) at first order in the suffix magnitude. This is the reading our readout measurements support rather than a proved corollary: the argument is not written out here, and Section <a href="#sec:readout" data-reference-type="ref" data-reference="sec:readout">6</a>, which uses it, treats the consequence as measured.
 
 </div>
 
 <div id="rem:readout" class="remark">
 
-*Remark 1* (readout arithmetic, measured). <span class="smallcaps">measured</span> (Section <a href="#sec:readout" data-reference-type="ref" data-reference="sec:readout">6</a>). With $`k`$\_sparse_ratio $`=0`$, the readout sums over all $`N`$ ReLU candidates, and growth adds terms to an existing sum with bit-frozen old weights. Theorem <a href="#thm:dissoc" data-reference-type="ref" data-reference="thm:dissoc">1</a> predicted this class of failure abstractly; the random-expansion control measures it at the English-era checkpoint: one random block costs $`4.1\times`$, and 83% (log scale; 62% in linear perplexity) of the real damage needs no learning at all.
+*Remark 2* (readout arithmetic, measured). <span class="smallcaps">measured</span> (Section <a href="#sec:readout" data-reference-type="ref" data-reference="sec:readout">6</a>). With $`k`$\_sparse_ratio $`=0`$, the readout sums over all $`N`$ ReLU candidates, and growth adds terms to an existing sum with bit-frozen old weights. Theorem <a href="#thm:dissoc" data-reference-type="ref" data-reference="thm:dissoc">1</a> predicted this class of failure abstractly; the random-expansion control measures it at the English-era checkpoint: one random block costs $`4.1\times`$, and 83% (log scale; 62% in linear perplexity) of the real damage needs no learning at all.
 
 </div>
 
@@ -154,19 +160,19 @@ One clarification, because it is easy to misread the dissociation result: the co
 
 <div id="prop:soft" class="proposition">
 
-**Proposition 1** (a cross-coupled ReLU counterexample to exact soft gating). *<span class="smallcaps">proved</span> (counterexample class). For non-affine updates with cross-coupling, the preservation constraints form a functional equation over the trajectory with no solution in an open gate range: a two-dimensional ReLU system makes the requirement $`(1{+}g_1)^2+g_1g_2\varepsilon\delta=4`$ for all input magnitudes $`a>0`$, unsolvable by any input-independent pair. Exactness collapses to the hard endpoint; soft regimes can only bound.*
+**Proposition 1** (a cross-coupled ReLU counterexample to exact soft gating). *<span class="smallcaps">proved</span> (counterexample class). For non-affine updates with cross-coupling, the preservation constraints form a functional equation over the trajectory with no solution in an open gate range: a two-dimensional ReLU system makes the requirement $`(1{+}g_1)^2+g_1g_2\varepsilon\delta=1`$ for all input magnitudes $`a>0`$, unsolvable by any input-independent pair. Exactness collapses to the hard endpoint; soft regimes can only bound.*
 
 </div>
 
 <div id="prop:amp" class="proposition">
 
-**Proposition 2** (depth amplification). *<span class="smallcaps">proved</span> (standard recursion). With local injections $`\delta_\ell`$ and Lipschitz level update constant $`L_f`$, $`\|e_L\|\le\sum_j(1+L_f)^{L-1-j}\delta_j`$. Uniform-in-depth bounding additionally requires contraction ($`\rho<1`$) on the interference dynamics.*
+**Proposition 2** (depth amplification). *<span class="smallcaps">proved</span> (standard recursion). With local injections $`\delta_\ell`$ and Lipschitz level update constant $`L_f`$, $`\|e_L\|\le\sum_j(1+L_f)^{L-1-j}\delta_j`$. Uniform-in-depth bounding additionally requires contraction ($`\rho<1`$) on the interference dynamics, realized as finite differences in Appendix <a href="#app:meas" data-reference-type="ref" data-reference="app:meas">14.7</a> and measured in Remark <a href="#rem:exp" data-reference-type="ref" data-reference="rem:exp">3</a>; the uniform bound is vacuous at the tested depths, and the measured directional gains do not support the premise.*
 
 </div>
 
 <div id="rem:exp" class="remark">
 
-*Remark 2* (expansiveness: measured, not proved-impossible). <span class="smallcaps">measured.</span> Directional spectral-norm proxies of trained <span class="smallcaps">bdh</span> levels at old-input states are $`1.05`$–$`1.89`$ (median per level). This is evidence *against* the contractivity premise of Proposition <a href="#prop:amp" data-reference-type="ref" data-reference="prop:amp">2</a> for the tested models—uniform contraction-based bounds are unsupported—and *not* an impossibility theorem: isolated stable directions may coexist with expansive medians.
+*Remark 3* (expansiveness: measured, not proved-impossible). <span class="smallcaps">measured.</span> Directional spectral-norm proxies of trained <span class="smallcaps">bdh</span> levels at old-input states are $`1.05`$–$`1.89`$ (median per level). This is evidence *against* the contractivity premise of Proposition <a href="#prop:amp" data-reference-type="ref" data-reference="prop:amp">2</a> for the tested models—uniform contraction-based bounds are unsupported—and *not* an impossibility theorem: isolated stable directions may coexist with expansive medians.
 
 </div>
 
@@ -178,7 +184,7 @@ One clarification, because it is easy to misread the dissociation result: the co
 
 <figure id="fig:fcs" data-latex-placement="t">
 <embed src="figures/f2_fcs_heatmap.pdf" style="width:85.0%" />
-<figcaption>FCS forgetting matrix (<span class="math inline">log<sub>10</sub></span> ppl). Each row is the 20-domain cold eval after that phase; blue box marks the diagonal. Latin-script languages fall to their English-only zero-shot level (9/19 fully erased, 7 partially); bg/el collapse by five orders of magnitude; family-structured oscillation survives throughout.</figcaption>
+<figcaption>FCS forgetting matrix (<span class="math inline">log<sub>10</sub></span> ppl). Each row is the 20-domain cold eval after that phase; blue box marks the diagonal. Latin-script languages fall to their English-only zero-shot level (nine of the sixteen zero-shot-comparable domains fully displaced, seven partial retention; en, lt, bg, el excluded); bg/el collapse by four orders of magnitude at row 20; family-structured oscillation survives throughout.</figcaption>
 </figure>
 
 # The forgetting baseline: what happens without growth
@@ -193,7 +199,7 @@ Fixed capacity $`\times`$<!-- -->128 ($`\sim`$<!-- -->100M), same sequence and p
 
 **Acquisition is never the constraint (P-FCS-2 PASS).** Every language acquires at its own phase between 1.54 and 2.29 ppl—including the 20th (lt, 2.13). Fixed 100M capacity saturates for no single language. Notable inversion: the non-Latin scripts acquire *best* under full overwrite (bg 1.54, el 1.59) while they were the worst acquirers under growth+selection (5.86, 5.99 in the fixed-regime ladder)—under full overwrite the entire model serves the current language, so there is no protected capacity to fight over.
 
-**Forgetting is family-structured, not total (P-FCS-1 PASS, corrected).** Row 20 (after all 20 phases) splits the sixteen zero-shot-comparable domains by family: *nine fully displaced*—serving at or above their English-only zero-shot level (es, fr, de, it, pt, da, sv, nl, fi; the Romance/Germanic group, strongest zero-shot transfer, displaced back to exactly what English alone transferred); *seven partial retention* (pl 0.34$`\times`$, sl 0.35$`\times`$, cs 0.37$`\times`$, sk 0.43$`\times`$, ro 0.61$`\times`$, hu 0.78$`\times`$, et 0.87$`\times`$ their zero-shot); and the two non-Latin scripts collapsed five orders of magnitude (bg 18,613, el 10,928). The family axis that governs interference also governs survival.
+**Forgetting is family-structured, not total (P-FCS-1 PASS, corrected).** Row 20 (after all 20 phases) splits the sixteen zero-shot-comparable domains by family: *nine fully displaced*—serving at or above their English-only zero-shot level (es, fr, de, it, pt, da, sv, nl, fi; the Romance/Germanic group, strongest zero-shot transfer, displaced back to exactly what English alone transferred); *seven partial retention* (pl 0.34$`\times`$, sl 0.35$`\times`$, cs 0.37$`\times`$, sk 0.43$`\times`$, ro 0.61$`\times`$, hu 0.78$`\times`$, et 0.87$`\times`$ their zero-shot); and the two non-Latin scripts collapsed four orders of magnitude at row 20 (bg 18,613, el 10,928; the twentieth domain, *lt*, is the language trained in row 20 itself and serves there at its acquisition value, $`2.13`$, retained rather than displaced). The family axis that governs interference also governs survival.
 
 **Interference is not recency-structured but family-structured (P-FCS-3 FAIL—replaced by a stronger finding).** Pre-registered prediction: the most recent phase dominates backward interference. Measured: the en column oscillates between 10.5–13.6 ppl after Romance/Germanic phases and 22.1–29.1 after Slavic/Uralic phases, with a Germanic phase *partially restoring* en after a Slavic one (29.1 $`\to`$ 11.3). The mechanism: shared Latin-script byte statistics act as implicit replay. This is the family-geometry finding at its cleanest.
 
@@ -237,7 +243,7 @@ Joint full-width serving on the final chain recovers dramatically vs. the leaky
 
 **H-decay-2 PASS:** joint recovery without splice confirms the decay component’s size; the residual is the readout problem.
 
-## Bit-exactness: four independent confirmations
+## Bit-exactness: independent confirmations across seats, hosts, and scripts
 
 The P5 protocol (masked-cell optimizer moments $`v\equiv 0`$, old-segment tensor equality $`c=1.000000`$) held at every tested transition, on two hosts, two scripts, two seats: the en$`\to`$es transition, es$`\to`$pl, the full p19$`\to`$p20 comparison, the single-phase fixed-capacity chain on the 4090, and the cross-script zh$`\to`$hi growth (Section <a href="#sec:xscript" data-reference-type="ref" data-reference="sec:xscript">8</a>). Frozen segments do not move. Storage is exact.
 
@@ -274,7 +280,7 @@ The zero-init discipline is itself load-bearing: arm C is “growth as shipped, 
 
 ## Seven fixed readout operators, all refuted
 
-If the damage is arithmetic, some fixed arithmetic might repair it. We tested seven readout operators, end-to-end, on the shipped chain (P-R1, P-R1b; two vacuous by construction):
+If the damage is arithmetic, some fixed arithmetic might repair it. We tested seven readout operators, end-to-end, on the shipped chain (P-R1, P-R1b; two vacuous by construction). The two identity controls below come from different instruments—$`2.33`$ from the expansion control on the en base, $`32.04`$ from the operator run on the full chain—so they differ by an order of magnitude.
 
 <div class="center">
 
@@ -512,7 +518,7 @@ We separate what this paper did not measure from what it measured and could not 
 
 # Conclusion
 
-A depth-recurrent language model with additive growth gives continual learning a shape the fixed-budget literature does not have: storage is exact by construction and verified at the bit level; serving degrades for reasons we measured to be mostly arithmetic at the checkpoint where we controlled it—83% on the log scale (62% in linear perplexity), a mechanism that reproduces across seven eras while the fraction does not—and repairable by no fixed operator we could construct; selection—input-dependent, label-free, nearly data-free—repairs it exactly; out-of-support detection needs two measured axes; and the whole stack holds across script universes. What remains open is addressing at scale, and we have measured its shape: cheap where byte statistics distinct, escalate where they do not, and reject what is not in support. The substrate grows monotonically; the science grows with it.
+A depth-recurrent language model with additive growth gives continual learning a shape the fixed-budget literature does not have: storage is exact by construction and verified at the bit level; serving degrades for reasons we measured to be mostly arithmetic at the checkpoint where we controlled it—83% on the log scale (62% in linear perplexity; fraction range $`0.60`$–$`1.47`$ over seven eras), a mechanism that reproduces across seven eras while the fraction does not—and repairable by no fixed operator we could construct; selection—input-dependent, label-free, nearly data-free—repairs it exactly; out-of-support detection needs two measured axes; and the whole stack holds across script universes. What remains open is addressing at scale, and we have measured its shape: cheap where byte statistics distinct, escalate where they do not, and reject what is not in support. The substrate grows monotonically; the science grows with it.
 
 # AI participation
 
@@ -586,7 +592,7 @@ Take any specialist $`F_A`$ and define $`F'(h)=F_A(h)+c\mathbf{1}`$ for $`c\neq0
 
 ## Proof of Theorem <a href="#thm:criterion" data-reference-type="ref" data-reference="thm:criterion">2</a>
 
-($`\Leftarrow`$) Induction over $`\ell`$. Base: $`h_0=E(x)\in H_A`$ by assumption and $`h_0=F_A^0(x)`$. Step: suppose $`h_\ell=F_A^\ell(x)\in H_A\cap\mathcal{T}_A`$. By (C1), $`F'(h_\ell)\in H_A`$; by (C2), its relevant components equal $`F_A(h_\ell)`$, i.e. $`F'(h_\ell)=F_A(h_\ell)`$ as elements of $`H_A`$ (identifying $`F_A`$’s image with $`H_A`$). Thus $`h_{\ell+1}=F'(h_\ell)=F_A(h_\ell)=F_A^{\ell+1}(x)`$. ($`\Rightarrow`$) Suppose $`F'^L(x)=F_A^L(x)`$ for all $`x\in\mathcal{X}_A`$ and all $`L`$, but there exists $`z^*\in\mathcal{T}_A`$ with $`F'(z^*)\neq F_A(z^*)`$. Choose $`x\in\mathcal{X}_A`$ whose trajectory passes through $`z^*`$ at depth $`\ell^*<L`$ (such $`x`$ exists by definition of $`\mathcal{T}_A`$). Applying the hypothesis at $`L=\ell^*+1`$ gives $`F'(z^*)=F_A(z^*)`$, contradicting the assumption. Hence equality must hold on all reachable old-trajectory states. $`\qed`$
+($`\Leftarrow`$) Induction over $`\ell`$. Base: $`h_0=E(x)\in H_A`$ by assumption and $`h_0=F_A^0(x)`$. Step: suppose $`h_\ell=F_A^\ell(x)\in H_A\cap\mathcal{T}_A`$. By (C1), $`F'(h_\ell)\in H_A`$; by (C2), its relevant components equal $`F_A(h_\ell)`$, i.e. $`F'(h_\ell)=F_A(h_\ell)`$ as elements of $`H_A`$ (identifying $`F_A`$’s image with $`H_A`$). Thus $`h_{\ell+1}=F'(h_\ell)=F_A(h_\ell)=F_A^{\ell+1}(x)`$. ($`\Rightarrow`$) Suppose $`F'^L(x)=F_A^L(x)`$ for all $`x\in\mathcal{X}_A`$ and all $`L`$, but there exists $`z^*\in\mathcal{T}_A`$ with $`F'(z^*)\neq F_A(z^*)`$. Choose $`x\in\mathcal{X}_A`$ whose trajectory passes through $`z^*`$ at depth $`\ell^*<L`$ (such $`x`$ exists by definition of $`\mathcal{T}_A`$). The hypothesis at $`L=\ell^*`$ gives $`F'^{\ell^*}(x)=F_A^{\ell^*}(x)=z^*`$, and at $`L=\ell^*+1`$ it gives $`F'^{\ell^*+1}(x)=F_A^{\ell^*+1}(x)`$, i.e. $`F'(z^*)=F_A(z^*)`$, contradicting the assumption. Hence equality must hold on all reachable old-trajectory states. $`\qed`$
 
 *Structural conditions.* If (C1) $`(I-P_A)F'P_A=0`$ then $`F'(H_A)\subseteq H_A`$: any $`z=P_Az`$ has $`F'(z)=P_AF'(z)+(I-P_A)F'(z)`$ and $`(I-P_A)F'(z)=(I-P_A)F'P_Az=0`$. If moreover (C2) $`P_AF'P_A=P_AF_AP_A`$ then on $`H_A`$, $`P_AF'=P_AF_A`$, i.e. the projected dynamics agree with the specialist’s. Together they satisfy the criterion restricted to $`H_A`$; combined with $`E(\mathcal{X}_A)\subseteq H_A`$ they give the full statement. Neither alone suffices: (C1) without (C2) confines but alters (e.g. $`F'=2\,\mathrm{id}`$, $`P_A=I`$: commuting, invariant, not preserving); (C2) without (C1) matches the specialist today but admits later leakage.
 
@@ -602,7 +608,7 @@ Two-dimensional counterexample, $`I_A=\{1\}`$, $`I_B=\{2\}`$, $`\sigma=\mathrm{R
 
 Standard recursion: with $`e_{\ell+1}=e_\ell+[f'(\tilde h_\ell)-f'(h_\ell)]+\delta_\ell`$ and $`\|f'(\tilde h)-f'(h)\|\le L_f\|e_\ell\|`$, $`\|e_{\ell+1}\|\le(1+L_f)\|e_\ell\|+\delta_\ell`$; unrolling gives the stated bound. Contractivity $`\rho<1`$ on the interference subspace replaces $`(1+L_f)`$ and yields $`\|e_L\|\le\delta_{\max}/(1-\rho)`$. $`\qed`$
 
-## Remark on the measurement (Remark <a href="#rem:exp" data-reference-type="ref" data-reference="rem:exp">2</a>)
+## Remark on the measurement (Remark <a href="#rem:exp" data-reference-type="ref" data-reference="rem:exp">3</a>)
 
 Two complementary instruments replace a single operator-norm computation. *(i) Whole-map directional gains*: 6-step power iteration on JVPs of one composed level map at 8 old-input states; medians $`1.05`$–$`1.89`$ per level (lower-bound-flavored; LayerNorm induces contractive directions with minima $`{\approx}0.9`$). *(ii) Trajectory-level gate-miscalibration curves* (the interference Jacobian realized as finite differences): scaling both suffix blocks to $`d`$ on EN inputs and tracking state deviation $`\|h^{(d)}_\ell-h^{(0)}_\ell\|/\|h^{(0)}_\ell\|`$ per level yields
 
@@ -619,4 +625,4 @@ Two complementary instruments replace a single operator-norm computation. *(i) W
 </div>
 
 Hard masking gives exact tensor identity at every level ($`\varepsilon_{\mathrm{inv}}
-=\varepsilon_{\mathrm{eq}}=0`$ by construction; implementation-faithfulness verified). Injections propagate with *mild per-level amplification* ($`{\sim}1.2`$–$`1.5\times`$, consistent with the directional gains) that *saturates* as deviations approach $`\mathcal{O}(1)`$ under LayerNorm renormalization. Conclusion drawn, precisely: contraction is unsupported for these models, so contraction-based uniform bounding is unavailable *here*; equally, erosion is not runaway-exponential within realistic depths — it approaches full decorrelation ($`{\approx}0.9`$ relative state deviation) and stays there. No universal impossibility is claimed.
+=\varepsilon_{\mathrm{eq}}=0`$ by construction; implementation-faithfulness verified). Injections propagate with *per-level amplification* (successive ratios $`1.20`$, $`1.32`$, $`1.21`$, $`1.12`$, $`1.06`$, consistent with the directional gains) that *saturates* as deviations approach $`\mathcal{O}(1)`$ under LayerNorm renormalization. Conclusion drawn, precisely: contraction is unsupported for these models, so contraction-based uniform bounding is unavailable *here*; equally, erosion is not runaway-exponential within realistic depths — it approaches full decorrelation ($`{\approx}0.9`$ relative state deviation) and stays there. No universal impossibility is claimed.
