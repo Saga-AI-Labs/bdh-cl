@@ -190,9 +190,9 @@ claim) · **unclassified** (nobody has declared it - gap, not absence).
 
 | path | last | author | date | bytes | title / status |
 |---|---|---|---|---|---|
-| `docs/papers/cl-bdh-manuscript-v0.md` | `8252455` | Quinn (Agent Zero) | 2026-09-12 | 27,035 | Computation-Isolable Continual Learning in a Depth-Recurrent Language <br>*unclassified* |
-| `docs/papers/cl-bdh-manuscript.pdf` | `9dd1663` | Quinn (Agent Zero) | 2026-09-06 | 510,758 | %PDF-1.7<br>*unclassified* |
-| `docs/papers/cl-bdh-manuscript.tex` | `9dd1663` | Quinn (Agent Zero) | 2026-09-06 | 45,852 | \documentclass[11pt]{article}<br>*unclassified* |
+| `docs/papers/archive/cl-bdh-manuscript-v0.md` | `8252455` | Quinn (Agent Zero) | 2026-09-12 | 27,035 | Computation-Isolable Continual Learning in a Depth-Recurrent Language <br>*unclassified* |
+| `docs/papers/archive/cl-bdh-manuscript.pdf` | `9dd1663` | Quinn (Agent Zero) | 2026-09-06 | 510,758 | %PDF-1.7<br>*unclassified* |
+| `docs/papers/archive/cl-bdh-manuscript.tex` | `9dd1663` | Quinn (Agent Zero) | 2026-09-06 | 45,852 | \documentclass[11pt]{article}<br>*unclassified* |
 | `docs/papers/figures/decay_regimes.pdf` | `9dd1663` | Quinn (Agent Zero) | 2026-09-06 | 25,363 | %PDF-1.4<br>*unclassified* |
 | `docs/papers/figures/f1_ladder_curves.pdf` | `ae791ed` | Quinn (Agent Zero) | 2026-09-12 | 21,372 | %PDF-1.4<br>*unclassified* |
 | `docs/papers/figures/f2_fcs_heatmap.pdf` | `ae791ed` | Quinn (Agent Zero) | 2026-09-12 | 24,863 | %PDF-1.4<br>*unclassified* |
