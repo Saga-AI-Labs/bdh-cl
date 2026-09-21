@@ -3,7 +3,7 @@
 Date: 2026-09-21 | Seat: A0-Quinn | Runtime host: .200 (/media/data/coding/bdh)
 Predecessor: Sonde D hybrid-crop readout (`docs/reports/2026-09-20_sonde-D-hybrid-crop-addressing-report.md`, commit f39627b)
 Pre-registration: `docs/plans/2026-09-20_sonde-B-train-damage-pairs-prereg.md`
-Status: mechanism question answered at the artefact. Harvest run (the (a)/(b)/(c) decision) is NOT run; one cell is blocked on an operator ruling (section 6).
+Status: mechanism question answered at the artefact. Harvest run (the (a)/(b)/(c) decision) is NOT run; the ga__code cell is resolved by the operator ruling (retained (b)-only, see section 7).
 
 ---
 
@@ -73,7 +73,7 @@ SMOKE_RC=0
 
 Corroboration from the run's own log: `growth: 224 -> 226`; `route-aware: prefix mask 14336..14464` (= 64x224 to 64x226); `old neurons + embed + lm_head frozen (bit-exact via step-end restore)`; device cuda. The produced pair sits at `out_c/sondeB/smoke/bdh_textmix_sondeB-smoke_{best,last}.pt` (2,133,917,764 bytes each).
 
-What the smoke does NOT say: the 8-iteration ppl (2.37 val / 2.26 test) is a smoke number with zero scientific weight. It proves plumbing: a legal checkpoint can be grown to a twin width at bs 512 while the old-neuron freeze path engages.
+What the smoke does NOT say: it does not establish learning. The only load-bearing claim is construction success -- checkpoint geometry and freeze semantics verified (achieved width 226 read off the produced artefact, block size 512 preserved, old neurons frozen). The 8-iteration validation/test ppl (2.37 / 2.26) are a plumbing diagnostic of no scientific weight and belong in an appendix note only; they are not evidence of learning.
 
 ## 6. Card protocol: claim with work behind it, released verified
 
@@ -92,7 +92,7 @@ The frozen pairs were prose__math, prose__code, math__ga, ga__code. Resolving gr
 
 For ga__code the back territory is narrower than the front one: a grow-mult cannot be negative, so twin-matched growth is not definable for that pair. This is a defect in the frozen strategy at that cell, found by arithmetic against measured values -- and it surfaced before any claim, which is the whole value of freezing first.
 
-Analyst position (not applied): ga__code can still serve the (b) addressing question without any growth, because (b) needs an oracle expert only for the back territory, and code already has one at 160; what it cannot reach is the (c) storage question, which requires a real growth boundary. The alternative -- flipping the cell to code__ga (160 to 256, +96) -- answers a different question than the frozen one and is therefore an operator decision, not a silent edit. The three healthy pairs plus the prose__legal 4.94 anchor remain ready to run on the next GO.
+RULING APPLIED (operator GO 2026-09-21; corroboration HAK #371): ga__code is RETAINED as the (b)-only cell, exactly as analysed -- (b) needs an oracle expert only for the back territory and code already has one at 160, so this cell answers the addressing question without any growth. It cannot reach the (c) storage question, which requires a real growth boundary the frozen widths forbid (back 160 is narrower than front 256, so a grow-mult would be negative). The code__ga flip is NOT taken: it answers a different question and would contaminate the pre-registration. Kept as a first-class infeasibility result, not fixed away. The three healthy pairs plus the prose__legal 4.94 anchor remain ready to run on the next GO.
 
 ## 8. Provenance
 
