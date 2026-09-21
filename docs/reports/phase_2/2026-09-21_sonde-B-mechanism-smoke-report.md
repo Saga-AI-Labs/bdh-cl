@@ -1,7 +1,7 @@
 # Sonde B -- mechanism smoke: the pipeline can grow a bs=512 checkpoint at the true twin width
 
 Date: 2026-09-21 | Seat: A0-Quinn | Runtime host: .200 (/media/data/coding/bdh)
-Predecessor: Sonde D hybrid-crop readout (`docs/reports/2026-09-20_sonde-D-hybrid-crop-addressing-report.md`, commit f39627b)
+Predecessor: Sonde D hybrid-crop readout (`docs/reports/phase_2/2026-09-20_sonde-D-hybrid-crop-addressing-report.md`, commit f39627b)
 Pre-registration: `docs/plans/2026-09-20_sonde-B-train-damage-pairs-prereg.md`
 Status: mechanism question answered at the artefact. Harvest run (the (a)/(b)/(c) decision) is NOT run; the ga__code cell is resolved by the operator ruling (retained (b)-only, see section 7).
 
