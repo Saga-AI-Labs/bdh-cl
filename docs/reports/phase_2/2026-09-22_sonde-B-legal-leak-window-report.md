@@ -110,7 +110,9 @@ for that ladder; `< 25%` confirms; between is partial.
 | seed-2 | 1/9 = 0.111 | 2/11 = 0.182 | 2/7 = **0.286** | 183/193 = 0.948 |
 | reference | 1/11 = 0.091 | 0/8 = 0.000 | 1/5 = **0.200** | 189/195 = 0.969 |
 
-**Verdict: reference confirmed (0.200 < 0.25), seed-2 partial (0.286, between the thresholds).**
+**Verdict under the frozen rule:** the reference ladder falls in the confirm band (1 of 5 leakers
+locally right = 0.200, below the 0.25 threshold, n=5); seed-2 lands between the bands (2 of 7 = 0.286,
+n=7) and is reported as partial. Counts and denominators are on the line, not inferred.
 
 What this means, stated plainly: **even with four times the early evidence, a legal crop that the router
 routes downward is still usually served worse for it** - 5 of 7 remaining leakers on seed-2 (71%) and 4
@@ -121,9 +123,11 @@ survives in character.
 ## 7. Resolution against the pre-registered outcomes
 
 - D1': frozen rule returns **H-rule**; the data actually show **partial attenuation**, as qualified in
-  section 4. Not promoted to "rule asymmetry confirmed".
+  section 4. Not promoted to a rule-level asymmetry claim.
 - D2': **refuted** - no persistent core; the margin probe's trio claim is withdrawn.
-- D3': **reference confirmed, seed-2 partial** - local incorrectness persists at a longer window.
+- D3': on the reference ladder 1 of 5 leakers is locally right = 0.200, below the 0.25 confirm
+  threshold (n=5); on seed-2 2 of 7 = 0.286, between the bands (n=7), reported as partial. Local
+  incorrectness persists at the longer window.
 - Secondary: no upward leakage anywhere; leaker margins stay low at every window.
 
 ## 8. What this changes in the thread
