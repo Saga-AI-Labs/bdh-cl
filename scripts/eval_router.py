@@ -32,6 +32,8 @@ def main():
     ap.add_argument("--batch", type=int, default=4)
     ap.add_argument("--oracle-routes", default=None,
                     help="optional name:width,... per-domain true prefix widths; adds an oracle served-ppl column")
+    ap.add_argument("--route-grid", action="store_true",
+                    help="emit a [true-domain x forced-width] served-ppl grid from the already-filled rl tensor (zero extra forwards)")
     args = ap.parse_args()
 
     from pipeline.analyze import _load_model
@@ -86,6 +88,7 @@ def main():
     routed_ppl = {}
     oracle_ppl = {}
     joint_losses = []
+    grid_rows = []
 
     for ti, (tname, blocks) in enumerate(doms):
         rl = torch.zeros(R, args.crops, bs)
@@ -105,6 +108,8 @@ def main():
         scores = rl[:, :, : args.window].mean(dim=2)
         choice = scores.argmin(dim=0)
         served = rl[choice, torch.arange(args.crops), args.window:].mean(dim=1)
+        if args.route_grid:
+            grid_rows.append(rl[:, :, args.window:].mean(dim=(1, 2)).float().cpu().exp().tolist())
 
         conf[ti] += torch.bincount(choice, minlength=R)
         routed_ppl[tname] = math.exp(served.mean().item())
@@ -129,6 +134,11 @@ def main():
     print("          " + "".join(f"{r:>9}" for r in routes))
     for i, n in enumerate(names):
         print(f"{n:>9} " + "".join(f"{conf[i, j].item():>9}" for j in range(R)))
+    if args.route_grid:
+        print("\nserved ppl grid (rows=true domain, cols=forced width):")
+        print("          " + "".join(f"{r:>9}" for r in routes))
+        for gi, gn in enumerate(names):
+            print(f"{gn:>9} " + "".join(f"{gv:>9.2f}" for gv in grid_rows[gi]))
     if oracle_ppl:
         print(f"\n{'domain':>9} {'routed':>8} {'oracle':>8}")
         for n in names:
