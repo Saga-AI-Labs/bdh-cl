@@ -19,7 +19,7 @@ This probe does not train anything. It serves the eight grown checkpoints twice 
 
 Four cells x two ladders. `N` is the trained width, `ppl_N` the mean of the `routed` ppl over
 the cell's own domains for the `_last` checkpoint as printed by the grown-capacity ablation
-(`--route-grid`, 200 crops, window 128; those dumps carry `ckpt=…/harvest_ref/…`, so the
+(`--route-grid`, 200 crops, window 128; those dumps carry `ckpt=.../harvest_ref/...`, so the
 figures below are reference-ladder figures). The file size is equal within a cell because the
 two tags differ only in weights.
 
