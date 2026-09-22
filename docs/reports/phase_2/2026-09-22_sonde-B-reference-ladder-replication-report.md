@@ -221,8 +221,9 @@ these numbers.
 
 **Replicates on an independent ladder:** the mechanism chain. Trained expert -> tight diagonal and
 oracle-grade serving; absent expert -> dispersed routing and 4-5x worse serving; the (b) oracle
-equality at delta 0.00; the (c) frozen-region bit-exactness with growth present. Three of three
-legs.
+equality at delta 0.00; the (c) frozen-region bit-exactness with growth present. These are
+complementary readings of one chain, not three independent confirmations: (a) routing, (b) serving
+and (c) storage are three views of the same grown checkpoints.
 
 **Replicates and strengthens:** the legal boundary leak is present on both ladders, in the same
 cell, in the same direction (20 of 20 leaks downward, 0 upward), with the upper column available.
