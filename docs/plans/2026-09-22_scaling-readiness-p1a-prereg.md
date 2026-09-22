@@ -17,12 +17,14 @@ This probe does not train anything. It serves the eight grown checkpoints twice 
 
 ## 2. The eight pairs (pinned before the run)
 
-Four cells x two ladders. `N` is the trained width, `ppl_N` the own-domain served perplexity of
-the `_last` checkpoint as printed by the grown-capacity ablation (`--route grid`, 200 crops,
-window 128). The file size is equal within a cell because the two tags differ only in weights.
+Four cells x two ladders. `N` is the trained width, `ppl_N` the mean of the `routed` ppl over
+the cell's own domains for the `_last` checkpoint as printed by the grown-capacity ablation
+(`--route-grid`, 200 crops, window 128; those dumps carry `ckpt=…/harvest_ref/…`, so the
+figures below are reference-ladder figures). The file size is equal within a cell because the
+two tags differ only in weights.
 
 ```
-cell           N      ppl_N (seed-2)   size (bytes)
+cell           N      ppl_N (ref)      size (bytes)
 prose__math    12288  1.41            1813044888
 prose__code    10240  4.90            1511046808
 math__ga       16384  2.40            2417040985
@@ -63,9 +65,14 @@ cell's own domains, `--routes <N>` (one route, so the routed expert is the train
 every crop), `--window 128`, `--crops 200`, generator seed 1234, the same domain list and the
 same order the harvest eval used.
 
-The number of interest is the `routed` ppl of that run: all crops take the trained width, so
-the routed figure is the cell's own-domain served ppl at the trained width. The instrument
-costs about one forward pass per crop; no grid over other widths is computed.
+The number of interest per checkpoint and cell is the mean of the `routed` ppl over the cell's
+own domains as printed in the routed block (prose+math, prose+code, math+ga, prose+legal - the
+two domains of the cell name; the mean of the two printed values). All crops take the trained
+width, so the routed figure is the served ppl at the trained width. The domains are passed as
+the full five-domain SPEC of the ablation, so every domain is drawn from the same stream the
+committed figures were drawn from; only the rows of the cell's own domains are read. The
+instrument costs about one forward pass per crop per domain; no grid over other widths is
+computed.
 
 ## 4. Frozen reading
 
@@ -96,11 +103,15 @@ cell's own width is the known weak point (its capacity gain over the pre-grown w
 
 - G1, the instrument and the pins: the driver prints `EVAL_ROUTER_MD5` and the md5 of every
   checkpoint before its run; a mismatch against the table above stops that pair.
-- G2, reproduction of the ablation: the four `_last` runs of the seed-2 ladder must print the
-  `ppl_N` of the table above within 0.01 (1.41, 4.90, 2.40, 2.20); the four `_last` runs of the
-  reference ladder must reach the own-domain figure of the stored
-  `out_c/sondeB/harvest_ref/grid_*.routdiag.txt` within 0.01. These are the same files, the same
-  domains and the same draw as in the committed ablation, so the figures are expected.
+- G2, reproduction of the ablation: the four `_last` runs of the reference ladder must reach the
+  `ppl_N` of the table above within 0.01 (1.41, 4.90, 2.40, 2.20) - the same files, the same
+  SPEC and the same draw as the committed grid dumps
+  (`out_c/sondeB/harvest_ref/grid_*.routdiag.txt`). The four `_last` runs of the seed-2 ladder
+  have no committed reference table, because the grid ablation ran on the reference ladder; the
+  legal cell is expected at 2.20 for its trained width, the figure the legal-leak thread
+  reported for this checkpoint at 200 crops. The other three seed-2 `_last` runs carry no
+  external expected value - the pair comparison stands on its own, and the frozen reading
+  needs nothing else.
 - G3, order: the pairs are run in the order of the table, ladder by ladder, and the log shows
   the eight sections in that order.
 - G4, scope: the driver writes only under `out_c/scaling_readiness/p1a/`, reads the checkpoints
