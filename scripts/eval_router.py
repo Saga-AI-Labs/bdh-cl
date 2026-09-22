@@ -34,6 +34,8 @@ def main():
                     help="optional name:width,... per-domain true prefix widths; adds an oracle served-ppl column")
     ap.add_argument("--route-grid", action="store_true",
                     help="emit a [true-domain x forced-width] served-ppl grid from the already-filled rl tensor (zero extra forwards)")
+    ap.add_argument("--crop-dump", default=None,
+                    help="domain:wA,wB - per-crop early-window scores at two routes, chosen route, and late-window loss at both, for that true domain")
     args = ap.parse_args()
 
     from pipeline.analyze import _load_model
@@ -110,6 +112,19 @@ def main():
         served = rl[choice, torch.arange(args.crops), args.window:].mean(dim=1)
         if args.route_grid:
             grid_rows.append(rl[:, :, args.window:].mean(dim=(1, 2)).float().cpu().exp().tolist())
+
+        if args.crop_dump:
+            dname, wspec = args.crop_dump.split(":", 1)
+            if dname == tname:
+                wa, wb = (int(x) for x in wspec.split(","))
+                ia, ib = routes.index(wa), routes.index(wb)
+                print(f"CROP_DUMP domain={tname} wA={wa} wB={wb} window={args.window} crops={args.crops}")
+                print("crop_idx|scoreA|scoreB|margin_AminusB|lateA|lateB|chosen")
+                for ci in range(args.crops):
+                    print(f"{ci}|{scores[ia, ci].item():.6f}|{scores[ib, ci].item():.6f}|"
+                          f"{(scores[ia, ci] - scores[ib, ci]).item():.6f}|"
+                          f"{rl[ia, ci, args.window:].mean().item():.6f}|"
+                          f"{rl[ib, ci, args.window:].mean().item():.6f}|{routes[choice[ci].item()]}")
 
         conf[ti] += torch.bincount(choice, minlength=R)
         routed_ppl[tname] = math.exp(served.mean().item())
