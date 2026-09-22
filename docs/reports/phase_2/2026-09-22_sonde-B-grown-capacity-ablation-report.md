@@ -91,8 +91,9 @@ per cell, re-parsed from the four printed grids:
   - `math__ga` (all five distinct): prose, code, math and ga each minimise at their own ladder
     width, but **legal minimises at 10240, not at its ladder width 14336** (4.03 vs 24.48).
   - `prose__legal` (8192..14336 distinct): the trained legal minimises at 14336 as expected, but
-    **code minimises at 12288** (63.35, vs 68.91 at its ladder width 10240) and **ga at 8192**
-    (24.98, vs 28.62 at 14336).
+    **code minimises at 12288** (63.35, vs 68.91 at its ladder width 10240), and **ga is flat
+    across its two lowest widths**: 24.98 / 24.98 / 26.52 / 28.62 / 28.62. The argmin the grid
+    prints for ga (8192) is a tie-break artifact across 8192 and 10240, not an optimum.
   - `prose__math` and `prose__code` clamp at their `N_full`, so non-trained domains cannot be
     served at their own ladder widths at all there; no argmin comparison in those two cells is
     meaningful.
@@ -101,12 +102,18 @@ per cell, re-parsed from the four printed grids:
   sentence ('every other domain still finds its own minimum at its own width') read as verified
   when the `math__ga` grid had already refuted it for legal. Corrected here, additively.
 
-What the grids support: the trained domain is served best at the width it was grown to, and being
-forced off that width is costly (section 2). What they do not support: a universal per-domain
-optimum. A domain's best width differs between stacks - so the optimum is a property of the stack
-it is served in, not of the domain alone, and the only invariant the data shows is the trained-
-domain one. That is the specificity the earlier fixed-width tables could not show, because they
-never forced a wrong width.
+What the grids support, stated at the strength the data allow:
+
+> Across all four grown cells, the trained domain's PPL minimum occurs at the width at which that
+> domain's capacity was trained. This does not generalize to a universal rule that every domain
+> achieves its minimum at its nominal width.
+
+Two further things the grids do support. Being forced off the trained width is costly (section 2).
+And a domain's best width differs between stacks, in two independent instances: legal minimises at
+14336 in its own grown cell but prefers 10240 in the `math__ga` cell, and code minimises at 10240
+in `math__ga` but at 12288 in the legal cell. So a domain's optimum is a property of the stack it
+is served in, not of the domain alone. That is the specificity the earlier fixed-width tables
+could not show, because they never forced a wrong width.
 
 ## 4. prose__legal, target 2 - load-bearing by the letter, marginal in the increment
 
