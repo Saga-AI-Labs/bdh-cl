@@ -36,6 +36,8 @@ def main():
                     help="emit a [true-domain x forced-width] served-ppl grid from the already-filled rl tensor (zero extra forwards)")
     ap.add_argument("--crop-dump", default=None,
                     help="domain:wA,wB - per-crop early-window scores at two routes, chosen route, and late-window loss at both, for that true domain")
+    ap.add_argument("--pos-dump", default=None,
+                    help="domain:wA,wB - per-crop position-decomposition of the early-window margin from the already-filled rl tensor (zero extra forwards)")
     args = ap.parse_args()
 
     from pipeline.analyze import _load_model
@@ -125,6 +127,34 @@ def main():
                           f"{(scores[ia, ci] - scores[ib, ci]).item():.6f}|"
                           f"{rl[ia, ci, args.window:].mean().item():.6f}|"
                           f"{rl[ib, ci, args.window:].mean().item():.6f}|{routes[choice[ci].item()]}")
+
+        if args.pos_dump:
+            dname, wspec = args.pos_dump.split(":", 1)
+            if dname == tname:
+                wa, wb = (int(x) for x in wspec.split(","))
+                ia, ib = routes.index(wa), routes.index(wb)
+                print(f"POS_DUMP domain={tname} wA={wa} wB={wb} window={args.window} crops={args.crops}")
+                print("crop_idx|M|A|R|k50|conc5|top1_pos|neg_share|lateA|lateB|chosen")
+                for ci in range(args.crops):
+                    m = rl[ia, ci, : args.window] - rl[ib, ci, : args.window]
+                    M = m.sum().item()
+                    A = m.abs().sum().item()
+                    Rv = (abs(M) / A) if A > 0 else 0.0
+                    srt, idxs = torch.sort(m.abs(), descending=True)
+                    cum = torch.cumsum(srt, 0)
+                    k50 = int((cum < 0.5 * A).sum().item()) + 1 if A > 0 else 0
+                    conc5 = (srt[:5].sum().item() / A) if A > 0 else 0.0
+                    top1 = int(idxs[0].item()) if A > 0 else -1
+                    neg_share = (m < 0).float().mean().item()
+                    chosen = routes[choice[ci].item()]
+                    print(f"{ci}|{M:.6f}|{A:.6f}|{Rv:.6f}|{k50}|{conc5:.6f}|{top1}|{neg_share:.6f}|"
+                          f"{rl[ia, ci, args.window:].mean().item():.6f}|{rl[ib, ci, args.window:].mean().item():.6f}|{chosen}")
+                leakers = [ci for ci in range(args.crops) if routes[choice[ci].item()] != wb]
+                stayers = [ci for ci in range(args.crops) if routes[choice[ci].item()] == wb][:20]
+                print(f"POS_ARRAYS wB={wb} leakers={leakers} stayers={stayers}")
+                for ci in leakers + stayers:
+                    m = rl[ia, ci, : args.window] - rl[ib, ci, : args.window]
+                    print(f"POS_ROW {ci} " + " ".join(f"{v:.4f}" for v in m.tolist()))
 
         conf[ti] += torch.bincount(choice, minlength=R)
         routed_ppl[tname] = math.exp(served.mean().item())
