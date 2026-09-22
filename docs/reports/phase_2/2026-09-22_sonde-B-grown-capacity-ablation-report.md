@@ -80,26 +80,33 @@ Raw grids (per cell, all five domains; out under `out_c/sondeB/harvest_ref/grid_
 
 ## 3. Secondary read - the grown columns are domain-specific (a second, independent witness)
 
-Each domain's minimum sits at its OWN trained width, and being forced wider than that optimum
-costs it. This does NOT mean monotone increase for every domain in every cell - e.g. in the
-`prose__math` grid the `code` column dips from 107.97 to 74.07 at 10240 (code's own width)
-before rising to 130.17. The correct statement is per-domain: a domain is cheapest at its own
-width and dearer on either side of it. The cleanest witness is `math__ga`, the only all-distinct
-grid, where every domain shows a dip at its own width:
+The trained domain is optimal at the width it was grown to; the cross-domain form of that
+claim does not hold, and an earlier version of this section stated it wrongly. Argmin per domain
+per cell, re-parsed from the four printed grids:
 
-| domain | own width | grid over 8192/10240/12288/14336/16384 | minimum at |
-|---|---|---|---|
-| ga    | 16384 | 24.98 / 20.07 / 57.71 / 3.61 / **2.40** | 16384 (trained) |
-| code  | 10240 | 107.96 / **4.90** / 28.87 / 60.31 / 120.15 | 10240 (own) |
-| math  | 12288 | 51.35 / 14.79 / **1.47** / 16.94 / 51.36 | 12288 (own) |
-| legal | 10240 | 4.72 / **4.03** / 11.86 / 24.48 / 39.82 | 10240 (own) |
-| prose | 8192  | **2.46** / 4.33 / 14.37 / 30.42 / 48.03 | 8192 (own) |
+- **In all four cells the trained domain's minimum sits at its trained width** - math at 12288,
+  code at 10240, ga at 16384, legal at 14336. This is section 2's result restated as an argmin.
+- **'Every domain has its own optimum width' is NOT supported.** Only two cells have widths
+  distinct enough to test it:
+  - `math__ga` (all five distinct): prose, code, math and ga each minimise at their own ladder
+    width, but **legal minimises at 10240, not at its ladder width 14336** (4.03 vs 24.48).
+  - `prose__legal` (8192..14336 distinct): the trained legal minimises at 14336 as expected, but
+    **code minimises at 12288** (63.35, vs 68.91 at its ladder width 10240) and **ga at 8192**
+    (24.98, vs 28.62 at 14336).
+  - `prose__math` and `prose__code` clamp at their `N_full`, so non-trained domains cannot be
+    served at their own ladder widths at all there; no argmin comparison in those two cells is
+    meaningful.
+- **Correction of record:** the first committed version of this section listed legal's own width
+  as 10240. That is **code's** width; legal is grown 8192 -> 14336. The mislabel made the derived
+  sentence ('every other domain still finds its own minimum at its own width') read as verified
+  when the `math__ga` grid had already refuted it for legal. Corrected here, additively.
 
-So within a cell grown for one domain, every other domain still finds its own minimum at its
-own (lower) width, and widening it past that optimum is strictly harmful. The grown columns are
-not merely *addressed* by the trained domain; they are capacity that helps that domain and costs
-the others whenever they are forced onto it. That is the specificity the earlier fixed-width
-tables could not show, because they never forced a wrong width.
+What the grids support: the trained domain is served best at the width it was grown to, and being
+forced off that width is costly (section 2). What they do not support: a universal per-domain
+optimum. A domain's best width differs between stacks - so the optimum is a property of the stack
+it is served in, not of the domain alone, and the only invariant the data shows is the trained-
+domain one. That is the specificity the earlier fixed-width tables could not show, because they
+never forced a wrong width.
 
 ## 4. prose__legal, target 2 - load-bearing by the letter, marginal in the increment
 
@@ -125,14 +132,16 @@ resolution of the routing-selection phenomenon itself.
 
 - H1 (load-bearing): **supported** - all four cells, three at >20x.
 - H0 (not in the grown content): **refuted** for all four cells.
-- Secondary "min at the trained width": **held** for all four cells.
+- Secondary "min at the trained width": **held** for all four cells (the cross-domain form of
+  that claim did not hold - see the correction in section 3).
 - Not re-opened: P1 (falsified at 189, band {191..199}) - untouched by this run.
 
 ## 6. What this settles, and what it does not
 
 - **Settled:** the grown capacity is domain-specific and load-bearing. Forcing the pre-growth
   width degrades the domain 22-36x in the three clean cells; the grown columns help their own
-  domain and actively hurt others.
+  domain, and serving another domain at them costs it relative to that stack best available
+  width (large in the math__ga grid, only a few percent in the legal-cell grid).
 - **Not settled:** the routing-selection half of #393. This run holds the router fixed (it
   scores the same prefixes) and changes only the forced serving width; it cannot explain why
   legal routes 11/200 downward. Section 4 narrows the *consequence* of that leak (small, because
