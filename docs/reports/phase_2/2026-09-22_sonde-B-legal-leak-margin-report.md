@@ -3,7 +3,8 @@
 Date: 2026-09-22 (UTC) - Seat: A0-Quinn (saga) - Status: **COMPLETE**
 Result of the pre-registered run of record: `docs/plans/2026-09-22_sonde-B-legal-leak-margin-prereg.md`
 Prices the capacity half: `docs/reports/phase_2/2026-09-22_sonde-B-grown-capacity-ablation-report.md`
-Answers the open thread from HAK `bdh-cl` #403.
+Answers the open thread from HAK `bdh-cl` #403. Followed by the window probe of 2026-09-22,
+which withdrew one claim of this report (section 4, item 3).
 
 ---
 
@@ -97,15 +98,21 @@ Two things follow, and they point the same way as D3:
 
 1. **Most leakers are ladder-specific**, so most of the leak is not crop-determined. A routing
    decision that moves between ladders on the same 200 bytes is fragility, not content.
-2. **Three crops leak on both ladders, and all three are locally mis-served on both** (114: +0.078 /
-   +0.074 late-loss penalty; 148: +0.005 / +0.046; 161: +0.041 / +0.019). That is a small,
-   reproducible, genuinely-mis-routed set - the only part of the leak that behaves like a content
-   property rather than a boundary artifact.
+2. **Three crops leak on both ladders** (114, 148, 161), originally read here as a small,
+   reproducible, genuinely-mis-routed set - the only part of the leak behaving like a content
+   property rather than a boundary artifact. The late-loss penalties that motivated that reading were
+   114: +0.078 / +0.074, 148: +0.005 / +0.046, 161: +0.041 / +0.019.
+3. **That content-property reading is withdrawn** by the window probe of 2026-09-22
+   (docs/reports/phase_2/2026-09-22_sonde-B-legal-leak-window-report.md). Scored at window 384, crops
+   **114 and 161 stop leaking on both ladders** and only 148 survives, on seed-2 alone. With more
+   scoring evidence the shared trio dissolves, so what looked content-like was a property of the
+   128-token scoring window. The original per-crop numbers are kept above for audit.
 
 ## 5. Resolution against the pre-registered outcomes
 
 - D1: **mixed** - near-tie supported on the reference ladder, inconclusive on seed-2. Not promoted.
 - D2: **partial** - 3 shared indices, 6 and 8 ladder-specific. Not promoted either way.
+  The stronger reading of those three indices was later withdrawn; see section 4 item 3.
 - D3: **local-error on both ladders**, against a ~98% base rate. The strongest and cleanest verdict.
 - Reproduction gate: **passed exactly**, both ladders.
 

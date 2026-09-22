@@ -1,6 +1,6 @@
 # Sonde B - legal-leak thread report (narrative of record)
 
-Date: 2026-09-22 (UTC) - Seat: A0-Quinn (saga) - Status: **COMPLETE** (story frozen; next probe pending)
+Date: 2026-09-22 (UTC) - Seat: A0-Quinn (saga) - Status: **COMPLETE** through leg 5 (window probe run; one leg-4 claim withdrawn)
 Purpose: preserve the whole legal-leak thread in one place - what was asked, what was measured,
 what was corrected, what is open - with the artefacts and commits that carry each step.
 
@@ -110,8 +110,10 @@ My working hypothesis - that legal was over-grown and the leak was a benign near
 **half right**: the low-margin part is supported, the benign-indifference implication is refuted.
 
 D2 keeps the claim honest: only 3 of 20 leakers are shared between ladders (114, 148, 161), so most
-of the leak is ladder-specific fragility rather than crop content. Those three shared crops leak and
-are mis-served on both ladders, and they are the only part of the leak behaving like a data property.
+of the leak is ladder-specific fragility rather than crop content. That trio was read here as the one
+part of the leak behaving like a data property. **Leg 5 withdrew the stronger half of that reading:**
+at scoring window 384, crops 114 and 161 stop leaking on both ladders and only 148 survives, on seed-2
+alone, so the shared trio was a property of the 128-token window rather than of the crops.
 
 ---
 
@@ -128,10 +130,13 @@ are mis-served on both ladders, and they are the only part of the leak behaving 
 | 4 | docs/plans/2026-09-22_sonde-B-legal-leak-margin-prereg.md | `3b43667` |
 | 4 | docs/reports/phase_2/2026-09-22_sonde-B-legal-leak-margin-report.md | `5f20c7e` |
 | 4 | scripts/eval_router.py `--crop-dump` | `72399e12` |
+| 5 | docs/plans/2026-09-22_sonde-B-legal-leak-window-prereg.md | `494fe52` |
+| 5 | docs/reports/phase_2/2026-09-22_sonde-B-legal-leak-window-report.md | `9cd5df68`, verdict lines corrected in `178978a8` |
+| 5 | scripts/eval_router.py `--route-grid` + `--crop-dump`, unchanged | `72399e12` reused |
 
 Raw per-run artefacts (gitignored, quoted in the reports): `out_c/sondeB/harvest/`,
-`out_c/sondeB/harvest_ref/` - four grown cells, five routdiag tables, two leak dumps,
-two grid tables.
+`out_c/sondeB/harvest_ref/` - four grown cells, five routdiag tables, two leak dumps, two grid tables,
+and six window-probe dumps (two ladders x windows 128/256/384).
 
 ---
 
@@ -146,6 +151,9 @@ two grid tables.
 4. **It is mostly ladder-specific**: only 3 of 20 leakers coincide across ladders.
 5. **It is not a capacity defect**: the same ablation shows the grown capacity is domain-specific
    and load-bearing in all four cells, legal included.
+6. **It attenuates with a longer scoring window** (leg 5): about half the flips disappear at window
+   384 on both ladders, no upward leakage appears at any window, and the remaining leakers are still
+   usually served worse at the width the router chose.
 
 Stated as one sentence: **the router's early-window estimate is reliable when it stays put and
 unreliable when it flips, and the flip is downward-only.**
@@ -154,22 +162,30 @@ unreliable when it flips, and the flip is downward-only.**
 
 ## 7. What is open, and the next probe
 
-**Open:** why the flip is one-sided. Two candidates remain, and one experiment separates them:
+**Open:** why the flip is one-sided. Two candidates were named in leg 4. Leg 5 scored the same 200
+legal crops on both ladders at windows 256 and 384 to separate them:
 
 1. the routing rule is asymmetric (a bias toward the smaller prefix), or
 2. the 128-token scoring window is too short to separate 12288 from 14336, so the tie-break lands
    arbitrarily.
 
-**Next probe (pre-registered before running):** score the same 200 legal crops at a **longer scoring
-window**, same pinned instrument, same spec, both ladders. If the downward flips persist at the
-longer window, the asymmetry is in the rule; if they vanish, the fix is a wider scoring window
-rather than a different router.
+**Leg 5 ran it (window 512 was inadmissible, substituted before the run):** the instrument asserts
+`0 < window < block_size` and the checkpoints' `block_size` is 512, so window 512 exits the process;
+511 would leave a 1-token late window and void the local-correctness read. The frozen substitution
+was windows 256 and 384, the latter being the largest window whose late span (128 tokens) equals the
+baseline scoring length.
 
-**Window constraint, recorded before the run:** the instrument asserts `0 < window < block_size`
-and the checkpoints' `block_size` is 512, so **window 512 is inadmissible** (the process would exit).
-Window 511 is admissible but leaves a **1-token** late window, which would make D3 ("was the router
-locally right?") meaningless by construction. The probe therefore uses windows that keep a
-statistically usable late window, and states the substitution explicitly rather than silently
-changing the requested value.
+What it found:
+
+- Leaker counts **seed-2 9 / 11 / 7** and **reference 11 / 8 / 5** at windows 128 / 256 / 384.
+- **No upward leakage** at any window, either ladder.
+- The leak **attenuates but does not vanish**: roughly halved at 384 on both ladders, still present.
+- Local correctness survives: at 384, **5 of 7** remaining seed-2 leakers (71 percent) and **4 of 5**
+  reference leakers (80 percent) are still served worse at the width the router chose, while stayers
+  remain about 95-97 percent locally right.
+- The 114/148/161 shared-core reading from leg 4 is **withdrawn** (section 4).
+
+So window length is part of the cause - about half the flips go away when the scoring window grows -
+but not the whole of it, and neither leg-4 candidate is eliminated on its own.
 
 **Not touched anywhere in this thread:** pre-reg P1 remains falsified at 189 against band {191..199}.
