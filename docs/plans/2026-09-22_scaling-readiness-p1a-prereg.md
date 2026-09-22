@@ -65,10 +65,13 @@ cell's own domains, `--routes <N>` (one route, so the routed expert is the train
 every crop), `--window 128`, `--crops 200`, generator seed 1234, the same domain list and the
 same order the harvest eval used.
 
-The number of interest per checkpoint and cell is the mean of the `routed` ppl over the cell's
-own domains as printed in the routed block (prose+math, prose+code, math+ga, prose+legal - the
-two domains of the cell name; the mean of the two printed values). All crops take the trained
-width, so the routed figure is the served ppl at the trained width. The domains are passed as
+The number of interest per checkpoint and cell is the `routed` ppl of the cell's TRAINED
+domain - the second token of the cell name: math, code, ga, legal - as printed in the routed
+block. All crops take the trained width, so the routed figure is the served ppl at the trained
+width. The companion domain of the cell name (prose, prose, math, prose) is printed as
+context but is not the metric: the frozen gate values 1.41, 4.90, 2.40, 2.20 are the
+trained-domain rows of the committed grid dumps, so metric and gate read the same quantity.
+A mean over both domains would not equal those values and the gate would not be met. The domains are passed as
 the full five-domain SPEC of the ablation, so every domain is drawn from the same stream the
 committed figures were drawn from; only the rows of the cell's own domains are read. The
 instrument costs about one forward pass per crop per domain; no grid over other widths is
