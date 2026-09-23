@@ -10,8 +10,14 @@
 
 ## Instrument
 
-`scripts/eval_router.py` @ `2f0dc9d1...` (md5 `ed9fd326...`, the P3b
-build); guest copy md5-pinned in the driver log. `--routes
+`scripts/eval_router.py` on the guest at HEAD `e6bf359` - md5
+`73832ecd08f24eded93a98a74572be6e`, git-clean against that HEAD (the copy that
+produced the P3 comparison base). The first pre-registration pinned
+`ed9fd326...` (`2f0dc9d1`, the local build with the `--crop-dump`/`--pos-dump`/`--route-grid` flags) - that file was never on the guest path; the md5 gate
+aborted the first launch, no measurement was taken, and the pin was corrected to
+the guest reality additively. Both builds share every flag P3b uses (`--routes`,
+`--window`, `--domains`, `--crops`, `--mb`, `--batch`); the dump flags are unused
+here. Guest copy md5-pinned in the driver log. `--routes
 8192,10240,12288,14336,16384,18432,20480,22528` (routes above a
 checkpoint's width clamp to it - they are identical to full width),
 `--crops 200 --mb 30 --batch 4`, the 8 domains as in P3.
