@@ -707,7 +707,7 @@ a same-crop artifact: in a separate eval-only run that chooses each
 route on crops disjoint from those served (a held-out byte window split
 in halves, selection crops never seen by the serving phase), the fixed
 route still resolves to the true acquisition width for all 20 domains (
-extttdocs/reports/2026-09-13_quinn_tier1-router-split-report.md,
+`docs/reports/2026-09-13_quinn_tier1-router-split-report.md`,
 bdh/2166c24).
 
 <figure id="fig:retention" data-latex-placement="t">
