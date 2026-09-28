@@ -221,7 +221,6 @@ by a post-hoc success.
 
 | ID | Pre-registered prediction | Outcome | Evidence / scope |
 |:---|:---|:---|:---|
-| ID | Pre-registered prediction | Outcome | Evidence / scope |
 | P-FCS-1 | Fixed-capacity sequential loading will produce catastrophic forgetting. | **PASS**; family-structured erasure is the measured form. | Fixed-capacity matrix; 20-domain protocol. |
 | P-FCS-2 | Acquisition remains comparable across phases, without a late-phase cliff. | **PASS**. | Acquisition-floor matrix; each phase remains within the reported band. |
 | P-FCS-3 | Backward interference will be dominated by the most recent phase. | **FAIL**; family structure is stronger and more specific. | FCS matrix; prediction falsified by family-dependent oscillation. |
@@ -354,9 +353,11 @@ experiment varies the data at a fixed schedule. Under the default lr
 schedule (warmup 30, decay 300, plateau at $`10^{-4}`$ for 97% of steps)
 the per-phase factor is $`c=0.8927`$; under the cosine schedule (warmup
 1000, decay 10000) it is $`c=0.5798`$. The f32 realization of the
-product adds a deterministic offset of $`-1.4\times10^{-6}`$ per plateau
-phase (float rounding of $`1-\mathrm{lr}\cdot\mathrm{wd}`$), which
-reconciles the measured 0.892636 with the exact-precision 0.892752.
+same product sits $`1.36\times10^{-8}`$ below the exact-precision
+value per plateau step (float rounding of $`1-\mathrm{lr}\cdot\mathrm{wd}`$),
+which over the $`\sim`$9{,}700 plateau steps accumulates to about
+$`-1.3\times10^{-4}`$ and reconciles the measured 0.892636 with the
+exact-precision 0.892752.
 
 **Verification.** The closed form matches measured per-segment scale
 factors on every checkpoint transition we tested: residuals
@@ -874,6 +875,17 @@ differ by an order of magnitude.
 
 <div class="center">
 
+| operator | en | de | cs | bg | el | verdict |
+|:---|---:|---:|---:|---:|---:|:---|
+| identity (control) | 32.04 | 35.56 | 60.23 | 228.12 | 64.25 | — |
+| absK top-2048 | 39.4 | — | 79 | 1160 | 287 | worse: culling removes information |
+| ev-shift ($\sqrt{2\ln\|N\|}$) | 36.7 | — | 117 | 4122 | 3473 | worse: catastrophic |
+| block-average | *bit-identical to identity* |  |  |  |  | vacuous: LayerNorm cancels global gain |
+| log-norm | *bit-identical to identity* |  |  |  |  | vacuous: same |
+| massnorm | 31.26 | 39.77 | 91.77 | 215073 | 180510 | catastrophic: new territories get a loud voice |
+| softmix $\tau{=}0.5$ | 18.73 | 27.24 | 68.31 | 4486 | 4093 | helps oldest, wrecks newest |
+| calibgain (fit on en) | 2.31 | — | — | −2.29† | −4.19† | converges to oracle masking |
+
 $`^\dagger`$log-scale change relative to identity; negative $`=`$ worse.
 Identity controls differ per run: absK and ev-shift rows come from P-R1
 (identity en 31.14); massnorm, softmix and calibgain from P-R1b
@@ -1000,8 +1012,12 @@ ratio threshold does not separate cross-script unseen from trained.
 
 **The two-axis rule separates all 26 languages.** Add the absolute axis:
 reject routing when the best-route perplexity exceeds
-$`\sim`$<!-- -->10$`\times`$ the acquisition band (2.36–6.47).
-Cross-script unseen languages sit at 304–732 (zh 417, ja 571, hi 732,
+$`\sim`$<!-- -->10$`\times`$ that language's own acquisition
+perplexity. Across the 20 trained languages the acquisition band is
+2.29–6.36 and the routed band is 2.36–6.47, the latter at most
+$`1.08\times`$ acquisition, so the rule's verdict is unchanged whichever
+of the two serves as the denominator. Cross-script unseen languages sit
+at 304–732 (zh 417, ja 571, hi 732,
 iu-clean 304)—orders above any trained domain; byte-adjacent unseen sit
 at 37–51, also above. With both axes, all 20 trained languages pass and
 all 6 unseen reject. The thresholds are empirical for this checkpoint
@@ -1106,7 +1122,7 @@ a proof across encodings.
 A fresh 100M <span class="smallcaps">bdh</span> (no Chinese exposure of
 any kind) trained on 30 MB of Chinese (MultiUN ): best-val perplexity
 **2.69** (test 2.48) at the same protocol as the European fixed-capacity
-baseline, whose acquisition band is 1.54–2.29. The byte-level
+baseline, whose best-val acquisition band is 1.54–2.29. The byte-level
 acquisition machinery is script-agnostic: what a cross-script language
 lacks in a trained <span class="smallcaps">bdh</span> is territory, not
 learnability.
@@ -1459,8 +1475,8 @@ project’s lifetime; they are not listed as authors because authorship
 implies accountability no current legal framework assigns to an AI
 system. Full role, model-backend, tool, and process disclosure—including
 every self-caught and cross-caught error that this paper’s numbers
-survived—is provided in the accompanying disclosure document
-(`rev4-ai-disclosure-draft.md`, committed with this revision).
+survived—is provided in `rev4-ai-disclosure-draft.md`, committed
+with revision 4.
 
 <div class="thebibliography">
 

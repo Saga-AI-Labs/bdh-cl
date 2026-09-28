@@ -236,9 +236,10 @@ p_{\text{exit}} = c\cdot p_{\text{entry}}
 \emph{independent of data, loss, or routing} as a property of the schedule; this clause is derived rather than separately tested, since no experiment varies the data at a fixed schedule. Under the default lr schedule
 (warmup 30, decay 300, plateau at $10^{-4}$ for 97\% of steps) the per-phase factor is
 $c=0.8927$; under the cosine schedule (warmup 1000, decay 10000) it is $c=0.5798$. The f32
-realization of the product adds a deterministic offset of $-1.4\times10^{-6}$ per plateau
-phase (float rounding of $1-\mathrm{lr}\cdot\mathrm{wd}$), which reconciles the measured
-0.892636 with the exact-precision 0.892752.
+realization of the same product sits $1.36\times10^{-8}$ below the exact-precision value
+per plateau step (float rounding of $1-\mathrm{lr}\cdot\mathrm{wd}$), which over the
+$\sim$9{,}700 plateau steps accumulates to about $-1.3\times10^{-4}$ and reconciles the
+measured 0.892636 with the exact-precision 0.892752.
 
 \textbf{Verification.} The closed form matches measured per-segment scale factors on
 every checkpoint transition we tested: residuals $\sim\!10^{-5}$ across 1-, 4-, 18-, and
@@ -707,8 +708,11 @@ bad,'' and the router finds it. hi exceeds the worst trained language's floor. A
 ratio threshold does not separate cross-script unseen from trained.
 
 \textbf{The two-axis rule separates all 26 languages.} Add the absolute axis: reject
-routing when the best-route perplexity exceeds $\sim$10$\times$ the acquisition band
-(2.36--6.47). Cross-script unseen languages sit at 304--732 (zh 417, ja 571, hi 732,
+routing when the best-route perplexity exceeds $\sim$10$\times$ that language's own
+acquisition perplexity. Across the 20 trained languages the acquisition band is
+2.29--6.36 and the routed band is 2.36--6.47, the latter at most $1.08\times$ acquisition,
+so the rule's verdict is unchanged whichever of the two serves as the denominator.
+Cross-script unseen languages sit at 304--732 (zh 417, ja 571, hi 732,
 iu-clean 304)---orders above any trained domain; byte-adjacent unseen sit at 37--51,
 also above. With both axes, all 20 trained languages pass and all 6 unseen reject. The
 thresholds are empirical for this checkpoint and instrument, and---critically---they are
@@ -778,7 +782,7 @@ a proof across encodings.
 
 A fresh 100M \BDH{} (no Chinese exposure of any kind) trained on 30\,MB of Chinese
 (MultiUN~\cite{multiun}): best-val perplexity \textbf{2.69} (test 2.48) at the same protocol as the
-European fixed-capacity baseline, whose acquisition band is 1.54--2.29. The byte-level
+European fixed-capacity baseline, whose best-val acquisition band is 1.54--2.29. The byte-level
 acquisition machinery is script-agnostic: what a cross-script language lacks in a trained
 \BDH{} is territory, not learnability.
 
@@ -1072,8 +1076,8 @@ and defined team roles), functioning as coherent team members over the project's
 lifetime; they are not listed as authors because authorship implies accountability no
 current legal framework assigns to an AI system. Full role, model-backend, tool, and
 process disclosure---including every self-caught and cross-caught error that this
-paper's numbers survived---is provided in the accompanying disclosure document
-(\texttt{rev4-ai-disclosure-draft.md}, committed with this revision).
+paper's numbers survived---is provided in \texttt{rev4-ai-disclosure-draft.md}, committed
+with revision 4.
 
 \begin{thebibliography}{99}\small
 
