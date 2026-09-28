@@ -1,0 +1,1710 @@
+---
+abstract: |
+  We study continual learning in <span class="smallcaps">bdh</span>, a
+  byte-level depth-recurrent language model  whose additive growth rule
+  appends zero-initialized neurons while leaving all existing
+  computation bit-identical. Our central finding separates three
+  concerns that the continual-learning literature usually conflates.
+  *Storage* is exact for the tested growth construction: under
+  gradient-masked growth, previously acquired computation remains
+  bit-identical at the tensor level across every subsequent phase
+  (verified independently across two seats, two hosts, and two scripts,
+  including cross-script). Throughout, *bit-exact* refers to equality of
+  the preserved parameter tensors and buffers, not to identity of every
+  floating-point output. *Serving* splits into two measured regimes:
+  joint serving degrades because the summation readout accumulates
+  contributions from all neurons (at the English-era checkpoint, 83% of
+  the damage on the log scale, 62% in perplexity units, is reproduced by
+  appending a single random, untrained block; across seven eras the same
+  mechanism reproduces the majority of the damage in six, while the
+  fraction itself is not a constant, range 0.60–1.47), while
+  prefix-masked serving tracks acquisition within the measured
+  routed-cost band (median $`+4.3\%`$ over the acquisition exit, worst
+  case $`+8.0\%`$), with zero drift across a full growth phase and 20/20
+  domains routing perfectly under an online-routing protocol, not a
+  held-out split (per-domain Wilson floor $`[0.91,1.0]`$ for 40/40).
+  *Addressing* is the open problem: label-free likelihood selection
+  achieves 20/20 correct prefix identification at every calibration
+  budget from 4 KB to 1 MB, and a byte-level $`n`$-gram addresser
+  reproduces the likelihood router on all 20 domains (8/8 held-out crops
+  each; per-domain Wilson floor $`[0.68, 1.0]`$ for a perfect 8/8) given
+  $`\sim`$<!-- -->4–8 KB of calibration text per domain—but
+  cumulative-prefix NLL is not unimodal, so selection is robust yet not
+  sublinear in territory count. Out-of-support detection requires two
+  axes (relative advantage and absolute perplexity): byte-adjacent
+  unseen languages have ratio $`\approx 1`$ while cross-script inputs
+  have catastrophic joint perplexity that inflates the ratio past the
+  trained floor (the thresholds are fit and evaluated on the same
+  $`n{=}6`$ probe set: a measured separation, not held-out validation).
+  Cross-script probes show that routing correlates strongly with
+  low-level byte statistics, and no linguistic reading is required to
+  explain any observed decision: Chinese, Japanese, Hindi, and Inuktitut
+  route 37–40/40 to the only two territories with substantial multi-byte
+  training exposure (Cyrillic and Greek: 82% of characters are
+  2-byte-encoded, against 11.7% for the next-highest territory, a factor
+  of 7), with zero linguistic kinship. A 20-phase fixed-capacity
+  baseline shows that without growth, a 2k-step re-acquisition probe
+  finds no measurable re-acquisition advantage over a fresh model
+  (forgetting is not access loss). In the tested growth cell (Latin,
+  Han, Devanagari), a Chinese territory grown on an English base, then
+  Devanagari grown on Chinese, retains all three bit-exactly, routes
+  perfectly, and serves each at acquisition quality.
+author:
+- |
+  Agon Sandro Buchholz\
+  Saga AI Labs
+date: September 28, 2026
+title: "Append-Only Neural Memory: Storage, Addressing, and Growth"
+---
+
+# Introduction
+
+How should a trained network remain trainable? The continual-learning
+literature offers three families of answers: protect important
+parameters , store and replay experience , or allocate separate capacity
+per task . Each presupposes that preserving *parameters* preserves
+*computation*. In depth-recurrent architectures—which reuse one
+parameter block across all levels, obtaining depth without parameter
+count—the distinction is not academic. A frozen weight can still
+contribute to a changed computation, because the readout sums over all
+neurons, and growth adds neurons to that sum.
+
+This paper takes <span class="smallcaps">bdh</span>  as its instrument
+and reports a measurement arc that separates three concerns:
+
+1.  **Storage.** Under masked growth, is previously acquired computation
+    physically preserved? We answer at the bit level for the tested
+    configurations: yes, confirmations across two seats, two hosts, and
+    two scripts, including cross-script.
+
+2.  **Serving.** Given preserved storage, does the model still serve old
+    tasks? We decompose the serving problem into *joint* (all neurons
+    active) and *routed* (prefix-masked) regimes, and show the
+    degradation in the former is 83% arithmetic on the log scale, 62% in
+    perplexity units at the English-era checkpoint (reproduced by random
+    untrained blocks; the mechanism holds in six of seven eras, the
+    fraction does not) while routed serving remains within the measured
+    cost band of acquisition and the hard mask preserves the old path by
+    construction.
+
+3.  **Addressing.** Can the model find the right territory without an
+    external language ID? We measure label-free selection, cheap
+    input-side addressing, out-of-support rejection, and their scaling
+    properties.
+
+The resulting thesis is not that <span class="smallcaps">bdh</span>
+solves continual learning. It is:
+
+> *<span class="smallcaps">bdh</span> provides an append-only neural
+> substrate in which previously acquired computation remains physically
+> intact while new computation is added. The central research problem is
+> stable, efficient **addressing** of the accumulated
+> territories—byte-separable in the regime measured here, and the open
+> question for domains whose statistics are not—not destructive
+> forgetting.*
+
+<figure id="fig:architecture" data-latex-placement="t">
+<embed src="figures/f_architecture.pdf" />
+<figcaption>Schematic of the tested BDH cell and growth/addressing path.
+A single parameter triple <span
+class="math inline">(<em>E</em>, <em>E</em><sub><em>v</em></sub>, <em>D</em><sub><em>c</em></sub>)</span>
+is reused across depth levels. Growth appends zero-initialized neurons
+and freezes the old path; route-aware training writes the new territory
+while an input-dependent mask selects which prefix may contribute at
+serving time. The diagram is architectural: the measured storage,
+routing, and readout claims are evaluated separately.</figcaption>
+</figure>
+
+Figure <a href="#fig:architecture" data-reference-type="ref"
+data-reference="fig:architecture">1</a> summarizes the distinction used
+throughout this paper: storage is protected at the tensor path, serving
+exposes the shared summation readout, and addressing chooses the prefix
+that may contribute.
+
+## The measurement arc
+
+Our experiments proceed from the simplest question to the hardest.
+
+**The forgetting baseline
+(Section <a href="#sec:fcs" data-reference-type="ref"
+data-reference="sec:fcs">4</a>).** A fixed-capacity 100M
+<span class="smallcaps">bdh</span> trained sequentially on 20 languages
+forgets catastrophically: by the final phase, nine of sixteen comparable
+languages serve at or below their English-only zero-shot level, two
+non-Latin scripts collapse by four orders of magnitude, and a two-arm
+re-acquisition probe finds no measurable re-acquisition advantage over a
+fresh model at the tested budget (forgetting is not access loss).
+
+**The decay confound
+(Section <a href="#sec:decay" data-reference-type="ref"
+data-reference="sec:decay">2.3</a>).** The original ladders carried a
+silent optimizer defect: AdamW’s decoupled weight decay eroded
+gradient-masked weights by a closed-form per-phase factor, invisible to
+loss curves. We derive the closed form, verify it to four decimal
+places, and repair it with a step-end bit-exact restore.
+
+**Preservation under growth
+(Section <a href="#sec:ra2b" data-reference-type="ref"
+data-reference="sec:ra2b">5</a>).** With the fix active, a 20-phase
+route-aware ladder (579M final) shows: position-dependent acquisition
+cost collapses, routing is perfectly diagonal (20/20 domains scored
+under all 20 prefix widths, 40 crops each; per-domain Wilson floor
+0.91), retention remains within the measured acquisition-cost band
+(median $`+4.3\%`$, worst case $`+8.0\%`$, zero within-instrument drift
+across a full growth phase), and bit-exactness holds at every
+transition.
+
+**Readout mechanics
+(Section <a href="#sec:readout" data-reference-type="ref"
+data-reference="sec:readout">6</a>).** Why does joint serving degrade if
+storage is bit-exact? A random-expansion control answers: appending one
+random untrained block costs English $`4.1\times`$; random expansion to
+full width reproduces 83% of the real damage at the English-era
+checkpoint (log scale; 62% in linear perplexity), and the mechanism
+reproduces in six of seven eras while the fraction does not (range
+0.60–1.47); inert zero-blocks cost nothing. Every fixed readout operator
+in the seven families we test (gain rescaling, mass normalization,
+mixing, gradient-fitted per-territory gains) fails to repair it; we do
+not claim the space of input-independent operations is exhausted, and
+the measured pattern is about the tested families: the seven simple
+fixed readouts tested (two vacuous by construction) do not repair routed
+serving; a sufficiently expressive fixed map can itself implement
+input-dependent behaviour. The correct operation in our measurements is
+input-dependent selection.
+
+**Selection (Section <a href="#sec:selection" data-reference-type="ref"
+data-reference="sec:selection">7</a>).** A label-free self-NLL selector
+identifies the correct prefix for all 20 domains at every calibration
+budget from 4 KB to 1 MB. A byte 1–4-gram logistic addresser reproduces
+the likelihood router perfectly under a class-balanced fit, given
+$`\sim`$<!-- -->4–8 KB of calibration text per domain. But binary search
+over prefix widths collapses: the cumulative-prefix NLL surface is not
+unimodal, so selection is robust but not sublinear in territory count.
+
+**Out-of-support detection
+(Section <a href="#sec:ood" data-reference-type="ref"
+data-reference="sec:ood">7.3</a>).** A reject rule on two axes separates
+20 trained languages from 6 unseen ones: routing advantage
+(joint/best-route ratio, $`\ge 5\times`$ for trained,
+$`\approx 1\times`$ for byte-adjacent unseen) and absolute best-route
+perplexity (within $`\sim 10\times`$ of the acquisition band).
+Cross-script unseen languages expose the ratio’s degeneration: their
+joint perplexity is so catastrophic that the ratio inflates past the
+trained floor.
+
+**Cross-script generalization
+(Section <a href="#sec:xscript" data-reference-type="ref"
+data-reference="sec:xscript">8</a>).** Routing correlates strongly with
+low-level byte statistics, and no linguistic reading is required to
+explain any observed decision: Chinese, Japanese, Hindi, and Inuktitut
+route 37–40/40 to the only two high-byte territories (Cyrillic, Greek).
+Chinese acquires from scratch at 2.69 ppl (best-val; test 2.48;
+‘docs/reports/2026-09-11_cross-script-rejection-suite.md‘); a Devanagari
+phase grown on Chinese retains both bit-exactly and serves both at
+acquisition quality. This is the tested cross-script cell (two growth
+transitions): it shows the construction remained functional across
+script families, not that every future transition is guaranteed.
+
+**Prior art (Section <a href="#sec:prior" data-reference-type="ref"
+data-reference="sec:prior">9</a>).** We position each result against the
+literature: additive growth (Progressive Networks, PackNet, Piggyback,
+SupSup), task addressing (Expert Gate), consolidation (EWC/SI/MAS),
+replay (GEM), MoE routing (Switch/GShard), selective prediction (Chow,
+conformal), and production-scale conditional memory (DeepSeek Engram).
+
+## Pre-registered prediction and outcome register
+
+The register below separates predictions fixed before their outcomes
+from later controls and from the measured limits of each claim. A failed
+or partial prediction is reported as such; it is not silently replaced
+by a post-hoc success.
+
+| ID | Pre-registered prediction | Outcome | Evidence / scope |
+|:---|:---|:---|:---|
+| ID | Pre-registered prediction | Outcome | Evidence / scope |
+| P-FCS-1 | Fixed-capacity sequential loading will produce catastrophic forgetting. | **PASS**; family-structured erasure is the measured form. | Fixed-capacity matrix; 20-domain protocol. |
+| P-FCS-2 | Acquisition remains comparable across phases, without a late-phase cliff. | **PASS**. | Acquisition-floor matrix; each phase remains within the reported band. |
+| P-FCS-3 | Backward interference will be dominated by the most recent phase. | **FAIL**; family structure is stronger and more specific. | FCS matrix; prediction falsified by family-dependent oscillation. |
+| P5 | Old masked segments and optimizer state remain protected at every tested growth transition. | **PASS**; standing integrity gate. | In-chain P5 checks; separate confirmations reported in the growth section. |
+| H-decay-1 | Step-end restore removes old-segment and routed drift. | **PASS**. | RA2b readout; 20/20 routing and zero p19–p20 routed drift. |
+| H-decay-2 | Joint serving recovers after the decay repair without a splice. | **PASS**; residual interference remains. | RA2b joint readout; the recovery claim excludes a no-op. |
+| H-decay-3 | Within-family acquisition gaps shrink markedly under the fix. | **PASS**. | RA2b same-host late-phase comparisons; position cost collapses. |
+| P-R1 | A tested fixed readout operator can repair growth damage. | **NEGATIVE**; no pass condition met. | P-R1 operator sweep; culling and fixed shifts fail or are vacuous. |
+| P-R1b | A language-agnostic scalar reweighting can repair growth damage. | **REFUTED**. | P-R1b; calibration helps one language while damaging others. |
+| P-R2 | Width growth can reproduce most joint-serving damage without new learning. | **SUPPORTED**; 83% log-scale, 62% linear. | Random/inert/real expansion control; English-era result, mechanism across six of seven eras. |
+| P-R3 | A cheap byte-geometry addresser can reproduce the likelihood router. | **SUPPORTED after correction**; balanced fit reaches 1.00 in-support. | Initial 76% fit withdrawn after a composition-confound audit; balanced refit is the reported result. |
+| P-R4 | Conformal thresholds can be frozen for OOD rejection. | **NOT STARTED**. | Thresholds remain empirical and fit/evaluated on the same six-language probe set. |
+| P-X1 | Cross-script inputs have no trained-quality territory. | **PASS**. | Cross-script suite; all tested inputs remain far above the trained band. |
+| P-X2 | Cross-script routing concentrates on high-byte territories. | **PASS**; clean rerun strengthens it. | zh/ja/hi/iu-clean route 37–40/40 to bg/el; no Latin attraction after correction. |
+| P-X3 | A ratio-only OOD rule remains below the trained floor at maximum byte distance. | **PARTIAL**; the one-axis rule fails, while the two-axis rule separates. | Cross-script suite; the corrected two-axis rule uses ratio and absolute PPL. |
+
+Pre-registered predictions, outcomes, and evidence scope.
+{#tab:predictions}
+
+# Setup
+
+## Architecture primer
+
+Table <a href="#tab:notation" data-reference-type="ref"
+data-reference="tab:notation">2</a> fixes notation. One
+<span class="smallcaps">bdh</span> level computes, with encoders
+$`E,E_v\in\mathbb{R}^{n_h\times d\times N}`$ and decoder
+$`D_c\in\mathbb{R}^{(n_hN)\times d}`$,
+``` math
+\nu=\operatorname{relu}(x@E),\qquad
+v=\operatorname{relu}\bigl(\operatorname{LN}(a(u))@E_v\bigr),\qquad
+x \;\leftarrow\; \operatorname{LN}\Bigl(x+\operatorname{LN}\bigl((u\odot v)@D_c\bigr)\Bigr),
+```
+where $`a(\cdot)`$ is per-neuron attention over positions of $`x`$: each
+latent neuron attends independently, there are no query/key/value
+projection matrices, and every operator above is coordinate-separable
+across neurons. The only cross-neuron coupling is LayerNorm’s  global
+statistics. One triple $`(E,E_v,D_c)`$ serves all $`L`$ levels. The
+attention block carries no trainable parameters (its only state is the
+RoPE  frequency buffer), which matters throughout: all learning lives in
+$`E`$, $`E_v`$, $`D_c`$, the token embedding, and the output head.
+
+**Growth** appends zero-initialized neurons to the triple; existing
+neurons, the token embedding, and the output head are frozen. RoPE
+frequencies carry the neuron count in their exponent, so naive growth
+would silently rewrite every surviving neuron’s phases; the growth path
+preserves the frequency prefix verbatim. During a growth phase, a
+gradient mask zeroes the gradients of all pre-existing neurons, so
+new-phase updates write only the new capacity; a step-end restore
+additionally guarantees bit-exactness of the frozen path against
+optimizer side effects
+(Section <a href="#sec:decay" data-reference-type="ref"
+data-reference="sec:decay">2.3</a>).
+
+**Route-aware training** couples the masked growth with a per-phase
+auxiliary loss: the phase minimizes NLL on its own data both under the
+prefix mask and over the full width, with weight $`\alpha`$ on the
+prefix term ($`\alpha=0.9`$ throughout). The effect, measured below: the
+phase writes its knowledge into its own territory while the shared
+readout stays calibrated enough that prefix selection recovers it.
+
+| symbol | meaning |
+|:---|:---|
+| $`d,\ n_h,\ N,\ L`$ | residual width, heads, neurons/head, depth levels |
+| $`x\in\mathbb{R}^{d}`$ | persistent residual state (shared across levels) |
+| $`E,E_v,D_c`$ | shared neuron operators (encoder, value encoder, decoder) |
+| phase $`A`$, $`\theta_A`$ | a training stage and its parameters |
+| $`F_A,\ F'`$ | specialist map; extended (grown) map |
+| $`\mathcal{X}_A,\ \mathcal{T}_A`$ | old-task input set; reachable old-trajectory states |
+| $`P_A`$ | projection/mask selecting the old-phase contribution channels |
+| territory $`b`$ | the neurons appended by phase $`b`$ (a width interval) |
+
+Notation used throughout. {#tab:notation}
+
+## Protocol
+
+All experiments use byte-level <span class="smallcaps">bdh</span> on
+Europarl  and the cross-script corpora below: the vocabulary is the 256
+byte values, sequences are raw byte streams, and a phase is a
+$`\sim`$<!-- -->30 MB byte stream. Growth phases initialize from the
+previous endpoint (weights only; fresh optimizer). Evaluation is
+per-domain held-out perplexity under a fixed cold random-crop protocol
+(block 512, 40 crops, generator 1234), always within-corpus. Where we
+compare joint and routed serving, the routed measurement uses the
+likelihood router of
+Section <a href="#sec:selection" data-reference-type="ref"
+data-reference="sec:selection">7</a> and the joint measurement uses the
+full width on the same crops. This is a controlled multilingual
+accumulation trial over one parallel-corpus ecosystem: it is closer to
+continual pretraining than to independent-task continual learning, and
+is read as such. All results are reported for the dense-ReLU
+configuration ($`k\_\mathrm{sparse\_ratio}=0`$); ratio-based top-$`k`$
+sparsification under growth is not width-invariant and is outside these
+claims.
+
+Hardware: one RTX 4090 (24 GB) and one NVIDIA GB10 (gx10, 121 GB); scale
+is $`\sim`$<!-- -->100M parameters at the base width
+($`\times`$<!-- -->128) and $`\sim`$<!-- -->579M at the final ladder
+width ($`\times`$<!-- -->736). Every number in this paper traces to a
+committed artifact in the project repository
+(<https://github.com/Saga-AI-Labs/bdh-cl>; reports, plans, data files,
+and pre-registration headers in the training scripts); the project’s
+internal message bus is the working coordination layer, and where a
+claim cites its provenance, this paper names the repository artifact.
+
+<div class="center">
+
+</div>
+
+## The decay confound, closed
+
+The original growth ladders carried a silent optimizer defect that we
+discovered and repaired mid-project; every pre-repair number in this
+paper carries its consequence, and we state the mechanism once, here.
+
+**Mechanism (<span class="smallcaps">derived</span>).** AdamW’s 
+decoupled weight decay multiplies every parameter that has a gradient by
+$`(1-\mathrm{lr}_t\cdot\mathrm{wd})`$ each step. A gradient mask that
+zeroes the frozen weights’ gradients does *not* stop this: a zero
+gradient still counts as a gradient, so masked weights shrink by the
+schedule product
+``` math
+c \;=\; \prod_{t=1}^{T}\bigl(1-\mathrm{lr}_t\cdot\mathrm{wd}\bigr),
+\qquad
+p_{\text{exit}} = c\cdot p_{\text{entry}}
+```
+*independent of data, loss, or routing* as a property of the schedule;
+this clause is derived rather than separately tested, since no
+experiment varies the data at a fixed schedule. Under the default lr
+schedule (warmup 30, decay 300, plateau at $`10^{-4}`$ for 97% of steps)
+the per-phase factor is $`c=0.8927`$; under the cosine schedule (warmup
+1000, decay 10000) it is $`c=0.5798`$. The f32 realization of the
+product adds a deterministic offset of $`-1.4\times10^{-6}`$ per plateau
+phase (float rounding of $`1-\mathrm{lr}\cdot\mathrm{wd}`$), which
+reconciles the measured 0.892636 with the exact-precision 0.892752.
+
+**Verification.** The closed form matches measured per-segment scale
+factors on every checkpoint transition we tested: residuals
+$`\sim\!10^{-5}`$ across 1-, 4-, 18-, and 19-phase intervals, three
+independent instruments (torch c-fits, optimizer-moment census,
+weight-atlas spectral fingerprints) agree to four decimals. In the other
+direction, the leak is invisible where it matters most: single-phase
+acquisition is unaffected (bounded regime nulls at $`\le 2.5\%`$, within
+the 2–4% seed floor), because the erosion acts over *many* phases.
+
+<figure id="fig:decayregimes" data-latex-placement="t">
+<embed src="figures/decay_regimes.pdf" style="width:85.0%" />
+<figcaption>Optimizer decay regimes used to audit the confound. The
+closed-form schedule product predicts the measured per-segment scale
+factors; the RA2 and default schedules differ in the resulting decay
+rate.</figcaption>
+</figure>
+
+**Repair.** A step-end restore re-establishes bit-exactness of the
+masked path after every optimizer step. Confirmed independently on two
+seats, two hosts, and two scripts verify old-segment bit-identity across
+growth phases, $`c=1.000000`$ exactly. All fixed-regime numbers below
+(the RA2b chain, cross-script stages) run under this repair. The cost is
+measured: 8.7 ms per GiB restored at the final width (2.06 GiB snapshot,
+17.9 ms against 3038 ms/step, 0.59% of step time; the snapshot is held
+resident for the phase, +2.06 GiB, which is the binding constraint on
+small-memory hardware).
+
+**Precedent.** The same failure signature—routed-expert norms falling
+toward zero under AdamW+weight decay while evaluations stay normal—has
+been observed independently in production MoE training (Marin project
+tracker, thread 8818) , suggesting a failure class, not an idiosyncrasy
+of our setup.
+
+# Theory: storage is exact; serving and addressing are not
+
+The theory of rev 3 carries over unchanged in its core; we restate the
+two load-bearing results and refer the proofs to
+Appendix <a href="#app:proofs" data-reference-type="ref"
+data-reference="app:proofs">15</a>. The new empirical sections then
+measure what the theory predicts: growth constructs exact storage, the
+readout breaks serving, and selection repairs it.
+
+One clarification, because it is easy to misread the dissociation
+result: the construction of
+Theorem <a href="#thm:dissoc" data-reference-type="ref"
+data-reference="thm:dissoc">1</a> is realized *after* training, by a
+suffix whose parameters are non-zero. The zero-initialized suffix of the
+growth convention measures the *untrained* case—which is exactly why the
+A$`-`$C gap in the random-expansion control quantifies that convention’s
+protective value, rather than contradicting the theorem.
+
+<div id="thm:dissoc" class="theorem">
+
+**Theorem 1** (dissociation). *<span class="smallcaps">proved.</span>
+There exist extended maps $`F'=F_A+c\,\mathbb{1}`$ (any $`c\neq0`$)
+whose parameter set contains $`\theta_A`$ unchanged, yet whose old-task
+trajectories differ from the specialist’s at every depth. Parameter
+isolation imposes no bound on computation isolation.*
+
+</div>
+
+<div id="thm:criterion" class="theorem">
+
+**Theorem 2** (exact-isolation criterion).
+*<span class="smallcaps">proved.</span> Let
+$`\mathcal{T}_A=\bigcup_{\ell\le L}\{F_A^\ell(x):\ x\in\mathcal{X}_A\}`$
+be the reachable old-trajectory set of the preserved specialist. Then
+$`F'^L(x)=F_A^L(x)`$ for all $`x\in\mathcal{X}_A`$, $`0\le\ell\le L`$
+**iff** $`F'(z)=F_A(z)`$ for all $`z\in\mathcal{T}_A`$. A sufficient
+structural decomposition: with $`H_A=\operatorname{im}P_A`$ containing
+$`\mathcal{T}_A`$,*
+
+1.  **invariance*: $`F'(H_A)\subseteq H_A`$;*
+
+2.  **restriction equivalence*: $`P_AF'P_A = P_AF_AP_A`$ on $`H_A`$.*
+
+*Neither condition alone suffices.*
+
+</div>
+
+<div id="cor:prefix" class="corollary">
+
+**Corollary 1** (prefix growth constructs the structure).
+*<span class="smallcaps">proved.</span> Under hard suffix masking, the
+grown map restricted to masked forwards satisfies (C1)–(C2) identically.
+Hard selection therefore reproduces specialists exactly.*
+
+</div>
+
+<div id="rem:softln" class="remark">
+
+*Remark 1* (soft activity, measured not proved).
+<span class="smallcaps">measured/heuristic.</span> Under *soft*
+activity, LayerNorm’s global statistics break (C1) at first order in the
+suffix magnitude. This is the reading our readout measurements support
+rather than a proved corollary: the argument is not written out here,
+and Section <a href="#sec:readout" data-reference-type="ref"
+data-reference="sec:readout">6</a>, which uses it, treats the
+consequence as measured.
+
+</div>
+
+<figure id="fig:leakage" data-latex-placement="t">
+<embed src="figures/leakage.pdf" style="width:55.0%" />
+<figcaption>Measured soft-regime leakage from a suffix block into
+old-language serving. Relative logit drift and top-1 agreement vary with
+suffix-block activity; the hard endpoint remains the only exactly
+measured preservation mechanism. This figure is evidence for the scope
+of the theory, not a replacement for the proof.</figcaption>
+</figure>
+
+<div id="rem:readout" class="remark">
+
+*Remark 2* (readout arithmetic, measured).
+<span class="smallcaps">measured</span>
+(Section <a href="#sec:readout" data-reference-type="ref"
+data-reference="sec:readout">6</a>). With $`k`$\_sparse_ratio $`=0`$,
+the readout sums over all $`N`$ ReLU candidates, and growth adds terms
+to an existing sum with bit-frozen old weights.
+Theorem <a href="#thm:dissoc" data-reference-type="ref"
+data-reference="thm:dissoc">1</a> predicted this class of failure
+abstractly; the random-expansion control measures it at the English-era
+checkpoint: one random block costs $`4.1\times`$, and 83% (log scale;
+62% in linear perplexity) of the real damage needs no learning at all.
+
+</div>
+
+<div id="lem:zf" class="lemma">
+
+**Lemma 1** (zero-forcing). *<span class="smallcaps">proved.</span> If
+suffix blocks are individually gated, $`f_b\mapsto g_b(x)\odot f_b`$,
+then exact preservation on $`\mathcal{X}_A`$ forces $`g_b(x)=0`$
+wherever $`f_b`$ is nonzero along the preserved trajectory. (The
+specialist term is un-gated; only suffix activity is constrained.) Gate
+freedom lives on never-active coordinates and new-task inputs.*
+
+</div>
+
+<div id="prop:soft" class="proposition">
+
+**Proposition 1** (a cross-coupled ReLU counterexample to exact soft
+gating). *<span class="smallcaps">proved</span> (counterexample class).
+For non-affine updates with cross-coupling, the preservation constraints
+form a functional equation over the trajectory with no solution in an
+open gate range: a two-dimensional ReLU system makes the requirement
+$`(1{+}g_1)^2+g_1g_2\varepsilon\delta=1`$ for all input magnitudes
+$`a>0`$, unsolvable by any input-independent pair. Exactness collapses
+to the hard endpoint; soft regimes can only bound.*
+
+</div>
+
+<div id="prop:amp" class="proposition">
+
+**Proposition 2** (depth amplification).
+*<span class="smallcaps">proved</span> (standard recursion). With local
+injections $`\delta_\ell`$ and Lipschitz level update constant $`L_f`$,
+$`\|e_L\|\le\sum_j(1+L_f)^{L-1-j}\delta_j`$. Uniform-in-depth bounding
+additionally requires contraction ($`\rho<1`$) on the interference
+dynamics, realized as finite differences in
+Appendix <a href="#app:meas" data-reference-type="ref"
+data-reference="app:meas">15.7</a> and measured in
+Remark <a href="#rem:exp" data-reference-type="ref"
+data-reference="rem:exp">3</a>; the uniform bound is vacuous at the
+tested depths, and the measured directional gains do not support the
+premise.*
+
+</div>
+
+<div id="rem:exp" class="remark">
+
+*Remark 3* (expansiveness: measured, not proved-impossible).
+<span class="smallcaps">measured.</span> Directional spectral-norm
+proxies of trained <span class="smallcaps">bdh</span> levels at
+old-input states are $`1.05`$–$`1.89`$ (median per level). This is
+evidence *against* the contractivity premise of
+Proposition <a href="#prop:amp" data-reference-type="ref"
+data-reference="prop:amp">2</a> for the tested models—uniform
+contraction-based bounds are unsupported—and *not* an impossibility
+theorem: isolated stable directions may coexist with expansive medians.
+
+</div>
+
+<div id="cor:sel" class="corollary">
+
+**Corollary 2** (selector vs. creator, scoped). *Within the frozen-path
+projection mechanism studied here, gates do not create invariant
+computational structure; they select structure already present in the
+frozen operator. In broader architectures a learned gate can alter
+effective computation; that possibility is outside this mechanism
+class.*
+
+</div>
+
+<figure id="fig:fcs" data-latex-placement="t">
+<embed src="figures/f2_fcs_heatmap.pdf" style="width:85.0%" />
+<figcaption>FCS forgetting matrix (<span
+class="math inline">log<sub>10</sub></span> ppl). Each row is the
+20-domain cold eval after that phase; blue box marks the diagonal.
+Latin-script languages fall to their English-only zero-shot level (nine
+of the sixteen zero-shot-comparable domains fully displaced, seven
+partial retention; en, lt, bg, el excluded); bg/el collapse by four
+orders of magnitude at row 20; family-structured oscillation survives
+throughout.</figcaption>
+</figure>
+
+# The forgetting baseline: what happens without growth
+
+Before any claim about growth, we measure what a fixed-capacity
+<span class="smallcaps">bdh</span> does under a pure sequential load: 20
+languages, no growth, no masks, no replay, one set of weights
+overwritten phase by phase, and no route-aware auxiliary loss (the
+fixed-capacity floor uses the plain next-token objective, while the
+growth ladder couples training to a prefix-masked loss;
+Section <a href="#sec:protocol" data-reference-type="ref"
+data-reference="sec:protocol">2.2</a>). This is the floor every
+mechanism must beat, and it was missing from the literature side of our
+own project until the operator asked for it explicitly (pre-registered
+as P-FCS-1–3).
+
+## Design
+
+Fixed capacity $`\times`$<!-- -->128 ($`\sim`$<!-- -->100M), same
+sequence and protocol as the growth ladder (en, es, pl, fr, de, cs, da,
+pt, fi, hu, bg, it, et, el, sk, sv, ro, nl, sl, lt), 10k steps per
+phase, batch 4, fresh optimizer per phase (weights restored via
+`--init-from`). After every phase, all 20 domains are cold-evaluated
+(block 512, 40 crops, generator 1234), yielding a $`21\times 20`$
+perplexity matrix whose rows are training prefixes.
+
+## Results
+
+**Acquisition is never the constraint (P-FCS-2 PASS).** Every language
+acquires at its own phase between 1.54 and 2.29 ppl—including the 20th
+(lt, 2.13). Fixed 100M capacity saturates for no single language.
+Notable inversion: the non-Latin scripts acquire *best* under full
+overwrite (bg 1.54, el 1.59) while they were the worst acquirers under
+growth+selection (5.86, 5.99 in the fixed-regime ladder)—under full
+overwrite the entire model serves the current language, so there is no
+protected capacity to fight over.
+
+**Forgetting is family-structured, not total (P-FCS-1 PASS,
+corrected).** Row 20 (after all 20 phases) splits the sixteen
+zero-shot-comparable domains by family: *nine fully displaced*—serving
+at or above their English-only zero-shot level (es, fr, de, it, pt, da,
+sv, nl, fi; the Romance/Germanic group, strongest zero-shot transfer,
+displaced back to exactly what English alone transferred); *seven
+partial retention* (pl 0.34$`\times`$, sl 0.35$`\times`$, cs
+0.37$`\times`$, sk 0.43$`\times`$, ro 0.61$`\times`$, hu 0.78$`\times`$,
+et 0.87$`\times`$ their zero-shot); and the two non-Latin scripts
+collapsed four orders of magnitude at row 20 (bg 18,613, el 10,928; the
+twentieth domain, *lt*, is the language trained in row 20 itself and
+serves there at its acquisition value, $`2.13`$, retained rather than
+displaced). The family axis that governs interference also governs
+survival.
+
+**Interference is not recency-structured but family-structured (P-FCS-3
+FAIL—replaced by a stronger finding).** Pre-registered prediction: the
+most recent phase dominates backward interference. Measured: the en
+column oscillates between 10.5–13.6 ppl after Romance/Germanic phases
+and 22.1–29.1 after Slavic/Uralic phases, with a Germanic phase
+*partially restoring* en after a Slavic one (29.1 $`\to`$ 11.3). The
+mechanism: shared Latin-script byte statistics act as implicit replay.
+This is the family-geometry finding at its cleanest.
+
+**Forgetting is destruction, not access loss (two-arm probe).**
+Fine-tune on bg for 2k steps from two bases: the row-20 endpoint (bg
+trained 19 phases ago, serving 18,613) reaches 1.67; a fresh
+English-only base (bg never trained, zero-shot 4.9M) reaches 1.70 under
+the identical budget. $`\Delta=1.8\%`$, below the 2–4% seed floor: the
+once-trained, 19-times-overwritten state contributes *nothing
+measurable* to re-learning speed. Resolution caveat (accepted in
+review): fixed-2k endpoints cannot separate “destroyed” from “intact but
+slowly re-accessible”; the claim is resolution-bounded. Scope: fixed
+capacity only—the growth regime is the opposite (bit-exact preservation,
+Section <a href="#sec:ra2b" data-reference-type="ref"
+data-reference="sec:ra2b">5</a>).
+
+**A first-class baseline, not only literature.** We did not run this
+floor against every classical competitor at matched compute, and we do
+not claim to have. But our own replay-in-training result belongs in the
+evidence, not only in the prior-art discussion: a replay arm (H1p)
+reached joint parity with the growth construction at $`+27\%`$
+additional training budget in the fixed-capacity regime, establishing
+the concrete price at which replay buys back what overwrite destroys.
+Replay pays data and compute; growth pays serving and addressing. The
+comparison is stated and sourced in
+Section <a href="#sec:prior:replay" data-reference-type="ref"
+data-reference="sec:prior:replay">9.4</a>, not re-run here.
+
+# Preservation under growth: the fixed-regime ladder
+
+The complementary experiment: the same 20-language sequence, but each
+phase *grows* the model by $`+32`$ neurons/head and *masks* all
+pre-existing gradients, under the decay repair of
+Section <a href="#sec:decay" data-reference-type="ref"
+data-reference="sec:decay">2.3</a>. Pre-registered predictions
+H-decay-1/2/3 were written before any number existed.
+
+<figure id="fig:ladder" data-latex-placement="t">
+<embed src="figures/f1_ladder_curves.pdf" style="width:95.0%" />
+<figcaption>Ladder acquisition. RA2b (fixed regime, blue, all 20
+phases): 2.25–5.99 band, position cost gone. RA2 (leaky regime, red, 12
+documented phases): acquisition tracked ladder position. Green arrows:
+same-position same-host cells lt <span
+class="math inline">9.94 → 3.72</span> (<span
+class="math inline">−63%</span>), sl <span
+class="math inline">9.45 → 3.36</span> (<span
+class="math inline">−64%</span>). Residual spread is alphabet difficulty
+(bg/el), not chain state.</figcaption>
+</figure>
+
+## Acquisition: position-spread collapses
+
+Final-chain best-val perplexities span 2.25–5.99, and the spread that
+characterized the leaky era is gone: same-position same-host cells lt
+(phase 20) improved from 9.94 to 3.72 and sl (phase 19) from 9.45 to
+3.36. Late-position languages now acquire in the same band as early ones
+(sv 2.89 at position 16, nl 2.88 at 18)—*better* than the leaky ladder’s
+early-position languages. What remains above the Latin band is alphabet
+difficulty, not chain state: bg 5.86, el 5.99, lt 3.72.
+
+**H-decay-3 PASS:** the within-family acquisition gaps of the leaky era
+were driven substantially by decay erosion of earlier segments’ serving
+capability at acquisition time.
+
+## Routing: perfectly diagonal
+
+The 20-way routing diagnosis on the final chain scores every domain
+under all twenty prefix widths (40 crops each, 800 crop-width cells) and
+resolves **20/20 domains to their own prefix**—every domain, every crop,
+its own training width (the per-domain Wilson floor for a perfect 40/40
+is $`[0.91,1.0]`$; crops within a domain are not independent, so the raw
+800 should not be read as 800 independent trials). Under the leaky chain
+the same instrument showed 36/40 for fi (four crops lost to its Estonian
+neighbor) and family wanderings (cs/pl$`\to`$sk, Romance$`\to`$ro); none
+of that remains. The family structure that governs *error* modes (FCS
+oscillation, cross-script attraction) disappears when every territory
+exists: routing is exact. Because the router selects on the first 128
+tokens of a crop and the serving evaluation uses the remaining 384
+tokens of the same crop, this is an online-routing protocol, not a
+held-out split. At 20/20 domains with 40/40 crops each, the observed
+routing is therefore *oracle serving* for this benchmark: per-sample
+selection buys nothing that a fixed correct assignment would not also
+give. That observation holds only where accuracy is 100% and does not
+transfer to regimes whose routing falls below it. The assignment is not
+a same-crop artifact: in a separate eval-only run that chooses each
+route on crops disjoint from those served (a held-out byte window split
+in halves, selection crops never seen by the serving phase), the fixed
+route still resolves to the true acquisition width for all 20 domains (
+extttdocs/reports/2026-09-13_quinn_tier1-router-split-report.md,
+bdh/2166c24).
+
+<figure id="fig:retention" data-latex-placement="t">
+<embed src="figures/f3_retention_bars.pdf" />
+<figcaption>RA2b final checkpoint: routed serving (blue), joint serving
+(orange), and acquisition exit (black tick), per domain, log scale.
+Routed serving remains within the measured acquisition-cost band (median
+<span class="math inline">+4.3%</span>, range <span
+class="math inline">−0.8%</span> to <span
+class="math inline">+8.0%</span>; maximum <span
+class="math inline">+8.0%</span> at hu). Joint serving ranges from <span
+class="math inline">1.0×</span> to <span
+class="math inline">37.8×</span> acquisition (median <span
+class="math inline">11.4×</span>). Values are regenerated from the
+committed A4 routed-cost table and the final RA2b matrix.</figcaption>
+</figure>
+
+## Retention: acquisition within the measured cost band
+
+The p19 and p20 routing diagnoses (before and after the final growth
+phase) are *bit-identical* on all 19 non-lt domains’ routed
+perplexities—zero drift across a full growth phase, against $`+88\%`$
+(fi) and $`+21\%`$ (hu) in the leaky era. Across all twenty domains,
+routed perplexity at the final checkpoint exceeds each domain’s own
+acquisition exit by a median of $`+4.3\%`$, worst case $`+8.0\%`$ (hu):
+a measured quality difference, not instrumentation. The
+instrument-offset escape is removed on provenance grounds, not replaced
+by a substitute measurement. The “+5–9%” figure traces to a single
+RA2-era lt control and was never measured across RA2b domains, so it
+cannot excuse a ratio in a sentence that also states a bound; and the
+sixteen matrix diagonal cells that agree with the logged exits do so
+because both come from the same random-crop evaluation family, differing
+only in implementation and crop seed, so their agreement is
+cross-implementation consistency rather than evidence about a
+window-versus-val offset. What makes the retained number strong is
+exactly that routed and acquisition serving are measured under the same
+evaluation family: $`+4.3\%`$ is the routing cost, not an instrument
+difference.
+
+**H-decay-1 PASS:** retention matches acquisition within the measured
+routed-cost band; the leaky-era “degradation” of fi/hu was entirely the
+decay artifact, and no domain pays more than an $`8\%`$ routed cost.
+
+## Joint serving: recovered but not solved
+
+Joint full-width serving on the final chain recovers dramatically
+vs. the leaky era (bg 1649 $`\to`$ 230, el 891 $`\to`$ 64) *without any
+repair*—but non-lt domains still serve 1.0–37.8$`\times`$ above
+acquisition (median 11$`\times`$). The interference term is real and
+survives the decay fix;
+Section <a href="#sec:readout" data-reference-type="ref"
+data-reference="sec:readout">6</a> shows 83% of it is arithmetic at the
+English-era checkpoint (log scale; 62% in linear perplexity); the
+mechanism reproduces across seven eras, the fraction does not.
+
+**H-decay-2 PASS:** joint recovery without splice confirms the decay
+component’s size; the residual is the readout problem.
+
+## Bit-exactness: independent confirmations across seats, hosts, and scripts
+
+The P5 protocol (masked-cell optimizer moments $`v\equiv 0`$,
+old-segment tensor equality $`c=1.000000`$) held at every tested
+transition, on two hosts, two scripts, two seats: the en$`\to`$es
+transition, es$`\to`$pl, the full p19$`\to`$p20 comparison, the
+single-phase fixed-capacity chain on the 4090, and the cross-script
+zh$`\to`$hi growth
+(Section <a href="#sec:xscript" data-reference-type="ref"
+data-reference="sec:xscript">8</a>). Frozen segments do not move.
+Storage is exact.
+
+# Readout mechanics: why joint serving degrades
+
+Storage is bit-exact
+(Section <a href="#sec:ra2b" data-reference-type="ref"
+data-reference="sec:ra2b">5</a>); routed serving remains within the
+measured acquisition-cost band; yet joint serving degrades
+1.0–37.8$`\times`$ over acquisition (median 11$`\times`$, worst bg). The
+gap lives in the readout. Three experiments, all pre-registered,
+decompose it.
+
+<figure id="fig:expansion" data-latex-placement="t">
+<embed src="figures/f6_expansion_control.pdf" style="width:60.0%" />
+<figcaption>Expansion control on the English-era base. The left panel
+reports free-width joint PPL and the right panel reports masked PPL at
+the original width. Random untrained growth reaches <span
+class="math inline">9.57</span> after one block and <span
+class="math inline">20.16</span> at full width; inert zeros remain at
+<span class="math inline">2.33</span>; the real ladder reaches <span
+class="math inline">31.07</span> free but <span
+class="math inline">2.31</span> masked. Thus the real growth arm is
+shown explicitly in both serving regimes, separating arithmetic readout
+damage from storage preservation.</figcaption>
+</figure>
+
+## The random-expansion control: mostly arithmetic (83% log-scale, 62% linear at the en-era checkpoint)
+
+Take the English-era checkpoint of the fixed-regime chain and expand its
+latent width synthetically—no training, no new language, no
+gradient—under three arms: *A*: append a randomly initialized
+(matched-scale Gaussian) block; *B*: the real ladder’s next trained
+block; *C*: an inert block that cannot activate (zero weights). Then
+measure English free-width perplexity and prefix-masked perplexity.
+
+<div class="center">
+
+| expansion                          | en free | en masked@8192 |
+|:-----------------------------------|:-------:|:--------------:|
+| none (base)                        |  2.33   |      2.33      |
+| A: one random block ($`N{+}2048`$) |  9.57   |      2.33      |
+| A: random to full width            |  20.16  |      2.33      |
+| B: real ladder (trained lt)        |  31.07  |      2.31      |
+| C: inert at every width            |  2.33   |      2.33      |
+
+</div>
+
+Three conclusions. First, **one random untrained block costs
+$`4.1\times`$**—no new language, no competition for knowledge, just 2048
+extra positive terms summed into an existing readout. Second, **random
+expansion to full width reproduces 83% of the real damage** on the log
+scale
+($`\Delta_{\log} = \ln(\mathrm{ppl}_{\mathrm{rand}}/\mathrm{ppl}_{\mathrm{base}}) / \ln(\mathrm{ppl}_{\mathrm{real}}/\mathrm{ppl}_{\mathrm{base}}) = 0.833`$;
+in linear perplexity units the same control yields 62%): learned
+competition is real but second-order ($`\sim\!17\%`$ on the log scale).
+Third, **inert blocks cost exactly nothing** (bit-identical at every
+width), which simultaneously validates the row-layout handling and
+proves the damage requires nonzero contributions. Masking back to 8192
+restores 2.33 under every arm: even after synthetic expansion, the old
+skill is untouched—storage holds; only the addressing of the readout
+fails.
+
+Fourth, **the mechanism generalizes across eras; the fraction does
+not.** Repeating the control on seven frozen era checkpoints (phases 1,
+5, 8, 11, 14, 17, 19, each expanded directly to final width, eval-only)
+reproduces the English result independently first ($`f_{\log}=0.832`$
+against the published $`0.833`$; arm-A perplexity $`20.08`$ against
+$`20.16`$, $`-0.4\%`$), which is what licenses comparison with the
+number already in this paper. Own-era fractions then span $`0.599`$ (sl)
+to $`1.472`$ (el) around that single point estimate: a random block
+reproduces the majority of the log-scale damage in six of seven eras, so
+the mechanism is not an English artefact, and the pre-registered
+falsifier triggered on the seventh. The Greek value decomposes into its
+two factors rather than standing as an anomaly: Greek’s random-block
+damage ($`28.7\times`$) is unremarkable—it is bg with a different
+denominator—and the fraction exceeds one because the trained ladder lost
+comparatively little there ($`9.8\times`$ against bg $`37.5\times`$), so
+$`f_{\log}>1`$ is driven by a small denominator, not by an extraordinary
+numerator. The 83 %/62 % headline above is specific to the English-era
+control.
+
+The zero-init discipline is itself load-bearing: arm C is “growth as
+shipped, untrained”—<span class="smallcaps">bdh</span>’s convention of
+initializing new capacity at zero is the better of the two random
+regimes, and the A$`-`$C gap measures that convention’s protective
+value.
+
+## Seven fixed readout operators, all refuted
+
+If the damage is arithmetic, some fixed arithmetic might repair it. We
+tested seven readout operators, end-to-end, on the shipped chain (P-R1,
+P-R1b; two vacuous by construction). The two identity controls below
+come from different instruments—$`2.33`$ from the expansion control on
+the en base, $`32.04`$ from the operator run on the full chain—so they
+differ by an order of magnitude.
+
+<div class="center">
+
+$`^\dagger`$log-scale change relative to identity; negative $`=`$ worse.
+Identity controls differ per run: absK and ev-shift rows come from P-R1
+(identity en 31.14); massnorm, softmix and calibgain from P-R1b
+(identity en 32.04, the control row shown). Compute cross-run ratios
+against the run’s own control.
+
+</div>
+
+The two vacuous arms are a structural finding: `bdh.py:279` applies
+$`y \leftarrow \mathrm{LN}(y_{\mathrm{MLP}})`$ immediately after the
+readout matmul, so *any* global gain change is annihilated—measured, not
+inferred (block-average and log-norm returned bit-identical identity
+values).
+
+The decisive arm is **calibgain**: one scalar per territory, fitted by
+gradient descent on English NLL alone. The fitted vector converges to
+base territories $`\approx 2.4`$, appended territories $`\le 0.12`$
+(several at the clamp floor)—that is, the optimizer *rediscovers oracle
+masking*, specialized to the language it was fitted on, and necessarily
+silences every other territory. There is **no language-agnostic scalar
+reweighting of the <span class="smallcaps">bdh</span> readout that
+repairs growth damage**. Culling hurts more than growth helps; relative
+reweighting helps only the oldest or nobody.
+
+**Consequence.** Cause and remedy are decoupled: the damage is
+arithmetic (P-R2), but every *fixed* arithmetic remedy fails, because a
+fixed operation is input-independent by definition. The only operation
+class that works in the families tested is *input-dependent
+selection*—which is exactly what the likelihood router does
+(Section <a href="#sec:selection" data-reference-type="ref"
+data-reference="sec:selection">7</a>), and why it succeeds where seven
+fixed operators fail.
+
+# Selection and out-of-support detection
+
+Given that the correct operation is selection, we measure how well
+selection works, how cheap it can be, when it fails, and how to detect
+failure.
+
+## Label-free likelihood selection
+
+The likelihood router scores the early positions of a block under every
+prefix width and routes the late positions to the arg-min. No human task
+IDs, no external labels. On the fixed-regime chain: **20/20 domains
+route to their own prefix at every calibration budget from
+$`\sim`$<!-- -->4 KB (8 crops) to 1 MB**—selection is nearly data-free.
+Routed routed serving remains within the measured acquisition-cost band
+across all domains (median $`+4.3\%`$, worst case $`+8.0\%`$ at hu; the
+routed-cost band is measured in
+Section <a href="#sec:ra2b" data-reference-type="ref"
+data-reference="sec:ra2b">5</a> under a single evaluation family).
+
+But selection is *robust, not sublinear*: binary search over prefix
+widths (the cheap alternative to scanning all widths) collapses to
+4–6/20, because the cumulative-prefix NLL surface is
+**multimodal**—multiple widths can locally minimize the score, and only
+4–6 of 20 languages recover their own territory by bisection; 14–16 land
+in a wrong local minimum. The failed assumption is the finding:
+selection scales linearly in territory count unless a cheaper addresser
+exists below it.
+
+## Cheap addressing from byte geometry
+
+The chain’s address geometry is byte-statistical
+(Section <a href="#sec:xscript" data-reference-type="ref"
+data-reference="sec:xscript">8</a>); can a cheap input-side model
+reproduce the likelihood router’s decisions? A multinomial logistic
+regression on hashed byte 1–4-gram counts ($`2^{18}`$ buckets) predicts
+the arg-min route: under a **class-balanced fit**, agreement is 20/20
+domains at 1.00 each (8 held-out crops per domain; the per-domain Wilson
+floor for a perfect 8/8 is $`[0.68, 1.0]`$—the crops within a domain are
+not independent, so the three-decimal iid band over all 160 would claim
+precision the design does not have), at $`\sim`$<!-- -->4–8 KB
+calibration text per domain. The cost is one counting pass plus a
+$`2^{18}\times 23`$ matvec—a $`\sim`$<!-- -->23$`\times`$ reduction in
+forward cost versus scanning all widths. The $`23`$ classes are
+cumulative-prefix *territories*, not languages: English owns the four
+base sub-widths and the nineteen grown phases add one each, so the
+addresser predicts a prefix width rather than a language identity.
+
+Two design lessons from this result’s own history, stated for the
+record: the first fit (76% agreement, three Latin-neighbor domains at
+zero and one at two-thirds) was withdrawn by its author after he found a
+composition confound—giving four domains 96 training crops shifted every
+class’s share of a fixed-budget L2 fit; the balanced re-fit resolved the
+four domains to 1.00 and confirmed the failure was starvation, not
+geometry. And the density curve (8/16/32/64 crops, controls pinned)
+shows all domains at 1.00 by 8–16 crops. The withdrawal sequence is
+itself evidence for the process discipline this project runs on.
+
+<figure id="fig:ood" data-latex-placement="t">
+<embed src="figures/f4_ood_scatter.pdf" style="width:80.0%" />
+<figcaption>Two-axis OOD separation. Blue: 20 trained languages (ratio
+<span class="math inline"> ≥ 5×</span>, absolute ppl <span
+class="math inline"> ≤ 6.5</span>). Diamonds: 6 unseen — byte-adjacent
+(lv, ga) collapse on the ratio axis; cross-script (zh, ja, hi, iu) sit
+orders above on the absolute axis. hi breaches the trained ratio floor
+(5.74<span class="math inline">×</span>): the one-axis rule fails
+informatively; both axes together separate all 26.</figcaption>
+</figure>
+
+## Out-of-support detection: two axes, not one
+
+Can the system tell *seen* from *unseen*? We probe the final chain with
+six languages never in any ladder: Latvian (lv, Baltic, byte-adjacent),
+Irish (ga, Celtic, byte-adjacent, different corpus), and Chinese,
+Japanese, Hindi, Inuktitut (zh/ja/hi/iu, cross-script). A natural
+candidate statistic is the *routing advantage*—joint perplexity divided
+by best-route perplexity: if routing genuinely helps, the ratio should
+be large.
+
+**The one-axis rule fails, informatively.** For trained languages the
+advantage is 5.7–15.6$`\times`$. For the byte-adjacent unseen languages
+it collapses: lv 0.98$`\times`$ (routing slightly *worse* than joint),
+ga 1.39$`\times`$—correctly below any trained floor. But for the
+cross-script languages the ratio *inflates* past the trained floor: zh
+3.87$`\times`$, ja 3.21$`\times`$, hi 5.74$`\times`$, iu-clean
+1.90$`\times`$ (but see the contamination correction below)—because
+their joint perplexity is so catastrophic (1614–4204; per-domain joint
+runs, ‘docs/reports/2026-09-11_cross-script-rejection-suite.md‘) that
+even maximally foreign territory is consistently “less bad,” and the
+router finds it. hi exceeds the worst trained language’s floor. A pure
+ratio threshold does not separate cross-script unseen from trained.
+
+**The two-axis rule separates all 26 languages.** Add the absolute axis:
+reject routing when the best-route perplexity exceeds
+$`\sim`$<!-- -->10$`\times`$ the acquisition band (2.36–6.47).
+Cross-script unseen languages sit at 304–732 (zh 417, ja 571, hi 732,
+iu-clean 304)—orders above any trained domain; byte-adjacent unseen sit
+at 37–51, also above. With both axes, all 20 trained languages pass and
+all 6 unseen reject. The thresholds are empirical for this checkpoint
+and instrument, and—critically—they are fit and evaluated on the same
+$`n{=}6`$ probe set; the separation they produce is measured, but it is
+not held-out validation. Independent unseen languages must be collected
+and the rule re-tested before it is used for any real rejection
+decision. Conformal calibration that would freeze thresholds
+non-arbitrarily is future work
+(Section <a href="#sec:limits" data-reference-type="ref"
+data-reference="sec:limits">11</a>).
+
+**The cheap addresser and the likelihood router are two instruments, not
+rivals.** When the balanced byte addresser and the likelihood router
+disagree—hi routes to bg/el under likelihood but to Latin territories
+under the byte fit, and clean Inuktitut does the same—neither is wrong.
+Centroid geometry shows hi and iu-syllabic sit nearest Latin territories
+in byte $`n`$-gram space (bg/el rank 19–20 of 22 by cosine), so the
+cheap addresser faithfully reports *distributional proximity*; the
+likelihood router answers a different question, *realized fit*, and
+bg/el fit each of the four 3-byte scripts tested better than any Latin
+territory. Maximum-centroid cosine separates the two regimes with zero
+fitted parameters: Latin-family inputs at 0.78–0.85, cross-script inputs
+at 0.07–0.14; the price is over-escalation: zh and ja agree with the
+likelihood router yet still fall out-of-hull, so this trigger escalates
+4 of 7 unseen inputs where catching the divergences needs 2. The cascade
+consequence is concrete: escalate to the likelihood scan when the margin
+is low *or* the maximum cosine falls in the out-of-hull band; margin
+alone lets half the Hindi crops through unsafely. The margin floor
+itself is optimistic: it comes from a fit that was 160/160 correct on
+those same crops, so thresholds must be re-estimated on crops the fit
+never saw (ideally under the next growth phase) before coverage is
+quoted.
+
+**The iu contamination, disclosed.** The original Inuktitut file mixed
+syllabic text with Turkish film-subtitle lines from the parallel column
+(454 of 719 lines Latin). The contamination was caught by an independent
+census during a different experiment, the clean re-run (265 syllabic
+lines) strengthens the byte-geometry result (routing concentration rises
+from 25/40 to 40/40 high-byte) and moves the advantage to
+1.90$`\times`$. Both numbers are reported; the correction is a worked
+example of the second-seat cross-check discipline.
+
+# Cross-script generalization
+
+All results so far live inside the Latin-script byte continuum (plus
+Cyrillic and Greek as the only substantially multi-byte territories). We
+now test the growth–selection–addressing stack at maximum byte distance:
+four script universes with near-zero ASCII overlap and no linguistic
+kinship to anything trained.
+
+<figure id="fig:xscript" data-latex-placement="t">
+<embed src="figures/f5_cross_script.pdf" style="width:70.0%" />
+<figcaption>Cross-script routing on the fixed-regime chain (40 crops per
+probe). zh 37/40, ja 40/40, hi 40/40 and the decontaminated iu 40/40
+concentrate on the only two territories with substantial multi-byte
+training exposure (bg/el: 82% 2-byte characters vs 11.7% next-highest);
+no Latin-route attraction remains after the iu correction. No linguistic
+kinship exists between any probe and Cyrillic or Greek.</figcaption>
+</figure>
+
+## Out-of-support routing: byte geometry, not linguistics
+
+Probing the fixed-regime chain
+(Section <a href="#sec:ra2b" data-reference-type="ref"
+data-reference="sec:ra2b">5</a>) with Chinese (zh, Han), Japanese (ja),
+Hindi (hi, Devanagari), and Inuktitut (iu, Canadian Syllabics;
+contaminated file corrected as in
+Section <a href="#sec:ood" data-reference-type="ref"
+data-reference="sec:ood">7.3</a>): pre-registered prediction was that
+routing would concentrate on the only two territories with substantial
+multi-byte training exposure— bg (Cyrillic) and el (Greek)—despite zero
+linguistic relationship. Measured confusion: zh 37/40 to bg+el, ja
+40/40, hi 40/40, iu-clean 40/40. Every systematic routing decision lands
+on a high-byte territory; the pre-registered falsification case
+(Latin-route attraction) never occurred. Even the contaminated iu’s
+Latin share (12/40 to en) matched its actual Latin-script content,
+predominantly English-prose lines; the Turkish-diacritic subset was too
+small to test separately.
+
+A per-territory byte census on the exact training slices quantifies
+"substantial": bg and el encode 82% of characters as 2-byte sequences
+against 11.7% for the next-highest territory (cs), a factor of 7. Every
+territory sees some non-ASCII bytes (pl 10.4%, de 3.6%)—the operative
+fact is the *density* of multi-byte structure, not its presence. No
+territory has material 3-byte exposure (maximum 0.018%, and that is
+typography: em dashes and ellipses), so bg and el win cross-script
+inputs not because they have seen those scripts—nobody has—but because
+they are the only territories whose weights live in a multi-byte regime
+at all.
+
+We state this carefully, scoped to this checkpoint and instrument: the
+likelihood router’s selection is strongly organized by byte statistics,
+and nothing in these measurements requires linguistic identity to
+explain a single routing decision. The strict reading—family geometry
+*is* byte geometry as an architectural law—remains a hypothesis; the
+cross-script acquisition test below gives it a second data point but not
+a proof across encodings.
+
+## Acquisition from scratch: script-agnostic
+
+A fresh 100M <span class="smallcaps">bdh</span> (no Chinese exposure of
+any kind) trained on 30 MB of Chinese (MultiUN ): best-val perplexity
+**2.69** (test 2.48) at the same protocol as the European fixed-capacity
+baseline, whose acquisition band is 1.54–2.29. The byte-level
+acquisition machinery is script-agnostic: what a cross-script language
+lacks in a trained <span class="smallcaps">bdh</span> is territory, not
+learnability.
+
+## The cross-script growth cell: monotonic growth holds
+
+The final test: grow Chinese on top of English, then Hindi on top of
+Chinese, under the full masked-growth protocol. (i) *Acquisition*: Hindi
+on top of Chinese-growth reaches 2.78 best-val. (ii) *Routing*:
+perfectly diagonal on the two-territory stack—zh 40/40 to its own width,
+hi 40/40 to its grown width, no language ID. (iii)  *Retention*: zh
+routed 2.81 vs. its own acquisition 2.69 ($`+4.5\%`$, within the
+measured routed-cost band); hi routed 2.79 vs. 2.78. Joint 23.92 gives a
+routing advantage of 8.5$`\times`$: deep in-support. (iv) *Storage*: the
+zh segment is bit-identical across Hindi growth in encoder,
+value-encoder, and decoder (first cross-script instance of the
+bit-exactness protocol); embedding and head unchanged; grown segments
+nonzero.
+
+Two maximally disjoint script universes, stored, grown, selected without
+IDs, and served at acquisition quality. Monotonic model growth holds
+across script families.
+
+## Data reality, separated from capability
+
+The entire public OPUS Inuktitut–English parallel holding is
+$`\sim`$<!-- -->163 KB ($`\sim`$<!-- -->725 pairs), and our file of it
+was itself contaminated. The statement “no LLM can translate Inuktitut
+even roughly” has a measured correlate here: the bottleneck is upstream
+of any architecture. Data availability and architectural capability are
+different claims, and this experiment supports only the first.
+
+# Prior art, discussed
+
+We discuss prior work in the format the humanities use: what each line
+actually studied, what they found, where we agree, where we diverge, and
+a verdict. Short citations are not sufficient; we show the engagement.
+
+## Additive and parameter-isolating growth
+
+**Progressive Networks**  studied continual learning in RL by adding a
+new network column per task, with frozen lateral connections to all
+previous columns. They measured transfer on Atari game sequences and
+found positive backward transfer but linear parameter growth per task,
+which they identified as the approach’s practical limitation.
+*Agreement:* the design idea is the same family as ours—append frozen
+capacity per phase; their freezing discipline presaged our
+bit-exactness. *Divergence:* their capacity is a full column per task
+(parameters grow with task count by a whole network); ours grows a
+*prefix slice* of a shared operator set, and we measure the serving
+consequences (joint degradation) that progressive networks never had to
+face, because their columns were never summed into one readout.
+*Verdict:* closest in spirit; our contribution is the storage
+mathematics under a shared readout, which is exactly where their story
+ends and ours begins.
+
+**PackNet**  studied fixed-capacity continual learning by iterative
+pruning: after each task, prune a fraction of weights and dedicate the
+freed capacity to the next task, protecting old tasks by construction.
+They measured on supervised vision tasks and found low forgetting at
+modest capacity cost. *Agreement:* protection by construction works; our
+masked growth is the same philosophy. *Divergence:* PackNet stays inside
+one fixed parameter budget, so each new task competes for the freed pool
+and old-task capacity is capped; our growth appends, so no competition
+exists and the protection is bit-exact rather than capacity-rationed.
+Our fixed-capacity baseline
+(Section <a href="#sec:fcs" data-reference-type="ref"
+data-reference="sec:fcs">4</a>) is precisely the regime PackNet operates
+in, and its measured forgetting floor motivates leaving it. *Verdict:*
+complementary; we test the capacity-growth arm they exclude.
+
+**Piggyback**  and **SupSup**  studied binary/super mask allocation over
+a *single frozen* backbone: learn a per-task mask of the same weights,
+all tasks share parameters but each uses a different subset.
+*Agreement:* selection-as-mechanism is their insight too; our prefix
+mask is a mask. *Divergence:* their masks select within a fixed budget,
+so tasks interfere at the assignment level and must be learned per task;
+our mask is structural (a prefix of an ordered growth), so assignments
+never collide and no mask learning is required. Our random-expansion
+control measures what their setting cannot express: even untrained
+appended capacity changes the joint readout, which no within-budget mask
+can create or repair. *Verdict:* same mechanism class, different
+capacity regime; our results quantify the regime’s serving difference.
+
+## Task and domain addressing
+
+**Expert Gate**  studied task addressing: train a per-task autoencoder
+and route each input to the expert whose autoencoder reconstructs it
+best, for lifelong vision tasks. *Agreement:* an input-gated address
+that selects stored experts is the right architecture; our likelihood
+router is the same idea in language-model space. *Divergence:* Expert
+Gate requires per-task labels and per-task auxiliary networks; our
+selector is label-free (arg-min NLL by the model itself) and our cheap
+addresser needs $`\sim`$<!-- -->4–8 KB per domain of unlabeled text; and
+we measure the failure modes their vision setting could not
+exhibit—out-of-support detection with a two-axis rule, and the
+non-unimodality that blocks sublinear search. *Verdict:* nearest
+published analogue to our addressing stage; our contribution is the
+self-supervised label source plus the measured rejection geometry.
+**Learning to Prompt (L2P)**  addresses the same problem with a learned
+prompt pool: task-appropriate prompts are selected per input and
+conditioned into a frozen model—addressing without architectural growth.
+*Agreement:* input-conditioned selection of stored capability is the
+shared idea. *Divergence:* L2P’s prompts compete for a fixed embedding
+budget, whereas our territories are append-only and bit-frozen; and
+L2P’s selection is a learned attention head, whereas our label source is
+the model’s own NLL. *Verdict:* complementary rather than competing—L2P
+conditions a fixed model, we grow and address new capacity.
+
+## Consolidation and importance protection
+
+**EWC**  and its successors (SI , MAS ) studied importance-weighted
+protection: estimate per-parameter importance from data (Fisher
+information, path sensitivity) and penalize changes to important
+parameters. *Agreement:* the goal—protect what past learning made
+load-bearing—is the right one, and in a *fixed-budget* model it is the
+only lever available. *Divergence:* in our growth regime there is
+nothing for importance protection to do: gradients never reach old
+segments (the mask is exact), so the Fisher matrix over old parameters
+is identically zero over the preserved trajectory—a measured null, not
+an omission. Our fixed-capacity baseline shows the regime where these
+methods are the right family. *Verdict:* complementary by regime; we
+supply the measured boundary between them.
+
+## Replay
+
+**GEM/A-GEM**  studied replay with constraint gradients: keep a memory
+of old-task examples and project updates to not increase old-task loss.
+*Agreement:* replay works; our own replay-in-training result (H1p)
+reached joint parity at $`+27\%`$ budget in the fixed-capacity regime,
+and our FCS matrix measured the *implicit* replay that family structure
+provides for free. *Divergence:* replay rewrites rather than protects—it
+re-exposes old data to keep old skills—while masked growth never
+re-touches old weights at all; the two are alternative regimes, and our
+measurements say which costs what: replay pays data and compute, growth
+pays serving (addressing). *Verdict:* orthogonal mechanisms; the paper’s
+decomposition shows replay answers a question growth does not need to
+ask. Episodic-memory approaches for lifelong language learning  apply
+sparse experience replay and local adaptation—the language-domain
+sibling of GEM’s constraint, with the same rehearsal-buffer assumption
+our storage results aim to replace.
+
+## Sparse expert routing and its failure class
+
+**Mixture-of-Experts routing**  studied sparse expert selection inside a
+single training run: a learned router activates $`k`$ experts per token,
+with capacity-factor clipping and load-balancing auxiliary losses.
+*Agreement:* sparse selection over specialized sub-networks is the
+shared design idea; our prefix selection is a special case with
+structural (not learned) sparsity. *Divergence:* MoE routing is learned
+*during* training with gradient pressure toward balance; ours is
+structural (each phase’s territory is fixed by construction) and must be
+solved at *serving* time, which is a different problem—MoE never asks
+whether an input belongs to the run at all. Our two-axis rejection has
+no MoE analogue. *Verdict:* shared mechanism vocabulary; our
+measurements cover the serving questions MoE leaves to load balancing.
+The decay-leak class connects the two literatures: the same silent
+erosion under AdamW+weight decay that broke our frozen path has been
+observed as “silent expert death” in production MoE training
+(independently, on a public 535B training tracker)— routed-expert norms
+falling while evaluations stay normal. The class is
+optimizer-architecture interaction, not idiosyncrasy.
+
+## Selective prediction and rejection
+
+**Chow’s rule**  studied the reject option in pattern recognition:
+classify only when confidence exceeds a threshold, reject otherwise,
+minimizing risk under rejection cost. *Agreement:* our two-axis rule is
+Chow’s rule with a measured twist—confidence alone (the ratio) is
+insufficient, because “confidently least-wrong” is not “in support”; we
+need an absolute-competence axis alongside the relative one.
+*Divergence:* conformal prediction  would freeze thresholds with
+distribution-free coverage guarantees; our thresholds are empirical for
+one checkpoint and instrument, and freezing them properly (nonconformity
+scores on held-out labeled crops, thresholds committed before any exotic
+test set is touched) is specified future work. *Verdict:* direct
+lineage; our contribution is showing which two statistics the rule needs
+in this architecture, and that one of them is not the obvious one.
+
+## Production-scale conditional memory
+
+**DeepSeek-V4.1-Flash Engram**  (2026) ships a 196B-parameter
+conditional memory accessed sparsely by token-based lookup, alongside a
+552B MoE backbone. *Agreement:* massive dormant capacity with
+input-gated sparse access is deployed at production scale—the same
+design family as ours, at $`340\times`$ our parameter scale. The vendor
+card establishes that the design ships, not how it behaves under
+continual learning; every behavioral claim in this paper rests on our
+own measurements. *Divergence:* Engram’s lookup is trained end-to-end
+inside one pre-training recipe; our territories are written by
+sequential *post-hoc* phases with bit-exact preservation, which is the
+continual-learning question Engram does not address. *Verdict:* the
+closest public prior art at production scale; it establishes that the
+substrate idea is deployable and leaves the accumulation question—ours
+to answer.
+
+## Continual-learning evaluation methodology
+
+Standard CL benchmarks (e.g. Permuted MNIST, Split CIFAR) measure
+average accuracy and backward transfer after a fixed sequence. Our
+contribution to methodology is the decomposition they lack: *storage*
+(bit-exactness), *serving* (joint vs. routed), *addressing* (selection
+accuracy), and *support* (seen vs. unseen), each with its own
+instrument. The two-arm re-acquisition probe
+(Section <a href="#sec:fcs" data-reference-type="ref"
+data-reference="sec:fcs">4</a>) operationalizes “destroyed
+vs. inaccessible”—a distinction standard benchmarks cannot make, and one
+that changes the intervention conclusion (protection vs. recovery). We
+offer these instruments to the CL literature as portable methodology.
+
+# Discussion
+
+**The thesis against the evidence.** The operator’s framing—append-only
+substrate, addressing as the central problem—survived every measurement:
+storage is bit-exact
+(Section <a href="#sec:ra2b" data-reference-type="ref"
+data-reference="sec:ra2b">5</a>), joint degradation is arithmetic and
+unrepairable by any fixed operator
+(Section <a href="#sec:readout" data-reference-type="ref"
+data-reference="sec:readout">6</a>), selection works label-free and
+nearly data-free
+(Section <a href="#sec:selection" data-reference-type="ref"
+data-reference="sec:selection">7</a>), and the measured open problems
+are all addressing-shaped: sublinear search (blocked by
+non-unimodality), out-of-hull generalization (the hi/iu divergence), and
+calibrated rejection (two axes, thresholds not yet conformally frozen).
+
+**What would falsify the framing.** Three results, none observed: (i)
+masked growth failing to preserve a phase bit-exactly (the P5 protocol
+would catch it); (ii) a *fixed* readout operator repairing joint serving
+(seven tested, all refuted, two vacuously); (iii) selection failing at
+moderate territory counts with a unimodal NLL surface (the surface is
+measured non-unimodal at 20 territories).
+
+**Scaling.** All results are at 100M–579M parameters, byte-level, up to
+20 territories. The addressing question at $`2{,}000{+}`$
+territories—the operator’s $`20 \to 20{,}000`$ question—is the design
+frontier: a cheap input-side addresser (byte $`n`$-gram, measured
+perfect in-support) as a prefilter, escalating low-margin or out-of-hull
+inputs to the likelihood scan, is the architecture our measurements
+motivate, and its second stage (semantic, self-distilled) is the open
+design work.
+
+# Limitations
+
+The measurement limits are: single seed per run (measured seed floor
+2–4%); one language ordering per ladder, with order effects observed
+only implicitly through the family structure; byte-level models only, so
+the byte statistics our addresser exploits are those of this vocabulary
+(byte tax $`\sim`$<!-- -->4$`\times`$ vs. BPE at equal text);
+$`100`$M–$`579`$M parameters on two GPUs of one team; rejection
+thresholds empirical for this checkpoint and instrument, with conformal
+freezing future work; twenty growth phases; and the Inuktitut data
+reality (163 KB total public holding), which bounds what any
+architecture could show there. Two further boundaries—the
+parallel-corpus register of every domain, and the untested “domain”
+notion for chat-level continual learning—are carried with the other open
+items in Section <a href="#sec:open" data-reference-type="ref"
+data-reference="sec:open">12</a>, so that the limits we can measure and
+the questions we cannot yet answer are not read as the same list.
+
+# Open problems and further research
+
+We separate what this paper did not measure from what it measured and
+could not explain. The first list is scope; the second is results.
+
+**Results we did not explain.** (i) *Why joint serving degrades unevenly
+across the high-byte territories.* bg and el have similar acquisition
+exits ($`6.09`$ and $`6.36`$) and are the two territories with
+substantial multi-byte exposure, yet the trained ladder loses
+$`37.5\times`$ at bg against $`9.8\times`$ at el
+(Section <a href="#sec:readout" data-reference-type="ref"
+data-reference="sec:readout">6</a>). The asymmetry is present in the
+landed fixed-regime matrix and predates the expansion control, which is
+what surfaced it. We record it as a measured line with no mechanism
+attached, not as a planned experiment.
+
+(ii) *The residual joint-serving damage.* The decay repair removed the
+erosion component; the arithmetic control accounts for 83% of what
+remains at the English-era checkpoint; the rest is attributed to
+interference and to co-adaptation of jointly trained segments. We have
+not separated those two terms experimentally.
+
+(iii) *Why the cumulative-prefix NLL surface is multimodal.* This is the
+fact that blocks sublinear search, and it is measured rather than
+explained. The same byte geometry that organizes routing and family
+structure is the natural candidate—territories whose byte statistics are
+similar carry similar likelihoods, so the prefix score has local minima
+by construction—but that link is a hypothesis here, not a result.
+
+(iv) *Architecture versus training objective.* The headline contrast
+between the fixed-capacity floor (destruction) and the growth ladder
+(preservation) moves two variables at once: the capacity mechanism *and*
+the route-aware auxiliary loss ($`\alpha=0.9`$,
+Section <a href="#sec:protocol" data-reference-type="ref"
+data-reference="sec:protocol">2.2</a>), which is present for the growth
+phases and absent for the floor. Each is disclosed in its own section,
+so the paper never juxtaposes them where the comparison is asserted—and
+therefore cannot separate how much of the recovered routed-serving
+competence is bought by the architecture and how much by the objective.
+We report the construction and the objective we actually trained, not a
+claim about either in isolation. Isolating them is a *follow-up
+project*, not part of this one: the same growth, masking and restore,
+with `route_aware=False`, read against this ladder.
+
+**Scope we did not cover.** Single seed per run (measured floor 2–4%);
+one language ordering per ladder; byte-level models only;
+$`100`$M–$`579`$M parameters; twenty growth phases; all domains from
+parallel-corpus-adjacent registers. The addressing results rest on byte
+distinctness, and nothing here measures whether the same address
+geometry survives in domains whose statistics are not separable at the
+byte level (reasoning, world knowledge, code-versus-prose).
+
+**What would settle each.** Held-out unseen-language validation with
+thresholds frozen before the test set is touched (conformal
+calibration); a multi-seed repetition of the headline retention and
+routing numbers; a multi-order ladder; the isolating arm above
+(architecture fixed, route-aware loss toggled); and the two probes our
+measurements motivate—a domain-continual-learning probe on non-parallel
+registers, and an embedding-level addresser that would extend addressing
+past byte geometry. None of these is a correction to what is reported
+here; each extends it.
+
+# Conclusion
+
+A depth-recurrent language model with additive growth gives continual
+learning a shape the fixed-budget literature does not have: storage is
+exact by construction and verified at the bit level; serving degrades
+for reasons we measured to be mostly arithmetic at the checkpoint where
+we controlled it—83% on the log scale (62% in linear perplexity;
+fraction range $`0.60`$–$`1.47`$ over seven eras), a mechanism that
+reproduces across seven eras while the fraction does not—and repairable
+by no fixed operator we could construct; selection—input-dependent,
+label-free, nearly data-free—repairs it exactly; out-of-support
+detection needs two measured axes; and the whole stack holds across
+script universes. What remains open is addressing at scale, and we have
+measured its shape: cheap where byte statistics distinct, escalate where
+they do not, and reject what is not in support. The substrate grows
+monotonically; the science grows with it.
+
+# AI participation
+
+All experiments, analyses, and manuscript text were produced with
+substantial AI-agent participation under the direction of the human
+author, who verified headline numbers against primary artifacts and
+carries full responsibility. The agents maintained persistent identities
+across sessions (identity documents, in-context protocols, memory, and
+defined team roles), functioning as coherent team members over the
+project’s lifetime; they are not listed as authors because authorship
+implies accountability no current legal framework assigns to an AI
+system. Full role, model-backend, tool, and process disclosure—including
+every self-caught and cross-caught error that this paper’s numbers
+survived—is provided in the accompanying disclosure document
+(`rev4-ai-disclosure-draft.md`, committed with this revision).
+
+<div class="thebibliography">
+
+99
+
+A. Kosowski, P. Uznański, J. Chorowski, Z. Stamirowska,
+M. Bartoszkiewicz. *The Dragon Hatchling: The Missing Link between the
+Transformer and Models of the Brain.* arXiv:2509.26507 (2025).
+
+A. Rusu, N. Rabinowitz, Y. Guo, K. Jayaraman, S. O’Hara, O. Vinyals,
+S. Hadsell. *Progressive Neural Networks.* arXiv:1606.04671 (2016).
+
+A. Mallya, S. Lazebnik. *PackNet: Adding Multiple Tasks to a Single
+Network by Iterative Pruning.* CVPR (2018).
+
+A. Mallya, D. Davis, S. Lazebnik. *Piggyback: Adapting a Single Network
+to Multiple Tasks by Learning to Mask Weights.* ECCV (2018);
+arXiv:1801.06519.
+
+M. Wortsman, V. Ramanujan, R. Liu, A. Kembhavi, M. Rastegari,
+J. Yosinski, A. Farhadi. *Supermasks in Superposition.* NeurIPS (2020);
+arXiv:2006.14769.
+
+R. Aljundi, P. Chakravarty, T. Tuytelaars. *Expert Gate: Lifelong
+Learning with a Network of Experts.* CVPR (2017); arXiv:1611.06194.
+
+J. Kirkpatrick, R. Pascanu, N. Rabinowitz, J. Veness, G. Desjardins,
+A.A. Rusu, et al. *Overcoming catastrophic forgetting in neural
+networks.* PNAS 114(13) (2017); arXiv:1612.00796.
+
+F. Zenke, B. Poole, S. Ganguli. *Continual Learning Through Synaptic
+Intelligence.* ICML (2017); arXiv:1703.04200.
+
+R. Aljundi, F. Babiloni, M. Elhoseiny, M. Rohrbach, T. Tuytelaars.
+*Memory Aware Synapses: Learning what (not to) forget.* ECCV (2018),
+pp. 139–154.
+
+D. Lopez-Paz, M. Ranzato. *Gradient Episodic Memory for Continual
+Learning.* NeurIPS (2017); arXiv:1706.08840.
+
+A. Chaudhry, M. Ranzato, A. Rohrbach, M. Elhoseiny. *Efficient Lifelong
+Learning with A-GEM.* ICLR (2019); arXiv:1812.00420.
+
+N. Shazeer, A. Mirhoseini, K. Maziarz, A. Davis, Q. Le, G. Hinton,
+J. Dean. *Outrageously Large Neural Networks: The Sparsely-Gated
+Mixture-of-Experts Layer.* ICLR (2017); arXiv:1701.06538.
+
+W. Fedus, B. Zoph, N. Shazeer. *Switch Transformers: Scaling to Trillion
+Parameter Models with Simple and Efficient Sparsity.* JMLR 21 (2021);
+arXiv:2101.03961.
+
+D. Lepikhin, H. Lee, Y. Xu, D. Chen, et al. *GShard: Scaling Giant
+Models with Conditional Computation and Automatic Sharding.* ICLR
+(2021); arXiv:2006.16668.
+
+C. K. Chow. *On optimum recognition error and reject tradeoff.* IEEE
+Trans. Inf. Theory 16(1) (1970); DOI 10.1109/TIT.1970.1054406.
+
+V. Vovk, A. Gammerman, G. Shafer. *Algorithmic Learning in a Random
+World.* Springer (2005); A. N. Angelopoulos, S. Bates. *A Gentle
+Introduction to Conformal Prediction.* arXiv:2107.07511 (2021).
+
+I. Loshchilov, F. Hutter. *Decoupled Weight Decay Regularization.* ICLR
+(2019); arXiv:1711.05101.
+
+J. L. Ba, J. R. Kiros, G. E. Hinton. *Layer Normalization.*
+arXiv:1607.06450 (2016).
+
+J. Su, Y. Lu, S. Pan, A. Murtadha, B. Wen, Y. Liu. *RoFormer: Enhanced
+Transformer with Rotary Position Embedding.* arXiv:2104.09864 (2021).
+
+C. de Masson d’Autume, S. Ruder, L. Kong, D. Yogatama. *Episodic Memory
+in Lifelong Language Learning.* NeurIPS (2019); arXiv:1906.01076.
+
+Z. Wang, Z. Zhang, C.-Y. Lee, H. Zhang, R. Sun, X. Ren, G. Su, V. Perot,
+J. Dy, T. Pfister. *Learning to Prompt for Continual Learning.* CVPR
+(2022); arXiv:2112.08654.
+
+D. Hall, L. Dial, et al. (Marin community). *Marin: An Open Laboratory
+for Foundation Models in JAX.* OpenXLA DevLab presentation (2025);
+project tracker at <https://mtracker.oa.dev> (thread 8818, silent expert
+death observation; accessed 2026-09).
+
+DeepSeek. *DeepSeek-V4.1-Flash.* Hugging Face model card and technical
+report at <https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash>
+(released 2026-09-10; accessed 2026-09). Cited as vendor documentation,
+not peer-reviewed work.
+
+P. Koehn. *Europarl: A Parallel Corpus for Statistical Machine
+Translation.* MT Summit (2005).
+
+Y. Chen, A. Eisele. *MultiUN v2: UN Documents with Multilingual
+Alignments.* LREC (2012).
+
+</div>
+
+# Legacy consolidation comparison (not a K20 result)
+
+The merge–prune–replay experiment predates the fixed-regime K20 ladder
+and is retained here as a scoped systems comparison, not as a K20 gate.
+It asks a different question—how much can be consolidated into a
+fixed-width artifact—and its values are regenerated from the source
+report table rather than copied from the earlier figure caption.
+
+<figure id="fig:paretolegacy" data-latex-placement="t">
+<embed src="figures/pareto_legacy_rev5.pdf" style="width:78.0%" />
+<figcaption>Legacy consolidation readout. Merge, random pruning, and
+brief replay approach the joint reference for EN/DE/ES in the historical
+three-phase experiment. This is contextual evidence for consolidation,
+not evidence for the K20 routing, storage, or readout
+gates.</figcaption>
+</figure>
+
+# Proofs and formal details
+
+## Separability facts
+
+Throughout, (S1) *coordinate separability*: encoder columns, per-neuron
+attention, and decoder rows act independently per neuron, so zeroing a
+neuron’s columns and rows removes its contribution exactly; (S2)
+*LayerNorm coupling*: $`\operatorname{LN}`$ mixes statistics globally
+over $`d`$, and is the sole cross-neuron operation. Both verified
+against the implementation (masked-forward reproduction tests).
+
+## Proof of Theorem <a href="#thm:dissoc" data-reference-type="ref"
+data-reference="thm:dissoc">1</a>
+
+Take any specialist $`F_A`$ and define $`F'(h)=F_A(h)+c\mathbf{1}`$ for
+$`c\neq0`$, where the constant is produced by a suffix module with
+frozen (nonzero) parameters and $`\theta_A`$ unchanged inside $`F'`$.
+Then $`\Delta\theta_A=0`$ while every old-task trajectory shifts by
+$`c`$ per level: $`F'^L(x)=F_A^L(x)+Lc\mathbf{1}\neq F_A^L(x)`$.
+Conversely, weight isolation places no lower bound on divergence either
+(take $`c=0`$ with divergent suffix dynamics elsewhere). Hence the two
+notions are logically independent. $`\qed`$
+
+## Proof of Theorem <a href="#thm:criterion" data-reference-type="ref"
+data-reference="thm:criterion">2</a>
+
+($`\Leftarrow`$) Induction over $`\ell`$. Base: $`h_0=E(x)\in H_A`$ by
+assumption and $`h_0=F_A^0(x)`$. Step: suppose
+$`h_\ell=F_A^\ell(x)\in H_A\cap\mathcal{T}_A`$. By (C1),
+$`F'(h_\ell)\in H_A`$; by (C2), its relevant components equal
+$`F_A(h_\ell)`$, i.e. $`F'(h_\ell)=F_A(h_\ell)`$ as elements of $`H_A`$
+(identifying $`F_A`$’s image with $`H_A`$). Thus
+$`h_{\ell+1}=F'(h_\ell)=F_A(h_\ell)=F_A^{\ell+1}(x)`$. ($`\Rightarrow`$)
+Suppose $`F'^L(x)=F_A^L(x)`$ for all $`x\in\mathcal{X}_A`$ and all
+$`L`$, but there exists $`z^*\in\mathcal{T}_A`$ with
+$`F'(z^*)\neq F_A(z^*)`$. Choose $`x\in\mathcal{X}_A`$ whose trajectory
+passes through $`z^*`$ at depth $`\ell^*<L`$ (such $`x`$ exists by
+definition of $`\mathcal{T}_A`$). The hypothesis at $`L=\ell^*`$ gives
+$`F'^{\ell^*}(x)=F_A^{\ell^*}(x)=z^*`$, and at $`L=\ell^*+1`$ it gives
+$`F'^{\ell^*+1}(x)=F_A^{\ell^*+1}(x)`$, i.e. $`F'(z^*)=F_A(z^*)`$,
+contradicting the assumption. Hence equality must hold on all reachable
+old-trajectory states. $`\qed`$
+
+*Structural conditions.* If (C1) $`(I-P_A)F'P_A=0`$ then
+$`F'(H_A)\subseteq H_A`$: any $`z=P_Az`$ has
+$`F'(z)=P_AF'(z)+(I-P_A)F'(z)`$ and $`(I-P_A)F'(z)=(I-P_A)F'P_Az=0`$. If
+moreover (C2) $`P_AF'P_A=P_AF_AP_A`$ then on $`H_A`$, $`P_AF'=P_AF_A`$,
+i.e. the projected dynamics agree with the specialist’s. Together they
+satisfy the criterion restricted to $`H_A`$; combined with
+$`E(\mathcal{X}_A)\subseteq H_A`$ they give the full statement. Neither
+alone suffices: (C1) without (C2) confines but alters
+(e.g. $`F'=2\,\mathrm{id}`$, $`P_A=I`$: commuting, invariant, not
+preserving); (C2) without (C1) matches the specialist today but admits
+later leakage.
+
+## Proof of Lemma <a href="#lem:zf" data-reference-type="ref"
+data-reference="lem:zf">1</a>
+
+With suffix gating $`f_b\mapsto g_b(x)\odot f_b(b)`$-terms only, the
+gated update is
+$`h_{\ell+1}=h_\ell+f(h_\ell;\theta_A)+\sum_b g_b(x)\odot f_b(h_\ell)`$.
+Preservation requires the sum term to vanish identically along preserved
+trajectories; any coordinate with a nonzero $`f_b`$ component pins
+$`g_{b,i}(x)=0`$. Union over levels and inputs gives the claim. The
+specialist term carries no multiplier, so no complementary constraint
+arises. $`\qed`$
+
+## Proof sketch of Proposition <a href="#prop:soft" data-reference-type="ref"
+data-reference="prop:soft">1</a>
+
+Two-dimensional counterexample, $`I_A=\{1\}`$, $`I_B=\{2\}`$,
+$`\sigma=\mathrm{ReLU}`$: $`f'_1(x)=\sigma(x_1)+\varepsilon x_2`$,
+$`f'_2(x)=\delta\sigma(x_1)+\gamma x_2`$, $`\varepsilon\delta\neq0`$.
+Preservation from $`x_0=(a,0)`$, $`a>0`$, requires after one step
+$`x_1=(a(1{+}g_1),\,g_2\delta a)`$ and after two
+$`a(1{+}g_1)+g_1\sigma(a(1{+}g_1))+g_1\varepsilon g_2\delta a=a`$ for
+*all* $`a>0`$ (the first component must return to $`a`$). The second
+component forces $`g_2=0`$ (since
+$`g_2\delta(a+\sigma(a(1{+}g_1))+g_2\gamma a)=0`$ and the bracket is
+positive for $`a>0`$). With $`g_2=0`$ the first component reduces to
+$`g_1(1+\sigma(a(1{+}g_1)))=0`$, which forces $`g_1=0`$ since
+$`\sigma>0`$. The only solution is the hard endpoint; no open-range pair
+works. Nonlinearity (the kink in $`\sigma`$) is exactly what forces
+hardness. $`\qed`$
+
+## Proof of Proposition <a href="#prop:amp" data-reference-type="ref"
+data-reference="prop:amp">2</a>
+
+Standard recursion: with
+$`e_{\ell+1}=e_\ell+[f'(\tilde h_\ell)-f'(h_\ell)]+\delta_\ell`$ and
+$`\|f'(\tilde h)-f'(h)\|\le L_f\|e_\ell\|`$,
+$`\|e_{\ell+1}\|\le(1+L_f)\|e_\ell\|+\delta_\ell`$; unrolling gives the
+stated bound. Contractivity $`\rho<1`$ on the interference subspace
+replaces $`(1+L_f)`$ and yields $`\|e_L\|\le\delta_{\max}/(1-\rho)`$.
+$`\qed`$
+
+## Remark on the measurement (Remark <a href="#rem:exp" data-reference-type="ref"
+data-reference="rem:exp">3</a>)
+
+Two complementary instruments replace a single operator-norm
+computation. *(i) Whole-map directional gains*: 6-step power iteration
+on JVPs of one composed level map at 8 old-input states; medians
+$`1.05`$–$`1.89`$ per level (lower-bound-flavored; LayerNorm induces
+contractive directions with minima $`{\approx}0.9`$). *(ii)
+Trajectory-level gate-miscalibration curves* (the interference Jacobian
+realized as finite differences): scaling both suffix blocks to $`d`$ on
+EN inputs and tracking state deviation
+$`\|h^{(d)}_\ell-h^{(0)}_\ell\|/\|h^{(0)}_\ell\|`$ per level yields
+
+<div class="center">
+
+| $`d`$   | $`L_1`$ | $`L_2`$ | $`L_3`$ | $`L_4`$ | $`L_5`$ | $`L_6`$ |
+|:--------|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
+| 0.01    |  .0006  |  .0016  |  .0021  |  .0023  |  .0023  |  .0022  |
+| 0.05    |  .0016  |  .0025  |  .0033  |  .0039  |  .0044  |  .0050  |
+| 0.15    |  .0053  |  .0100  |  .0191  |  .0245  |  .0298  |  .0351  |
+| 0.30    |  .0214  |  .0468  |  .0817  |  .1006  |  .1171  |  .1297  |
+| ungated |  .4024  |  .4816  |  .6340  |  .7697  |  .8580  |  .9078  |
+
+</div>
+
+Hard masking gives exact tensor identity at every level
+($`\varepsilon_{\mathrm{inv}}
+=\varepsilon_{\mathrm{eq}}=0`$ by construction;
+implementation-faithfulness verified). Injections propagate with
+*per-level amplification* (successive ratios $`1.20`$, $`1.32`$,
+$`1.21`$, $`1.12`$, $`1.06`$, consistent with the directional gains)
+that *saturates* as deviations approach $`\mathcal{O}(1)`$ under
+LayerNorm renormalization. Conclusion drawn, precisely: contraction is
+unsupported for these models, so contraction-based uniform bounding is
+unavailable *here*; equally, erosion is not runaway-exponential within
+realistic depths — it approaches full decorrelation ($`{\approx}0.9`$
+relative state deviation) and stays there. No universal impossibility is
+claimed.

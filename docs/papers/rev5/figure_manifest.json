@@ -1,0 +1,45 @@
+{
+  "domain_order": [
+    "en",
+    "es",
+    "pl",
+    "fr",
+    "de",
+    "cs",
+    "da",
+    "pt",
+    "fi",
+    "hu",
+    "bg",
+    "it",
+    "et",
+    "el",
+    "sk",
+    "sv",
+    "ro",
+    "nl",
+    "sl",
+    "lt"
+  ],
+  "retention_summary": {
+    "routed_median_ratio": 1.0429333030852994,
+    "routed_min_ratio": 0.9917695473251029,
+    "routed_max_ratio": 1.0798611111111112,
+    "joint_median_ratio": 11.428149920255184,
+    "joint_max_ratio": 37.80295566502463
+  },
+  "expansion_summary": {
+    "base": 2.33,
+    "random_one_block": 9.57,
+    "random_full_width": 20.16,
+    "inert_zeros": 2.33,
+    "real_ladder_free": 31.07,
+    "real_ladder_masked": 2.31
+  },
+  "inputs": {
+    "docs/papers/rev5/data/a4_routed_cost.csv": "9e8210437ae3a43939833829ebabcf7bcb72916d74c20cd79e2b71190d4000d8",
+    "docs/papers/rev5/data/a4_summary.json": "b3ab806327746e8b107edabb3ab8b89d2df9903e3b71dc85455382ae8e6b4f3a",
+    "docs/papers/rev5/data/ra2b_acquisition.csv": "6d640b43e638545b8867939e1f350fca87ae72dfe08cb0f4fa34259d1b8d1005",
+    "docs/papers/rev5/data/ra2b_matrix.csv": "112424344884412c894c93aa5ef7a084a4413ca081cb1854c309db872a7bd8c1"
+  }
+}
