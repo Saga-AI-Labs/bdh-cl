@@ -61,10 +61,21 @@ The final router evaluation (25 domains × 25 prefix widths × 200 crops each) c
 
 ### 1.3 K4 — Retention: PASS (all within +4.3% of acquisition)
 
-For 13 domains with available per-phase routing diagnostics, the comparison of acquisition-exit PPL (measured at each domain's own training phase) against final routed PPL (measured in the 25×25 confusion matrix) shows:
+For all 24 growth phases with available per-phase routing diagnostics, the comparison of acquisition-exit PPL (measured at each domain's own training phase) against final routed PPL (measured in the 25×25 confusion matrix) shows:
 
 | Domain | Acquisition exit | Final routed | Δ | Ratio | Verdict |
 |---|---:|---:|---:|---:|---|
+| es | 2.54 | 2.54 | +0.00 | 1.0000 | retained |
+| pl | 2.90 | 2.90 | +0.00 | 1.0000 | retained |
+| fr | 2.53 | 2.53 | +0.00 | 1.0000 | retained |
+| de | 2.75 | 2.75 | +0.00 | 1.0000 | retained |
+| cs | 2.97 | 2.97 | +0.00 | 1.0000 | retained |
+| da | 2.95 | 2.95 | +0.00 | 1.0000 | retained |
+| pt | 2.75 | 2.77 | +0.02 | 1.0073 | retained |
+| fi | 3.03 | 3.03 | +0.00 | 1.0000 | retained |
+| hu | 2.93 | 2.93 | +0.00 | 1.0000 | retained |
+| bg | 2.28 | 2.28 | +0.00 | 1.0000 | retained |
+| it | 3.13 | 3.13 | +0.00 | 1.0000 | retained |
 | et | 3.58 | 3.58 | +0.00 | 1.0000 | retained |
 | el | 2.35 | 2.35 | +0.00 | 1.0000 | retained |
 | sk | 3.41 | 3.41 | +0.00 | 1.0000 | retained |
@@ -79,13 +90,15 @@ For 13 domains with available per-phase routing diagnostics, the comparison of a
 | ga | 2.83 | 2.83 | +0.00 | 1.0000 | retained |
 | zh | 6.93 | 7.11 | +0.18 | 1.0260 | retained |
 
-**Summary (n=13):**
+**Summary (n=24):**
+- **Perfect retention (ratio=1.0000): 20 / 24 domains**
 - Median ratio: **1.0000** (perfect retention)
 - Max ratio: **1.0429** (legal, +4.3%)
-- Mean ratio: **1.0064** (+0.64%)
+- Mean ratio: **1.0037** (+0.37%)
+- Median delta: **+0.0000 PPL**
 - **K4 verdict: PASS** (all within +8% threshold)
 
-Note: The first 11 domains (es through it) do not have per-phase routing diagnostics from the original run available on the remote host. Their acquisition exits are expected to match final routed values given the perfect retention pattern observed in the remaining 13 domains.
+Note: Per-phase routing diagnostics for all 24 growth phases were recovered from the original K20 run artifacts on gx10-50ef (`k20_gx10_A_recovery_routdiag_*.txt` and `k20_gx10_A_routdiag_*.txt` in `out_c/scaling_readiness/k20/`) and from the parallel audit copy on bdh-4090 (`k20_A_routdiag_*.txt` in `/media/data/coding/bdh/out_c/scaling_readiness/k20/`).
 
 ### 1.4 Joint vs. Routed Serving Gap
 
