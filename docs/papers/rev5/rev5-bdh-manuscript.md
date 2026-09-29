@@ -131,7 +131,8 @@ data-reference="sec:fcs">4</a>).** A fixed-capacity 100M
 <span class="smallcaps">bdh</span> trained sequentially on 20 languages
 forgets catastrophically: by the final phase, nine of sixteen comparable
 languages serve at or below their English-only zero-shot level, two
-non-Latin scripts collapse by four orders of magnitude, and a two-arm
+non-Latin scripts collapse by up to four orders of magnitude (bg
+$`\times`$<!-- -->12,086, el $`\times`$<!-- -->6,873), and a two-arm
 re-acquisition probe finds no measurable re-acquisition advantage over a
 fresh model at the tested budget (forgetting is not access loss).
 
@@ -413,10 +414,19 @@ protective value, rather than contradicting the theorem.
 <div id="thm:dissoc" class="theorem">
 
 **Theorem 1** (dissociation). *<span class="smallcaps">proved.</span>
-There exist extended maps $`F'=F_A+c\,\mathbb{1}`$ (any $`c\neq0`$)
-whose parameter set contains $`\theta_A`$ unchanged, yet whose old-task
-trajectories differ from the specialist’s at every depth. Parameter
-isolation imposes no bound on computation isolation.*
+There exist extended maps $`F'`$ of the form
+$`F'(h)=F_A(h)+c\,\mathbb{1}`$ with a *per-level* shift: the constant
+$`c\neq0`$ is added at each level invocation of the depth recursion.
+Because the BDH level map is shift-invariant (LayerNorm normalizes away
+constant offsets: $`\operatorname{LN}(h+c\mathbf{1})=\operatorname{LN}(h)`$),
+the shift does not accumulate across depth—the correct formula is
+$`F'^{\ell}(x)=F_A^{\ell}(x)+c\,\mathbf{1}`$, not $`+Lc\,\mathbf{1}`$—
+but it persists at every depth $`\ell\ge1`$: the level map cannot see
+the offset, so the divergence $`c\,\mathbf{1}`$ is re-established after
+every iteration. Any such $`F'`$ whose parameter set contains
+$`\theta_A`$ unchanged still has old-task trajectories that differ from
+the specialist’s at every depth. Parameter isolation imposes no bound on
+computation isolation.*
 
 </div>
 
@@ -426,8 +436,9 @@ isolation imposes no bound on computation isolation.*
 *<span class="smallcaps">proved.</span> Let
 $`\mathcal{T}_A=\bigcup_{\ell\le L}\{F_A^\ell(x):\ x\in\mathcal{X}_A\}`$
 be the reachable old-trajectory set of the preserved specialist. Then
-$`F'^L(x)=F_A^L(x)`$ for all $`x\in\mathcal{X}_A`$, $`0\le\ell\le L`$
-**iff** $`F'(z)=F_A(z)`$ for all $`z\in\mathcal{T}_A`$. A sufficient
+$`F'^{\ell}(x)=F_A^{\ell}(x)`$ for all
+$`x\in\mathcal{X}_A`$ and all $`0\le\ell\le L`$ **iff**
+$`F'(z)=F_A(z)`$ for all $`z\in\mathcal{T}_A`$. A sufficient
 structural decomposition: with $`H_A=\operatorname{im}P_A`$ containing
 $`\mathcal{T}_A`$,*
 
@@ -559,8 +570,10 @@ class="math inline">log<sub>10</sub></span> ppl). Each row is the
 20-domain cold eval after that phase; blue box marks the diagonal.
 Latin-script languages fall to their English-only zero-shot level (nine
 of the sixteen zero-shot-comparable domains fully displaced, seven
-partial retention; en, lt, bg, el excluded); bg/el collapse by four
-orders of magnitude at row 20; family-structured oscillation survives
+partial retention; en, lt, bg, el excluded); bg/el collapse by up to
+four orders of magnitude at row 20 (bg $`\times`$<!-- -->12,086, el
+$`\times`$<!-- -->6,873 relative to acquisition); family-structured
+oscillation survives
 throughout.</figcaption>
 </figure>
 
@@ -581,12 +594,21 @@ as P-FCS-1–3).
 ## Design
 
 Fixed capacity $`\times`$<!-- -->128 ($`\sim`$<!-- -->100M), same
-sequence and protocol as the growth ladder (en, es, pl, fr, de, cs, da,
-pt, fi, hu, bg, it, et, el, sk, sv, ro, nl, sl, lt), 10k steps per
-phase, batch 4, fresh optimizer per phase (weights restored via
-`--init-from`). After every phase, all 20 domains are cold-evaluated
-(block 512, 40 crops, generator 1234), yielding a $`21\times 20`$
-perplexity matrix whose rows are training prefixes.
+sequence and evaluation protocol as the growth ladder (en, es, pl, fr,
+de, cs, da, pt, fi, hu, bg, it, et, el, sk, sv, ro, nl, sl, lt), 10k
+steps per phase at batch 4 ($`20.48`$<!-- -->M tokens per phase in every
+one of its 20 phases, confirmed against `scripts/ladder_fixedcap.sh`),
+fresh optimizer per phase (weights restored via `--init-from`). After
+every phase, all 20 domains are cold-evaluated (block 512, 40 crops,
+generator 1234), yielding a $`21\times 20`$ perplexity matrix whose rows
+are training prefixes. The full matrix is `2026-09-10_fcs_matrix.csv`
+under the project reports data directory. Note the token-budget
+asymmetry with the growth ladder: FCS is batch 4 throughout, while the
+ladder switches to batch 1 at phases 5–20 (Setup), so FCS-vs-ladder is
+not token-matched—the ladder used $`4\times`$ less data per phase in 16
+of its 20 phases. The asymmetry favours the ladder (comparable
+acquisition on a fraction of the data) but any cross-phase trend in the
+ladder must not be read as coming from a single data budget.
 
 ## Results
 
@@ -608,7 +630,9 @@ displaced back to exactly what English alone transferred); *seven
 partial retention* (pl 0.34$`\times`$, sl 0.35$`\times`$, cs
 0.37$`\times`$, sk 0.43$`\times`$, ro 0.61$`\times`$, hu 0.78$`\times`$,
 et 0.87$`\times`$ their zero-shot); and the two non-Latin scripts
-collapsed four orders of magnitude at row 20 (bg 18,613, el 10,928; the
+collapsed up to four orders of magnitude at row 20 (bg
+$`\times`$<!-- -->12,086 $`\to`$<!-- -->18,613, el
+$`\times`$<!-- -->6,873 $`\to`$<!-- -->10,928; the
 twentieth domain, *lt*, is the language trained in row 20 itself and
 serves there at its acquisition value, $`2.13`$, retained rather than
 displaced). The family axis that governs interference also governs
@@ -890,7 +914,10 @@ $`^\dagger`$log-scale change relative to identity; negative $`=`$ worse.
 Identity controls differ per run: absK and ev-shift rows come from P-R1
 (identity en 31.14); massnorm, softmix and calibgain from P-R1b
 (identity en 32.04, the control row shown). Compute cross-run ratios
-against the run’s own control.
+against the run’s own control. All seven operator rows,
+including the per-run identity controls, are shipped as
+`readout_operators.csv` in this revision’s data directory with SHA-256
+hashes in `figure_manifest.json`.
 
 </div>
 
@@ -1604,14 +1631,27 @@ against the implementation (masked-forward reproduction tests).
 ## Proof of Theorem <a href="#thm:dissoc" data-reference-type="ref"
 data-reference="thm:dissoc">1</a>
 
-Take any specialist $`F_A`$ and define $`F'(h)=F_A(h)+c\mathbf{1}`$ for
-$`c\neq0`$, where the constant is produced by a suffix module with
-frozen (nonzero) parameters and $`\theta_A`$ unchanged inside $`F'`$.
-Then $`\Delta\theta_A=0`$ while every old-task trajectory shifts by
-$`c`$ per level: $`F'^L(x)=F_A^L(x)+Lc\mathbf{1}\neq F_A^L(x)`$.
-Conversely, weight isolation places no lower bound on divergence either
-(take $`c=0`$ with divergent suffix dynamics elsewhere). Hence the two
-notions are logically independent. $`\qed`$
+Take any specialist $`F_A`$ and construct $`F'`$ so that it adds its
+constant at every level invocation: the map applied at each depth step
+is $`h\mapsto F_A(h)+c\mathbf{1}`$, with the constant $`c\neq0`$
+produced by a suffix module with frozen (nonzero) parameters and
+$`\theta_A`$ unchanged inside $`F'`$. The BDH level map is
+shift-invariant: every level begins and ends with LayerNorm
+($`\operatorname{LN}(h+c\mathbf{1})=\operatorname{LN}(h)`$, see the
+residual guard $`x\leftarrow\operatorname{LN}(x+y)`$ and the readout
+guard $`y\leftarrow\operatorname{LN}(y_{\mathrm{MLP}})`$ in the
+implementation), so $`F_A(F_A^{\ell}(x)+c\mathbf{1})=F_A^{\ell+1}(x)`$.
+By induction, $`F'^{\ell}(x)=F_A^{\ell}(x)+c\mathbf{1}\neq F_A^{\ell}(x)`$
+for every $`\ell\ge1`$: the shift does not accumulate (it is
+$`c\,\mathbf{1}`$, not $`Lc\,\mathbf{1}`$), but it persists at every
+depth because the level map cannot see the offset. The parameter
+condition $`\Delta\theta_A=0`$ holds by construction. (For a general
+$`F_A`$ without shift invariance, the depth-1 difference
+$`c\,\mathbf{1}`$ still holds by construction; persistence beyond depth
+1 requires shift invariance or an equivalent property, which the BDH
+level map satisfies.) Conversely, weight isolation places no lower
+bound on divergence either (take $`c=0`$ with divergent suffix dynamics
+elsewhere). Hence the two notions are logically independent. $`\qed`$
 
 ## Proof of Theorem <a href="#thm:criterion" data-reference-type="ref"
 data-reference="thm:criterion">2</a>

@@ -70,7 +70,7 @@ Figure~\ref{fig:architecture} summarizes the distinction used throughout this pa
 
 Our experiments proceed from the simplest question to the hardest.
 
-\textbf{The forgetting baseline (Section~\ref{sec:fcs}).} A fixed-capacity 100M \BDH{} trained sequentially on 20 languages forgets catastrophically: by the final phase, nine of sixteen comparable languages serve at or below their English-only zero-shot level, two non-Latin scripts collapse by four orders of magnitude, and a two-arm re-acquisition probe finds no measurable re-acquisition advantage over a fresh model at the tested budget (forgetting is not access loss).
+\textbf{The forgetting baseline (Section~\ref{sec:fcs}).} A fixed-capacity 100M \BDH{} trained sequentially on 20 languages forgets catastrophically: by the final phase, nine of sixteen comparable languages serve at or below their English-only zero-shot level, two non-Latin scripts collapse by up to four orders of magnitude (bg $\times$12{,}086, el $\times$6{,}873), and a two-arm re-acquisition probe finds no measurable re-acquisition advantage over a fresh model at the tested budget (forgetting is not access loss).
 
 \textbf{The decay confound (Section~\ref{sec:decay}).} The original ladders carried a silent optimizer defect: AdamW's decoupled weight decay eroded gradient-masked weights by a closed-form per-phase factor, invisible to loss curves. We derive the closed form, verify it to four decimal places, and repair it with a step-end bit-exact restore.
 
@@ -204,7 +204,7 @@ the repository artifact.
 setting & value \\
 \midrule
 model & byte-level \BDH{}, $d=512$, $n_h=8$ ($64$ neurons per head per unit multiplier) \\
-training sequence & $512$ bytes, batch $4$ at width up to $\times192$, batch $1$ beyond \\
+training sequence & $512$ bytes, batch $4$ at width up to $\times192$ ($20.48$M tokens per phase), batch $1$ beyond ($5.12$M tokens per phase) \\
 optimizer & AdamW, $\mathrm{lr}=10^{-3}$, weight decay $0.1$, $\beta=(0.9,0.95)$, grad-clip $1.0$ \\
 schedule & warmup $1000$, cosine to $\min\mathrm{lr}=10^{-4}$ over $10{,}000$ iters \\
 phase budget & $10{,}000$ iters on a $\sim$30\,MB byte stream per language \\
@@ -281,15 +281,22 @@ are non-zero. The zero-initialized suffix of the growth convention measures the
 quantifies that convention's protective value, rather than contradicting the theorem.
 
 \begin{theorem}[dissociation]\label{thm:dissoc}
-\textsc{proved.} There exist extended maps $F'=F_A+c\,\mathbb{1}$ (any $c\neq0$) whose
-parameter set contains $\theta_A$ unchanged, yet whose old-task trajectories differ from the
-specialist's at every depth. Parameter isolation imposes no bound on computation isolation.
+\textsc{proved.} There exist extended maps $F'$ of the form $F'(h)=F_A(h)+c\,\mathbb{1}$
+with a \emph{per-level} shift: the constant $c\neq0$ is added at each level invocation of the
+depth recursion. Because the \BDH{} level map is shift-invariant (LayerNorm normalizes away
+constant offsets: $\operatorname{LN}(h+c\mathbf{1})=\operatorname{LN}(h)$), the shift does not
+accumulate across depth---the correct formula is $F'^{\ell}(x)=F_A^{\ell}(x)+c\,\mathbf{1}$,
+not $+Lc\,\mathbf{1}$---but it persists at every depth $\ell\ge1$: the level map cannot see
+the offset, so the divergence $c\,\mathbf{1}$ is re-established after every iteration. Any
+such $F'$ whose parameter set contains $\theta_A$ unchanged still has old-task trajectories
+that differ from the specialist's at every depth. Parameter isolation imposes no bound on
+computation isolation.
 \end{theorem}
 
 \begin{theorem}[exact-isolation criterion]\label{thm:criterion}
 \textsc{proved.} Let $\TA=\bigcup_{\ell\le L}\{F_A^\ell(x):\ x\in\Xa\}$ be the reachable
 old-trajectory set of the preserved specialist. Then
-$F'^L(x)=F_A^L(x)$ for all $x\in\Xa$, $0\le\ell\le L$
+$F'^{\ell}(x)=F_A^{\ell}(x)$ for all $x\in\Xa$ and all $0\le\ell\le L$
 \;\textbf{iff}\;
 $F'(z)=F_A(z)$ for all $z\in\TA$.
 A sufficient structural decomposition: with $H_A=\operatorname{im}P_A$ containing $\TA$,
@@ -367,7 +374,7 @@ outside this mechanism class.
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/f2_fcs_heatmap.pdf}
-\caption{FCS forgetting matrix ($\log_{10}$ ppl). Each row is the 20-domain cold eval after that phase; blue box marks the diagonal. Latin-script languages fall to their English-only zero-shot level (nine of the sixteen zero-shot-comparable domains fully displaced, seven partial retention; en, lt, bg, el excluded); bg/el collapse by four orders of magnitude at row 20; family-structured oscillation survives throughout.}
+\caption{FCS forgetting matrix ($\log_{10}$ ppl). Each row is the 20-domain cold eval after that phase; blue box marks the diagonal. Latin-script languages fall to their English-only zero-shot level (nine of the sixteen zero-shot-comparable domains fully displaced, seven partial retention; en, lt, bg, el excluded); bg/el collapse by up to four orders of magnitude at row 20 (bg $\times$12{,}086, el $\times$6{,}873 relative to acquisition); family-structured oscillation survives throughout.}
 \label{fig:fcs}
 \end{figure}
 
@@ -382,11 +389,19 @@ explicitly (pre-registered as P-FCS-1--3).
 
 \subsection{Design}
 
-Fixed capacity $\times$128 ($\sim$100M), same sequence and protocol as the growth ladder
-(en, es, pl, fr, de, cs, da, pt, fi, hu, bg, it, et, el, sk, sv, ro, nl, sl, lt), 10k steps
-per phase, batch 4, fresh optimizer per phase (weights restored via \texttt{--init-from}).
-After every phase, all 20 domains are cold-evaluated (block 512, 40 crops, generator
-1234), yielding a $21\times 20$ perplexity matrix whose rows are training prefixes.
+Fixed capacity $\times$128 ($\sim$100M), same sequence and evaluation protocol as the
+growth ladder (en, es, pl, fr, de, cs, da, pt, fi, hu, bg, it, et, el, sk, sv, ro, nl, sl, lt),
+10k steps per phase at batch 4 ($20.48$M tokens per phase in every one of its 20 phases,
+confirmed against \texttt{scripts/ladder\_fixedcap.sh}), fresh optimizer per phase (weights
+restored via \texttt{--init-from}). After every phase, all 20 domains are cold-evaluated
+(block 512, 40 crops, generator 1234), yielding a $21\times 20$ perplexity matrix whose rows
+are training prefixes. The full matrix is \texttt{2026-09-10\_fcs\_matrix.csv} under the
+project reports data directory. Note the token-budget asymmetry with the growth ladder:
+FCS is batch 4 throughout, while the ladder switches to batch 1 at phases 5--20
+(Section~\ref{sec:setup}), so FCS-vs-ladder is not token-matched---the ladder used $4\times$
+less data per phase in 16 of its 20 phases. The asymmetry favours the ladder (comparable
+acquisition on a fraction of the data) but any cross-phase trend in the ladder must not be
+read as coming from a single data budget.
 
 \subsection{Results}
 
@@ -403,7 +418,7 @@ model serves the current language, so there is no protected capacity to fight ov
 fr, de, it, pt, da, sv, nl, fi; the Romance/Germanic group, strongest zero-shot transfer,
 displaced back to exactly what English alone transferred); \emph{seven partial retention}
 (pl 0.34$\times$, sl 0.35$\times$, cs 0.37$\times$, sk 0.43$\times$, ro 0.61$\times$,
-hu 0.78$\times$, et 0.87$\times$ their zero-shot); and the two non-Latin scripts collapsed four orders of magnitude at row 20 (bg 18{,}613, el 10{,}928; the twentieth domain, \emph{lt}, is the language trained in row 20 itself and serves there at its acquisition value, $2.13$, retained rather than displaced). The family axis that governs
+hu 0.78$\times$, et 0.87$\times$ their zero-shot); and the two non-Latin scripts collapsed up to four orders of magnitude at row 20 (bg $\times$12{,}086 $\to$ 18{,}613, el $\times$6{,}873 $\to$ 10{,}928; the twentieth domain, \emph{lt}, is the language trained in row 20 itself and serves there at its acquisition value, $2.13$, retained rather than displaced). The family axis that governs
 interference also governs survival.
 
 \textbf{Interference is not recency-structured but family-structured (P-FCS-3
@@ -612,7 +627,9 @@ calibgain (fit on en) & 2.31 & --- & --- & $-$2.29$^\dagger$ & $-$4.19$^\dagger$
 \bottomrule
 \end{tabular}%
 }
-\footnotesize $^\dagger$log-scale change relative to identity; negative $=$ worse. Identity controls differ per run: absK and ev-shift rows come from P-R1 (identity en 31.14); massnorm, softmix and calibgain from P-R1b (identity en 32.04, the control row shown). Compute cross-run ratios against the run's own control.
+\footnotesize $^\dagger$log-scale change relative to identity; negative $=$ worse. Identity controls differ per run: absK and ev-shift rows come from P-R1 (identity en 31.14); massnorm, softmix and calibgain from P-R1b (identity en 32.04, the control row shown). Compute cross-run ratios against the run's own control. All seven operator rows, including the per-run identity
+controls, are shipped as \texttt{readout\_operators.csv} in this revision's data directory
+with SHA-256 hashes in \texttt{figure\_manifest.json}.
 \end{center}
 
 The two vacuous arms are a structural finding: \texttt{bdh.py:279} applies
@@ -1182,12 +1199,23 @@ statistics globally over $d$, and is the sole cross-neuron operation. Both verif
 the implementation (masked-forward reproduction tests).
 
 \subsection{Proof of Theorem~\ref{thm:dissoc}}
-Take any specialist $F_A$ and define $F'(h)=F_A(h)+c\mathbf{1}$ for $c\neq0$, where the
-constant is produced by a suffix module with frozen (nonzero) parameters and $\theta_A$
-unchanged inside $F'$. Then $\Delta\theta_A=0$ while every old-task trajectory shifts by
-$c$ per level: $F'^L(x)=F_A^L(x)+Lc\mathbf{1}\neq F_A^L(x)$. Conversely, weight isolation
-places no lower bound on divergence either (take $c=0$ with divergent suffix dynamics
-elsewhere). Hence the two notions are logically independent. \hfill$\qed$
+Take any specialist $F_A$ and construct $F'$ so that it adds its constant at every level
+invocation: the map applied at each depth step is $h\mapsto F_A(h)+c\mathbf{1}$, with the
+constant $c\neq0$ produced by a suffix module with frozen (nonzero) parameters and $\theta_A$
+unchanged inside $F'$. The \BDH{} level map is shift-invariant: every level begins and ends
+with LayerNorm ($\operatorname{LN}(h+c\mathbf{1})=\operatorname{LN}(h)$, see the residual
+guard $x\leftarrow\operatorname{LN}(x+y)$ and the readout guard
+$y\leftarrow\operatorname{LN}(y_{\mathrm{MLP}})$ in the implementation), so
+$F_A(F_A^{\ell}(x)+c\mathbf{1})=F_A^{\ell+1}(x)$. By induction,
+$F'^{\ell}(x)=F_A^{\ell}(x)+c\mathbf{1}\neq F_A^{\ell}(x)$ for every $\ell\ge1$: the shift
+does not accumulate (it is $c\,\mathbf{1}$, not $Lc\,\mathbf{1}$), but it persists at every
+depth because the level map cannot see the offset. The parameter condition
+$\Delta\theta_A=0$ holds by construction. (For a general $F_A$ without shift invariance, the
+depth-1 difference $c\,\mathbf{1}$ still holds by construction; persistence beyond depth 1
+requires shift invariance or an equivalent property, which the \BDH{} level map satisfies.)
+Conversely, weight isolation places no lower bound on divergence either (take $c=0$ with
+divergent suffix dynamics elsewhere). Hence the two notions are logically independent.
+\hfill$\qed$
 
 \subsection{Proof of Theorem~\ref{thm:criterion}}
 ($\Leftarrow$) Induction over $\ell$. Base: $h_0=E(x)\in H_A$ by assumption and

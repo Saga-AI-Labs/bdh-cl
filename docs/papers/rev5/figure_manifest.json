@@ -40,6 +40,10 @@
     "docs/papers/rev5/data/a4_routed_cost.csv": "9e8210437ae3a43939833829ebabcf7bcb72916d74c20cd79e2b71190d4000d8",
     "docs/papers/rev5/data/a4_summary.json": "b3ab806327746e8b107edabb3ab8b89d2df9903e3b71dc85455382ae8e6b4f3a",
     "docs/papers/rev5/data/ra2b_acquisition.csv": "6d640b43e638545b8867939e1f350fca87ae72dfe08cb0f4fa34259d1b8d1005",
-    "docs/papers/rev5/data/ra2b_matrix.csv": "112424344884412c894c93aa5ef7a084a4413ca081cb1854c309db872a7bd8c1"
+    "docs/papers/rev5/data/ra2b_matrix.csv": "112424344884412c894c93aa5ef7a084a4413ca081cb1854c309db872a7bd8c1",
+    "docs/papers/rev5/data/readout_operators.csv": "6962ad67419e3c4004bbf10a447c88f6b28a22dcf71006455b49588a2328b25a",
+    "docs/papers/rev5/data/ood_probe.csv": "fbc1974653eef750759d15e618f63fa7787da2e8b24fafbe538fdf7c22288cee",
+    "docs/papers/rev5/data/ladRA2b_routdiag_p20.txt": "1f1126006bcce1182e2308eab7f60cf743af7e7b57e7e4d51a61e282cc5d49ec",
+    "docs/papers/rev5/data/ladRA2b_routdiag_p19.txt": "380f7fd6d076d30bff22c92bd341e1e0a68a50d828fcea7e65fda4a08520d599"
   }
 }

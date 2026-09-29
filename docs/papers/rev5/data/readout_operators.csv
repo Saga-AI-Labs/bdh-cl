@@ -1,0 +1,9 @@
+operator,run,identity_en,identity_de,identity_cs,identity_bg,identity_el,en,de,cs,bg,el,verdict
+identity (control),P-R1b,32.04,35.56,60.23,228.12,64.25,32.04,35.56,60.23,228.12,64.25,control
+absK top-2048,P-R1,31.14,35.21,60.86,226.99,65.24,39.37,48.09,78.73,1160.22,287.38,worse: culling removes information
+ev-shift (sqrt(2 ln |N|)),P-R1,31.14,35.21,60.86,226.99,65.24,36.66,49.47,117.32,4122.12,3472.78,worse: catastrophic
+block-average,P-R1,31.14,35.21,60.86,226.99,65.24,31.14,35.22,60.85,227.07,65.29,vacuous: LayerNorm cancels global gain
+log-norm,P-R1,31.14,35.21,60.86,226.99,65.24,31.14,35.22,60.86,226.92,65.27,vacuous: same
+massnorm,P-R1b,32.04,35.56,60.23,228.12,64.25,31.26,39.77,91.77,215073,180510,catastrophic: new territories get a loud voice
+softmix (tau=0.5),P-R1b,32.04,35.56,60.23,228.12,64.25,18.73,27.24,68.31,4486,4093,helps oldest wrecks newest
+calibgain (fit on en),P-R1b,32.04,35.56,60.23,228.12,64.25,2.31,,,,,converges to oracle masking
