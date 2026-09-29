@@ -31,7 +31,7 @@ Row 20 (after lt) vs each language's own acquisition:
 - Latin-script languages: 26.8–60.0 ppl = **12.5–28.4× acquisition** (en 29.0, es 26.8, it 28.1,
   pt 29.9, de 33.1, fr 33.0, nl 38.2, da 41.1, sv 44.9, ro 47.2, et 49.0, fi 52.9, sk 51.4,
   hu 56.8, cs 59.4, pl 60.0, sl 30.1)
-- Non-Latin scripts: bg 18,613 (×12,086), el 10,928 (×6,873) — five orders of magnitude.
+- Non-Latin scripts: bg 18,613 (×12,086), el 10,928 (×6,873) — up to four orders of magnitude (bg 12,086x, el 6,873x).
 
 The pre-registered prediction (early Latin languages > 20 ppl, non-Latin worst) is confirmed.
 
@@ -49,7 +49,7 @@ not total; the original "entirely" reading is retracted.**
   cs 0.37×, sk 0.43×, ro 0.61×, hu 0.78×, et 0.87× — the Slavic/Uralic/Baltic group keeps a
   measurable fraction of what their phases added.
 - bg/el sit trivially above their effectively-random zero-shot (4.9M/12.4M) but remain
-  collapsed in absolute terms (five orders of magnitude above acquisition).
+  collapsed in absolute terms (up to four orders of magnitude above acquisition: bg 12,086x, el 6,873x).
 
 Under the operator's retention formula (1 − forgetting/initial-competence, nll space), the
 nine sit at retention ≈ 0 or below; the partial seven measurably above zero. The family axis
@@ -99,7 +99,7 @@ byte-level subword-sharing story predicts; fr is the best zero-shot transfer of 
 | en final | 29.0 (12.7× acq, ≈ zero-shot) | routed 2.36 (1.05× acq) |
 
 Without growth+selection, the model retains NOTHING language-specific (Latin languages land at
-their English-only zero-shot levels; non-Latin scripts collapse five orders of magnitude).
+their English-only zero-shot levels; non-Latin scripts collapse up to four orders of magnitude: bg 12,086x, el 6,873x).
 With route-aware growth, every trained language is served at acquisition quality (1.02–1.13×).
 **That contrast is the measured memory story: it is real, and it is the growth+selection pair
 that delivers it — capacity alone delivers nothing.**
