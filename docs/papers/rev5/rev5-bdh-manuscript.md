@@ -1502,8 +1502,9 @@ project’s lifetime; they are not listed as authors because authorship
 implies accountability no current legal framework assigns to an AI
 system. Full role, model-backend, tool, and process disclosure—including
 every self-caught and cross-caught error that this paper’s numbers
-survived—is provided in `rev4-ai-disclosure-draft.md`, committed
-with revision 4.
+survived—is drafted in `rev5-ai-disclosure-draft.md` in this
+revision’s directory (pending operator re-review; the revision-4 draft
+is archived at `docs/papers/archive/rev4-ai-disclosure-draft.md`).
 
 <div class="thebibliography">
 
