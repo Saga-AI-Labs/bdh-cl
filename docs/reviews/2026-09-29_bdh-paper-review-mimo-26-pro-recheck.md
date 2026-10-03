@@ -35,7 +35,7 @@
 
 | # | Item | Status |
 |---|---|---|
-| 6 | Multi-seed/order replication; non-parallel-register probes | 🟡 **Underway outside the paper.** New `2026-09-29_k20-gx10-preliminary-results.md`: dual-arm K20 ladder (seeds 1 & 2), 25 domains × 25 widths × 200 crops, routing 99.18% (4,959/5,000) — and the domain set now spans **prose, code, math, legal, ga, zh** alongside the 20 languages, i.e. exactly the "domain-continual-learning probe on non-parallel registers" the review asked for. Two honest anomalies reported (code 96.5%, legal 84.5% with a data-composition explanation). These results are not yet in the manuscript. |
+| 6 | Multi-seed/order replication; non-parallel-register probes | 🟡 **Underway outside the paper.** New `2026-09-29_k20-gx10-results.md`: dual-arm K20 ladder (seeds 1 & 2), 25 domains × 25 widths × 200 crops, routing 99.18% (4,959/5,000) — and the domain set now spans **prose, code, math, legal, ga, zh** alongside the 20 languages, i.e. exactly the "domain-continual-learning probe on non-parallel registers" the review asked for. Two honest anomalies reported (code 96.5%, legal 84.5% with a data-composition explanation). These results are not yet in the manuscript. |
 | 7 | Conformal threshold freezing (P-R4) | 🔴 **Open** (declared future work in-paper; unchanged). |
 | 8 | Routed-vs-exit on identical crops (the +4.3% window question) | 🟡 Partially mitigated: bands are now correctly separated (item 3) and routdiags shipped; the paper still says the instrument-offset escape "is removed on provenance grounds, not replaced by a substitute measurement". The decisive matched-crop experiment remains undone. |
 | 9 | End-to-end addressing cost | 🔴 **Open** (still only the 23× relative figure). |
