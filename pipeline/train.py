@@ -169,6 +169,13 @@ def train(cfg: Config) -> None:
             new_f = 1.0 / (2 ** 16 ** ((idx // 2 * 2) / n_new)) / (2 * math.pi)
             freqs = torch.cat([old_f, new_f])
             raw_model.attn.freqs.data[:] = freqs.view(1, 1, 1, n_new)
+        # Release the parent checkpoint now that its weights have been copied.
+        # At mult 832 it is ~30 GB (fp32 weights plus a full Adam state) and,
+        # if kept alive, stays resident in the unified CPU+GPU memory pool for
+        # the whole phase. That load contributed to the kernel OOM kill in
+        # phase 22 (legal, 2026-10-28, peak ~92 GB of 124 GB available).
+        del sd
+        grow_src = None
         raw_model.embed.weight.requires_grad_(False)
         raw_model.lm_head.requires_grad_(False)
         if cfg.freeze_attn:
