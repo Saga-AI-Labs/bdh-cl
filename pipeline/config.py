@@ -63,6 +63,7 @@ class Config:
     text_mix_mb: int = 30                  # textmix only; per-domain train MB (val/test 1MB each follow)
     route_aware: bool = False              # route-aware training: zero out old neurons in forward, compute loss on prefix-only logits
     route_alpha: float = 0.9               # prefix fraction: loss = alpha*prefix_loss + (1-alpha)*full_loss (higher = stronger route-aware signal; 0.9 = 10% full mix, the registered setting)
+    route_split_backward: bool = False     # route-aware only: backward the prefix and full passes separately (gradient accumulation) so both activation graphs never coexist; at mult 864 / block 512 this lowers the peak from 106.77 to 91.36 GiB at a ~2e-8 relative gradient difference (below bf16 resolution)
 
 
 def estimate_bdh_params(cfg: Config) -> int:

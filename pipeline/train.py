@@ -274,6 +274,16 @@ def train(cfg: Config) -> None:
     # TBPTT window would be pointless; force per-step detachment.
     horizon = 1 if cfg.no_bptt else max(1, cfg.tbptt_horizon)
 
+    if cfg.route_split_backward and cfg.carry_state:
+        # Split backward frees the prefix graph before the full pass is even
+        # built. Truncated-BPTT windows need that graph to stay attached across
+        # steps, so the combination is rejected rather than silently weakened.
+        raise ValueError(
+            "--route-split-backward cannot be combined with --carry-state: "
+            "the prefix graph is freed mid-step, which breaks truncated-BPTT "
+            "window accumulation.")
+
+
     def optimizer_step():
         if cfg.grad_clip > 0:
             scaler.unscale_(optimizer)
@@ -305,13 +315,26 @@ def train(cfg: Config) -> None:
         else:
             x, y = data.get_batch("train", cfg.block_size, cfg.batch_size, device)
 
+        pending_full = None
         with ctx:
             if route_neuron_mask is not None:
                 # Route-aware training: prefix-masked forward + full forward, mix losses.
                 # route_alpha = prefix fraction (higher = stronger route-aware signal).
                 _, prefix_loss, new_state = model(x, y, state, neuron_mask=route_neuron_mask)
-                _, full_loss, _ = model(x, y, state)
-                loss = cfg.route_alpha * prefix_loss + (1 - cfg.route_alpha) * full_loss
+                if cfg.route_split_backward:
+                    # Backward the prefix pass now, before the full pass is built,
+                    # so the two activation graphs never coexist. Measured at
+                    # mult 864 / block 512: peak 106.77 -> 91.36 GiB. Gradients
+                    # accumulate; the only difference to the combined backward
+                    # is summation order (~2e-8 relative, below bf16 resolution).
+                    scaler.scale(cfg.route_alpha * prefix_loss).backward()
+                    _, full_loss, _ = model(x, y, state)
+                    pending_full = (1 - cfg.route_alpha) * full_loss
+                    loss = (cfg.route_alpha * prefix_loss.detach()
+                            + (1 - cfg.route_alpha) * full_loss)
+                else:
+                    _, full_loss, _ = model(x, y, state)
+                    loss = cfg.route_alpha * prefix_loss + (1 - cfg.route_alpha) * full_loss
             else:
                 _, loss, new_state = model(x, y, state)
 
@@ -334,7 +357,12 @@ def train(cfg: Config) -> None:
             state = detach_state(new_state)
         else:
             state = None
-            scaler.scale(loss).backward()
+            if pending_full is not None:
+                # prefix pass was already backpropagated above; only the full
+                # pass is outstanding. Gradients accumulate onto the same .grad.
+                scaler.scale(pending_full).backward()
+            else:
+                scaler.scale(loss).backward()
             optimizer_step()
 
         running_loss += loss.detach().item()
