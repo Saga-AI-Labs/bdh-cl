@@ -113,7 +113,14 @@ def train(cfg: Config) -> None:
     if cfg.init_from and cfg.grow_mult > 0:
         if cfg.gate_from:
             raise ValueError("--grow-mult and --gate-from are mutually exclusive")
-        grow_src = torch.load(cfg.init_from, map_location="cpu", weights_only=False)
+        # mmap=True: the grow path reads only cfg and model_state, but the
+        # checkpoint also carries a full Adam state (~21 GB at mult 832).
+        # Without mmap both are materialized eagerly, which pushed the
+        # CPU+GPU unified pool over the edge at the 22->23 phase transition
+        # (phase 23 ga, 2026-10-29, killed 181 s in before step 1). Mapped
+        # pages are file-backed: only the weights actually touched are
+        # faulted in, and the rest stays reclaimable under pressure.
+        grow_src = torch.load(cfg.init_from, map_location="cpu", weights_only=False, mmap=True)
         base_mult = int(grow_src["cfg"]["mlp_internal_dim_multiplier"])
         cfg.mlp_internal_dim_multiplier = base_mult + cfg.grow_mult
 
