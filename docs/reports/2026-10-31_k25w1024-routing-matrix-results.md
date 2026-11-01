@@ -36,8 +36,8 @@ n_embd 256 (legal -> prose, 31/200), reduced here by an order of magnitude.
 
 | Metric | Value |
 |---|---|
-| Overall accuracy | **499/500 = 99.8 %** |
-| Worst domain | **legal 19/20 = 95.0 %** |
+| Overall accuracy | **499/500 = 99.8 %** (20-crop estimate; see the n=200 follow-up below) |
+| Worst domain | **legal 181/200 = 90.5 %** (measured at n=200; the 20-crop sample above showed 19/20) |
 | Domains at 100 % | 24 / 25 |
 
 K20 reference at n_embd 256: 99.18 % overall, legal misroute 31/200. The wider base
@@ -93,6 +93,61 @@ Selected extremes from the grid (forced width far from the domain's own):
 The served-PPL penalty for serving a domain on the wrong width is up to **four orders
 of magnitude** (sk: 3.15 -> 105.78; zh: 5.80 -> 87,596 at 51200). Routing is not a
 cosmetic optimisation here.
+
+## Follow-up -- legal at n=200 (adversarial sample)
+
+The 20-crop sample is too small to estimate the legal error rate: it produced 1
+misroute, the n=200 sample produced 19. Both are the same checkpoint and the same
+evaluator; only the crop count differs.
+
+| | n=20 | n=200 |
+|---|---|---|
+| legal correct | 19/20 = 95.0 % | **181/200 = 90.5 %** |
+| misroutes | 1 | 19 |
+
+Run: 2 routes (8192 vs 53248), 200 crops, batch 4, window 128, wall 649 s.
+
+### Misroutes sit at the decision boundary, not in a second mode
+
+Every one of the 19 misroutes has a *positive* margin (the base route 8192 wins the
+early window). The correct routings are far from zero:
+
+| group | median abs(margin) |
+|---|---|
+| misrouted (19) | **0.124** |
+| correctly routed (181) | **0.626** |
+
+| band | crops | misrouted |
+|---|---|---|
+| abs(margin) < 0.2 | 36 | **13 (36 %)** |
+| margin < -0.5 | 109 | **0 (0 %)** |
+
+Beyond -0.5 the router is perfect on this sample (109/109). The failure zone is a
+narrow band around zero, not a systematic confusion of two corpora. This is the
+outcome the prereg predicted for a boundary-limited router; a cluster of misroutes at
+large negative margin would have indicated a real bias instead.
+
+### What the misroutes cost
+
+| metric | value |
+|---|---|
+| misroutings | 19 / 200 |
+| of those, own route would serve better | 17 (89 %) |
+| mean regret per misroute | **-0.31 nats** |
+| worst single regret | -1.18 nats |
+| **aggregate cost over 200 crops** | **+0.0295 nats** |
+
+The 9.5 % error rate costs 0.03 nats over the domain, because the misroutes occur only
+where the two routes are nearly equally good. Error rate and damage are different
+quantities and must be reported separately.
+
+### Methodological defect found
+
+The crop generator (`manual_seed(1234)`) is consumed across domains, so **the per-domain
+sample depends on how many domains are passed in the same call**. The legal 20-crop set
+from the 25-domain run is not the same set as from a 1-domain run. Reproducible tests
+must fix the crops explicitly (per-domain seed or a crop file), not rely on the shared
+generator.
 
 ## What this does and does not establish
 
