@@ -32,6 +32,10 @@ def main():
     ap.add_argument("--batch", type=int, default=4)
     ap.add_argument("--oracle-routes", default=None,
                     help="optional name:width,... per-domain true prefix widths; adds an oracle served-ppl column")
+    ap.add_argument("--score-vector", action="store_true",
+                    help="emit the full early-window score vector (one value per "
+                         "route) per crop, so cheap reliability features can be "
+                         "computed offline without further forwards")
     ap.add_argument("--margin-dump", action="store_true",
                     help="emit per-crop routing margin: NLL(second best) - NLL(best) "
                          "over the early window, with both route widths")
@@ -117,6 +121,14 @@ def main():
         served = rl[choice, torch.arange(args.crops), args.window:].mean(dim=1)
         if args.route_grid:
             grid_rows.append(rl[:, :, args.window:].mean(dim=(1, 2)).float().cpu().exp().tolist())
+
+        if args.score_vector:
+            # Full early-window score vector per crop (prereg stage b): every
+            # cheap feature -- normalised margin, gap to the third route, spread
+            # across routes -- is derivable from this offline.
+            for ci in range(args.crops):
+                vals = " ".join(f"{v:.6f}" for v in scores[:, ci].tolist())
+                print(f"SCORES {tname} {ci} {vals}")
 
         if args.margin_dump:
             # Routing margin per crop (prereg e288141, instrument definition):
