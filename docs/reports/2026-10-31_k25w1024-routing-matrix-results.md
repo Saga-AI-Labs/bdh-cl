@@ -302,6 +302,65 @@ arise from an incoherent early window is plausible and evidenced for these two c
 not statistically established. The dump writes all 200 crops; a full decomposition was
 not analysed.
 
+## Is early-window coherence a reliability signal? (n=400 pairs)
+
+The two code-vs-peer position dumps give a per-position margin for every one of the
+200 crops against two peers, i.e. 400 (crop, peer) pairs. For each pair we can ask
+the decisive question:
+
+> Does the early window's verdict (positions 0-127) agree with the late ordering
+> (positions 128+) of the same two routes?
+
+| | count | share |
+|---|---|---|
+| early agrees with late | **397** | 99.2 % |
+| early contradicts late | **3** | 0.8 % |
+
+The three contradictions are crops 68 (vs 53248), 71 (vs 57344) and 45 (vs 53248).
+
+### R separates the contradictions; conc5 and k50 do not
+
+| metric | contradictions | agreeing pairs (median) | separates? |
+|---|---|---|---|
+| **R = abs(M)/A** | 0.143 / 0.153 / 0.325 | **0.825** (p10 0.620) | **yes, factor ~2.5** |
+| conc5 | 0.168 / 0.170 / 0.209 | 0.161 | **no** |
+| k50 | 20 / 20 / 27 | 23 | **no** |
+
+No agreeing pair falls below R = 0.62 while the worst contradiction sits at 0.325.
+
+That conc5 and k50 fail is the more useful half of this result: **concentration of the
+margin on a few positions says nothing about reliability.** The failure lives in the
+mutual cancellation of positions, not in a handful of outliers. An analysis that looks
+for outlier positions will not find it.
+
+### A coherence gate
+
+| threshold | pairs flagged | share | true contradictions caught | precision | recall |
+|---|---|---|---|---|---|
+| R < 0.20 | 6 | 1.5 % | 2 | 33.3 % | 66.7 % |
+| R < 0.30 | 10 | 2.5 % | 2 | 20.0 % | 66.7 % |
+| **R < 0.35** | **12** | **3.0 %** | **3** | **25.0 %** | **100 %** |
+| R < 0.50 | 24 | 6.0 % | 3 | 12.5 % | 100 % |
+
+At R < 0.35 three percent of crops would fall back to the full width, covering all three
+known contradictions. Precision of 25 % is the correct trade here: nine of twelve
+flagged crops could also have been routed, at a cost of 3 % extra compute, and no known
+misroute survives.
+
+### This supersedes the earlier ad-hoc gate proposal
+
+An earlier margin-based gate (`margin < 0.2`, suggested from the legal analysis) would
+have **missed two of the three** contradictions - both sit at margins of 0.157 and
+0.257. The coherence gate is not merely tighter, it is derived from a measured property
+rather than chosen from the observations it was meant to explain.
+
+### Limit
+
+**n = 3 contradictions.** The R < 0.35 threshold catches all three *known* cases; it is
+not a calibrated false-negative rate. A rate needs many more contradictions: legal has 9
+misroutes per 100 crops, which makes it the natural next measuring set for a
+`--pos-dump` run.
+
 ## What this does and does not establish
 
 **Establishes (measured on this exact crop set: 20 crops x 25 corpora = 500 crops,

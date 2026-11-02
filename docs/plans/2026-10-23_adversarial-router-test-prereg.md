@@ -144,3 +144,73 @@ report, not instead of it.
 ---
 
 — Quinn, @quinn-the-builder, 2026-10-23
+
+
+---
+
+# Amendment v0.2 -- 2026-11-02
+
+**Status:** additive. Nothing in v0.1 above is altered or withdrawn. This section
+records two measurements that were not available when v0.1 was written, and the
+consequences for the test that has not yet run.
+
+## A1 -- The 0.1 nat boundary threshold is too narrow
+
+v0.1 defines a boundary failure as `margin < 0.1 nats` **and** wrong argmin. Measured
+on `zh_last.pt` (K25/W1024 chain, see
+`docs/reports/2026-10-31_k25w1024-routing-matrix-results.md`), the misroutes that
+motivated this test sit at:
+
+| domain | n | misroutes | margins of those misroutes |
+|---|---|---|---|
+| legal | 200 | 19 | 0.015 to 0.503, median 0.124 |
+| code | 200 | 4 | 0.157 to 0.506 |
+
+Under the v0.1 rule, **10 of 19 legal misroutes and all 4 code misroutes are not
+boundary failures**, although every one of them is a wrong argmin close to the
+decision boundary of its competing route.
+
+**Decision:** the 0.1 nat threshold is retained as-is for scoring v0.1 comparability,
+and a second label is reported alongside it: **near-boundary misroute** = wrong argmin
+with `margin < 0.5 nats`. Both counts are always reported. Neither replaces the other.
+
+## A2 -- Coherence R, not raw margin, is the reliability signal
+
+A `--pos-dump` run over 200 code crops against two peers gives 400 (crop, peer) pairs.
+For each pair the early window verdict (positions 0-127) was compared with the late
+ordering (positions 128+):
+
+| | count |
+|---|---|
+| early agrees with late | 397 |
+| early contradicts late | 3 |
+
+| metric | contradictions | agreeing (median) | separates? |
+|---|---|---|---|
+| R = abs(M)/A | 0.143 / 0.153 / 0.325 | 0.825 | **yes** |
+| conc5 | 0.168 / 0.170 / 0.209 | 0.161 | no |
+| k50 | 20 / 20 / 27 | 23 | no |
+
+**Consequence for the test design:** a confidence gate keyed on the raw margin is
+superseded. A margin gate at 0.2 would have missed two of the three known
+contradictions. The gate candidate is now `R < 0.35`, which flags 3 % of pairs and
+covers all three known cases (precision 25 %, recall 100 %, n=3).
+
+**Open:** n=3 is not a rate. The threshold is a candidate, not a calibration. The next
+`--pos-dump` run must target a domain with many misroutes -- legal has 9 per 100 crops,
+which is enough to measure precision and recall properly.
+
+## A3 -- Instrument changes required before the test runs
+
+1. Every Stage-1 and Stage-2 measurement reports **R per crop**, not only the margin.
+2. The crop sample is fixed explicitly (per-domain seed or a crop file). The current
+evaluator consumes one shared generator across domains, so the per-domain sample
+depends on how many domains are passed in a single call -- a defect recorded in the
+routing report and fixed for the n=100 sweep by running one domain per call.
+3. A domain whose early-window coherence is low is **reported**, not silently routed.
+
+## A4 -- What this amendment does not do
+
+- It does not lower the bar for the test: the decision rules in v0.1 remain the rules.
+- It does not retro-fit results into v0.1's thresholds; A1 keeps both labels visible.
+- It does not claim a calibrated gate. `R < 0.35` is a candidate with n=3 support.
