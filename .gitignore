@@ -2,6 +2,7 @@
 __pycache__/
 /data/
 /out/
+/out_a/
 .jspace/
 .kilo/
 .kilocode/
