@@ -32,6 +32,9 @@ def main():
     ap.add_argument("--batch", type=int, default=4)
     ap.add_argument("--oracle-routes", default=None,
                     help="optional name:width,... per-domain true prefix widths; adds an oracle served-ppl column")
+    ap.add_argument("--margin-dump", action="store_true",
+                    help="emit per-crop routing margin: NLL(second best) - NLL(best) "
+                         "over the early window, with both route widths")
     ap.add_argument("--route-grid", action="store_true",
                     help="emit a [true-domain x forced-width] served-ppl grid from the already-filled rl tensor (zero extra forwards)")
     ap.add_argument("--crop-dump", default=None,
@@ -114,6 +117,17 @@ def main():
         served = rl[choice, torch.arange(args.crops), args.window:].mean(dim=1)
         if args.route_grid:
             grid_rows.append(rl[:, :, args.window:].mean(dim=(1, 2)).float().cpu().exp().tolist())
+
+        if args.margin_dump:
+            # Routing margin per crop (prereg e288141, instrument definition):
+            # NLL(second best route) - NLL(best route) over the early window.
+            # A small margin means the crop sits on the decision boundary.
+            srt, idx = torch.sort(scores, dim=0)
+            for ci in range(args.crops):
+                b1, b2 = idx[0, ci].item(), idx[1, ci].item()
+                print(f"MARGIN {tname} {ci} {routes[b1]} "
+                      f"{srt[0, ci].item():.6f} {routes[b2]} "
+                      f"{srt[1, ci].item():.6f} {(srt[1, ci] - srt[0, ci]).item():.6f}")
 
         if args.crop_dump:
             dname, wspec = args.crop_dump.split(":", 1)
