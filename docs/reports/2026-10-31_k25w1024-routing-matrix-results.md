@@ -252,6 +252,56 @@ weakest domain, only that one exists.
 finite), what code's failure mode is, and nothing about unseen territories. The
 margin analysis exists for legal only.
 
+## Position decomposition of the two code misroutes
+
+`--pos-dump` decomposes the early-window margin position by position for the two
+code crops whose misroute was against a peer route rather than the base. Both runs
+completed (rc=0, ~11 min each, 200 crops, 2 routes).
+
+| | crop 45 -> 53248 | crop 71 -> 57344 |
+|---|---|---|
+| M (sum of margin over window) | +32.91 | +20.12 |
+| A (sum of abs margin) | 101.20 | 131.46 |
+| **R = abs(M)/A** | **0.325** | **0.153** |
+| k50 (positions for 50 % of abs margin) | 20 | 27 |
+| conc5 (share of the 5 largest positions) | 0.209 | 0.168 |
+| positions favouring the peer | 83/128 | 66/128 |
+| neg_share (positions favouring own route) | 0.336 | 0.477 |
+| lateA (own route, positions 128+) | 2.250 | 2.223 |
+| lateB (routed route, positions 128+) | 2.715 | 3.978 |
+
+### The error is distributed, not driven by outliers
+
+`conc5` is 0.17 to 0.21 and `k50` is 20 to 27 positions: no handful of positions
+carries the decision. R = abs(M)/A measures how much the per-position margins cancel
+each other; at crop 71 it is 0.153 with neg_share 0.477, i.e. the early window is a
+near coin flip. At crop 45 it is 0.325 with neg_share 0.336.
+
+So the answer to the open question after the first margin dump is: the instrument is
+not too sensitive, the crops are genuinely ambiguous in their first 128 tokens. The
+model has no coherent early signal and decides narrowly wrong.
+
+### The late positions contradict the early window
+
+The own route is better from position 128 onward: 0.47 nats for crop 45 and 1.75 nats
+for crop 71. For these crops the decision is therefore not merely noisy but
+systematically unrepresentative of the rest of the text.
+
+### Tension with the prereg threshold, recorded rather than resolved
+
+The prereg (`e288141`) defines a boundary failure as `margin < 0.1 nats` **and** wrong
+argmin. These two cases have margins of 0.257 and 0.157, i.e. above that threshold.
+By the fixed definition they are not boundary failures, although they are misroutes
+with an incoherent early signal. The threshold is **not** adjusted retroactively; both
+categories must be reported separately.
+
+### Limit of this finding
+
+**n = 2.** This is a case study over two crops, not a rate. The claim that misroutes
+arise from an incoherent early window is plausible and evidenced for these two cases,
+not statistically established. The dump writes all 200 crops; a full decomposition was
+not analysed.
+
 ## What this does and does not establish
 
 **Establishes (measured on this exact crop set: 20 crops x 25 corpora = 500 crops,
