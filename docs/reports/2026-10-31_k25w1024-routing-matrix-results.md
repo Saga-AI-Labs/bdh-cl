@@ -36,8 +36,8 @@ n_embd 256 (legal -> prose, 31/200), reduced here by an order of magnitude.
 
 | Metric | Value |
 |---|---|
-| Overall accuracy | **499/500 = 99.8 %** (20-crop estimate; see the n=200 follow-up below) |
-| Worst domain | **legal 181/200 = 90.5 %** (measured at n=200; the 20-crop sample above showed 19/20) |
+| Overall accuracy | **2486/2500 = 99.44 %** (n=100 per domain; see the sweep section below) |
+| Worst domain | **legal 91/100 = 91.0 %** (n=100 sweep; an independent n=200 sample gave 90.5 %) |
 | Domains at 100 % | 24 / 25 |
 
 K20 reference at n_embd 256: 99.18 % overall, legal misroute 31/200. The wider base
@@ -148,6 +148,73 @@ sample depends on how many domains are passed in the same call**. The legal 20-c
 from the 25-domain run is not the same set as from a 1-domain run. Reproducible tests
 must fix the crops explicitly (per-domain seed or a crop file), not rely on the shared
 generator.
+
+## Per-domain sweep at n=100 (all 24 territories + prose)
+
+One evaluator call per domain (25 routes, 100 crops, batch 4, window 128,
+`--route-grid`). One domain per call so the shared crop generator yields a
+reproducible sample per domain, fixing the defect recorded above.
+
+Run: 2026-11-01 01:45 - 19:22 (17.6 h) plus a catch-up for legal at 00:54.
+Wall time 2641 s per domain (44 min), peak RSS 44.6 GB.
+
+| domain | own width | correct | acc | misroutes |
+|---|---|---|---|---|
+| prose | 8192 | 100/100 | 100.0 % | - |
+| es | 10240 | 99/100 | 99.0 % | 20480:1 |
+| pl | 12288 | 100/100 | 100.0 % | - |
+| fr | 14336 | 100/100 | 100.0 % | - |
+| de | 16384 | 100/100 | 100.0 % | - |
+| cs | 18432 | 100/100 | 100.0 % | - |
+| da | 20480 | 100/100 | 100.0 % | - |
+| pt | 22528 | 100/100 | 100.0 % | - |
+| fi | 24576 | 100/100 | 100.0 % | - |
+| hu | 26624 | 100/100 | 100.0 % | - |
+| bg | 28672 | 100/100 | 100.0 % | - |
+| it | 30720 | 100/100 | 100.0 % | - |
+| et | 32768 | 100/100 | 100.0 % | - |
+| el | 34816 | 100/100 | 100.0 % | - |
+| sk | 36864 | 100/100 | 100.0 % | - |
+| sv | 38912 | 100/100 | 100.0 % | - |
+| ro | 40960 | 100/100 | 100.0 % | - |
+| nl | 43008 | 100/100 | 100.0 % | - |
+| sl | 45056 | 100/100 | 100.0 % | - |
+| lt | 47104 | 100/100 | 100.0 % | - |
+| code | 49152 | 96/100 | 96.0 % | 8192:2, 53248:1, 57344:1 |
+| math | 51200 | 100/100 | 100.0 % | - |
+| legal | 53248 | 91/100 | 91.0 % | 8192:9 |
+| ga | 55296 | 100/100 | 100.0 % | - |
+| zh | 57344 | 100/100 | 100.0 % | - |
+
+**Total: 2486/2500 = 99.44 %. 20 of 25 domains at 100 %.**
+
+### legal: independent confirmation at 91 %
+
+The n=200 adversarial sample gave 181/200 = 90.5 %. This independent n=100
+sample gives 91/100 = 91.0 %. Both runs agree, and in both every misroute goes
+to the base width 8192 -- none to a neighbouring width. legal is the only domain
+where the router confuses a territory with the prose base, and the two samples
+agree on the magnitude to within one crop.
+
+### code: a second kind of failure
+
+At n=20 code was 20/20. At n=100 it is 96/100, and the four misroutes are _not_
+concentrated_: two go to the base width (8192) and one each to the two widest
+routes (53248, 57344). Unlike legal, this is not a boundary case against a single
+competing route; code distributes its errors across unrelated widths. That is a
+qualitatively different failure mode and deserves its own margin analysis before
+any claim is made about it.
+
+### What the sweep settles and what it does not
+
+**Settles:** on 100 crops per domain, 20 of 25 domains route perfectly and the two
+weak domains are legal (91 %) and code (96 %). The 20-crop matrix had shown code as
+perfect and legal as the only weak point -- a 20-crop sample cannot identify the
+weakest domain, only that one exists.
+
+**Does not settle:** whether these rates hold on fresh crops (the samples are still
+finite), what code's failure mode is, and nothing about unseen territories. The
+margin analysis exists for legal only.
 
 ## What this does and does not establish
 
