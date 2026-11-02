@@ -361,6 +361,65 @@ not a calibrated false-negative rate. A rate needs many more contradictions: leg
 misroutes per 100 crops, which makes it the natural next measuring set for a
 `--pos-dump` run.
 
+## Legal position dump -- the coherence gate does not survive n=200
+
+The code analysis above proposed a coherence gate (R < 0.35) on n=3 contradictions.
+legal is the natural calibration set: 19 misroutes per 200 crops, all against the base
+route 8192. The dump ran 200 crops against that single peer (rc=0, 630 s).
+
+```
+chosen distribution: 181 x 53248 (own), 19 x 8192 (base)
+early-window vs late-ordering disagreements: 20
+disagreements that are also misroutes: 17 of 20
+```
+
+Note the last line: "the early window contradicts the late ordering" and "the crop was
+misrouted" are related but **not identical**. Three crops (167, 39, 81) contradict and
+still route correctly; two misroutes do not appear in the contradiction set.
+
+### No metric separates
+
+| metric | contradictions (median) | agreeing (median) | worst agreeing value | disagreements inside the agreeing range |
+|---|---|---|---|---|
+| **R = abs(M)/A** | 0.175 | 0.570 | **0.027** | 18/20 |
+| conc5 | 0.274 | 0.309 | 0.183 | 19/20 |
+| **k50** | **14** | **11** | 6 | **20/20** |
+| neg_share | 0.344 | 0.504 | 0.297 | 16/20 |
+
+R has the largest median gap (factor 3.3) but the distributions overlap almost
+completely: the single lowest R in the whole dataset (0.027) belongs to an **agreeing**
+crop. conc5 is nearly flat. **k50 is inverted** -- contradictions have a *higher* k50
+than agreeing crops, so the metric points the wrong way.
+
+### Gate cost at equal coverage
+
+Each row flags the bottom decile / quintile / third of the metric distribution:
+
+| metric | flagged | share | contradictions caught | precision | recall |
+|---|---|---|---|---|---|
+| R <= 0.362 | 61 | **30.5 %** | 18/20 | 29.5 % | **90 %** |
+| conc5 <= 0.285 | 61 | 30.5 % | 12/20 | 19.7 % | 60 % |
+| k50 <= 10 | 77 | 38.5 % | 1/20 | 1.3 % | 5 % |
+
+At a 30 % compute overhead R reaches 90 % recall. For the last two contradictions the
+threshold must drop to R < 0.50, at which point 45 % of all crops fall back to the full
+width. That is no longer a cheap gate; it is disabling the router for half a domain.
+
+### Conclusion, stated plainly
+
+**The R < 0.35 gate proposed in the code analysis is withdrawn.** It was supported by
+n=3; at n=200 the overlap between the distributions makes it useless as a binary
+decision.
+
+What survives is weaker and still worth recording: **R correlates with unreliability**
+(median 0.175 vs 0.570, consistent with the code measurement) and is therefore usable
+as a **diagnostic**, not a switch. No single metric among the four tested permits a
+cheap binary routing decision on either domain.
+
+The code result (3 % flagged, 100 % recall) was an artefact of three data points. The
+lesson is methodological: a threshold proposed from three cases and then tested on
+twenty is a threshold that has not been tested at all.
+
 ## What this does and does not establish
 
 **Establishes (measured on this exact crop set: 20 crops x 25 corpora = 500 crops,

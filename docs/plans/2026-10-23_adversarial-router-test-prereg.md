@@ -214,3 +214,53 @@ routing report and fixed for the n=100 sweep by running one domain per call.
 - It does not lower the bar for the test: the decision rules in v0.1 remain the rules.
 - It does not retro-fit results into v0.1's thresholds; A1 keeps both labels visible.
 - It does not claim a calibrated gate. `R < 0.35` is a candidate with n=3 support.
+
+
+## A5 -- Withdrawal of the A2 gate candidate (2026-11-02, same day)
+
+A2 above proposed `R < 0.35` as a gate candidate on the strength of n=3 contradictions
+in one domain. The calibration run on legal (200 crops, 19 misroutes against the base
+route) refutes it. A2 is left unedited so the sequence stays visible; this section is
+the operative statement.
+
+### The measurement
+
+200 (crop, route) pairs, 20 early-vs-late contradictions, 19 actual misroutes, 17 of 20
+overlapping. Per-metric separation:
+
+| metric | contradiction median | agreeing median | worst agreeing value | disagreements inside the agreeing range |
+|---|---|---|---|---|
+| R = abs(M)/A | 0.175 | 0.570 | **0.027** | 18/20 |
+| conc5 | 0.274 | 0.309 | 0.183 | 19/20 |
+| k50 | **14** | **11** | 6 | **20/20** |
+| neg_share | 0.344 | 0.504 | 0.297 | 16/20 |
+
+R has the largest median gap (3.3x) and the worst overlap behaviour: the single lowest
+R in the dataset (0.027) belongs to an agreeing crop. k50 is **inverted** --
+contradictions score higher than agreeing crops.
+
+### Gate cost at equal coverage
+
+| metric | flagged | share | contradictions caught | precision | recall |
+|---|---|---|---|---|---|
+| R <= 0.362 | 61 | 30.5 % | 18/20 | 29.5 % | 90 % |
+| conc5 <= 0.285 | 61 | 30.5 % | 12/20 | 19.7 % | 60 % |
+| k50 <= 10 | 77 | 38.5 % | 1/20 | 1.3 % | 5 % |
+
+### What replaces A2
+
+- **Withdrawn:** `R < 0.35` as a routing gate. Guarding 18 of 20 contradictions costs
+  30.5 % of all traffic on legal; the code figure of 3 % was a three-point artefact.
+- **Retained:** R as a **diagnostic**. Median 0.175 vs 0.570 is a real correlation across
+  two domains and belongs in every report. It is a readout, not a switch.
+- **Retained:** the A1 near-boundary label. It is orthogonal to the gate question.
+- **Open:** no metric among these four permits a cheap binary decision. If a gate is
+  wanted later it must be justified by a cost model that accepts 30 % fallback, or by a
+  metric not yet tested. "Cheap confidence gating" is not available and must not be
+  described as such.
+
+### Methodological note
+
+A threshold proposed from three cases and then tested on twenty was not tested at all.
+Future amendments must state the sample size that supports any recommended threshold, and
+no threshold enters a plan on fewer than two independent domains.
