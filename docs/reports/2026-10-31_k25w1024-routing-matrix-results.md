@@ -420,6 +420,76 @@ The code result (3 % flagged, 100 % recall) was an artefact of three data points
 lesson is methodological: a threshold proposed from three cases and then tested on
 twenty is a threshold that has not been tested at all.
 
+## Stage (a): worst-case accuracy at the decision boundary
+
+The prereg (`e288141`) defines the margin as NLL(second best route) minus NLL(best
+route) over the early window and requires the adversarial set to be built from it. The
+evaluator originally kept only the argmin; `--margin-dump` (commit `74c736f`) emits both
+scores and the margin per crop with no additional forwards.
+
+Two runs, 200 crops each, 25 routes, `--margin-dump`:
+
+| domain | wall | rc | correct | misrouted |
+|---|---|---|---|---|
+| legal | 5233 s (1.45 h) | 0 | 181/200 = 90.5 % | 19 |
+| code | 5246 s (1.46 h) | 0 | 196/200 = 98.0 % | 4 |
+
+### Margin distribution
+
+| | legal | code |
+|---|---|---|
+| p5 | 0.0666 | 0.2439 |
+| p25 | 0.2586 | 0.7637 |
+| median | 0.4918 | 1.1397 |
+| min | 0.0146 | 0.0163 |
+
+### Worst-case accuracy, not the mean
+
+This is the number the prereg asks for. Accuracy by margin band:
+
+| margin band | legal n | legal accuracy | code n | code accuracy |
+|---|---|---|---|---|
+| 0.0 - 0.1 | 22 | **59.1 %** | 2 | **50.0 %** |
+| 0.1 - 0.2 | 14 | 71.4 % | 5 | 80.0 % |
+| 0.2 - 0.5 | 65 | 92.3 % | 15 | 93.3 % |
+| 0.5 - 1.0 | 95 | 98.9 % | 55 | 98.2 % |
+| >= 1.0 | 4 | 100.0 % | 123 | 100.0 % |
+
+**The decline is monotone across all five bands in both domains.** The headline figures
+(90.5 %, 98.0 %, 99.44 % overall) are averages over the margin distribution. In the
+lowest band, where the prereg expects the failure to live, accuracy is 59.1 % on legal
+and 50.0 % on code (n=2 there, so only the legal figure is informative).
+
+This is the qualitative difference from the coherence measure R: R overlapped almost
+completely on legal (worst agreeing crop at R = 0.027), whereas the margin orders the
+crops correctly. What the margin does **not** do is separate them cheaply.
+
+### The two prereg metrics
+
+| metric | definition | legal | code |
+|---|---|---|---|
+| boundary failures | `margin < 0.1` AND wrong | **9/22 = 4.50 %** | 1/2 = 0.50 % |
+| near-boundary (A1) | `margin < 0.5` AND wrong | **18/101 = 9.00 %** | 3/22 = 1.50 % |
+
+Under the fixed 0.1 nat definition, 9 of the 19 legal misroutes count. The other ten fall
+into the near-boundary band that amendment A1 introduced for exactly this reason.
+
+### Margin separates better than R, and is still not a cheap gate
+
+| | misrouted median | correct median | ratio |
+|---|---|---|---|
+| legal margin | 0.1237 | 0.5312 | 4.3x |
+| legal R | 0.175 | 0.570 | 3.3x |
+| code margin | 0.2731 | 1.1432 | 4.2x |
+
+But the cost is prohibitive. A gate at `margin < 0.5` would fall back to full width on
+**50 % of legal crops** and catch 18 of 19 misroutes. At `margin < 0.1` the fallback is
+11 % and only 9 of 19 are caught. There is no threshold that is both cheap and complete.
+
+Consistency note, since the two numbers were previously reported separately: legal's
+9.5 % error rate and its 0.03 nat aggregate cost are both true. The misroutes sit where
+both routes are nearly equally good, so the error rate is high and the damage is small.
+
 ## What this does and does not establish
 
 **Establishes (measured on this exact crop set: 20 crops x 25 corpora = 500 crops,
