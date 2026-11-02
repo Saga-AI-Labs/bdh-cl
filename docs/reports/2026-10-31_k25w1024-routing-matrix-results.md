@@ -180,13 +180,15 @@ Wall time 2641 s per domain (44 min), peak RSS 44.6 GB.
 | nl | 43008 | 100/100 | 100.0 % | - |
 | sl | 45056 | 100/100 | 100.0 % | - |
 | lt | 47104 | 100/100 | 100.0 % | - |
-| code | 49152 | 96/100 | 96.0 % | 8192:2, 53248:1, 57344:1 |
+| code | 49152 | 96/100 | 96.0 % | 8192:2, 53248:1, 57344:1 (n=200 below gives 98.0 %) |
 | math | 51200 | 100/100 | 100.0 % | - |
 | legal | 53248 | 91/100 | 91.0 % | 8192:9 |
 | ga | 55296 | 100/100 | 100.0 % | - |
 | zh | 57344 | 100/100 | 100.0 % | - |
 
 **Total: 2486/2500 = 99.44 %. 20 of 25 domains at 100 %.**
+`code` was later re-measured at n=200 (196/200 = 98.0 %); the 96.0 % above was
+an unlucky draw from a small sample, not a stable estimate.
 
 ### legal: independent confirmation at 91 %
 
@@ -196,14 +198,48 @@ to the base width 8192 -- none to a neighbouring width. legal is the only domain
 where the router confuses a territory with the prose base, and the two samples
 agree on the magnitude to within one crop.
 
-### code: a second kind of failure
+### code: boundary cases against three different competitors
 
-At n=20 code was 20/20. At n=100 it is 96/100, and the four misroutes are _not_
-concentrated_: two go to the base width (8192) and one each to the two widest
-routes (53248, 57344). Unlike legal, this is not a boundary case against a single
-competing route; code distributes its errors across unrelated widths. That is a
-qualitatively different failure mode and deserves its own margin analysis before
-any claim is made about it.
+At n=20 code was 20/20, at n=100 it was 96/100. A larger n=200 run with full
+margin instrumentation gives **196/200 = 98.0 %**; the n=100 figure was a small
+sample draw.
+
+All four n=200 misroutes are boundary cases, measured against the route they
+actually lost to:
+
+| crop | routed to | margin against that route | median abs(margin), correct crops |
+|---|---|---|---|
+| idx 68 | 8192 | +0.5061 | 2.6621 (vs base) |
+| idx 70 | 8192 | +0.3890 | 2.6621 (vs base) |
+| idx 45 | 53248 | +0.2571 | 1.3478 (vs 53248) |
+| idx 71 | 57344 | +0.1572 | 1.5882 (vs 57344) |
+
+An earlier reading of this report called code a "qualitatively different failure
+mode" because its misroutes spread over unrelated widths. **That was wrong.** With
+the missing margin dumps (code vs 53248 and code vs 57344, ~11 min each) every
+misroute turns out to sit at a small margin against whichever route won. The
+mechanism is identical to legal; what differs is only that legal has one competitor
+(the prose base) while code has three. That is plausible for a corpus mixing
+syntax, identifiers and natural language.
+
+### The early window can invert the late verdict
+
+For idx 71 the served (wrong) route is *worse* on the late positions:
+
+```
+lateA (own 49152) = 2.223
+lateB (routed 57344) = 3.978
+```
+
+The own route is 1.75 nats better from position 128 onward, yet the early window
+chose 57344. The same holds for idx 45 (2.250 vs 2.715). So the limit is not the
+route set but the **decision position**: for these crops the first 128 tokens point
+away from what the rest of the text supports. The prereg's `--pos-dump` exists to
+decompose exactly this and has not been run for code.
+
+Cost over the domain: mean regret per misroute -0.72 nats (worst single -2.21), but
+only 4 of 200 crops are affected, so the aggregate is **+0.0144 nats** -- smaller
+than legal's 0.0295 despite the larger per-case regret.
 
 ### What the sweep settles and what it does not
 
