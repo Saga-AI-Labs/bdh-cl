@@ -625,6 +625,84 @@ These five domains bear on H1: a positive bias would mean wider routes score *wo
 off-domain. They score better in all five. **H1 as stated is contradicted.** H2 is not
 touched by this analysis and remains open.
 
+## H2: doubling the scoring window removes most misroutes at zero cost
+
+RBC-1 hypothesis H2 states that 128 tokens under-determine the base-vs-own comparison
+for a minority of crops. Two runs test it on the identical crop indices: same
+checkpoint, same seed, same 200 crops per domain, `--window 384` instead of 128.
+
+Block size is 512, so 384 is the largest window that keeps a 128-token late span -- the
+same span the baseline used. Crop indices are comparable across windows; the late-span
+perplexity is not, because the span length differs.
+
+| domain | wall | rc | misroutes @128 | misroutes @384 |
+|---|---|---|---|---|
+| legal | 5264 s | 0 | 19 | **5** |
+| code | 5253 s | 0 | 4 | **2** |
+
+Per-crop transitions on legal (n=200 paired):
+
+| transition | count |
+|---|---|
+| wrong at 128, right at 384 | **15** |
+| right at 128, wrong at 384 | **1** (crop 39) |
+| right at both | 180 |
+| wrong at both | 4 |
+
+On code: 2 fixed (crops 70, 71), 0 broken, 196 right at both, 2 wrong at both.
+
+### The window costs nothing
+
+The forward pass covers all 512 positions regardless; the window only selects which
+slice is averaged:
+
+```python
+scores = rl[:, :, :args.window].mean(dim=2)
+```
+
+Wall times confirm it: 5257/5260 s at window 128 against 5264/5253 s at window 384.
+A 74 % reduction in misroutes for zero additional compute.
+
+### The mechanism is not larger margins
+
+RBC-1 H2 anticipated that longer windows remove tie-break noise, i.e. widen margins.
+The measurements disagree:
+
+| margin | window 128 | window 384 |
+|---|---|---|
+| legal p5 | 0.0666 | **0.1373** |
+| legal median | 0.4918 | 0.4806 |
+| code median | 1.1397 | 1.2205 |
+
+The median barely moves while the lower tail doubles. Misroutes disappear because fewer
+crops sit in the boundary band at all, not because each decision becomes more confident.
+That also explains the five survivors: they are close enough to the boundary that 384
+tokens still do not resolve them.
+
+### A consistency check that holds
+
+The one crop that breaks (39) appeared in the earlier position decomposition as one of
+three crops whose early window contradicted the late ordering while still routing
+correctly. It was already a boundary case at 128 and happened to land on the right side;
+at 384 it lands on the wrong side. The two observations agree rather than conflict.
+
+### Windows beyond 384
+
+Window is asserted `< block_size`. At block 512, window 384 is the largest value that
+leaves a usable late span (448 leaves 64 tokens, 480 leaves 32, 500 leaves 12). Testing
+longer windows therefore requires longer blocks, and activation memory grows with them:
+
+| block | activation estimate | note |
+|---|---|---|
+| 512 | ~21 GiB | current |
+| 768 | ~32 GiB | |
+| 1024 | ~42 GiB | |
+| 2048 | ~85 GiB | outside the 121 GiB pool with weights and optimizer |
+
+Two data points (128 and 384) do not determine whether the curve saturates. A window of
+256 at the current block would provide the third point at the same cost as the runs above
+and is the cheap way to decide whether longer blocks are worth pursuing.
+
 ## What this does and does not establish
 
 **Establishes (measured on this exact crop set: 20 crops x 25 corpora = 500 crops,
