@@ -565,6 +565,66 @@ over the domain is cheaper than a 20 % compute surcharge. The gate is only worth
 cost if a legal misroute is expensive for a reason outside perplexity -- and that has
 not been shown.
 
+## Five domains: the base route is not a generalist
+
+An earlier reading of the legal and code score vectors -- that the base route 8192 is a
+generalist competitor on every territory -- rested on two domains. Three more score
+vector runs (math, zh, ga; 200 crops each, rc=0, 5246-5260 s) refute it.
+
+For each domain, the best route **other than the domain's own** and the rank of 8192
+among the 24 off-domain routes:
+
+| domain | own route | best off-domain route | its score | rank of 8192 | 8192 score | gap to best |
+|---|---|---|---|---|---|---|
+| legal | 53248 | **8192** | 1.6512 | **#1** | 1.6512 | +0.0000 |
+| code | 49152 | 53248 | 3.3564 | #6 | 5.2091 | +1.8527 |
+| math | 51200 | 53248 | 2.2836 | #5 | 4.1766 | +1.8931 |
+| zh | 57344 | 49152 | 3.2912 | #5 | 4.2229 | +0.9317 |
+| ga | 55296 | 57344 | 3.4486 | #3 | 3.4486 | +1.1996 |
+
+The base route wins on **legal only**. On the other four it sits mid-field. The
+two-domain generalisation was wrong, and it is the same error as the earlier R threshold:
+concluding from a sample too small to carry the claim.
+
+### What the five domains do show: a width gradient
+
+Pearson correlation between route width and mean off-domain score:
+
+| domain | rho |
+|---|---|
+| legal | -0.007 |
+| code | -0.648 |
+| math | -0.530 |
+| zh | -0.539 |
+| ga | -0.176 |
+
+**All five are negative.** Wider routes score *better* on foreign territory, and the best
+off-domain competitor is in every case one of the wider routes. A route of width `w`
+contains all neurons from phases 1..k, so more width means more frozen territories and
+therefore a better generalist. This is a capacity monotonicity, not an additive bias.
+
+legal is the exception and it is explainable: legal text is natural language, close to
+the prose the base route was trained on. legal flips to 8192 because 8192 is genuinely
+competent there -- not because a noise term pushes it.
+
+### Caveat on the neighbour pattern
+
+In three of five domains the best off-domain route is a near neighbour in the growth
+order (code to 53248 at distance 2, math to 53248 at distance 1, ga to 57344 at distance
+1). That looks like an ordering effect, but width rises monotonically with training
+order, so "neighbour" and "wider" are partly the same variable. Five domains cannot
+separate them; the remaining twenty would.
+
+### Consequence for the router bias-correction prereg
+
+The RBC-1 prereg (`docs/plans/2026-11-02_router-bias-correction-escalation-prereg.md`,
+v0.1 draft) names two candidate causes: H1, an asymmetric per-route bias pushing
+borderline crops toward the base route, and H2, a scoring window that is too short.
+
+These five domains bear on H1: a positive bias would mean wider routes score *worse*
+off-domain. They score better in all five. **H1 as stated is contradicted.** H2 is not
+touched by this analysis and remains open.
+
 ## What this does and does not establish
 
 **Establishes (measured on this exact crop set: 20 crops x 25 corpora = 500 crops,
