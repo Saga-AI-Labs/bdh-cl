@@ -490,6 +490,81 @@ Consistency note, since the two numbers were previously reported separately: leg
 9.5 % error rate and its 0.03 nat aggregate cost are both true. The misroutes sit where
 both routes are nearly equally good, so the error rate is high and the damage is small.
 
+## Stage (b): no cheap reliability feature
+
+Stage (a) showed that accuracy falls monotonically with the routing margin, but the
+margin alone does not separate cheaply. Stage (b) asks the sharper question: does any
+feature derivable from the full score vector predict the error better than the raw
+margin, at an acceptable fallback cost?
+
+`--score-vector` (commit `1111146`) emits all 25 per-route early-window scores per crop,
+so every feature below is computed offline with no additional forwards. Two runs, 200
+crops each, rc=0 (legal 5257 s, code 5260 s).
+
+Six features were tested. All are oriented so that a **low** value flags a suspect crop:
+
+| feature | definition |
+|---|---|
+| margin | s2 - s1 |
+| norm_margin | (s2 - s1) / s1 |
+| gap3 | s3 - s1 |
+| spread | max(scores) - min(scores) |
+| std | population std over the 25 scores |
+| n_close | number of routes within 10 % of the best score |
+
+### Results at 20 % fallback
+
+| feature | legal caught | code caught |
+|---|---|---|
+| **margin** | **15/19 (79 %)** | **4/4** |
+| **norm_margin** | **15/19 (79 %)** | **4/4** |
+| gap3 | 7/19 | 4/4 |
+| spread | 7/19 | 3/4 |
+| std | 4/19 | 1/4 |
+| n_close | 3/19 | 0/4 |
+
+### Three findings
+
+**Normalisation changes nothing.** `norm_margin` produces exactly the same hit counts as
+`margin` (15/19 and 4/4). The relative score level carries no information the absolute
+value does not already carry. A plausible fix -- "maybe it is the score magnitude" -- is
+ruled out.
+
+**std points the wrong way.** Misrouted legal crops have a *higher* score spread
+(median 0.7586) than correctly routed ones (0.7167). The intuitive expectation, that
+errors occur on a flat landscape, is wrong here; but the effect is weak enough to catch
+only 4 of 19.
+
+**n_close is conceptually right and practically useless.** Misrouted crops do have more
+routes within 10 % of the best score (median 2.0 vs 1.0) -- exactly the expected
+direction. It still catches only 3 of 19, because most correct crops also have
+`n_close = 1`.
+
+### Answer to the prereg question (b)
+
+> Is there a cheap feature that predicts routing unreliability?
+
+**No.** Six features, 800 (crop, route) pairs, two domains. None permits a binary
+decision below 20 % fallback that catches more than 79 % of the errors, and the raw
+margin remains the best of the six.
+
+This is a negative result and it is load-bearing: after R (n=3), legal R (n=20), the
+margin bands (n=200) and these six features, every measurement says the same thing. The
+error sits at the boundary and the boundary is not cheaply recognisable.
+
+### What remains practically
+
+| option | cost | effect |
+|---|---|---|
+| do nothing | 0 % fallback | 9.5 % legal error rate, **0.03 nats** aggregate |
+| 20 % margin gate | 20 % fallback | removes 79 % of legal errors |
+| never route legal | 1 of 25 domains special-cased | zero legal errors, full width always |
+
+On the damage figures, doing nothing is rational: a 9.5 % error rate costing 0.03 nats
+over the domain is cheaper than a 20 % compute surcharge. The gate is only worth its
+cost if a legal misroute is expensive for a reason outside perplexity -- and that has
+not been shown.
+
 ## What this does and does not establish
 
 **Establishes (measured on this exact crop set: 20 crops x 25 corpora = 500 crops,
