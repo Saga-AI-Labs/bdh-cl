@@ -132,7 +132,7 @@ Pairing across windows is by crop index; any index mismatch aborts the analysis.
   relative, and increases no other domain's misroute count by more than 2 crops.
 - **P2** *(OBSOLETE v0.2 — same.)* Downward share of flips (A3) drops from 19/19 (legal, n=200 sample) into
   {50 % .. 80 %}. If it stays > 90 %, H1 is **falsified** as the dominant cause.
-- **P3** Escalation (A4) removes ≥ 40 % of low-margin flips (leg-5 attenuation suggests
+- **P3** *(CONFIRMED v0.2 by direct experiment, commit `b89eec3`: 17/23 removed.)* Escalation (A4) removes ≥ 40 % of low-margin flips (leg-5 attenuation suggests
   ~50 %; band kept wide on purpose, cf. the P1 lesson from the replication leg).
 - **P4** Code boundary cases (four at n=200, commit `2882e0e`) sit in the low-margin
   tail: ≥ 3 of 4 have margin below the overall median.
