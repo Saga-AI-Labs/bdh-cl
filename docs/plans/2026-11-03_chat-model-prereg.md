@@ -1,0 +1,152 @@
+# Usable BDH-CL Chat Model - Preregistration v0.1 (DRAFT)
+
+**Status:** draft. No run has been authorised. Section 4.2 now carries the measured
+H2 control result; sections 4.3 and 4.4 remain open decisions.
+
+**Purpose.** The ladders and the K25/W1024 bridge are preparatory work: they exist to
+establish how BDH behaves under continual learning, so that a *usable* model can be
+trained. This prereg turns those findings into a training plan. It is not a continuation
+of the routing investigation - it is the step that investigation was for.
+
+## 1. What the bridge established, and what it did not
+
+Settled and load-bearing for this plan:
+
+| finding | evidence |
+|---|---|
+| A 24-phase grow ladder trains without forgetting (P5 bit-exact, K4 retention) | K25/W1024 chain, `docs/reports/2026-09-29_k20-gx10-results.md` |
+| Routing over a grown stack works in the mean (99.44 % at n=100) | `docs/reports/2026-10-31_k25w1024-routing-matrix-results.md` |
+| Accuracy falls monotonically with the routing margin (59.1 % in the lowest legal band) | same report, stage (a) |
+| No cheap feature predicts a misroute (six tested, 800 pairs) | same report, stage (b) |
+| A longer scoring window removes most misroutes at zero cost | same report, H2 |
+| Wider routes generalise better off-domain (all five correlations negative) | same report, five-domain section |
+
+Not settled, and this plan must not assume otherwise:
+
+- **The window result is measured on two domains only.** The control runs on math and zh
+  decide whether it is a mechanism or a fit to legal/code.
+- **Window size does not transfer.** `window < block_size`, and block size is a training
+  decision. A different block yields a different optimum; only the principle transfers.
+- **Nothing here was measured on chat data.** Every corpus used so far is parliamentary
+  text, legal prose or source code.
+
+## 2. What carries over into the design
+
+Three consequences follow directly, and each contradicts an assumption the bridge made:
+
+**Fewer, better-separated routes.** The legal misroutes arise because legal text and
+prose are both natural language, so route 53248 and the base route 8192 are both
+competent on the same input. At three languages that overlap largely disappears: en, de
+and zh are lexically and orthographically distinct. The 25-route taxonomy is a property
+of the bridge experiment, not of the target model.
+
+**The window is a design parameter, not a tuning knob.** Given a block size *b*, the
+scoring window should be as large as possible while leaving a late span for measurement.
+The exact fraction is what the control runs inform.
+
+**A misroute has no cheap safety net.** Six features over 800 pairs found nothing that
+permits a binary guard below 20 % fallback. A production model therefore needs routing
+that is *right by construction* (few, well-separated routes) rather than guarded after
+the fact.
+
+## 3. Target model
+
+First stage: **chat, without tool calling.**
+
+| parameter | value | rationale |
+|---|---|---|
+| languages | **en, de, zh** | three maximally distinct scripts/language families |
+| training data | high-quality corpora, not Europarl | to be selected from the running preliminary studies |
+| hardware | 2x DGX Spark, TP=2, ~256 GB unified minus OS/overhead | available locally, no purchase lead time |
+| routing | few routes (see section 4.3) | fewer boundaries, larger margins |
+
+## 4. Decisions this prereg must not leave implicit
+
+### 4.1 Block size
+
+Block size couples three things: training length, activation memory, and the routing
+window. Measured activation estimates from the K25 checkpoint (n_embd 1024, 6 layers,
+mult 896):
+
+| block | eval activations | training total incl. weights, grads, Adam, frozen backup |
+|---|---|---|
+| 512 | ~21 GiB | ~73 GiB |
+| 768 | ~32 GiB | ~84 GiB |
+| 1024 | ~42 GiB | ~94 GiB |
+| 2048 | ~85 GiB | ~137 GiB (exceeds a single node) |
+
+With TP=2 the pool roughly doubles, which makes block 1024 plausible and 2048 worth
+checking. **The estimate is a working figure, not a measurement** - it needs a live
+memory run at block 768 before any plan depends on it.
+
+### 4.2 Window
+
+**Measured, 2026-11-04.** The H2 control runs are complete: legal, code, math and zh at
+window 128 against 384 on identical crop indices, 800 paired crops in total.
+
+| domain | @128 wrong | @384 wrong | delta |
+|---|---|---|---|
+| legal | 19 | 5 | -14 |
+| code | 4 | 2 | -2 |
+| math | 0 | 0 | 0 |
+| zh | 0 | **1** | **+1** |
+
+23 misroutes before, 8 after: 17 fixed, 2 broken, at zero additional compute (the forward
+covers the whole block; the window only selects the averaged slice).
+
+The window is therefore **a mechanism with side effects**, not a pure mechanism. It
+resolves genuine ambiguity in most cases and occasionally introduces a new error. Both
+breaks route to the base width, but two cases are not enough to call that a pattern.
+
+**Rule for the target model:** start from `block - 128`, then run a per-language control
+check before fixing it. If a language that was clean at the smaller window loses cases,
+the window is too large for that language.
+
+**What does not transfer:** the number 384 itself. Window is asserted below block size,
+and block size is a training decision. A model trained at a different block has a
+different optimum; only the procedure carries over.
+
+### 4.3 Number of routes
+
+Three candidate designs, to be decided before the training prereg is finalised:
+
+| design | routes | risk |
+|---|---|---|
+| language-only | 3 (en, de, zh) | clean separation, but no prose/code split |
+| language + prose base | 4 | base route may again compete on natural language |
+| language + capability | 5-6 (add code, math) | more boundaries, but each still well separated |
+
+The bridge evidence argues for the **smallest** set that covers the target use. The
+legal-prose overlap is the concrete warning: two routes that are both plausible on the
+same input are where boundary errors live.
+
+### 4.4 Evaluation metric
+
+Perplexity is insufficient for a chat model and was already a poor guide for routing:
+legal's 9.5 % error rate cost only 0.03 nats aggregated, while a single misroute could
+cost 1.18 nats. **The relevant unit is the worst case a user experiences, not the domain
+mean.**
+
+A response-quality metric must therefore be defined *before* training. Candidates:
+held-out instruction-following with human or model-graded scoring, and a per-language
+fluency check. This is the largest open item in this prereg.
+
+## 5. What this prereg does not establish
+
+- **No claim that three languages suffice.** The choice follows the stated target use
+  (chat), not a measurement.
+- **No claim that TP=2 will work with the BDH implementation.** The training code has not
+  been ported to tensor parallelism; this is unbuilt and untested.
+- **No claim about the window beyond the control result.** See 4.2.
+- **No prediction of final quality.** The bridge measured routing and retention, not
+  language ability.
+
+## 6. Open items before this can become a training prereg
+
+1. ~~H2 control result~~ - done 2026-11-04; see section 4.2.
+2. A live memory measurement at block 768 on the target hardware.
+3. Selection of training corpora from the running preliminary studies.
+4. A response-quality metric (section 4.4) - the largest gap.
+5. The TP=2 port itself, which is a development task, not an experiment.
+
+Until items 1 and 4 are settled, this document is a frame, not a plan.

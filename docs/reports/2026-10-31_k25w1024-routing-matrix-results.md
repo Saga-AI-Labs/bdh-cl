@@ -703,6 +703,42 @@ Two data points (128 and 384) do not determine whether the curve saturates. A wi
 256 at the current block would provide the third point at the same cost as the runs above
 and is the cheap way to decide whether longer blocks are worth pursuing.
 
+## H2 control group: the window is a mechanism with side effects
+
+The H2 result above was measured on legal and code, the two domains that had misroutes
+at window 128. That alone cannot distinguish a mechanism from a fit to those two
+domains. math and zh were perfect at window 128 (200/200 each), so a longer window can
+only help by removing errors that do not exist, and can only hurt by introducing new
+ones. They are the control.
+
+| domain | @128 wrong | @384 wrong | delta |
+|---|---|---|---|
+| legal | 19 | 5 | **-14** |
+| code | 4 | 2 | **-2** |
+| math | 0 | 0 | 0 |
+| **zh** | **0** | **1** | **+1** |
+| ga | 0 | not run | - |
+
+Across the 800 paired crops: **23 misroutes before, 8 after. 17 fixed, 2 broken**
+(ratio 8.5:1, at zero additional compute).
+
+The second break is crop 91 on zh, which routes to **8192** at window 384 -- the base
+route, the same destination as the legal misroutes.
+
+### What this settles and what it does not
+
+**Settled:** the window is not a pure mechanism. It resolves genuine ambiguity in most
+cases and occasionally introduces new errors. Any rule of the form "use the largest
+possible window" must therefore carry a per-language control check.
+
+**Not settled:** why exactly those two crops break. Two cases are too few to claim a
+pattern; both landing on the base route is suggestive but not evidence.
+
+**Not established:** whether the ratio holds at other block sizes. The window is
+asserted below block size, and block size is a training decision, so the 384 figure does
+not transfer to a model trained with a different block -- only the procedure does:
+calibrate on one language and check the others.
+
 ## What this does and does not establish
 
 **Establishes (measured on this exact crop set: 20 crops x 25 corpora = 500 crops,
