@@ -46,6 +46,37 @@ legal-leak thread (5 legs, complete through the window probe).
 - **Protocol recommendation:** route at window 384 by default; keep raw margin as the
   single monitored feature; drop the bias-correction line entirely.
 
+## v0.3 amendment (2026-11-04) — H2 holds with a measurable side effect
+
+Per `docs/notes/2026-11-04_rbc1-h2-control-group.md` (commit `e6db7e6`):
+
+- **Control group (math, zh; 400 paired crops; both perfect at 128):** math 0→0, zh
+  0→1 (crop 91 → the base route 8192). Across all four domains, 800 paired crops:
+  **23 → 8 misroutes, 17 fixed, 2 broken — ratio 8.5:1.** The headline restated:
+  **H2 holds with a measurable side effect**; it is not a pure mechanism.
+- **Protocol recommendation gains a precondition:** start from `block − 128`, then run a
+  **per-corpus control check** before fixing the window. If a corpus that was clean at
+  the smaller window loses cases, the window is too large for that corpus. Without this
+  step the recommendation would repeat a known failure mode (R gate at n=3, two-domain
+  generalist claim, 44-minute runtime estimate).
+- **Crop anatomy of the two breaks (new, asb):** the two breaks are different species.
+  **zh crop 91 is 95 % ASCII** (488/512 bytes; typical zh crops: 4–100, median ≈ 8 han
+  lines) — the crop is *English content* inside the zh corpus ("land degradation
+  (Coordinator Febles) | 15:00 …"). At 128 the zh route still wins (2.3374 vs 2.6310,
+  capacity monotonicity); at 384 the English bulk votes base (2.0146 vs 2.1577). The
+  router is arguably reading the *content* correctly; the **label is the lie** — a
+  candidate corpus-purity artifact, not instrument noise. Verification path: served
+  late-span NLL of crop 91 at 8192 vs 57344 (base should win if this reading holds).
+  **legal crop 39 is ordinary for its corpus** (509/512 ASCII, within the 476–509
+  range of neighbours) and remains a genuine boundary case, consistent with its history
+  in the position decomposition. Two cases, two species: one label artifact, one real
+  boundary. Neither supports "the window creates noise".
+- **Carried into the target-model plan:** corpus **purity per crop** (byte/script
+  census is free metadata) becomes a selection criterion for training corpora, and the
+  per-corpus control check becomes part of the routing protocol
+  (`docs/plans/2026-11-03_chat-model-prereg.md` §4.2 already carries the measured
+  control table and the rule).
+
 ---
 
 ## 0. The story in one paragraph
