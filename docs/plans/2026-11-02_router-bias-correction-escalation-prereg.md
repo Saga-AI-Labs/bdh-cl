@@ -1,11 +1,50 @@
 # Router Bias-Correction & Margin-Escalation — Preregistration v0.1 (draft)
 
-**Status:** DRAFT v0.1 · drafted 2026-11-02 · asb (assistant-drafted; freezes only after both seats sign off)
+**Status:** DRAFT v0.2 · drafted 2026-11-02, amended 2026-11-04 · asb (assistant-drafted; freezes only after both seats sign off)
 **Position:** post-hoc *characterization and decision-rule change*, **not** a bridge gate.
 It modifies neither the bridge protocol nor the adversarial prereg (`e288141`); its result
 cannot invalidate any pre-registered gate.
 **Trigger:** the running legal/code eval (score-vector, stage b) + the settled Sonde B
 legal-leak thread (5 legs, complete through the window probe).
+
+---
+
+## v0.2 amendment (2026-11-04) — resolved by data before freezing
+
+- **H1 is falsified.** Five-domain score vectors (legal, code, math, zh, ga; 200 crops
+  each, all 25 routes, `zh_last.pt`) show the width↔off-domain-score correlation is
+  **negative in all five** (code −0.648, math −0.530, zh −0.539, ga −0.176, legal
+  −0.007): wider routes score *better* on foreign territory, the best off-domain
+  competitor is always a wide route (53248/49152/57344), and 8192 ranks #1 off-domain
+  on legal only (code #6 at +1.85 nats, math #5, zh #5, ga #3). An additive per-route
+  bias cannot hold. Analysis: `docs/notes/2026-11-03_rbc1-h1-contradicted-by-five-domains.md`.
+  What fits instead: a **capacity monotonicity** (a width-w route contains all frozen
+  phases 1..k, so wider = better generalist); legal is the explainable exception
+  (legal ≈ prose, the base route is genuinely competent there). Capacity is not
+  correctable, so the A1–A3/D-new remedy is dead.
+- **H2 is confirmed, and the mechanism is sharper than §0 anticipated.** Window 384 on
+  identical crop indices (same checkpoint, seed, 200 crops/domain): legal 19→5
+  misroutes, code 4→2 — **17 of 23 removed at zero additional compute**, because the
+  forward already covers all 512 positions and the window only selects the averaging
+  slice (`scores = rl[:, :, :window].mean(dim=2)`; wall times 5257/5260 s vs
+  5264/5253 s). Mechanism: a **thinner boundary band**, not larger margins — legal p5
+  margin doubles 0.0666→0.1373 while the median barely moves (0.4918→0.4806). The five
+  survivors sit close enough to the boundary that 384 does not resolve them; the one
+  broken crop (39) was already a boundary case in the position decomposition. Commit
+  `b89eec3`. A4's paired rerun has therefore already happened.
+- **Reliability features (stage b): no cheap fallback exists.** Of six features, raw
+  margin is best (15/19 legal + 4/4 code caught at a 20 % fallback); std points the
+  *wrong* way (0.7586 vs 0.7167); normalization is a no-op; "do nothing" is rational at
+  0.03 nats aggregate cost vs a 20 % compute surcharge (commit `8b42104`). Note: that
+  arithmetic was computed at window 128; with window 384 free, the fallback question
+  mostly dissolves.
+- **Still open (the remaining value of this prereg):** the window-256 third point
+  (does the removal curve saturate before block limits force longer blocks?); width vs
+  growth-order separation using the remaining twenty domains (width and training order
+  are confounded; 3 of 5 best off-domain competitors are order-neighbours); P4 below.
+  Longer blocks are priced (~32/42 GiB activations at 768/1024) and not warranted yet.
+- **Protocol recommendation:** route at window 384 by default; keep raw margin as the
+  single monitored feature; drop the bias-correction line entirely.
 
 ---
 
@@ -55,7 +94,7 @@ Splits are by crop index, fixed before looking: **even indexes estimate, odd ind
 evaluate**, computed per domain (crop-index identity by construction, as in the margin
 probe). Estimation and evaluation never share crops.
 
-- **A1 — offset estimation.** For every route r: `τ_r = median over prose
+- **A1 — offset estimation.** *(STRUCK v0.2: H1 falsified, see amendment.)* For every route r: `τ_r = median over prose
   estimation-crops of S_r(c)` (prose = base/host domain; it is the one domain where no
   route has a domain advantage by construction). Robustness: recompute with mean; report
   split-half reliability of `τ` (even-vs-odd prose crops).
@@ -89,9 +128,9 @@ Pairing across windows is by crop index; any index mismatch aborts the analysis.
 
 ## 5. Predictions (first-guess bands; falsification is a result, not an embarrassment)
 
-- **P1** Offset correction (A2) reduces legal misroutes on the evaluation half by ≥ 50 %
+- **P1** *(OBSOLETE v0.2 — tested the falsified H1 path.)* Offset correction (A2) reduces legal misroutes on the evaluation half by ≥ 50 %
   relative, and increases no other domain's misroute count by more than 2 crops.
-- **P2** Downward share of flips (A3) drops from 19/19 (legal, n=200 sample) into
+- **P2** *(OBSOLETE v0.2 — same.)* Downward share of flips (A3) drops from 19/19 (legal, n=200 sample) into
   {50 % .. 80 %}. If it stays > 90 %, H1 is **falsified** as the dominant cause.
 - **P3** Escalation (A4) removes ≥ 40 % of low-margin flips (leg-5 attenuation suggests
   ~50 %; band kept wide on purpose, cf. the P1 lesson from the replication leg).
