@@ -5,6 +5,36 @@
 **Evidence:** `docs/reports/2026-10-31_k25w1024-routing-matrix-results.md`, section "H2 control group"; commit `e6db7e6`
 **Status:** note, not an amendment. RBC-1 is unedited; this records data that arrived after v0.2 was written.
 
+## CORRECTION (2026-11-04, same day): the zh control case was a corpus labelling error
+
+The analysis below treats zh crop 91 as a side effect of the longer window and asks for
+a per-corpus control step on that basis. The first half of that is wrong.
+
+Crop 91 is English UNCCD agenda text inside `xscript_zh.txt`: 0.0 % CJK, 100.0 % Latin
+characters. Two independent audits confirm it (`scripts/corpus_purity_census.py`, which
+reports crops 50 and 91; `scripts/quinn/corpus_purity_audit.py`, which reports offsets
+28,365,496 and 29,547,559). All other 24 corpora are clean in both.
+
+Read against its content, crop 91 routes **wrongly** at window 128 (to Han) and
+**correctly** at 384 (to the prose base). The longer window corrected a label-driven
+decision; it did not break a correct one.
+
+What survives of the argument below:
+
+- **The count**: 17 fixed, 1 broken over 800 paired crops -- ratio **17:1**, not 8.5:1.
+  The one break is legal crop 39, which is genuine.
+- **The protocol recommendation still needs a precondition**, but the precondition is
+  *corpus purity*, not a window control check. A window tuned on two domains remains a
+  small sample, and the third point (256: legal 9, code 3) shows the curve flattening
+  rather than ending.
+
+What does not survive: the claim that zh demonstrates a side effect of the longer window.
+That reading came from trusting a corpus label that had never been audited.
+
+The lesson is narrower and more useful than "carry a control check": **audit the labels
+before interpreting a disagreement with them.** A single crop that disagrees with its
+domain may be the only correct measurement in the room.
+
 ## What v0.2 says about H2
 
 > **H2 is confirmed, and the mechanism is sharper than section 0 anticipated.** Window 384

@@ -81,30 +81,40 @@ memory run at block 768 before any plan depends on it.
 
 ### 4.2 Window
 
-**Measured, 2026-11-04.** The H2 control runs are complete: legal, code, math and zh at
-window 128 against 384 on identical crop indices, 800 paired crops in total.
+**Measured, 2026-11-04.** Four domains at window 128 against 384 on identical crop
+indices, 800 paired crops. A third point at 256 exists for legal and code.
 
-| domain | @128 wrong | @384 wrong | delta |
+| domain | @128 wrong | @256 wrong | @384 wrong |
 |---|---|---|---|
-| legal | 19 | 5 | -14 |
-| code | 4 | 2 | -2 |
-| math | 0 | 0 | 0 |
-| zh | 0 | **1** | **+1** |
+| legal | 19 | 9 | 5 |
+| code | 4 | 3 | 2 |
+| math | 0 | - | 0 |
+| zh | 0 | - | 0 |
 
-23 misroutes before, 8 after: 17 fixed, 2 broken, at zero additional compute (the forward
-covers the whole block; the window only selects the averaged slice).
+17 misroutes fixed, 1 broken over the 800 pairs at 384 -- ratio 17:1, at zero additional
+compute, because the forward covers the whole block and the window only selects the
+averaged slice.
 
-The window is therefore **a mechanism with side effects**, not a pure mechanism. It
-resolves genuine ambiguity in most cases and occasionally introduces a new error. Both
-breaks route to the base width, but two cases are not enough to call that a pattern.
+**CORRECTION (2026-11-04):** an earlier version of this section reported 17 fixed and 2
+broken, with zh losing a case. That was wrong. The zh crop in question (91) is English
+UNCCD text inside `xscript_zh.txt` -- 0.0 % CJK, 100.0 % Latin -- confirmed by two
+independent corpus audits (`scripts/corpus_purity_census.py` and
+`scripts/quinn/corpus_purity_audit.py`; all other 24 corpora clean). Read against its
+content, that crop routes wrongly at 128 and correctly at 384: the longer window
+**corrected a label-driven decision** rather than breaking a correct one. The single
+remaining break is legal crop 39.
 
-**Rule for the target model:** start from `block - 128`, then run a per-language control
-check before fixing it. If a language that was clean at the smaller window loses cases,
-the window is too large for that language.
+**Rule for the target model:** start from `block - 128`, then audit the training corpora
+for label/content agreement before fixing it. The window cannot repair a mislabelled
+crop; it can only expose one.
 
 **What does not transfer:** the number 384 itself. Window is asserted below block size,
 and block size is a training decision. A model trained at a different block has a
 different optimum; only the procedure carries over.
+
+**Not yet decided:** whether a block larger than 512 is worth it. Four legal crops are
+wrong at all three windows, so more context will not rescue them; the slope has flattened
+from -10 to -4 between 256 and 384.
 
 ### 4.3 Number of routes
 

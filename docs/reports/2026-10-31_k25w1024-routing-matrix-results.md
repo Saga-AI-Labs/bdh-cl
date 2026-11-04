@@ -703,7 +703,7 @@ Two data points (128 and 384) do not determine whether the curve saturates. A wi
 256 at the current block would provide the third point at the same cost as the runs above
 and is the cheap way to decide whether longer blocks are worth pursuing.
 
-## H2 control group: the window is a mechanism with side effects
+## H2 control group: the window is a pure mechanism on clean corpora
 
 The H2 result above was measured on legal and code, the two domains that had misroutes
 at window 128. That alone cannot distinguish a mechanism from a fit to those two
@@ -716,28 +716,68 @@ ones. They are the control.
 | legal | 19 | 5 | **-14** |
 | code | 4 | 2 | **-2** |
 | math | 0 | 0 | 0 |
-| **zh** | **0** | **1** | **+1** |
-| ga | 0 | not run | - |
+| zh | 0 | 0 (see below) | 0 |
 
-Across the 800 paired crops: **23 misroutes before, 8 after. 17 fixed, 2 broken**
-(ratio 8.5:1, at zero additional compute).
+Across the 800 paired crops: **17 misroutes fixed, 1 broken** -- ratio **17:1**, at zero
+additional compute.
 
-The second break is crop 91 on zh, which routes to **8192** at window 384 -- the base
-route, the same destination as the legal misroutes.
+### CORRECTION (2026-11-04): the zh "break" was a corpus labelling error
 
-### What this settles and what it does not
+An earlier version of this section reported zh dropping to 199/200 with crop 91 routing
+to 8192, and read that as a side effect of the longer window. That reading was wrong.
 
-**Settled:** the window is not a pure mechanism. It resolves genuine ambiguity in most
-cases and occasionally introduces new errors. Any rule of the form "use the largest
-possible window" must therefore carry a per-language control check.
+Crop 91 is English UNCCD agenda text inside `xscript_zh.txt`: 0.0 % CJK, 100.0 % Latin
+characters, with CJK full-width colons (U+FF1A) as its only Chinese feature. Two
+independent audits confirm it -- `scripts/corpus_purity_census.py` (protocol crops;
+reports crops 50 and 91) and `scripts/quinn/corpus_purity_audit.py` (window view;
+reports offsets 28,365,496 and 29,547,559). All other 24 corpora are clean in both.
 
-**Not settled:** why exactly those two crops break. Two cases are too few to claim a
-pattern; both landing on the base route is suggestive but not evidence.
+Read against its content, crop 91 should route to the prose base:
 
-**Not established:** whether the ratio holds at other block sizes. The window is
-asserted below block size, and block size is a training decision, so the 384 figure does
-not transfer to a model trained with a different block -- only the procedure does:
-calibrate on one language and check the others.
+| window | routed to | correct for English text? |
+|---|---|---|
+| 128 | 57344 (Han) | **no** |
+| 384 | 8192 (prose) | **yes** |
+
+The longer window did not break a correct decision; it **corrected a label-driven one**.
+At 128 tokens the full-width colons dominated the early window; at 384 the English prose
+overwhelmed them. zh is therefore 200/200 on content, and the single remaining break is
+legal crop 39.
+
+Crop 50 (66.7 % Latin) routes to 57344 at both windows and is unaffected.
+
+### What this settles
+
+**Settled:** on corpora whose labels match their content, a longer window only removes
+misroutes -- 17 removed, 0 introduced over 800 paired crops, at zero cost because the
+forward already covers the whole block.
+
+**Settled, additionally:** the window can reveal label errors a shorter window hides.
+That is a diagnostic property worth remembering when a single crop disagrees with its
+domain.
+
+**Not settled:** whether the 17:1 ratio holds at other block sizes. Window is asserted
+below block size and block size is a training decision, so 384 does not transfer -- only
+the procedure does.
+
+### The third point: window 256
+
+A third run fills in the curve between 128 and 384:
+
+| window | legal misroutes | code misroutes |
+|---|---|---|
+| 128 | 19 | 4 |
+| **256** | **9** | **3** |
+| 384 | 5 | 2 |
+
+The slope flattens (legal -10, then -4) but is not zero. Per-crop transitions are not
+monotone: legal crops 34, 173 and 192 go right-wrong-right; code crop 45 goes
+wrong-right-wrong. Four legal crops (36, 108, 110, 185) are wrong at all three windows --
+those are the hard floor, not the five at 384.
+
+A larger block would probably not rescue those four, since three times the context does
+not. It would address a few remaining boundary cases at the price of retraining with a
+doubled block.
 
 ## What this does and does not establish
 

@@ -1,0 +1,48 @@
+{
+  "date": "2026-11-04",
+  "method": "protocol mode: the exact crop offsets eval_router.py draws (seed 1234, block 512, mb 30); two independent implementations",
+  "implementations": [
+    "scripts/corpus_purity_census.py",
+    "scripts/quinn/corpus_purity_audit.py"
+  ],
+  "corpora_audited": 25,
+  "corpora_clean": 24,
+  "corpora_with_anomalies": 1,
+  "anomalies": {
+    "zh": {
+      "expected_script": "cjk",
+      "count": 2,
+      "cases": [
+        {
+          "offset": 28365496,
+          "dominant": "latin",
+          "shares": {
+            "cjk": 33.3,
+            "latin": 66.7
+          },
+          "chars": 57
+        },
+        {
+          "offset": 29547559,
+          "dominant": "latin",
+          "shares": {
+            "latin": 100.0
+          },
+          "chars": 369
+        }
+      ]
+    }
+  },
+  "census_crosscheck": {
+    "code.txt": {
+      "dominant": "Latin",
+      "anomalous": 1,
+      "rate": 0.005
+    },
+    "xscript_zh.txt": {
+      "dominant": "Han",
+      "anomalous": 2,
+      "rate": 0.01
+    }
+  }
+}
