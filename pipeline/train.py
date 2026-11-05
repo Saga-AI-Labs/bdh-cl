@@ -126,7 +126,16 @@ def train(cfg: Config) -> None:
 
     raw_model = build_model(cfg).to(device)
     if cfg.init_from and grow_src is None:
-        ckpt = torch.load(cfg.init_from, map_location=device, weights_only=False)
+        # mmap=True for the same reason as the grow path above: the checkpoint
+        # carries a full Adam state (22.55 GB at mult 896) that this path never
+        # reads. With map_location=device and weights_only=False, torch
+        # materializes BOTH tensors on the GPU and the reference lives until the
+        # function returns -- 33.83 GB of dead weight against a 121.7 GB pool.
+        # Measured 2026-11-05: three 100-step probe arms were SIGKILLed before
+        # step 1 with this load in place; the grow path has used mmap since the
+        # phase-22/23 OOMs and never hit this.
+        ckpt = torch.load(cfg.init_from, map_location="cpu",
+                          weights_only=False, mmap=True)
         # F-V9 guard: without --grow-mult there are no gradient masks and no
         # step-end restore, so AdamW's decoupled weight decay erodes the loaded
         # (old) segments at (1 - lr_t*wd) per step - the F-decay-leak failure
@@ -148,7 +157,14 @@ def train(cfg: Config) -> None:
                 f"Pass --allow-unfrozen-grown-init if overwrite-with-decay is "
                 f"the intended design (e.g. FCS), or set --weight-decay 0.")
         raw_model.load_state_dict(ckpt["model_state"])
-        print(f"initialized weights from {cfg.init_from} (ckpt step {ckpt.get('step')})")
+        step_note = ckpt.get("step")
+        # Release the mapping before the training loop: load_state_dict has
+        # copied everything this path needs, and keeping the dict alive would
+        # hold the mmap (and, on a page-cache miss, re-fault 33.83 GB).
+        del ckpt
+        import gc
+        gc.collect()
+        print(f"initialized weights from {cfg.init_from} (ckpt step {step_note})")
         # Same-width fine-tune: optionally hold the token embedding and the output
         # head fixed. Not a P5 claim -- P5 (bit-exact preservation) belongs to the
         # frozen grow path, which has gradient masks and a step-end restore; a
