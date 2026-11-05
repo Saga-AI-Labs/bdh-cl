@@ -188,3 +188,43 @@ user can reproduce by sending `draft: false`. A hype-averse, benchmark-driven co
 pays in exactly that currency. Lesson for this repo: preregs + raw-JSON verification +
 receipts are the same currency — narrow-but-exact beats broad-but-approximate, in
 adoption as in evaluation.
+
+### Follow-up same day: two operator takeaways, each sharpened
+
+**1. "Check TensorFold as serving engine once we have a servable model" — yes, with
+one architecture caveat to price in advance.** The engine refuses checkpoints whose
+`model_type` has no native family, and only four families have hand-written kernel
+packages. BDH-CL (k-sparse attention, per-width `attn.freqs` buffer, squared-ReLU
+latents) is not one of them, and a semantics-preserving conversion to a supported
+family does not exist. Serving evaluation therefore means one of: (a) writing a
+BDH family kernel package (nontrivial; the repo's ATC infrastructure exists for
+exactly this kind of contribution), or (b) accepting the Python 0.6.6 engine path if
+it still exists by then, or (c) no TensorFold. This is a candidate open item for the
+chat prereg §6 — the architecture choice and the serving engine are coupled decisions,
+not independent ones. The exactness contract would also be worth having for our own
+eval reproducibility (misroute diagnostics are seed-sensitive).
+
+**2. "Living Weights diametrically opposed to us — nothing to take — was premature."**
+Correction recorded, with an observation about the record itself: Quinn's similarities
+table above (2026-10-12) already mapped the deep parallels — additive neurons beside
+frozen originals, gated acceptance, preservation checks. The "diametral" reading
+over-weighted one axis: **growth law** (bounded 64-neuron pocket vs unbounded physical
+width growth). On strategy, Living Weights is the fine-grained limit of the same idea:
+a BDH ladder phase at ~10 neurons per step with a runtime acceptance gate. Three
+concrete transfers, now on file:
+
+- **Acceptance-check pattern** (held-out wordings + near-miss preservation +
+  hallucination probes, commit-or-remove-whole) — the runtime twin of our prereg
+  discipline; candidate pattern for any post-deployment learning in the chat product.
+- **Audit metric** — off-subject firing rate per neuron against a fixed, versioned
+  prompt bank; nearest published analogue for the §4.4 interference metric.
+- **Order-of-operations caution for Q3** — their delete docs learn the hard way that
+  zeroing weights *after* 4-bit grouping re-rounds the shared scale groups of
+  neighbouring neurons and moves their answers. Directly applicable to our Q3
+  ("merged+pruned artifacts quantized end-to-end"): any post-quantisation mutation
+  (prune, zero, edit) re-rounds shared groups — **sequence prune → quantise, never
+  quantise → prune**, and keep the scale-group membership fixed across the sequence.
+- One sobering data point against a strong isolation prior: even additive-only
+  pockets show interference (#870, later lessons disturbing earlier facts). Isolation
+  reduces interference; it does not abolish it — which is exactly why the prereg
+  measures P1b/P2 instead of assuming the isolation side wins §4.3.
