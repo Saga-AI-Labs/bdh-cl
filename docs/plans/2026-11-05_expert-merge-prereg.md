@@ -1,11 +1,15 @@
-# Expert-merge preregistration v0.2 (FROZEN)
+# Expert-merge preregistration v0.3 (FROZEN)
 
-**Status:** FROZEN v0.2 · drafted 2026-11-05 (v0.1), frozen same day after review
+**Status:** FROZEN v0.3 · drafted 2026-11-05 (v0.1), frozen same day after review
 incorporation · asb drafted, Quinn reviewed; both seats signed off (the review table
 of 2026-11-05 is incorporated in full). No run has been authorised yet — freezing makes
 the predictions below binding; run authorisation is separate. Fills the divergent-branch
 open item of `docs/reports/2026-11-04_merge-experiments.md` (§6.3) and operationalises
 the frame in `docs/notes/2026-11-04_bdh-paper-merge-claim-verified-with-caveats.md`.
+
+v0.3 closes the optimiser-schedule gap that v0.2 left open (its miss, not a later
+discovery): §2.3a now names the schedule, its selection rule and the measured probe
+that chose it, and fixes the training seed. Predictions P1-P5 are unchanged.
 
 **Changelog v0.1 → v0.2 (per Quinn's review):** branch corpus 640 MB → 15–30 MB, target
 20 MB (measured step times at mult 896 make 640 MB a 20–36-day run, not 1–1.5 days);
@@ -14,6 +18,12 @@ deviation from the paper, which averages embeddings); prune fix switched from pa
 to contiguous blocks (attempt 2 had correctly gathered freqs and still failed —
 contiguity, not pairing, is the decisive property); P3 sharpened from ≤ 1.6966 to
 ≤ 1.2479 (the ancestor-descendant merge already undercut the old threshold).
+
+**Changelog v0.2 -> v0.3:** optimiser schedule named and justified by a measured
+probe (§2.3a) instead of left to the pipeline default; `min_lr` documented as the
+parameter that silently reshaped arm A; training seed fixed at 1234 for B1/B2
+(matched data order, so P4 isolates the fake-quant forward); probe numbers reported
+for all three arms, not only the chosen one.
 
 ## 0. The story in one paragraph
 
@@ -98,6 +108,57 @@ purposes: topology test, QAT preview, tooling gate.
   proceeds FP32-only; QAT stays closed at every level.
 - B1 and B2 can run in parallel on the two Sparks (15–29 h each per the table in
   2.2); otherwise B2 follows B1.
+
+### 2.3a Optimiser schedule and training seed
+
+v0.2 said only "identical schedule" and left the value to `pipeline/config.py`, whose
+default is a from-scratch schedule (`learning_rate 1e-3`, `warmup_iters 30`,
+`lr_decay_iters 300`). Applied to a converged 2.82B checkpoint that default would not
+fine-tune, it would overwrite. The value is therefore named here, and it was chosen by
+measurement rather than by analogy to the ladder.
+
+**The probe.** Three arms, 100 steps each, from `zh_last` on the 20 MB Gutenberg
+corpus, `--freeze-embed --weight-decay 0 --seed 1234`, batch 1, block 512. A fourth
+variable was found in the process: `min_lr` defaults to `1e-4`, so any arm whose peak
+is `1e-4` runs a flat cosine -- constant rate, not a slow one.
+
+| arm | peak | warmup | decay iters | R2 (mean, steps 81-100) | min |
+|---|---|---|---|---|---|
+| A | 1e-4 | 20 | 100 | **1.7893** | 1.7712 |
+| B | 3e-4 | 20 | 100 | 1.7550 | 1.7408 |
+| C | 1e-3 | 10 | 100 | 1.7848 | 1.7714 |
+
+**Selection rule, fixed before the arms were read** (R1-R5, adopted from the RBC-1
+cycle's review): R1 disqualify any arm with NaN/inf or an end loss above its own
+step-10 level; R2 metric is the trailing mean over steps 81-100; R3 among survivors
+pick the **lowest peak rate whose R2 is within +5 % of the best**; R4 a tie within
+0.5 % goes to the lower rate; R5 if no arm survives, the schedule stays open and B1/B2
+wait rather than proceeding on a broken schedule.
+
+**Outcome.** All three arms survive R1 (each ends well below its step-10 loss: A
+2.4220 -> 1.7712, B 2.3625 -> 1.7408, C 2.2942 -> 1.7714). All three sit inside the
++5 % band (A +1.95 %, B 0.00 %, C +1.70 %). R3 therefore selects **arm A: peak
+`1e-4`, warmup 20, decay 100** -- the lowest rate in the band, not the lowest loss.
+
+**Honest limits of this probe.** (i) The A-B gap is 1.95 % on ten tail points; that is
+not a resolution at which one rate can be called better, which is precisely why R3
+prefers the gentler schedule instead of ranking. (ii) The lengths are calibrated to the
+probe, not the branch: with `--lr-decay-iters 100` every arm reaches `min_lr = 1e-4` at
+step 100, so the arms differ in the path they take, not in the regime they hold. The
+branch runs ~19.5k steps and will need `lr_decay_iters` on that order. (iii) The probe
+can disqualify a destructive rate; it cannot optimise one.
+
+**Schedule for the branch.** Peak `1e-4`, warmup proportional to run length
+(~500 steps for a 19.5k-step branch), cosine decay to `min_lr`, with `min_lr` set
+**below the peak** (1e-5) so the decay is real rather than nominal -- the parameter that
+silently flattened arm A.
+
+**Training seed: 1234 for both B1 and B2.** The seed fixes batch order (`torch.randint`
+in `get_batch`) and the dropout masks, so the two branches see the same data sequence and
+the P4 comparison isolates the fake-quant forward as the only difference. This is
+matched pairs, not bit-exactness: CUDA reduction order remains free to vary, so the
+same seed yields reproducibly *ordered* runs, not identical ones. The eval seed being
+numerically equal (1234, §2.5) is harmless -- different generators.
 
 ### 2.4 Repaired prune as instrument check (not on the critical path)
 
