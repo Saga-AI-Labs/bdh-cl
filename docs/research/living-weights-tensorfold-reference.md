@@ -2,6 +2,9 @@
 
 **Source:** Abriss by Ash Hart (X/Twitter), TensorFold v1.0.7, 2026-10-11
 **Committed:** 2026-10-12 · Quinn
+**Updated:** 2026-11-05 · asb — refreshed against `docs/living-weights.md` (post-1.0.6
+pocket learner) and full-engine context; additions appended below, the v1.0.7 text
+above is left as written.
 **Status:** Reference only — no installation, no training, no infrastructure change without explicit operator authorization
 
 ---
@@ -121,3 +124,67 @@ It belongs on the **parameter-learning side** of the memory distinction (alongsi
 ---
 
 — Quinn, @quinn-the-builder, 2026-10-12
+
+---
+
+## Update 2026-11-05 (asb): pocket learner shipped; engine context; adoption
+
+### Corrections to the v1.0.7-era picture above
+
+| Announcement era (sections above) | Current docs (`docs/living-weights.md`, release after 1.0.6) |
+|---|---|
+| Lesson registry a draft, "real fact" problem open | Shipped as the lesson's acceptance checks: model-written Q&A, held-out wordings (never trained, thinking off *and* on), near-misses must not move, hallucination probes ("the user's cat's name") must stay unanswered; a failed lesson is removed whole before anything is written |
+| "No quantitative numbers" | Documented: 8.7–10.5 min per fact (GB10, Flash Next); −16 % Mac decode with 21 facts, −5 % drafted with 3; rollback 5.6–5.7 s (M3 Ultra, APFS clones) vs 58–91 s (GB10, ext4) |
+| Pocket as design sketch | Pocket learner shipped: shared expert widened 3712→3776, `tensorfold_learned_neurons` in config.json; folders taught by 1.0.3–1.0.6 (lessons *inside* the shared experts) are refused by `--slide`; only freed top-of-pocket neurons are reused |
+| Retention/deletion implicit | Single + batch delete (≤256 ids) shipped: silencing (input weights zeroed, output columns left), retained-fact checks, two-phase crash-consistent write (graph file ↔ shards), GPU put-back rules on upload failure |
+| — | `slide audit` shipped: per-neuron off-subject firing rate against a versioned 256-prompt bank (activation > 1e-4, default flag at 1 %), four prompt groups, read-only |
+| — | Cross-fact disturbance confirmed as known issue #870 (Flash Next: after five lessons, two of three kept facts still answered) |
+| — | Cross-backend portability: a folder taught on a Mac serves on GB10 and vice versa |
+
+### BDH-CL relevance, sharpened (updates "Synergies")
+
+- The pocket is **additive-only by construction** — nothing existing is written, so the
+  failure mode we measured on 2026-11-04 (ancestor∥descendant merge: trunk duplication
+  + pooled-k cross-talk, legal +0.19 / zh +0.47 nats) cannot arise. Living Weights is a
+  productised existence proof for the **isolation side** of chat-prereg §4.3 (routes
+  vs merge).
+- The audit's **off-subject firing rate against a fixed, versioned prompt bank** is the
+  closest published analogue to the §4.4 response-quality/interference metric that is
+  still to be defined.
+- **GB10/DGX Spark is the qualified learning platform.** Once B1 finishes, a
+  Living-Weights lesson run on one of our own Sparks is a cheap external datapoint for
+  §4.3. No installation before then (the status line above stands).
+
+### Engine context (why TensorFold, not just Living Weights, gets adopted)
+
+- **Exact decoding as a contract:** every accepted draft must equal the token the same
+  engine produces with `draft: false` (Gumbel noise derived only from seed, position,
+  token-id; every row of a multi-row verify pass gets single-row arithmetic bits);
+  resumed = fresh execution, concurrent stream = solo run. Auditable by any user.
+- Single Zig binary (no Python/MLX install), hand-written per-family kernels, refuses
+  unsupported formats before download; CUDA release covers sm_80–sm_121.
+- README-qualified multi-Spark serving: **TP=2 and TP=3** (GLM-5.3-Flash NVFP4 /
+  FP4-Local / XSFP4 on two and three GB10s). **TP=4 is community-verified, not
+  README-qualified** (tonyd2wild: GLM-5.3-Flash EXL3 TP4; DeepSeek-V4.1-Flash TP4 at
+  93.6 tok/s, 1M context).
+- Adoption: ~328 stars late Sep 2026 → ~1.7k (Nov); self-reported 1.6–3.1× vs vLLM
+  (MTP=3) on DGX Spark; community operators report replacing vLLM at TP=1–4 within
+  weeks (X: "4 Sparks, TP4, switchless RoCE ring — same hardware and topology,
+  different software: vLLM vs TensorFold").
+- Documented vLLM fragility on exactly this topology: NVIDIA forum, two-Spark vLLM
+  TP=2 — "one node drops while the other's GPU goes 100 % forever".
+
+### Assessment: adoption without many "gravierende Neuerungen"?
+
+Operator's question, 2026-11-05: if the technical novelty is modest, is the vLLM
+displacement mostly clever marketing? Assessment (asb): the displacement is
+**fit-for-purpose, not hype**. vLLM's design centre is datacenter batch throughput on
+H100-class parts; on 1–4 unified-memory Sparks the real workload is 1–8 concurrent
+single-streams — the regime where TensorFold's per-family kernels, MTP drafting and
+exactness contract are strongest and vLLM is weakest (and demonstrably fragile, forum
+thread above). The "marketing" that worked is **verifiability**: receipts with pinned
+commits, documented known-issues, refused qualifications, self-reported benchmarks a
+user can reproduce by sending `draft: false`. A hype-averse, benchmark-driven community
+pays in exactly that currency. Lesson for this repo: preregs + raw-JSON verification +
+receipts are the same currency — narrow-but-exact beats broad-but-approximate, in
+adoption as in evaluation.
