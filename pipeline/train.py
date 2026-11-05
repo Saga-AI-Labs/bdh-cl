@@ -149,6 +149,17 @@ def train(cfg: Config) -> None:
                 f"the intended design (e.g. FCS), or set --weight-decay 0.")
         raw_model.load_state_dict(ckpt["model_state"])
         print(f"initialized weights from {cfg.init_from} (ckpt step {ckpt.get('step')})")
+        # Same-width fine-tune: optionally hold the token embedding and the output
+        # head fixed. Not a P5 claim -- P5 (bit-exact preservation) belongs to the
+        # frozen grow path, which has gradient masks and a step-end restore; a
+        # fine-tune has neither. What this preserves is narrower and is what the
+        # merge needs: embed.weight and lm_head stay bit-identical to the parent,
+        # so pipeline.merge's averaging step is a no-op instead of a compromise.
+        if cfg.freeze_embed:
+            raw_model.embed.weight.requires_grad_(False)
+            raw_model.lm_head.requires_grad_(False)
+            print("freeze-embed: embed.weight and lm_head requires_grad=False "
+                  "(embedding identity preserved for a later merge)")
 
     if grow_src is not None:
         sd = grow_src["model_state"]
@@ -249,8 +260,16 @@ def train(cfg: Config) -> None:
 
     model = torch.compile(raw_model) if cfg.compile else raw_model
 
+    # Only parameters that can receive a gradient need optimizer state. With
+    # freeze-embed (or any frozen region) the filtered list is strictly smaller;
+    # AdamW would otherwise allocate m/v for tensors it will never update.
+    trainable = [p for p in raw_model.parameters() if p.requires_grad]
+    n_trainable = sum(p.numel() for p in trainable)
+    if n_trainable != n_params:
+        print(f"optimizer: {n_trainable:,} of {n_params:,} params trainable "
+              f"({100.0 * n_trainable / n_params:.2f} %)")
     optimizer = torch.optim.AdamW(
-        raw_model.parameters(),
+        trainable,
         lr=cfg.learning_rate,
         weight_decay=cfg.weight_decay,
         betas=(cfg.beta1, cfg.beta2),
