@@ -108,3 +108,16 @@ problem), while `legal_last ∥ zh_last` merged an ancestor with its descendant.
 report's section 5 says this in one line; the arithmetic above is the proof that no
 script fix changes it. The 7-day divergent-branch experiment (report §6.3) remains the
 decisive test, and the fixed prune script is exactly the instrument it needs.
+
+## Addendum (2026-11-05, per the author's review)
+
+The review corrects the attempt-2 record: the original frequencies were **gathered**
+(not sliced, not recomputed) and the control still failed (5.64 → 21.78). The
+pair/sequence mechanism above therefore stands — scattered positions destroy the
+rotation structure through re-pairing and an irregular phase sequence even when the
+gathered values are correct. The recommended fix is now **contiguous blocks**
+(`--block` in `scripts/prune_eval.py`, already implemented there): it preserves the
+pairing *and* the local ladder, and it is the variant the August evidence was measured
+against. A pair-wise sorted gather remains theoretically equivalent (the attention
+kernel sum is commutative over pairs) but is untested. The recompute diagnosis
+(attempt 3, squared frequencies) is unchanged.
