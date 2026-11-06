@@ -85,10 +85,41 @@ is 0.05 nats against 1-nat failures elsewhere and does not soften the verdict; i
 does mean the sentence "worse than the best parent on every domain" would be wrong,
 and it is corrected here.
 
-The mechanism is the same as measured on 2026-11-04: in the forward pass
-`x @ self.encoder` runs over all neurons, so the non-target half activates on the
-target text and its decoder rows add to the output. Sibling topology does not
-isolate the halves; it changes which half interferes, not whether it does.
+The mechanism is the same as measured on 2026-11-04, and it is **co-activation,
+not duplication**. In the forward pass `x @ self.encoder` runs over all neurons, so
+both halves activate on every text and both halves' decoder rows add to the output.
+Concatenation pooling does not decide *whether* the halves sum — it always does. It
+decides *how correlated* their contributions are:
+
+| merge | halves | decoder-row relation | measured dilution |
+|---|---|---|---|
+| ancestor (`legal_last` + `zh_last`) | shared bit-exact trunk | agree where the text is in-distribution for either | +0.19 / +0.47 nats (mild) |
+| sibling (`zh_last` + `expert_b1`) | full fine-tune moved every neuron | uncorrelated | +1.00 / +1.19 / +1.47 nats |
+
+The ancestor merge's legal gain (1.2479 against zh_last's 1.6966) was therefore
+**lineage correlation, not width** — the halves agreed because they shared a trunk.
+This is exactly the clause P3 carries in the prereg: "If violated, the width
+gradient was a ladder-lineage artifact, not width." That clause now triggers, and it
+also revises RBC-1 v0.2's reading of the width gradient.
+
+## 4a. B1's own numbers: catastrophic forgetting under the paper protocol
+
+The branch itself is a finding, independent of the merge. A full fine-tune on 20 MB
+without replay buys a capability by selling the home language:
+
+| domain | zh_last (before) | expert_b1 (after) | delta |
+|---|---|---|---|
+| expert (held-out) | 11.56 ppl | **3.61 ppl** | **-1.16 nats** |
+| zh | **5.64 ppl** | 46.57 ppl | **+2.11 nats (8.2x)** |
+| legal | 5.46 ppl | 6.38 ppl | +0.16 nats |
+
+**zh loses 2.11 nats — an 8.2-fold perplexity increase — while expert gains 1.16.**
+This is the paper's own protocol followed literally: the branch is a pure specialist,
+no replay mix, and the home territory pays for it.
+
+**Consequence for the chat prereg:** any future specialist branch needs a replay mix.
+The August merge->prune->replay recipe had one; B1 deliberately followed the paper
+and did not. A specialist without replay is a trade, not a gain.
 
 ## 5. Consequence
 
@@ -112,6 +143,12 @@ non-selected neurons are masked in the forward pass rather than summed. That is
 the isolation the pooled merge lacks, and it is the same mechanism the router
 evaluation measured (K3 99.44 % at n=100). The expert-merge experiment is
 evidence for routing, not against it.
+
+**The capability survives the merge at the ~1 % level.** B1 gains 1.16 nats on
+expert; through the pool, 0.014 nats remain (merged 2.4336 against zh_last's 2.4476).
+Dilution factor ~99 %. Pooling does not average capabilities — it buries them. This
+is the quantitative form of the co-activation account above, and it is why a pooled
+merge cannot be rescued by width alone.
 
 **What it does not test:** whether a *pruned* merge (the August recipe: merge ->
 prune to budget -> replay) recovers quality. That recipe's figures came from
