@@ -107,7 +107,15 @@ def build_mixed(arr_a, idxs_a, arr_b, idxs_b, block, pieces=4):
             if len(piece) < piece_len:
                 piece += b"\x00" * (piece_len - len(piece))
             parts.append(piece)
-        out.append(b"".join(parts))
+        # One more byte, continuing the alternation (piece index `pieces`, even
+        # -> arr_a), so y = crop[1:block+1] has a true next byte. Without it the
+        # loss sees 1022 targets for 1024 logits -- the same "learned the hard
+        # way" bug the main eval had before the offset construction.
+        src, start = (arr_a, ia) if pieces % 2 == 0 else (arr_b, ib)
+        piece = bytes(src[start + block:start + block + 1])
+        if len(piece) < 1:
+            piece += b"\x00"
+        out.append(b"".join(parts) + piece)
     return out
 
 
