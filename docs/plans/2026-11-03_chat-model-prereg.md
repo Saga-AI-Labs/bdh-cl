@@ -1,4 +1,15 @@
-# Usable BDH-CL Chat Model - Preregistration v0.1 (DRAFT)
+# Usable BDH-CL Chat Model - Preregistration v0.2 (DRAFT)
+
+**Status:** DRAFT v0.2 · v0.1 drafted 2026-11-03 · v0.2 2026-11-07 after the masked-serving measurements
+
+**Changelog v0.1 -> v0.2:** (1) §3 gains the scope decision - the first chat model is a
+routable specialist library, not a generalist, with composition at prompt level;
+(2) §4.3's choice of routed routes is now backed by a measurement (4/4 masked cells
+reproduce their parent at +0.0000) and gains a router-policy sub-item;
+(3) §4.4 splits the metric into isolation and composition, and records that composition
+via prompting is unmeasured rather than contradicted;
+(4) §6 gains the decision record and the open composition question.
+
 
 **Status:** draft. No run has been authorised. Section 4.2 now carries the measured
 H2 control result; sections 4.3 and 4.4 remain open decisions.
@@ -59,6 +70,21 @@ First stage: **chat, without tool calling.**
 | training data | high-quality corpora, not Europarl | to be selected from the running preliminary studies |
 | hardware | 2x DGX Spark, TP=2, ~256 GB unified minus OS/overhead | available locally, no purchase lead time |
 | routing | few routes (see section 4.3) | fewer boundaries, larger margins |
+
+**Scope decision (operator sign-off 2026-11-07).** The first chat model is a
+**routable specialist library**: one merged parameter set plus per-route masks, with
+composition happening at prompt level (system prompt, retrieved context) rather than
+inside the weights. It is not a generalist that pools domains in one forward pass.
+
+This follows the masked-serving measurements: four of four masked cells reproduce
+their parent **to +0.0000**, while the pooled forward costs 1.47 nats on pure zh and
+1.89 nats on a mixed probe. The pooled forward is the worst of the three serving modes
+measured. A generalist via pooled forward is the null hypothesis this program exists
+to beat, not a target.
+
+Option C (composition via co-trained mixture) remains a possible later scope change.
+Its cheapest instrument is the 22-h B1b replay probe, which tests whether mixed
+*training* data teaches the halves to cooperate; it stays on the optional list.
 
 ## 4. Decisions this prereg must not leave implicit
 
@@ -130,6 +156,36 @@ The bridge evidence argues for the **smallest** set that covers the target use. 
 legal-prose overlap is the concrete warning: two routes that are both plausible on the
 same input are where boundary errors live.
 
+**Measured (2026-11-07):** the routed-routes direction is now a measurement, not a
+caution. On the sibling merge (`zh_b1_merged.pt`, mult 1792), segment masking
+reproduces each parent to +0.0000:
+
+| masked mode | nll | parent's own |
+|---|---|---|
+| `mask_a` on zh | 1.7306 | `zh_last` 1.7306 |
+| `mask_a` on expert | 2.4476 | `zh_last` 2.4476 |
+| `mask_b` on expert | 1.2839 | `expert_b1` 1.2839 |
+| `mask_b` on zh | 3.8409 | `expert_b1` 3.8409 |
+
+The pooled forward scores zh 3.1975 against 1.7306 isolated. The route count itself is
+unchanged: the smallest set covering the target use.
+
+#### 4.3a Router policy
+
+The route count is not the whole routing decision. **Who routes, when, and what a
+mistake costs** are separate questions, and the measurements now price a mistake:
+
+| misroute | cost |
+|---|---|
+| zh query sent to the branch half | +2.11 nats |
+| expert query sent to parent A | +1.16 nats |
+
+The natural policy for a chat model is **per-conversation static routing**: language
+detected once, route fixed for the conversation. This removes the router from
+per-turn risk entirely. Per-turn dynamic routing is possible but would need an
+accuracy requirement stated explicitly; the prereg's own misroute history (9.5 % at
+legal, 1.18-nat worst case, no cheap guard) argues against adopting it without one.
+
 ### 4.4 Evaluation metric
 
 Perplexity is insufficient for a chat model and was already a poor guide for routing:
@@ -139,7 +195,23 @@ mean.**
 
 A response-quality metric must therefore be defined *before* training. Candidates:
 held-out instruction-following with human or model-graded scoring, and a per-language
-fluency check. This is the largest open item in this prereg.
+fluency check.
+
+**The metric must separate two questions the measurements show can have opposite
+answers:**
+
+| question | instrument | status |
+|---|---|---|
+| **Isolation** - does routing recover each domain? | masked-recovery, the serving-eval protocol | **operational now** (4/4 at +0.0000) |
+| **Composition** - does the model use two domains in one answer? | cross-domain-context instruction-following, post-SFT | **unmeasured**; cheap to probe once a chat-SFT exists |
+
+The mixed probe (alternating 128-byte blocks of two domains) is **not** the
+composition a chat model needs: it scores next-byte loss on raw text, not
+instruction-following with cross-domain context. Against a naive two-domain average
+the best mask pays only +0.24 nats (mask_a 2.3273 vs 2.0891), so the halves handle
+language switching with a mild penalty. **Composition via prompting is unmeasured,
+not contradicted.** The candidate for the §4.4 shortlist is therefore a masked model
+given a cross-domain system prompt plus few-shot context, run after SFT.
 
 ## 5. What this prereg does not establish
 
