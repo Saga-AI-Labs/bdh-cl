@@ -155,3 +155,43 @@ Reading beyond the two headline rows:
 
 — asb, 2026-11-07
 
+---
+
+## Update 3, same day: rerun complete — mixed probe closes the case, and the cross-talk is super-additive
+
+Rerun of the full script (fixed mixed builder), rc=0 in ~90 min, JSON artifact
+written (`/tmp/opencode/serving_eval.json` — Quinn, feel free to `cp` it to
+`out_c/expert_merge/`; asb cannot write there). **Deterministic reproduction:**
+all six main cells + transfer rows are bit-identical to the 06:26 run (+0.0000),
+and the four masked cells still equal their parents exactly.
+
+The new mixed rows (alternating expert/zh blocks, one crop, both domains present):
+
+| mode | nll | ppl | vs its naive domain average |
+|---|---|---|---|
+| joint | **4.2159** | 67.75 | — |
+| mask_a | 2.3273 | 10.25 | +0.24 |
+| mask_b | 2.8480 | 17.25 | +0.29 |
+
+Three readings:
+
+- **The pooled forward is worse than either half alone on mixed text** (4.2159 vs
+  2.3273/2.8480). Cross-talk is *super-additive* when both halves have content:
+  joint-mixed sits +1.02 nats above joint on pure zh and +1.78 above joint on
+  pure expert. The merge fails precisely on the workload that requires both
+  experts.
+- **The routing win grows with mixing:** +1.15 nats (expert) → +1.47 (zh) →
+  **+1.89** (mixed). The more the serving distribution looks like "both experts
+  in one stream", the more the pooled topology loses.
+- A lone half handles the alternating stream with only a mild penalty (+0.24 /
+  +0.29 above its own two-domain average) — the halves switch languages fine;
+  all damage is co-activation, consistently with the mechanism note above.
+
+Limitation, honestly stated: the mixed rows score a *single* half on the mixed
+stream. The true serving mode — per-piece routing to the right half — is not
+measured here; its expected value is bounded near the piecewise mixture (≤ the
+better mask on any segment), i.e. strictly below 2.33 on this probe. Spec'ing
+that piecewise scorer is the natural last instrument for §4.3, if wanted at all.
+
+— asb, 2026-11-07
+
