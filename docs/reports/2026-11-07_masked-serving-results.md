@@ -92,25 +92,35 @@ For the chat-model prereg this changes §4.3 from a caution into a measurement:
 routable expert library over pooled budget, with the joint forward as the control
 that quantifies what pooling costs.
 
-## 6. Open: the mixed probe
+## 6. Mixed probe: neither half owns a mixed task, isolation still wins
 
-The `mixed` mode (crops built from alternating blocks of both domains) did not
-run. It crashed with the same crop-construction error this script had in its
-first version:
+The first run crashed in `eval_mixed` (the crop-construction error described above);
+a rerun after `ad4601e` fixed it and produced the missing numbers. Crops alternate
+four 128-byte pieces from expert and zh, so no single half owns the text.
 
-```
-ValueError: Expected input batch_size (1024) to match target batch_size (1022)
-```
+| mixed mode | nll | ppl |
+|---|---|---|
+| **joint** | **4.2159** | **67.75** |
+| **mask_a** | **2.3273** | **10.25** |
+| **mask_b** | **2.8480** | **17.25** |
 
-Cause: `eval_mixed` slices `y = crop[1:block+1]` out of a crop of exactly `block`
-bytes, which yields `block-1` targets. The main path was fixed to use offset
-slices of the whole array (`x = data[i:i+block]`, `y = data[i+1:i+1+block]`, as in
-`merge_probe_eval.py`); `eval_mixed` was not. The fix is the same one line.
+The mixed result sharpens the isolation picture without changing it:
 
-This does not affect §3–§5: the isolation chain (joint / mask_a / mask_b /
-transfer) is complete. What the mixed probe would add is the answer to a different
-question — whether the two halves cooperate on a task that genuinely needs both.
-That remains untested.
+- **Neither half is competent on the mixed task.** mask_a's 2.3273 is close to
+  zh_last's ordinary expert score (2.4476) and worse than zh_last on its own zh
+  territory (1.7306). That is expected: the crop is half English prose, so the
+  parent-A half alone is not the right model for it.
+- **The pooled forward is catastrophically worse than either half.** 4.2159 against
+  2.3273 is a **1.89-nat** gap — larger than the 1.47-nat gap measured on pure zh,
+  and the perplexity ratio is 6.6x (67.75 vs 10.25).
+- **mask_a beats mask_b on the mixed task**, consistent with the composition
+  (the crop starts with an expert piece, and expert is parent A's weaker territory).
+
+The mixed probe therefore answers its own question: on a task that genuinely needs
+both domains, no single half is sufficient, but the pooled forward is the worst of
+the three options. A router would have to choose the better half per crop or per
+segment, and the measured cost of choosing wrong (2.3273 vs 4.2159) is what the
+routing decision buys.
 
 ## 7. What the runs cost, honestly
 
@@ -141,7 +151,8 @@ Neither number is a reliable load indicator on this host.
 ## 8. Artifacts
 
 ```
-out_c/expert_merge/serving_eval.log     full log incl. the mixed-probe traceback
+out_c/expert_merge/serving_eval.json     rerun output, sha256 693950e8a6f35b16
+out_c/expert_merge/serving_eval.log     full log incl. the first run's traceback
 out_c/expert_merge/eval_sibling.json    reference values for both parents
 out_c/expert_merge/zh_b1_merged.pt      the merged checkpoint (22 GB)
 scripts/quinn/serving_eval.py           the measurement
@@ -158,5 +169,5 @@ scripts/quinn/mini_mask_a.py            single-value probe of the core compariso
   --out out_c/expert_merge/serving_eval.json
 ```
 
-(The mixed probe will fail until `eval_mixed` gets the same offset construction as
-the main path.)
+(Requires the mixed-probe fix in ad4601e; the first run before that fix died
+in `eval_mixed` with the crop-shape ValueError documented in §6.)
