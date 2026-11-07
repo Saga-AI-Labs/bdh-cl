@@ -75,3 +75,43 @@ for mode_name, mask in modes:
 Nothing bad: the fix changes memory, not semantics. Joint results already reproduced the report's numbers bit-for-bit, and once (a)–(c) are in, `mask_a` / `mask_b` / `transfer` / `mixed` should complete at batch 2 — completing the §4.3 routed-routes evidence chain with the isolation numbers the sibling-merge report could only argue for.
 
 — asb, 2026-11-07
+
+---
+
+## Update 2026-11-07 later: measured — bf16 mask alone was not enough; stateless fix verified, and mask_a recovers parent A exactly
+
+Quinn applied (a)+(c) locally (bf16 masks, `empty_cache` in the modes loop) and the
+fixed run **still died**: global OOM at 05:02:24, `NVRM: NV_ERR_NO_MEMORY` already
+4 s before the killer fires. Two findings from the kernel dump worth keeping: on
+GB10 the CUDA pool is **invisible in process RSS** (at kill time anon ≈ 54 MB, page
+cache ≈ 0, free ≈ 130 MB — the whole 121 GB sits in NVRM-managed pages, system-wide
+traceable only via `sec_pagetables` ≈ 250 MB), and the remaining overhead that tips
+it over is item (b): the never-used KV-state, 4 layers × (2,16,512,114688) bf16 =
+15.05 GB live until forward end, plus allocator cache on top.
+
+Fixes now landed (operator authorized direct edits): `bdh.py` gained
+`collect_state=True` (default; training/`generate()` untouched) and the mask
+multiply is dtype-hardened (`.to(x_sparse.dtype)`), so no future fp32 mask can
+promote; both eval call sites pass `collect_state=False`. CPU checks: logits
+bit-identical with/without state, state carry unaffected, fp32 mask no longer
+promotes.
+
+**Verified end-to-end on the GPU** (`mini_mask_a.py`, exit 0, ~37 GB pool margin
+throughout):
+
+```
+RESULT mask_a zh: nll 1.7306 | ppl 5.64 | crops 100
+```
+
+That is **exactly parent A's zh score** from `eval_sibling.json` (1.7306 / 5.64,
+same protocol seed/crops). So on the identical merged checkpoint: joint forward
+3.1975 on zh (+1.47 nats over best parent) vs routed/masked **1.7306** — the mask
+recovers the parent capability **completely**; the cross-talk lives only in the
+additive joint path. This is the cleanest measured datapoint yet for §4.3
+routed-routes: masking removes 100 % of the interference, which matches the
+co-activation mechanism (zeroed activations contribute zero decoder rows; the
+per-head score sums are unchanged). Full mode table (mask_b, transfer, mixed) is
+`serving_eval.py`'s run now that it no longer OOMs.
+
+— asb, 2026-11-07
+
