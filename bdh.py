@@ -202,7 +202,8 @@ class BDH(nn.Module):
         elif isinstance(module, nn.Embedding):
             nn.init.normal_(module.weight, mean=0.0, std=0.02)
 
-    def forward(self, idx, targets=None, state=None, neuron_mask=None):
+    def forward(self, idx, targets=None, state=None, neuron_mask=None,
+                collect_state=True):
         """State-space forward pass.
 
         state: None, or {"pos": int, "layers": [per-layer attention state]} as
@@ -211,8 +212,14 @@ class BDH(nn.Module):
         recurrent state rho), enabling state carry-over / truncated BPTT.
         neuron_mask: optional (N,) float tensor; zeros out old neurons so only
         newly grown neurons contribute to the forward.  Used by route-aware
-        training.
-        Returns (logits, loss, new_state).
+        training.  Applied in the activations' dtype (an fp32 mask does not
+        promote bf16 activations to fp32).
+        collect_state: build and return the per-layer attention state.  Pass
+        False when the caller discards it anyway (stateless eval loops): each
+        layer's k-cache is (B, nh, T, N) -- at the merged width ~3.8 GB bf16
+        per layer -- so skipping it removes n_layer such tensors per forward.
+        Returns (logits, loss, new_state); new_state is None when
+        collect_state is False.
         """
         C = self.config
 
@@ -252,7 +259,7 @@ class BDH(nn.Module):
             x_sparse = _k_sparse_relu(x_latent, C.k_sparse_ratio) if C.k_sparse_ratio > 0 else F.relu(x_latent)  # B, nh, T, N
 
             if neuron_mask is not None:
-                x_sparse = x_sparse * neuron_mask.view(1, 1, 1, -1)
+                x_sparse = x_sparse * neuron_mask.view(1, 1, 1, -1).to(x_sparse.dtype)
 
             yKV, layer_new_state = self.attn(
                 x_sparse,
@@ -260,14 +267,15 @@ class BDH(nn.Module):
                 state=layer_state,
                 pos_offset=pos,
             )
-            new_layers.append(layer_new_state)
+            if collect_state:
+                new_layers.append(layer_new_state)
             yKV = self.ln(yKV)
 
             y_latent = yKV @ self.encoder_v
             y_sparse = _k_sparse_relu(y_latent, C.k_sparse_ratio) if C.k_sparse_ratio > 0 else F.relu(y_latent)
 
             if neuron_mask is not None:
-                y_sparse = y_sparse * neuron_mask.view(1, 1, 1, -1)
+                y_sparse = y_sparse * neuron_mask.view(1, 1, 1, -1).to(y_sparse.dtype)
 
             xy_sparse = x_sparse * y_sparse  # B, nh, T, N
 
@@ -284,7 +292,7 @@ class BDH(nn.Module):
         if targets is not None:
             loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1))
 
-        new_state = {"pos": pos + T, "layers": new_layers}
+        new_state = {"pos": pos + T, "layers": new_layers} if collect_state else None
         return logits, loss, new_state
 
     @torch.no_grad()

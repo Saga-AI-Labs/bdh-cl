@@ -15,7 +15,11 @@ model = model.to(device).eval()
 nh, D = cfg.n_head, cfg.n_embd
 N = cfg.mlp_internal_dim_multiplier * D // nh
 half = N // 2
-mask = torch.zeros(N, device=device); mask[:half] = 1.0
+# The mask MUST be bf16: an fp32 mask promotes every masked activation to fp32
+# (bf16 * fp32 -> fp32), doubling each (B,nh,T,N) tensor and the attention
+# state. 0 and 1 are exact in bf16, so numerics are unchanged. Diagnosis:
+# docs/notes/2026-11-07_masked-serving-oom-diagnosis.md
+mask = torch.zeros(N, device=device, dtype=torch.bfloat16); mask[:half] = 1.0
 print("mask_a: N=%d half=%d active=%d" % (N, half, int(mask.sum())), flush=True)
 
 arr = np.frombuffer(open(DOM,"rb").read(30_000_000)[-2_000_000:], dtype=np.uint8)
@@ -29,10 +33,14 @@ with torch.no_grad(), torch.autocast("cuda", dtype=torch.bfloat16):
         ch = idxs[b0:b0+2]
         x = torch.stack([data[i:i+512] for i in ch]).to(device)
         y = torch.stack([data[i+1:i+513] for i in ch]).to(device)
-        logits, _, _ = model(x, y, None, neuron_mask=mask)
+        # collect_state=False: the eval discards the returned state anyway, and
+        # each layer's k-cache is (B,nh,T,N) bf16 ~3.8 GB at this width -- the
+        # forward would otherwise hold n_layer of them (15 GB here) as live
+        # memory on top of the working set.
+        logits, _, _ = model(x, y, None, neuron_mask=mask, collect_state=False)
         losses.append(torch.nn.functional.cross_entropy(
             logits.view(-1, logits.size(-1)), y.view(-1)).item())
         if (b0//2) % 25 == 0:
             print("  crop %3d/200 | batch nll %.4f" % (b0+2, losses[-1]), flush=True)
 m = sum(losses)/len(losses)
-print("RESULT mask_a zh: nll %.4f | ppl %.2f | crops %d" % (m, math.exp(m), len(idxs)), flush=True)
+print("RESULT mask_a zh: nll %.4f | ppl %.2f | crops %d" % (m, math.exp(m), len(losses)), flush=True)

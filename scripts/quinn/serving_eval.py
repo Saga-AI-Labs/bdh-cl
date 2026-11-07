@@ -85,7 +85,7 @@ def eval_domain(model, cfg, arr, idxs, block, device, batch, mask=None):
             chunk = idxs[b0:b0 + batch]
             x = torch.stack([data[i:i + block] for i in chunk]).to(device)
             y = torch.stack([data[i + 1:i + 1 + block] for i in chunk]).to(device)
-            logits, _, _ = model(x, y, None, neuron_mask=mask)
+            logits, _, _ = model(x, y, None, neuron_mask=mask, collect_state=False)
             loss = torch.nn.functional.cross_entropy(
                 logits.view(-1, logits.size(-1)), y.view(-1))
             losses.append(loss.item())
@@ -125,7 +125,7 @@ def eval_mixed(model, cfg, crops, block, device, batch, mask=None):
             y = torch.stack([torch.from_numpy(np.frombuffer(c, dtype=np.uint8)
                                                .astype(np.int64)[1:block + 1])
                              for c in chunk]).to(device)
-            logits, _, _ = model(x, y, None, neuron_mask=mask)
+            logits, _, _ = model(x, y, None, neuron_mask=mask, collect_state=False)
             losses.append(torch.nn.functional.cross_entropy(
                 logits.view(-1, logits.size(-1)), y.view(-1)).item())
     m = sum(losses) / len(losses)
@@ -168,9 +168,17 @@ def main():
     # "size of tensor a (114688) must match the size of tensor b (1835008)".
     N = total_neurons // nh
     half = N // 2
-    mask_a = torch.zeros(N, device=device)
+    # The mask MUST be bf16. A float32 mask promotes every masked activation to
+    # fp32 (bf16 * fp32 -> fp32), doubling each (B,nh,T,N) tensor from 3.76 GB to
+    # 7.52 GB, and the attention state inherits the dtype, taking the KV cache from
+    # 15 GB to 30 GB. On a 121 GB unified pool that is the difference between a
+    # run that fits and one killed by the global OOM killer -- measured: joint ran
+    # 400 crops cleanly, mask_a died in batch 1. Diagnosis in
+    # docs/notes/2026-11-07_masked-serving-oom-diagnosis.md. 0 and 1 are exact in
+    # bf16, so the numerics are unchanged.
+    mask_a = torch.zeros(N, device=device, dtype=torch.bfloat16)
     mask_a[:half] = 1.0                      # parent A half
-    mask_b = torch.zeros(N, device=device)
+    mask_b = torch.zeros(N, device=device, dtype=torch.bfloat16)
     mask_b[half:] = 1.0                      # branch B half
     mask_none = None
     print("mask per head: N=%d | half=%d | mask_a=%d mask_b=%d"
@@ -182,6 +190,10 @@ def main():
                "modes": {}}
 
     for mode_name, mask in modes:
+        # release the allocator's cached blocks before switching modes: the joint
+        # pass leaves ~65 GB of cached bf16 blocks, and the masked path wants
+        # slightly different block sizes on top.
+        torch.cuda.empty_cache()
         print("\n=== %s ===" % mode_name)
         per = {}
         for name, _, arr, idxs in doms:
@@ -212,6 +224,7 @@ def main():
         print("\n=== mixed probe (alternating 4-block pieces, %s + %s) ===" % (a_name, b_name))
         results["mixed"] = {}
         for mode_name, mask in modes:
+            torch.cuda.empty_cache()
             r = eval_mixed(model, cfg, mixed, args.block, device, args.batch, mask)
             results["mixed"][mode_name] = r
             print("  %-8s nll %.4f | ppl %8.2f" % (mode_name, r["nll"], r["ppl"]))
