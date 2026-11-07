@@ -213,6 +213,61 @@ language switching with a mild penalty. **Composition via prompting is unmeasure
 not contradicted.** The candidate for the §4.4 shortlist is therefore a masked model
 given a cross-domain system prompt plus few-shot context, run after SFT.
 
+#### 4.4a Judge topology (decision point)
+
+The composition metric needs a judge, and the topology matters more than the model.
+**A judge is an HTTP endpoint, not an agent session.** GLM under Opencode and LongCat
+under Agent Zero are agents with context and agenda; firing 200 requests into an
+agent session is not a judge, it is a conversation. The same models are also available
+as programmatic endpoints:
+
+| topology | rate limits | API cost | retry logic | German |
+|---|---|---|---|---|
+| local endpoint (GLM on 192.168.178.50:8888) | none | 0 | not needed | strong |
+| cloud API (LongCat) | yes | yes | **required** | strong |
+| local Qwen 3.8 Next Flash | none | 0 | not needed | weak |
+
+The retry problem is real and non-trivial: a cloud judge will fail at least once in
+200 queries, so the harness needs backoff, `Retry-After` handling, max retries, and a
+"judge did not answer" case. A local endpoint removes that entire class of failure.
+
+**Proposed topology (to be confirmed by the operator):**
+
+1. **Primary judge:** local GLM endpoint (HTTP, no agent session) — independent of the
+   training pipeline, no rate limits, no cost.
+2. **Cross-check judge:** cloud judge, run on a subset only, to calibrate the primary.
+3. **Agreement metric:** % agreement between the two; if they disagree on more than
+   20 % of items, the metric is not usable and the disagreement is reported.
+4. **Self-reference note:** LongCat as judge of LongCat is a self-reference. It is
+   not disqualifying when a second independent judge exists, but it must be stated
+   rather than assumed away.
+
+**Not yet decided:** whether the primary judge is the local GLM endpoint or the cloud
+judge. The cost is asymmetric (local: none; cloud: rate limits + retry logic + money),
+and the quality question is open (a local GLM judge may be weaker than a frontier
+cloud judge). This is an operator decision because it commits infrastructure, not
+because the prereg cannot state a preference.
+
+#### 4.4b Composition metric (post-SFT, structure fixed now)
+
+The instrument is **cross-domain instruction-following**, not next-byte loss:
+
+1. **Test set:** 200 instructions that require both domains (e.g. "explain the
+difference between X and Y", "translate this code comment and explain the logic").
+2. **Scoring:** 1-5 per criterion (factual correctness, domain coverage, language
+   quality), graded by the judge topology in 4.4a.
+3. **Gate:** worst case over the 200 items, not the mean. This is the §4.4 principle
+   already stated: the relevant unit is the worst case a user experiences.
+4. **Second stage (optional):** per-language fluency check, to test whether routing
+   degrades language quality.
+5. **Fact check (optional):** for instructions with factual claims, a retrieval or
+   knowledge-base check rather than LLM judgment. Without it the metric measures
+   plausibility, not correctness.
+
+The structure is fixed before training; the judge choice and the item count are the
+open parts. The threshold is **not** fixed here — it follows the judge calibration,
+and fixing it before calibration is the R-gate error in a new form.
+
 ## 5. What this prereg does not establish
 
 - **No claim that three languages suffice.** The choice follows the stated target use
