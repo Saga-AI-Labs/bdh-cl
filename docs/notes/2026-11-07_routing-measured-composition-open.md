@@ -20,7 +20,9 @@ measurement. It is now a measurement:
 | `mask_b` on expert | 1.2839 | `expert_b1` 1.2839 |
 | `mask_b` on zh | 3.8409 | `expert_b1` 3.8409 |
 
-Six of six cells reproduce the parent **to +0.0000**. The merged parameter set
+**Four of four masked cells reproduce their parent to +0.0000.** The two joint
+cells reproduce the merged model's own 2026-11-06 numbers exactly — a separate
+receipt, protocol reproducibility rather than isolation. The merged parameter set
 contains both experts intact; the pooled forward pass is what loses the weaker one.
 On pure zh the pooled forward costs **1.47 nats** against the better half; on the
 mixed probe **1.89 nats**.
@@ -43,15 +45,20 @@ genuinely needs both domains, does the merged model compose?
 Two findings, and they pull in opposite directions:
 
 - **Isolation beats pooling** (1.89 nats) — the routed-routes direction holds.
-- **Neither half is competent on the mixed task.** The best single mask (2.3273)
-  is worse than either parent on its own home territory. Masking *removes*
-  capability as well as interference; it does not select the parts that would
-  cooperate.
+- **The halves handle language switching with a mild penalty.** Against a naive
+  two-domain average, the best mask pays only +0.24 nats (mask_a: 2.3273 vs
+  2.0891) and mask_b +0.29 (2.8480 vs 2.5624). "Neither half is competent" would
+  overstate it: the halves track the switch; the catastrophe is exclusively the
+  pooled forward.
 
-So the library is real, and it is not a general model. A chat model that has to
-compose — to use knowledge from two domains in one answer — cannot do so by
-routing alone. The pooled forward is the only mechanism that even attempts
-composition, and it is the worst of the three options measured.
+So the library is real, and it is not a general model. What the mixed probe does
+**not** measure is the composition a chat model needs: next-byte loss on
+alternating 128-byte blocks of raw text is a different task from
+instruction-following with cross-domain context (system prompt, retrieved
+passages, a code answer citing prose). That task does not exist until a chat-SFT
+does, and it is cheap to probe once it does — a masked model given a
+cross-domain prompt plus few-shot context. **Composition via prompting is
+unmeasured, not contradicted.**
 
 ## 3. The decision the prereg now has to take
 
@@ -66,7 +73,26 @@ composition, and it is the worst of the three options measured.
 **My read (not a recommendation):** Option A is what the measurements support
 today, and it is a coherent product — a router over domain experts with prompt-level
 composition. Option C is the path to a general model, and it is a research field,
-not a step in the current plan. Option B is not supported by anything measured.
+not a step in the current plan. Option B is not merely unmeasured: it is the **null
+hypothesis this program exists to beat** — pooled, trained-through models are the
+founding observation of the ladder line (P5's bit-exact retention works because
+growth is masked and preserved, not pooled).
+
+**Router policy is a separate decision.** A adds *who routes, when, and what a
+mistake costs*. The masked table now prices a misroute: a zh query sent to the
+branch half costs +2.11 nats, an expert query to parent A +1.16. For the chat model
+the analog is the prereg's own misroute history (9.5 % at legal, 1.18-nat worst
+case, no cheap guard). The natural policy is **per-conversation static routing** —
+language detected once, route fixed — which moves the router out of per-turn risk
+entirely. Per-turn dynamic routing would need an accuracy requirement stated
+explicitly. This belongs as its own sub-item, not under the route count.
+
+**Option C's cheapest instrument is already scoped.** The 22-h B1b replay probe
+(optional in the sibling-merge note) is exactly the measurement that informs
+C-lite: does mixed *training* data teach the halves to cooperate? The
+co-activation model makes a falsifiable prediction — ancestor-like mild dilution
+instead of the +1-nat sibling cross-talk. Without that link, C reads as more
+unreachable than its probe is.
 
 What the prereg should state explicitly: **the first chat model is A unless the
 goal is changed.** If the goal is B or C, the prereg changes scope, and the
