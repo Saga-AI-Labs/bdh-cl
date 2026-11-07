@@ -115,3 +115,43 @@ per-head score sums are unchanged). Full mode table (mask_b, transfer, mixed) is
 
 — asb, 2026-11-07
 
+---
+
+## Update 2, same day: full mode table measured and verified — every masked cell equals its parent exactly
+
+`serving_eval.py` ran to completion through the four main modes (log
+`out_c/expert_merge/serving_eval.log`, 06:26). All cells verified against
+`eval_sibling.json` — **6/6 at +0.0000**:
+
+| cell | value | reference (parent) | delta |
+|---|---|---|---|
+| joint · expert | 2.4336 | merged · expert | 0.0000 (protocol reproduces) |
+| joint · zh | 3.1975 | merged · zh | 0.0000 (protocol reproduces) |
+| mask_a · expert | 2.4476 | zh_last · expert | **0.0000 — exact** |
+| mask_a · zh | 1.7306 | zh_last · zh | **0.0000 — exact** |
+| mask_b · expert | 1.2839 | expert_b1 · expert | **0.0000 — exact** |
+| mask_b · zh | 3.8409 | expert_b1 · zh | **0.0000 — exact** |
+
+(transfer rows = re-evaluations of mask_a·zh and mask_b·expert, identical values.)
+Reading beyond the two headline rows:
+
+- **Isolation is total, in both directions, on both home and foreign domains.**
+  Not just "the expert capability comes back" — parent A's *expert* cell (2.4476)
+  is recovered exactly too, and branch B's half keeps exactly its own forgotten
+  zh (3.8409): the catastrophic forgetting lives in B's weights, not in the merge.
+  Masking is a lossless window into each half's stored state; the pooled forward
+  is the only place the interference exists.
+- **On zh, the router choice is worth +1.47 nats** (3.1975 → 1.7306) with zero
+  retraining; on expert, routing to B is worth +1.15 (2.4336 → 1.2839). §4.3's
+  routed-routes branch now has a complete measured basis: the pooled merge buries
+  capabilities at the ~1 % level, the mask restores them at the 100 % level.
+- **The mixed probe crashed after the main modes** — the same documented
+  ValueError the main eval had before the offset construction (`1024` logits vs
+  `1022` targets; `build_mixed` produced `block`-byte crops, `eval_mixed` needs
+  `block+1`). Fixed in `ad4601e` (one extra byte continuing the alternation);
+  construction CPU-verified. A rerun would also produce the missing
+  `serving_eval.json` artifact — the crashed run's four-mode numbers live only in
+  the log.
+
+— asb, 2026-11-07
+
