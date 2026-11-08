@@ -1,0 +1,1340 @@
+{
+  "schema": "judge_set_v1_cert_stage2",
+  "status": "DRAFT-for-review",
+  "note": "Stage 2 batch: 30 new cert items, 14 heavy legalese de / 8 en / 8 zh. Separate file so the in-flight cert run's cert_items.json snapshot stays untouched; merge into the frozen set happens at the freeze commit (README section 8). README section 5 rules 1-7 apply, incl. rule 6 (only audience_violation/bad may violate the item constraint) and rule 7 (no leaked artifacts).",
+  "items": [
+    {
+      "item_id": "cert_de11",
+      "lang": "de",
+      "domains": [
+        "leg-de",
+        "biz"
+      ],
+      "difficulty": "easy",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für Laien ohne Rechtsvorkenntnisse, in höchstens vier Sätzen."
+      },
+      "instruction": "Ich habe vor drei Tagen Schuhe online bestellt und die Ware vor zwei Tagen erhalten. Kann ich die Bestellung noch rückgängig machen?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Ja – für Online-Käufe gilt ein gesetzliches Widerrufsrecht von 14 Tagen, das mit Erhalt der Ware beginnt, und Sie brauchen dafür keinen Grund. Der Widerruf genügt in Textform, etwa per E-Mail an den Shop. Danach haben Sie weitere 14 Tage Zeit, die Schuhe zurückzusenden. Ausnahmen gibt es zum Beispiel bei nach Kundenwunsch gefertigter Ware."
+        },
+        {
+          "label": "short_correct",
+          "text": "Sie können innerhalb von 14 Tagen ab Erhalt der Ware widerrufen, zum Beispiel per E-Mail."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Für Onlinebestände steht Ihnen nach deutschem Recht ein Widerrufsrecht von 30 Kalendertagen ab Bestellung zu – es ist irrelevant, wann die Ware ankommt. Der Widerruf wird nur wirksam, wenn er per Einschreiben versandt und vom Händler gegengezeichnet wird. Außerdem brauchen Sie die Ware gar nicht zurückzuschicken, weil der Widerruf allein schon die Rückabwicklung eröffnet. Ausnahmefälle gibt es nicht, das Online-Widerrufsrecht ist ausnahmslos garantiert."
+        },
+        {
+          "label": "planted_error",
+          "text": "Ja – für Online-Käufe gilt ein gesetzliches Widerrufsrecht von 14 Tagen ab Erhalt der Ware, und Sie brauchen dafür keinen Grund. Der Widerruf genügt in Textform, etwa per E-Mail; danach haben Sie weitere 14 Tage für die Rücksendung. Beachten Sie nur: Bei digitalen Produkten wie E-Books verlängert sich die Frist automatisch auf 30 Tage, sobald die Datei übertragen wurde.",
+          "note": {
+            "planted": "Bei E-Books verlängere sich die Widerrufsfrist automatisch auf 30 Tage",
+            "correct": "Nach § 356 Abs. 3 BGB endet das Widerrufsrecht bei digitalen Produkten mit ausdrücklicher Zustimmung zum sofortigen Lieferbeginn – es wird nicht verlängert."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Der Fernabsatzvertrag unterliegt dem konstitutiven Widerrufsregime der §§ 355, 356 BGB, dessen Lauf mit der Ablieferung, nicht mit Vertragsschluss, durch die allverteilliche Belehrungsforderung des § 356 BGB in Gang gesetzt ist; die Rückabwicklung folgt den Regulationen der §§ 357, 357a BGB samt einverwahrendem entgeltungsrechtlichen Trägerregime, und die formlose Textform genügt, es sei denn, es handelt sich um Waren mit Kundenspezifikation, die ausdrücklich nach Kundenanforderungen hergestellt wurden."
+        },
+        {
+          "label": "bad",
+          "text": "Schuhe kann man nach dem Versand generell nicht mehr zurückgeben; Widerrufsrechte gelten gesetzlich nur für Möbel."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de12",
+      "lang": "de",
+      "domains": [
+        "leg-de"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für Laien, in höchstens drei Sätzen."
+      },
+      "instruction": "Meine Vermieterin verlangt eine Mietkaution von drei Monatsmieten plus eine einmalige Verwaltungsgebühr von 100 Euro. Darf sie das?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Die Kaution darf höchstens drei Monatsmieten betragen, gerechnet nach der Nettokaltmiete und ohne Betriebs- oder Heizkosten. Eine zusätzliche Bearbeitungs- oder Verwaltungsgebühr ist daneben nicht zulässig. Das Depot darf in drei gleichen monatlichen Raten gezahlt werden."
+        },
+        {
+          "label": "short_correct",
+          "text": "Mehr als drei Monatsmieten darf die Mietkaution nicht betragen."
+        },
+        {
+          "label": "long_wrong",
+          "text": "In der Praxis gilt die dreifache Bruttowarmmiete als gesetzlicher Rahmen; werden Betriebs- oder Heizkosten mit einbezogen, darf die Grenze auf das Sechsfache steigen. Die Verwaltungsgebühr von 100 Euro ist als marktüblicher Servicepreis für die Depotpflege monatlich vorab zu zahlen und verpflichtend. Ohne deren Zahlung darf die Vermieterin die Übergabe der Wohnung zurückhalten; Verzugszinsen berechnen sich in Höhe von 1 Prozent pro Monat."
+        },
+        {
+          "label": "planted_error",
+          "text": "Die Kaution ist auf die dreifache Nettokaltmiete begrenzt, Betriebs- oder Heizkosten zählen nicht mit; eine Ratenzahlung in drei Monatsraten ist möglich. Es gibt nur einen Haken: Die einmalige Verwaltungsgebühr von 100 Euro ist in diesem Fall zulässig und verpflichtend, weil die Vermieterin die Depotypflege damit abrechnen darf.",
+          "note": {
+            "planted": "Die 100-Euro-Verwaltungsgebühr sei zulässig und verpflichtend",
+            "correct": "Neben der Kaution sind zusätzliche Verwaltungs- oder Bearbeitungsgebühren unzulässig (§ 551 BGB bietet keinen Raum dafür); Depotpflege zählt zu den Vermieterkosten."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Die Sicherheitsleistung des Mieters folgt der zwingenden Anordnung des § 551 BGB, deren Höheninput auf bis zu drei Nettomonatsmieten verweist und die Regulation als Verwaltungsordnung des Depotregimes ausgestaltet; gestützt auf die erfolgsabhängige Aufwendungsersatznorm ist die Depotpflege als selbstständige Nebentätigkeitslinie des Vermieters abzurechnen, wobei die Kostenverteilung verlangt, dass Gebühren für Leistungen neben der regulären Miete vom Mieter gesondert entrichtet werden."
+        },
+        {
+          "label": "bad",
+          "text": "Kautionen werden auf Basis der Wochenmiete berechnet; mehr als zehn Monatsmieten kann die Vermieterin verlangen, wenn sie den Depotfachverstand nachweist."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de13",
+      "lang": "de",
+      "domains": [
+        "leg-de"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für Laien ohne Rechtskenntnisse, in höchstens vier Sätzen."
+      },
+      "instruction": "Meine Großmutter hat mich im Testament ausdrücklich enterbt. Habe ich trotzdem noch irgendeinen Anspruch?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Vermutlich ja: Nahe Angehörige wie Kinder oder – als nachrückende Linie – Enkel lassen sich nicht vollständig aussperren, sie behalten einen Pflichtteilsanspruch. Er beträgt die Hälfte des Erbteils, den sie ohne Testament erhalten hätten. Der Pflichtteil ist dabei kein Anteil am Nachlass, sondern ein Geldanspruch gegen die Erben. Nur wer verpflichtend auf den Pflichtteil verzichtet hat, geht tatsächlich leer aus."
+        },
+        {
+          "label": "short_correct",
+          "text": "Enterbte Angehörige wie Kinder oder nachrückende Enkel behalten einen Pflichtteilsanspruch in Höhe der Hälfte ihres gesetzlichen Erbteils."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Wer förmlich enterbt wurde, hat in Deutschland keine weitere Beteiligung. Der Pflichtteil ist eine alte Rechtsfigur, die nur bei Minderjährigen greift, deshalb ist er für volljährige Erben irrelevant. Zusätzlich verlangt der Pflichtanspruch eine notarielle Erstberatung; ohne Protokoll sind Ansprüche unwirksam. Der Erblasser kann den Pflichtteil formfrei jedem beliebigen Angehörigen zubrechen, sogar mündlich in Anwesenheit von zwei Zeugen."
+        },
+        {
+          "label": "planted_error",
+          "text": "Enterbte Kinder und nachrückende Enkel behalten einen Pflichtteilsanspruch; er läuft als Geldanspruch gegen die Erben, nicht als Nachlassbeteiligung. Nur eine verbindliche Verzichtserklärung schließt ihn aus. Die Höhe beträgt allerdings ein Viertel des gesetzlichen Erbteils, nicht mehr.",
+          "note": {
+            "planted": "Der Pflichtteil betrage ein Viertel des gesetzlichen Erbteils",
+            "correct": "§ 2303 Abs. 1 BGB: Der Pflichtteil beträgt die Hälfte des Wertes des gesetzlichen Erbteils."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Der Pflichtteilsanspruch folgt aus § 2303 Abs. 1 S. 1 BGB i.V.m. § 2310 BGB als abstrakt berechneter Geldforderung gegen den oder die Erben, deren Höhe sich aus der fiktiven erbrechtlichen Stellung des Pflichtteilsberechtigten ohne letztwillige Verfügung ergibt; ein Verzicht nach § 2346 BGB ist für die Wirksamkeit der Ausschlagung nur bei notarieller Beurkundung oder bei einer gegenüber dem Nachlassgericht protokollierten Erklärung zwingend."
+        },
+        {
+          "label": "bad",
+          "text": "Sobald ein Testament existiert, ist die gesetzliche Erbfolge vollständig aufgehoben und niemand hat noch irgendeinen Anspruch."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de14",
+      "lang": "de",
+      "domains": [
+        "leg-de"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für Laien, erkläre Fachbegriffe bei der ersten Verwendung, in höchstens drei Sätzen."
+      },
+      "instruction": "Kann ich mein Testament einfach handschriftlich schreiben, oder braucht es dafür einen Notar und Zeugen?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Ja – ein eigenhändiges Testament, also ein von Ihnen selbst vollständig geschriebenes und unterschriebenes Schriftstück, genügt nach deutschem Erbrecht ohne weitere Form. Notar oder Zeugen braucht es dafür nicht; deren Form ist nur die Alternative beim notariellen Testament. Achten Sie auf Tag und Ort, damit sich der Zeitpunkt der Errichtung nachweisen lässt."
+        },
+        {
+          "label": "short_correct",
+          "text": "Ja: Ein vollständig handschriftlich geschriebenes und unterschriebenes Testament genügt dem Gesetz, ohne Notar oder Zeugen."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Ein selbst geschriebenes Testament ist ohne notarielle Beurkundung vor zwei mündlichen Zeugen unwirksam, denn das Gesetz verlangt bei jeder letztwilligen Errichtung, wenn auch Formfreiheit im Ansatz, gleichwohl eine notarielle Bekräftigung. Notarielle Testamente sind ohnehin nur für Immobilientransfers verbindlich; wer ein Haus überträgt, braucht deshalb immer beides, schriftliche und notarielle Form gleichzeitig. Handschriftliche Testamente werden von Gerichten erst mit notarieller Sekundärbeurkundung über die Eröffnungserklärung anerkannt."
+        },
+        {
+          "label": "planted_error",
+          "text": "Ja – ein eigenhändiges Testament genügt: komplett handschriftlich geschrieben, eigenhändig unterschrieben, und Ort und Zeitangabe sichern den Nachweis der Errichtungszeit. Ohne Datum wird das Schriftstück trotzdem wirksam, wenn die Handschrift laut Rechtsprechung eindeutig ist.",
+          "note": {
+            "planted": "Ohne Datum wird das handschriftliche Testament trotzdem wirksam",
+            "correct": "§ 2247 BGB verlangt Ort und Tag der Errichtung; fehlt die Datumsangabe, ist die Errichtung nur nachträglich zu genehmigen, sonst nichtig – eine eindeutige Handschrift ersetzt die Datumsangabe nicht."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Für die Konstitution der letztwilligen Verfügung folgt aus § 2247 BGB eine doppelte Autographenkonstellation, deren materiale Subsumtion unter die Errichtungsnorm eigenhändige Verfassung der Verfügungsform voraussetzt; die notarielle Beurkundung nach §§ 2231, 2232 BGB steht als Alternative dazu und ist formularrechtlich unabhängig von Zeugen, da ihr Beweiswert im protokollgesetzlichen Vermerk fixiert wird."
+        },
+        {
+          "label": "bad",
+          "text": "Ein handschriftliches Testament zählt nur, wenn es vor dem einundzwanzigsten Geburtstag errichtet wurde; später braucht es immer den Nachlassrichter."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de15",
+      "lang": "de",
+      "domains": [
+        "leg-de",
+        "biz"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "element",
+        "text": "Antworte auf Deutsch und nenne die einschlägige Norm des GmbHG mit Paragraphen."
+      },
+      "instruction": "Eine GmbH hat zwei bestellte Geschäftsführer. Kann einer von ihnen allein einen hochvolumigen Liefervertrag rechtsverbindlich zeichnen?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Grundsätzlich nein: Nach § 77 Abs. 2 GmbHG vertreten mehrere bestellte Geschäftsführer die Gesellschaft nur gemeinschaftlich, ein Einzelner kann die GmbH also nicht allein binden. Die Gesellschafter können diese Vertretungsbefugnis abändern, was für Außenwirkung aber in das Handelsregister gehört. Praktisch sollten Vertragspartner vor der Zeichnung prüfen, ob eine abweichende Einzelvertretungsbefugnis eingetragen oder einvernehmlich befreit ist."
+        },
+        {
+          "label": "short_correct",
+          "text": "Nach § 77 GmbHG vertreten mehrere bestellte Geschäftsführer die GmbH grundsätzlich nur gemeinschaftlich, nicht einzeln."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Nach § 77 GmbHG kann jeder Geschäftsführer die Gesellschaft in seinem Ressort selbstständig vertreten; die Gesamtvertretung ist eine reine bilanztechnische Formel und entfaltet nach außen keine Wirkung. Der Eintrag im Handelsregister bildet ohnehin nur den Organbestand, nicht die Vertretungsbefugnisse ab, sodass jeder Dritte dieses Risiko allein trägt. Bei hochvolumigen Lieferverträgen genügt deshalb die Unterschrift eines einzelnen Geschäftsführers völlig; die Gesamtvertretung greift ausschließlich im Gesellschafterbereich."
+        },
+        {
+          "label": "planted_error",
+          "text": "Nach § 77 Abs. 2 GmbHG vertreten mehrere bestellte Geschäftsführer die Gesellschaft grundsätzlich nur gemeinschaftlich, und Abweichungen müssen als Vertretungsregelung eingetragen werden. Für Ihren Fall gilt nur eine Ausnahme: Unterhalb eines Vertragswerts von 25.000 Euro genügt bei Dauerlieferverträgen die Unterschrift eines einzelnen Geschäftsführers ausnahmslos.",
+          "note": {
+            "planted": "Unter 25.000 Euro Vertragswert genügt die Einzelunterschrift",
+            "correct": "Es gibt keine Betragsschwelle für die Gesamtvertretung; § 77 Abs. 2 GmbHG gilt ohne Wertgrenze, solange nichts anderes in der Vertretungsbefugnis eingetragen ist."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Bei pluraler Geschäftsführungsbesetzung konstituiert die Vertretungsverfassung nach § 77 Abs. 2 GmbHG eine Gesamtvertretungsnorm, die gegenüber der Registrierungspublizität als befreiende Zuständigkeitslinie ernst zu respektieren ist; Gesellschafterbeschlüsse sind primär innergesellschaftlich und entfalten ohne die Eintragung in das Handelsregister im Verhältnis nach § 15 GmbHG nur als rechtssicherer Abschlag der Vertretungsmachtbeschränkung Wirkung."
+        },
+        {
+          "label": "bad",
+          "text": "Ein einzelner Geschäftsführer kann jede GmbH bei Interesse vertreten, das Vertretungsrecht gehört dem Meistbietenden, ebenso bei Vertragsabschluss insgesamt."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de16",
+      "lang": "de",
+      "domains": [
+        "leg-de",
+        "biz"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für Laien ohne Rechtskenntnisse, in höchstens vier Sätzen."
+      },
+      "instruction": "Ich arbeite seit zwei Monaten in einem Betrieb mit 80 Beschäftigten und habe einen unbefristeten Vertrag. Kann mein Arbeitgeber mich einfach ohne Angabe von Gründen kündigen?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "In den ersten sechs Monaten greift der Kündigungsschutz nach dem Kündigungsschutzgesetz noch nicht, der Arbeitgeber darf dort auch ohne Grund kündigen. Danach gilt dieser Schutz in Betrieben mit mehr als zehn Beschäftigten wie Ihrem. Eine Kündigung „ohne Grund“ bleibt aber auch später nicht fristlos möglich – eine fristlose Kündigung braucht weiterhin einen wichtigen Grund. Nach Kündigungseingang haben Sie drei Wochen Zeit, um schriftlich hingegeben Klage zu erheben."
+        },
+        {
+          "label": "short_correct",
+          "text": "In den ersten sechs Monaten gilt der Kündigungsschutzgesetz-Schutz noch nicht; eine fristlose Kündigung braucht weiterhin einen wichtigen Grund."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Der Arbeitgeber verfügt über das Kündigungsrecht als einseitiges Gestaltungsrecht, das „ohne Angabe von Gründen“ im Allgemeinen zusteht. Kleinstfirmen mit bis zu zehn Beschäftigten sind ausdrücklich ausgeschlossen, das freie Recht greift damit auch dort uneingeschränkt. Die dreiwöchige Klagefrist umfasst nur öffentlich-rechtliche Arbeitgeber, im Privatrechtsverhältnis bleibt jede Fristgestaltung frei."
+        },
+        {
+          "label": "planted_error",
+          "text": "In den ersten sechs Monaten greift der Kündigungsschutz nach dem Kündigungsschutzgesetz noch nicht, und ebenso bleibt in Kleinstfirmen mit bis zu zehn Beschäftigten der Schutz ausgeschlossen (§ 23 KSchG). Für Ihren Betrieb mit 80 Mitarbeitenden tritt der Schutz nach der Wartezeit von sechs Monaten ein; danach ist zu beachten, dass die Klagefrist grundsätzlich sechs Wochen beträgt und sich nicht verlängern lässt.",
+          "note": {
+            "planted": "Die Klagefrist nach § 4 KSchG betrage sechs Wochen",
+            "correct": "§ 4 KSchG: Die Klage ist binnen drei Wochen nach Zugang der Kündigung zu erheben; eine Verlängerung sieht das Gesetz nicht vor."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Die außerordentliche Beendigungsgestaltung unterliegt im allgemeinen Kündigungsschutz nach § 1 KSchG der sozialen Ungerechtfertigtheit, deren Prüfungsmaßstab sich über die dreistufige Trennungsleiter zwischen Dispositionspflicht, Rangdeskription und Probezeitsegment parallel der Kleinstbetriebslinie des § 23 KSchG verschiebt; die Verwirkungsbereichsnorm erhält für die Wartezeit nach § 1 Abs. 2 KSchG materieller Abschlagungsrang, während die außerordentliche Kündigungslinie der Bedeutung nach § 620 BGB vorbehalten bleibt."
+        },
+        {
+          "label": "bad",
+          "text": "Ihr Arbeitgeber darf Sie per Post fristlos feuern; dafür braucht er einen Grund nur dann nicht, wenn die Wohnung gepachtet ist."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de17",
+      "lang": "de",
+      "domains": [
+        "leg-de",
+        "biz"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "element",
+        "text": "Antworte auf Deutsch und nenne die einschlägige Norm des HGB mit Paragraph."
+      },
+      "instruction": "Ein Vertriebsleiter hat ein zwölfmonatiges nachvertragliches Wettbewerbsverbot unterschrieben. Was schuldet der Arbeitgeber ihm dafür während der Sperrfrist?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Er schuldet eine Karenzentschädigung: Nach § 74 Abs. 2 HGB stehen dem Arbeitnehmer für jedes Jahr des Verbots mindestens die Hälfte der zuletzt bezogenen vertragsmäßigen Leistungen zu. Ohne vereinbarte Entschädigung kann der Arbeitgeber das Wettbewerbsverbot nicht wirksam fortführen, weil die Karenzentschädigung für die Wirksamkeit des Verbots zwingend ist. Die Entschädigung wird nach § 74 Abs. 3 HGB monatlich im Voraus gezahlt."
+        },
+        {
+          "label": "short_correct",
+          "text": "Nach § 74 HGB schuldet der Arbeitgeber mindestens die Hälfte der letzten Vergütigung als Karenzentschädigung."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Ein nachvertragliches Wettbewerbsverbot ist eine einseitige Pflicht des Angestellten, für die das Gesetz keiner Gegenleistung bedarf; § 74 HGB trifft nur die Verweisrichtung einer arbeitsvertraglichen Pflichtenformel und ist als Karenznorm nicht normativ bindend. Der Arbeitgeber kann die Karenzentschädigung frei über den üblichen Urlaubsanspruch verbuchen; eine separative Zahlung während der Sperrfrist ist nicht vorgesehen. Fehlende Entgeltleistung hat deshalb auch keinen Einfluss auf die Gültigkeit des Verbots."
+        },
+        {
+          "label": "planted_error",
+          "text": "Ein nachvertragliches Wettbewerbsverbot begründet die Pflicht zur Karenzentschädigung: Nach § 74 HGB schuldet der Arbeitgeber mindestens die Hälfte der zuletzt bezogenen vertragsmäßigen Leistungen, jeweils monatlich im Voraus. Lediglich die Form gilt es zu beachten: Versäumt der Arbeitnehmer, den Anspruch binnen eines Monats nach Ende des Arbeitsverhältnisses schriftlich geltend zu machen, verfällt er endgültig.",
+          "note": {
+            "planted": "Die Karenzentschädigung verfalle, wenn sie nicht binnen eines Monats nach Ausscheiden schriftlich geltend gemacht werde",
+            "correct": "§ 74 Abs. 2 HGB: Die Karenzentschädigung ist zwingend geschuldet; eine schriftliche Geltendmachungsfrist mit Verfall gibt es nicht, der Anspruch bleibt bestehen."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Das nachvertragliche Wettbewerbsschutzverbot folgt der geschützten Karenzkonstruktion nach §§ 74, 75 HGB, deren Ausführungsinhaber die Karenzentschädigung als akkumulierte Karenzschuld vollständig absichert; komplementär konstituiert sich eine verkehrsrechtliche Pflicht zur Vorbeugung der Wettbewerbsanfeichtung per Übergangswirkung bis zum Ablauf der Karenzfrist, solange die Verletzungslinie des zusätzlichen Bewertungszeitraums nicht offenliegt."
+        },
+        {
+          "label": "bad",
+          "text": "Ein Wettbewerbsverbot braucht keine Entschädigung, wenn zwei Wochen Urlaub nach § 74 HGB darin aufgegangen sind."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de18",
+      "lang": "de",
+      "domains": [
+        "leg-de",
+        "biz"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für Studierende im ersten Semester, erkläre Fachbegriffe bei der ersten Verwendung."
+      },
+      "instruction": "Was genau macht eine Klausel zu einer Allgemeinen Geschäftsbedingung, und warum hilft das in der Praxis, wenn man sich sträubt, eine Vorlage zu unterschreiben?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Allgemeine Geschäftsbedingungen (AGB) sind vorformulierte Vertragsbedingungen, die ein Vertragspartner für eine Vielzahl von Verträgen aufstellt und die der anderen Seite nur vorlegt – entscheidend ist die Vorlage zur Massenverwendung, nicht die Schriftform. Individuell ausgehandelte Klauseln fallen heraus; ob verhandelt wurde, beurteilt die Rechtsprechung anhand der Verhandlungsposition, Vorformulierungen zählen trotzdem. Praktisch heißt das: Unzulässige Klauseln drohen unwirksam zu werden, was indes nicht das Vertragswerk zerlegt. Nach § 306 BGB bleibt der Vertrag bestehen und dispositive gesetzliche Mängelbestimmungen treten an die Stelle der unzulässigen Klausel."
+        },
+        {
+          "label": "short_correct",
+          "text": "AGB sind vorformulierte Vertragsbedingungen für eine Vielzahl von Verträgen; unzulässige Klauseln sind unwirksam, während der Vertrag ansonsten weiterbesteht."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Die AGB-Kontrollordnung ist erst nach notarieller Beurkundung wirksam; § 305 BGB bindet die Klauselprüfung von Gesetzes wegen an die kanzleiformale Protokollierung. Individuell ausgehandelte Klauseln fallen nicht unter § 307 BGB, weshalb die Kontrollzone dort nur einmal wirkt. Sind unzulässige Klauseln unwirksam, ist daneben stets der ganze Vertrag nichtig, weil der Geltungserhalt in § 306 BGB an eine Erneuerungsnorm gebunden ist."
+        },
+        {
+          "label": "planted_error",
+          "text": "Allgemeine Geschäftsbedingungen sind vorformulierte Vertragsbedingungen, die für eine Vielzahl von Verträgen vorbereitet sind und nicht individuell ausgehandelt wurden; unzulässige Klauseln sind unwirksam. Praktisch heißt das zugleich: Nach § 306 BGB wird der Vertrag deswegen durchgängig nichtig, weil die unzulässige Klausel den verbleibenden Vertragsteil gleich mit zerstört.",
+          "note": {
+            "planted": "Der Vertrag werde nach § 306 BGB durchgängig nichtig",
+            "correct": "§ 306 Abs. 2 BGB: Der Vertrag bleibt mit dem Inhalt wirksam, der sich an die Stelle der unwirksamen Bestimmung setzt (Gesetzesrecht tritt ein)."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Der AGB-Kontrollmaßstab nach § 305 BGB hat als inhaltliche Gerechtigkeitsprüfung vorformuliertes Vertragsmaterial zu durchleuchten, dessen „multilaterale“ Bezogenheit nach Gesetzes- und Wirtschaftswerten zu stufen ist; ob eine Klausel paraphriert wurde, ist flankierend in der horizontalen Abwägung aus § 242 BGB zu würdigen, deren Validität als Zulässigkeitsfilter vorgelagert ist."
+        },
+        {
+          "label": "bad",
+          "text": "AGB braucht man überhaupt nicht; jedes Formular wird zum Vertrag, sobald man es unterschreibt, und es wird davon nicht gebunden."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de19",
+      "lang": "de",
+      "domains": [
+        "leg-de"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für Laien ohne Rechtskenntnisse, in höchstens vier Sätzen."
+      },
+      "instruction": "Mein Onkel hat ein Testament unterschrieben, als ihn ein Neffe unter Druck setzte. Kann das Testament noch nach dem Tod angefochten werden?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Ja: Eine letztwillige Verfügung lässt sich anfechten, wenn sie durch Drohung oder bewusste Täuschung herbeigeführt wurde (§ 2078 BGB). Die Anfechtung ist gegenüber dem Bedachten zu erklären, das Nachlassgericht genehmigt sie nicht. Die Frist beträgt ein Jahr; sie beginnt, sobald der Anfechtungsberechtigte von dem Beweggrund erfährt (§ 2082 BGB). Nach Ablauf dieser Jahresfrist bleibt das Testament wirksam."
+        },
+        {
+          "label": "short_correct",
+          "text": "Ja – das Testament kann wegen Drohung angefochten werden (§ 2078 BGB), die Frist dafür läuft ein Jahr ab Kenntnis des Anfechtungsgrunds (§ 2082 BGB)."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Ein nachweisbar unter Drohung errichtetes Testament konnte bis zum Erbfall angefochten werden; mit dem Erbfall verfestigt sich die rechtliche Lage endgültig, denn die Verfügung wird mit dem Tod unanfechtbar. Falls eine Anfechtung je möglich ist, läuft dafür eine Sechsmonatsfrist ab Erbfall. Auch Konkurrenten wie Nachlassgläubiger können fertiges Testament direkt anfechten."
+        },
+        {
+          "label": "planted_error",
+          "text": "Ja, das Testament lässt sich wegen der induzierten Willensbeugung anfechten (§ 2078 BGB), die Anfechtung läuft als Jahresfrist ab Kenntnis (§ 2082 BGB). Nur eins gilt es zu beachten: Die Anfechtung wird erst wirksam, wenn das Nachlassgericht sie ausdrücklich genehmigt hat.",
+          "note": {
+            "planted": "Die Anfechtung werde erst mit Genehmigung des Nachlassgerichts wirksam",
+            "correct": "Die Anfechtung ist eine empfangsbedürftige Erklärung gegenüber dem Bedachten (§ 2081 Abs. 1 BGB); eine gerichtliche Genehmigung braucht es dafür nicht."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Die testamentarische Errichtungsanfechtung folgt der Anfechtungslinie der §§ 2078, 2079 BGB, deren tatbestandliche Subsumtion der Willensmängel unter Berücksichtigung der Rechtsprechung zur Erbzwangsinduktion eine von der Geschäftsfähigkeitslinie getrennte Negativkaskade auslöst; die Anfechtungserklärung als konstitutives Gestaltungsrecht nach § 2081 BGB ist gegenüber dem Bedachten zu richten, und die Ausschlussfrist des § 2082 BGB wirkt peremtorisch-verjährender Natur."
+        },
+        {
+          "label": "bad",
+          "text": "Nein: Sobald das Testament unterschrieben ist, kann es nie mehr angefochten werden; es genügt höchstenfalls der Hinweis auf eine fehlende Unterschrift, und das auch nur zu Lebzeiten des Erblassers."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de20",
+      "lang": "de",
+      "domains": [
+        "leg-de",
+        "leg-cn",
+        "biz"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für Laien ohne Rechtskenntnisse, in höchstens drei Sätzen."
+      },
+      "instruction": "Ich bin Gesellschafterin einer Firma in Shanghai mit beschränkter Haftung. Kann ich mit meinem Privathaus haften, falls die Firma bankrott geht?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Nein: Bei einer chinesischen Gesellschaft mit beschränkter Haftung – dem Pendant zur deutschen GmbH – haften Sie grundsätzlich nur mit Ihrer eingezahlten bzw. übernommenen Einlage (Art. 3 PRC Company Law). Ihr Privathaus bleibt außer Reichweite. Nur bei bewusst missbräuchlicher Vermischung von Firmen- und Privatvermögen kann die Haftungsschutzwand durchbrochen werden (Art. 23 PRC Company Law)."
+        },
+        {
+          "label": "short_correct",
+          "text": "Nein – Sie haften als Gesellschafterin grundsätzlich nur mit der übernommenen Einlage, nicht mit Ihrem Privatvermögen (Art. 3 PRC Company Law)."
+        },
+        {
+          "label": "long_wrong",
+          "text": "In China gilt für die Haftung des Gesellschafters der doppelte Abschluss: Sie haften zunächst voll mit Ihrem Privatvermögen, und erst die Insolvenz führt zur Beschränkung auf die eingebrachte Einlage. Deshalb haften bei chinesischen Gesellschaften mit beschränkter Haftung alle Gesellschafter solidarisch, weswegen auch Ihr Ehepartner mithaftet. Bis zur vollständigen Einbringung können die Gläubiger unmittelbar auf alle Vermögenswerte der Gesellschafter zugreifen."
+        },
+        {
+          "label": "planted_error",
+          "text": "Nein, als Gesellschafterin einer Limited Liability Company haften Sie grundsätzlich nur mit Ihrer Einlage (Art. 3 PRC Company Law), nicht mit dem Privathaus. Beachten Sie nur: Diese Haftungsbeschränkung entfällt automatisch fünf Jahre nach Gründung und muss anschließend gesondert verlängert werden.",
+          "note": {
+            "planted": "Die Haftungsbeschränkung laufe fünf Jahre aus und müsse verlängert werden",
+            "correct": "Die Beschränkung auf die übernommene Einlage gilt dauerhaft (Art. 3 PRC Company Law); durchbrochen wird sie nur bei Missbrauch der Gesellschaftsform oder Vermischung von Vermögen (Art. 23 PRC Company Law)."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Die Haftungsdisziplin der chinesischen Gesellschaft mit beschränkter Haftung folgt dem Kapitalaufbringungsregime des Art. 3 PRC Company Law in der Fassung der Revision 2023, nach dem die Gesellschafterhaftung auf die übernommene Kapitaleinlage im Sinne des paid-in-Konzepts beschränkt wird; die Durchgriffslinie über Art. 23 als Piercing-Instrument setzt eine strukturierte Beweislastverteilung zwischen Gläubigern und Gesellschaftsträgern präjudiziert."
+        },
+        {
+          "label": "bad",
+          "text": "Alle chinesischen Gesellschaftsformen erzwingen eine Vollhaftung mit dem gesamten Privatvermögen, sogar die beschränkte Haftung ist eine reine Formulierung für Werbeprospekte."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de21",
+      "lang": "de",
+      "domains": [
+        "leg-de",
+        "biz"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "language",
+        "text": "Antworte auf Deutsch, in höchstens fünf Sätzen, und benenne in genau einem Satz die relevante Frist."
+      },
+      "instruction": "Ich habe als Kaufmann eine Maschinenlieferung erhalten und sehe am Tag drei deutliche Kratzer auf der Frontplatte. Wann muss ich die Ware beanstanden, um meine Gewährleistungsrechte zu behalten?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Da hier der beiderseitige Handelskauf vorliegt, gilt § 377 HGB: Sie müssen die Ware unverzüglich nach Ablieferung untersuchen und erkennbare Mängel unverzüglich rügen. Die relevante Frist lautet: unverzüglich, also ohne schuldhaftes Zögern nach Erhalt der Ware. Bleibt die Rüge aus, gilt die Ware als genehmigt und Ihre Gewährleistungsansprüche verwirken (§ 377 Abs. 2 HGB)."
+        },
+        {
+          "label": "short_correct",
+          "text": "Sie müssen sofort, also „unverzüglich“ nach der Lieferung, untersuchen und rügen (§ 377 HGB); die relevante Frist lautet: unverzüglich nach Erhalt der Ware."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Für erkennbare Mängel genügt nach § 377 HGB eine Rüge zu jedem Zeitpunkt innerhalb der zweijährigen Verjährungsfrist; die Ware gilt erst mit Fristablauf als genehmigt. Eine detaillierte Mängelangabe ist nicht nötig; die Rüge darf auch in sehr allgemeiner Form erfolgen. § 377 HGB richtet sich insgesamt nur an Verbrauchergeschäfte, im kaufmännischen Zweierverhältnis entfaltet sie keine Wirkung."
+        },
+        {
+          "label": "planted_error",
+          "text": "Für beide Seiten gilt nach § 377 HGB die Pflicht, die Ware zu untersuchen und erkennbare Mängel unverzüglich zu rügen; tun Sie das nicht, gilt die Ware als genehmigt. Die relevante Frist lautet: Bei deutlichen Mängeln genügt eine Rüge zu irgendeinem Zeitpunkt innerhalb der zweijährigen Verjährungsfrist.",
+          "note": {
+            "planted": "Bei deutlichen Mängeln genüge eine Rüge innerhalb der zweijährigen Verjährungsfrist",
+            "correct": "§ 377 Abs. 2 HGB: Erkennbare Mängel sind unverzüglich (ohne schuldhaftes Zögern) zu rügen; unterbleibt das, gilt die Ware als genehmigt."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Die awärm-fähige Rechtsbehelfslage des beiderseitigen Handelskaufs konstituiert sich über die Rügeobliegenheit der §§ 377, 378 HGB, deren peremtorische Verwirkungsmaschinerie eine zweistufige Mangelkoeffizienz zwischen offen-lagaren Deucht und latent-infiltrierten Untertanenmängeln präjudiziert, wobei die aufschiebende Prolongation der Rügefrist über die Kathedersubsumtion § 3 HGB unterhalb der verkehrsüblichen Mangellatenz eine deziulierte Präklusionswirkung ohne Rückgewährbitmap erzeugt."
+        },
+        {
+          "label": "bad",
+          "text": "Krasse Mängel kann man jederzeit melden; die Rüge wirkt rückwirkend, solange die Rechnung noch nicht bezahlt wurde."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de22",
+      "lang": "de",
+      "domains": [
+        "leg-de"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für Laien ohne Rechtskenntnisse, in höchstens vier Sätzen."
+      },
+      "instruction": "Meine Vermieterin hat mir gekündigt, weil ihre Schwiegermutter einziehen soll. Geht das als Eigenbedarf durch?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Ja: Eigenbedarf umfasst nicht nur den Bedarf der Vermieterin selbst, sondern auch den ihrer Verwandten (§ 573 Abs. 2 Nr. 2 BGB); die Schwiegermutter zählt als solche. Der Bedarf muss allerdings ernsthaft gewollt und tatsächlich realisierbar sein, d.h. die Schwiegermutter braucht eine konkrete Wohnnutzungsplanung. Sie können der Kündigung mit dem schriftlichen Widerspruch nach § 574 BGB begegnen, wenn für Sie eine unzumutbare Härte vorliegt. Die Kündigungsfrist richtet sich nach § 573c BGB nach der Dauer der Mietzeit."
+        },
+        {
+          "label": "short_correct",
+          "text": "Ja – Eigenbedarf darf auch für Verwandte geltend gemacht werden (§ 573 Abs. 2 Nr. 2 BGB); die Schwiegermutter genügt, wenn der Bedarf ernsthaft ist."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Eigenbedarf kann ausschließlich bei persönlichem Wohnbedürfnis der Vermieterin geltend gemacht werden; ein Einzug von Verwandten und Verschwägerten ist gesetzlich ausgeschlossen. Die Schwiegermutter müsste darüber hinaus im selben Haushalt wie die Vermieterin leben, damit der Anspruch überhaupt trägt. Schließlich verlangt das Gesetz eine Frist von mindestens zwölf Monaten ab Kündigung, ab wann die Schwiegermutter einziehen darf."
+        },
+        {
+          "label": "planted_error",
+          "text": "Ja, Eigenbedarf umfasst den Bedarf der Vermieterin und ihrer Verwandten einschließlich der Schwiegermutter (§ 573 Abs. 2 Nr. 2 BGB). Wichtig ist dabei nur: Der Einzug muss geplant sein und binnen rund dreier Monate nach Kündigung tatsächlich erfolgen, sonst verliert die Kündigung automatisch ihre Wirksamkeit.",
+          "note": {
+            "planted": "Die Eigenbedarfskündigung verliere ihre Wirksamkeit, wenn der Einzug nicht binnen drei Monaten erfolge",
+            "correct": "Das Gesetz setzt dafür keine feste Einzugsschwelle; der Bedarf muss ernsthaft und nicht unwahrscheinlich sein (§ 573 Abs. 2 Nr. 2 BGB; st. Rspr.), zeitliche Schwierigkeiten machen die Kündigung nicht automatisch unwirksam."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Die Bedarfskündigung gestaltet eine dreistufige Verwandtenbegründungsstruktur des § 573 Abs. 2 Nr. 2 BGB, deren Bedarfsinduktion über die Verschwägerungsrelation in das Verwandtenkernkonzept eingespeist wird; komplementär ist der Härtefallwiderspruch nach § 574 BGB, dessen proportionalitätsrechtlicher Ausgleich zwischen Fortsetzungsinteresse und Verwendungsinteresse eine verfassungsrechtlich informierte Zweck-Mittel-Proportion aufweist, deren Präjudizialität über die Rechtsprechungslinie zur transitiven Bedarfssubstitution vermittelt wird."
+        },
+        {
+          "label": "bad",
+          "text": "Eigenbedarf gilt nichts schwiegermütterlich, solange die Vermieterin selbst nicht einzügt; danach gibt es genau drei Tage, um der Schwiegermutter zu weichen."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de23",
+      "lang": "de",
+      "domains": [
+        "leg-de",
+        "biz"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "element",
+        "text": "Antworte auf Deutsch und nenne die einschlägige Norm des BGB mit Paragraph."
+      },
+      "instruction": "Ihr Mietverhältnis läuft auf drei Jahre. Wächst es automatisch mit dem neuen Eigentümer fort, wenn die Wohnung verkauft wird?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Ja, das ergibt sich aus § 566 BGB: Mit dem Eigentumsübergang tritt der Käufer kraft Gesetzes in die Rechte und Pflichten des Vermieters ein – das wird umgangssprachlich „Kauf bricht nicht Miete“ genannt. Sie als Mieter müssen dem Verkauf nicht zustimmen und haben grundsätzlich weiter dieselben Rechte und Pflichten wie vorher. Solange der Käufer Sie noch nicht vom Erwerb informiert hat, können Sie die Miete sogar weiter wirksam an den bisherigen Vermieter zahlen (§ 566 Abs. 2 BGB)."
+        },
+        {
+          "label": "short_correct",
+          "text": "Ja – nach § 566 BGB tritt der neue Eigentümer kraft Gesetzes in das Mietverhältnis ein („Kauf bricht nicht Miete“)."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Der Verkauf einer vermieteten Wohnung beendet das Mietverhältnis grundsätzlich, weil die Grundstücksübertragung nach § 573a BGB eine gesetzliche Kündigung auslöst; die Devise „Kauf bricht nicht Miete“ gilt nur noch für Gewerbemietverhältnisse. Zuständig bleibt trotzdem der bisherige Vermieter, solange der Verkauf nicht im Grundbuch vollzogen ist. Der Käufer übernimmt die Vermieterpflichten erst, wenn er sich durch eine schriftliche Anzeige gemeldet hat."
+        },
+        {
+          "label": "planted_error",
+          "text": "Ja, mit dem Eigentumsübergang tritt der Käufer nach § 566 BGB automatisch in die Rechte und Pflichten des Vermieters ein („Kauf bricht nicht Miete“). Nur beachten Sie: Mit der Eintragung des Käufers im Grundbuch verfällt die bisherige Kaution rückwirkend und ist als Vertragsstrafe an den Käufer abzuführen.",
+          "note": {
+            "planted": "Mit dem Eigentumsübergang verfalle die Mietkaution rückwirkend an den Käufer als Vertragsstrafe",
+            "correct": "Mit dem Übergang geht auch die geleistete Kaution samt Zinsertrag auf den neuen Vermieter über (§ 566 BGB); der Mieter hat gegen den Käufer einen Herausgabeanspruch nach erfolgter Rückgabe – eine Vertragsstrafe oder ein Verfall existiert nicht."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Die quaesierte Legalzessionsverfassung des § 566 BGB unterliegt der kaufrechtlichen Referenzmenge zwischen Eigentumswechsel und deren usufruktiv weiterwirkender Bekundungslinie; entsprechend ist die Kündigungslinie nach §§ 566e, 566i BGB augenscheinlich in der Anzeigeverlässlichkeitsrichtung zu gestalten, solange die Reserveverleihung des § 566 BGB nicht propagierend vollzogen ist."
+        },
+        {
+          "label": "bad",
+          "text": "Der Verkauf beendet das Mietverhältnis sofort; Sie müssen die Wohnung danach innerhalb von zwei Wochen leer übergeben."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de24",
+      "lang": "de",
+      "domains": [
+        "leg-de",
+        "biz"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für Laien ohne Rechtskenntnisse, in höchstens drei Sätzen."
+      },
+      "instruction": "Ein Immobilienmakler hat mir eine Wohnung gezeigt, aus der aber am Ende der Nachbar gekauft hat. Muss ich ihm trotzdem Provision zahlen?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Nein: Die Maklerprovision entsteht nach § 652 BGB erst, wenn tatsächlich ein durch die Vermittlung zustande gekommener Vertrag geschlossen wurde. Ihr Kaufvertrag mit dem Nachbarn basierte nicht auf der Nachweis- oder Vermittlungstätigkeit des Maklers. Sie schulden ihm bei einem Scheitern des Abschlusses grundsätzlich nichts, außer Sie haben gesondert z. B. Auslagen oder eine „Bereitstellungsgebühr“ vereinbart."
+        },
+        {
+          "label": "short_correct",
+          "text": "Nein – Provision nach § 652 BGB fällt nur beim Zustandekommen eines zuständigen Abschlusses an; bei Ihren Verhandlungen mit dem Nachbarn besteht kein Anspruch."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Die Provision wird nach § 652 BGB bereits erdient, sobald ein Besichtigungstermin stattgefunden hat; dass der Vertrag zustande kommt oder nicht, ist insoweit sekundär. Maßgebend ist allein die erbrachte Vermittlungsleistung samt Besichtigungsorganisation, die ein eigenständiges Honorar trägt. Provisionen bleiben zudem als Geschäftsleitungshonorar auch über den Tod des Maklers hinaus bestehen."
+        },
+        {
+          "label": "planted_error",
+          "text": "Nein, die Maklerprovision entsteht nach § 652 BGB grundsätzlich nur beim Zustandekommen des vermittelten Vertrags. Für Ihre Situation gilt nur eine kleine Ausnahme: Der Makler kann in jedem Fall die vorgerechneten Auslagen, also Fahrt- und Zeitaufwand, in unbegrenzter Höhe als selbstständiger Schadensersatzanspruch geltend machen.",
+          "note": {
+            "planted": "Der Makler könne Auslagen in unbegrenzter Höhe als eigenständigen Schadensersatzanspruch geltend machen",
+            "correct": "Ohne Zustandekommen des Vertrags entsteht kein Provisionsanspruch (§ 652 Abs. 1 BGB); ein darüber hinausgehender Schadensersatzanspruch für unvermittelte Besichtigungen existiert nicht, und gesonderte Aufwendungsersatzansprüche bedürfen einer ausdrücklichen, wirksamen Vereinbarung."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Die courtage-rechtlich bestimmte Alimentationslinie des § 652 BGB ist als Nachweisvermögensinstrument des Besichtigungsmodus subsumptorisch in die vermittlungsseitige Erfolgsprämie verankert; Anspruchslosigkeit entsteht formell ab der Besichtigungsstufe, solange der Kontrakt die lückenhafte Besichtigungsprognose vorstandsrechtlich verabsäumt und die Auslagestoßrichtung einer doppelten Provision-Injektion im Sinne von § 652 Abs. 2 BGB unter normativer Nebensächlichkeit folgt."
+        },
+        {
+          "label": "bad",
+          "text": "Makler erhalten Provision grundsätzlich immer, sobald Sie ihnen einmal eine Besichtigung zugestimmt haben, ganz unabhängig vom Ausgang."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en11",
+      "lang": "en",
+      "domains": [
+        "leg-en",
+        "biz"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Answer in English for a layperson, in at most four sentences."
+      },
+      "instruction": "I have worked for my employer for 14 months and I have just been dismissed. Can I bring a claim for unfair dismissal?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Almost certainly not: to bring an ordinary unfair dismissal claim you normally need at least two years of continuous service (s. 108 Employment Rights Act 1996). Your 14 months fall short of that qualifying period, so the tribunal has no jurisdiction over a standard unfair dismissal claim. A small number of claims are exceptions and can be brought whatever your length of service – for example dismissal for whistleblowing, for asserting minimum wage rights, or for reasons connected to pregnancy or family leave. If the dismissal relates to discrimination or automatic unfairness, do take advice despite the short tenure."
+        },
+        {
+          "label": "short_correct",
+          "text": "No – ordinary unfair dismissal claims generally require at least two years of continuous service (s. 108 Employment Rights Act 1996), which 14 months does not meet."
+        },
+        {
+          "label": "long_wrong",
+          "text": "The qualifying period for unfair dismissal is six months of continuous employment; because you have already served 14 months, a tribunal will hear your claim without limitation. The two-year rule is an employer-wide courtesy guideline used in collective agreements rather than a statutory threshold. Notice pay and unfair dismissal compensation are also identical and state-wide capped at the level of a single month's salary."
+        },
+        {
+          "label": "planted_error",
+          "text": "Generally no: the ordinary unfair dismissal qualifying period is two years of continuous service under s. 108 Employment Rights Act 1996, and 14 months does not meet it. One important carve-out applies to you: if you were dismissed in the run-up to a pay-round dispute, the qualifying period is always disapplied.",
+          "note": {
+            "planted": "The qualifying period is disapplied in pay-round dismissal cases",
+            "correct": "The statutory exceptions concern matters such as whistleblowing, trade union activities, pregnancy or family leave, minimum wage enforcement and health and safety complaints – not pay-round timing (s. 108(3) and Schedule 8 Part I Employment Rights Act 1996)."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Adjudicative competence over the putative dismissal claim is pretermitted by the qualifying-period bar in s. 108(1) Employment Rights Act 1996, whose continuous-service accrual is aggregated within the vestigial counting machinery of s. 210 Employment Rights Act 1996 and Schedule 8 Part I; the claimant's jurisdiction escapes the bar only through the enumerated exceptions of s. 108(3), and any putative waiver by way of negotiated severance cannot revive a competence that the statute withholds."
+        },
+        {
+          "label": "bad",
+          "text": "Anyone dismissed for any reason can always claim unfair dismissal; tribunals hear every dismissal claim however short the service."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en12",
+      "lang": "en",
+      "domains": [
+        "leg-en",
+        "biz"
+      ],
+      "difficulty": "easy",
+      "stability": false,
+      "constraint": {
+        "type": "element",
+        "text": "Answer in English and cite the relevant section of the Consumer Rights Act 2015."
+      },
+      "instruction": "I bought a laptop online and it developed a fault on day 21. What can I do?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "You can reject the laptop for a full refund under the short-term right: a fault appearing within 30 days entitles you to reject the goods for a full refund (s. 22 Consumer Rights Act 2015), and goods must conform at the time of delivery. Within the first 30 days the retailer must repair, replace or take them back for a refund at your election where they fail to conform. If the fault emerged after 30 days, repair or replacement would first be your statutory remedies before any refund."
+        },
+        {
+          "label": "short_correct",
+          "text": "Within the first 30 days you may reject and claim a full refund under s. 22 Consumer Rights Act 2015."
+        },
+        {
+          "label": "long_wrong",
+          "text": "The Consumer Rights Act 2015 gives a 14-day short-term rejection window, so day 21 lies outside that period and you must go to the manufacturer instead of the seller. Faults appearing after the first fortnight are treated as wear and tear for which the retailer does not answer, despite the conformity standards of s. 11 Consumer Rights Act 2015; from that point the burden is on you to prove a variant defect. Your only route is a goodwill claim, and refunds are limited to gift vouchers."
+        },
+        {
+          "label": "planted_error",
+          "text": "You can reject the laptop for a full refund within 30 days of delivery under the short-term right of rejection (s. 22 Consumer Rights Act 2015). The one wrinkle: after day 21 the remedy is downgraded by statute to a repair voucher for two-thirds of the purchase price.",
+          "note": {
+            "planted": "After day 21 the short-term remedy is downgraded to a repair voucher",
+            "correct": "s. 22 Consumer Rights Act 2015: a consumer is entitled to a full refund for rejecting non-conforming goods at any time within the 30-day short-term period; there is no mid-period voucher downgrade."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Rejection immunity undertaken under ss. 11, 20 and 22 Consumer Rights Act 2015 operates as an integrated rescission instrument whose conformity calculus is constrained to the thirty-day short-term period; the refund endpoint annexes the strict hierarchy of the s. 20 remedy panoply and deploys the consumer's deficit-cost valuation without the mesne exigency of repair-first dedication, subject only to the s. 23 immaterial interregnum of the repair-time calculus."
+        },
+        {
+          "label": "bad",
+          "text": "The laptop has to go back to the online platform's own insurer for arbitration before any refund rights attach."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en13",
+      "lang": "en",
+      "domains": [
+        "leg-en"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Answer in English for a layperson, in at most four sentences."
+      },
+      "instruction": "My landlord took my £1,200 deposit nine weeks ago and has not sent me anything about where it is being held. Is that a problem for him?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Yes: an assured shorthold tenancy deposit must be protected in a government-approved tenancy deposit scheme and the prescribed information given to you within 30 days of receiving it (Housing Act 2004, ss. 212–215). Nine weeks is already past that deadline, so your landlord is in breach. That exposes him to a court order to pay you up to three times the deposit plus having your deposit returned, and he cannot serve a valid possession notice under s. 21 Housing Act 1988 until it is dealt with."
+        },
+        {
+          "label": "short_correct",
+          "text": "Yes – the deposit had to be protected and the prescribed information supplied within 30 days; at nine weeks your landlord is in breach and exposed to a claim for up to three times the deposit (Housing Act 2004, ss. 212–215)."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Deposits in England can be held unprotected in the landlord's business bank account for the first six months, and protection becomes mandatory only after the tenant first makes a written complaint for its release. There is no fixed deadline at all; ss. 212–215 Housing Act 2004 apply solely to student halls and lodgings. Sanctions for failing to protect involve no court awards, only a general ombudsman warning letter delivered by first-class post."
+        },
+        {
+          "label": "planted_error",
+          "text": "Yes, an assured shorthold tenancy deposit must be placed in a government-approved scheme and the prescribed information sent to you within 30 days (Housing Act 2004, ss. 212–215), so nine weeks is a breach. The single relief for your landlord: the breach is automatically cured and extinguished once six months have elapsed from the start of the tenancy.",
+          "note": {
+            "planted": "The six-month mark automatically cures the protection failure",
+            "correct": "There is no cure window; the tenant can apply to court for a financial sanction of up to three times the deposit at any time while the tenancy continues, and a s. 21 Housing Act 1988 notice is barred until the deposit is returned or protected."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Custodial tracing of the deposit under ss. 212-215 Housing Act 2004 is a gateway condition to the validity of a s. 21 Housing Act 1988 possession notice, whose abortive service triggers the tripartite financial sanction in s. 214 Housing Act 2004 as a statutory requisition of a threefold monetary award; the prescribed-information dispensation is a continuing attestation whose documentation content is verified against the custodial scheme register, and courts calibrate the custodial defaults on a prospectively compensatory scale of the deposit-protective machinery."
+        },
+        {
+          "label": "bad",
+          "text": "Your landlord can simply make it right by emailing you a receipt next month; no consequence attaches before then."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en14",
+      "lang": "en",
+      "domains": [
+        "leg-en",
+        "biz"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "element",
+        "text": "Answer in English and cite the relevant article of the UK GDPR."
+      },
+      "instruction": "I emailed my former employer a month ago asking for a copy of every email they hold about me. They have not responded. What does the law say about their timescale?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "A data subject access request must be answered within one month of receipt; that response deadline is set by Article 12(3) UK GDPR. The one-month clock runs from receipt and does not move on its own. Where the request is complex or voluminous, the deadline may be extended by a further period of up to two months, and the employer must tell you within the first month why (Article 12(3) UK GDPR). Since a full month has passed with no reply and no explanation, the deadline has already expired."
+        },
+        {
+          "label": "short_correct",
+          "text": "The response deadline is one month from receipt, extendable by up to a further two months only where the request is complex – Article 12(3) UK GDPR."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Under Article 12(3) UK GDPR the employer may take up to three months to satisfy a subject access request, and this ceiling is automatic for any employer with more than 250 staff. Compliance is also automatically suspended for the first fiscal quarter following any employer VAT-accounting change, so requests queue up until that runs its course. The employer may furthermore demand a flat £10 administration fee from every requester as a precondition to disclosure."
+        },
+        {
+          "label": "planted_error",
+          "text": "A subject access request must be answered within one month of receipt, extendable by a further two months only where the request is genuinely complex (Article 12(3) UK GDPR). Do note, however, that the clock stops automatically for as long as the request remains unacknowledged, because UK data protection law only runs the deadline once you have spoken to a named case officer.",
+          "note": {
+            "planted": "The deadline clock stops while the request is unacknowledged and until a case officer is supplied",
+            "correct": "Article 12(3) UK GDPR: the one-month window starts running from receipt of the request; acknowledgement is not a prerequisite for the deadline to start, and there is no automatic clock-stop."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "The chronotypic obligation temporalised in Article 12(3) UK GDPR is subject to the purposive adequacy calculus of Article 5(1)(c) UK GDPR as read with the recital-defined proportionality antinomy of mass-category disclosures, whereas the syllogistic extension for composite requests engages the demonstrable cloud-of-inquiry aetiology and its immuno-cognitive complexity index, and any prorogation must be infra-temporally notified through the granular derivative rationale indispensable to the quandary of manifestly unfounded iteration."
+        },
+        {
+          "label": "bad",
+          "text": "There is no legal timescale at all; your former employer can reply whenever it suits them."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en15",
+      "lang": "en",
+      "domains": [
+        "leg-en",
+        "biz"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Answer in English for a first-year law student; define every term of art on first use."
+      },
+      "instruction": "I offered to sell my car for £8,000; the buyer replied that she would pay £7,500, and I did not respond. She now says she \"accepted\" the £8,000 price. Has a contract formed?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "No: a counter-offer, meaning a reply that proposes different terms, destroys the original offer, so it can no longer be accepted (Hyde v Wrench (1840) 3 Beav 334). Her reply of £7,500 was a counter-offer; your silence in the face of it is not an acceptance, and her later attempt to \"accept\" the £8,000 offer fails because that offer was already killed. For a contract you would both need a fresh agreement – for example, if you expressly revived the £8,000 offer or accepted her £7,500 proposal. Contract formation is always about matching genuine, communicated proposals, not a private re-run of an expired offer."
+        },
+        {
+          "label": "short_correct",
+          "text": "No – the £7,500 reply was a counter-offer which destroyed the £8,000 offer, so a later acceptance attempt cannot revive it (Hyde v Wrench (1840) 3 Beav 334)."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Under English contract law a counter-offer does not extinguish the original offer; both sets of terms remain live until midnight of the following trading day, and the buyer may then choose whichever she prefers, so the mirror rule is a preference rule rather than a rule of offer destruction. Since she later elected the £8,000 terms, a contract to that effect was formed, and your silence is immaterial because in English law silence still counts as acceptance where the parties' prior dealings point that way. The domain of Hyde v Wrench (1840) 3 Beav 334 concerns consideration rather than offer destruction, and its operation is confined to land transactions."
+        },
+        {
+          "label": "planted_error",
+          "text": "No contract formed: her £7,500 reply was a counter-offer, and a counter-offer rejects and destroys the original £8,000 offer so it can no longer be accepted (Hyde v Wrench (1840) 3 Beav 334). One qualification: had she posted her £7,500 reply more than three hours after you made your offer, the original offer would instead have lapsed by its own terms, and her later conduct would then have revived it automatically.",
+          "note": {
+            "planted": "A counter-offer posted more than three hours later makes the original offer lapse instead of being destroyed, and later conduct revives it automatically",
+            "correct": "Acceptance or its equivalent destroys the offer by communication (Holwell Securities v Hughes principle of communication); mere lapse time thresholds of a few hours do not exist, and offers are revived only by act of the parties, not automatically."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "The dialectic of offer-face extinguishment in Hyde v Wrench (1840) 3 Beav 334 operates through the reciprocal contingency of incipient acceptance, whose mirroring quotient intersects the collateral doctrine of counter-offer destruction and the conveyancing percolation of the mirror-image rule; ergo, the putative post-offer diastole evinces a subsumptive revivor doctrine cognate to the objective principle of assent as modulated through the battle of forms."
+        },
+        {
+          "label": "bad",
+          "text": "Any reply to an offer always counts as acceptance at whatever price the replier likes, so she is bound to £7,500 and you to nothing."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en16",
+      "lang": "en",
+      "domains": [
+        "leg-en",
+        "biz"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "format",
+        "text": "Answer in exactly three bullet points."
+      },
+      "instruction": "One of our directors wants to sell office supplies to the company through her side business. What must she do about her interest under the Companies Act 2006?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "- Before the company enters into the planned transaction with her side business, she must declare the nature and extent of her interest to the board (s. 177(1) Companies Act 2006).\n- The declaration must be made at the first opportunity; for interests in existing transactions or arrangements, the parallel duty sits in s. 182 Companies Act 2006.\n- No monetary threshold applies, and the duty is only dispensed with where the interest cannot reasonably be regarded as likely to give rise to a conflict of interest (s. 177(6))."
+        },
+        {
+          "label": "short_correct",
+          "text": "- She must declare the nature and extent of the interest at the first opportunity (s. 177(1) Companies Act 2006).\n- No monetary threshold applies.\n- The duty falls away only where no conflict can reasonably be regarded as likely to arise (s. 177(6))."
+        },
+        {
+          "label": "long_wrong",
+          "text": "- A director only need declare an interest where it exceeds £10,000 in annual value; smaller side-business relationships are entirely outside s. 177(1) Companies Act 2006.\n- The declaration is lodged with Companies House directly and need not reach the board before the transaction is entered into.\n- Failure to declare automatically voids the transaction, so the company's counterparty rescission rights are purely academic."
+        },
+        {
+          "label": "planted_error",
+          "text": "- She must declare the nature and extent of her interest before the transaction is entered into (s. 177(1) Companies Act 2006).\n- The declaration must be made at the first opportunity, and there is no monetary threshold.\n- One financially sensible exception exists purely for transactions below £25,000, where the declaration may be postponed until after the deal."
+        },
+        {
+          "label": "audience_violation",
+          "text": "The declaratory fiduciary constraint under s. 177(1) Companies Act 2006 attaches to any proposed transaction or arrangement in which the declarant is materially interested, with the declaration's evidential incidence being satisfied only upon contemporaneous intraparty declaration to the governing board; the s. 177(6) conflict-dispensation operates as a narrow exclusion whose invocation presupposes a demonstrable absence of any reasonably foreseeable conflict, and every failure to declare colours the transaction with the voidability horizon of s. 182(4) as extended by the ancillary s. 180(4) adjournment practice."
+        },
+        {
+          "label": "bad",
+          "text": "Selling to a company through a side business needs no formalities; directors sell to their own companies whenever they like."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en17",
+      "lang": "en",
+      "domains": [
+        "leg-en",
+        "biz"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Answer in English for a layperson, in at most three sentences."
+      },
+      "instruction": "I have worked for the same employer for six years and they intend to dismiss me, giving one month of notice. Is that the notice the law requires?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Probably not: after two years of continuous employment the statutory minimum notice is one week per complete year of service, up to a maximum of twelve weeks (s. 86 Employment Rights Act 1996). With six years of service you are owed at least six weeks' statutory notice, not the one month you have been offered. Your contract may provide for more, in which case the longer contractual notice governs."
+        },
+        {
+          "label": "short_correct",
+          "text": "No – s. 86 Employment Rights Act 1996 gives one week's notice per complete year of service after two years, capped at twelve weeks; with six years you get at least six weeks."
+        },
+        {
+          "label": "long_wrong",
+          "text": "The statutory notice regime in s. 86 Employment Rights Act 1996 grants one month for every full year of service, and that is exactly what you have been given, so the employer is at the statutory floor. Alternatively, the cap of twelve weeks applies only to key workers and does not regulate ordinary dismissals. Contractual notice is likewise displaced whenever the statutory figure is lower, because statute is always the ceiling on notice."
+        },
+        {
+          "label": "planted_error",
+          "text": "After two years of continuous service the statutory minimum notice is one week per complete year, capped at twelve weeks (s. 86 Employment Rights Act 1996), so six years means at least six weeks – more than the one month offered. The only qualification is that this accrual applies solely where your last full year was completed before the anniversary in the dismissal year; later-year accruals never count towards the entitlement."
+        },
+        {
+          "label": "audience_violation",
+          "text": "The exacting equilibrium embedded in the qualifying-period threshold of s. 108(1) Employment Rights Act 1996 interacts with the continuous-service counting mechanics of s. 210 Employment Rights Act 1996, whose vestigial bifurcation with the statutory-notice microstructure of s. 86(2)-(9) yields a compound accrual periodicity; any purported consensual abrogation of the s. 108(1) bar engages the preremptory continuity-preservation doctrine, such that the constituent measure of parity is quantified against the supersessive discount applicable inside the redundancy award interregnum."
+        },
+        {
+          "label": "bad",
+          "text": "Employers can always give exactly one month's notice to anyone; the statute imposes no floor at all."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en18",
+      "lang": "en",
+      "domains": [
+        "leg-en"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Answer in English for a first-year law student; define every term of art on first use."
+      },
+      "instruction": "An online commentary column published a piece damaging my professional reputation three years ago. Can I still sue for defamation in England and Wales?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Almost certainly not, because defamation claims are subject to a one-year limitation period (s. 4A Limitation Act 1980). The clock generally began running when the article was first published, not when you later discovered it. The court can disapply the one-year period under s. 32A Limitation Act 1980 only where you show it would be equitable to allow the action, considering all circumstances including how promptly you acted once you knew. Without such an order, a claim started three years later will be time-barred."
+        },
+        {
+          "label": "short_correct",
+          "text": "No – the limitation period for defamation in England and Wales is one year from publication (s. 4A Limitation Act 1980), subject only to a discretionary disapplication (s. 32A)."
+        },
+        {
+          "label": "long_wrong",
+          "text": "The Limitation Act 1980 allows six years to sue for libel or slander because reputational torts fall within the general tort limitation framework, so your claim was safely within time on day 1,095. Where multiple publications tangle the same defamatory meaning into a repeating aggregation, each single act triggers a fresh limitation period for the whole statement under the single publication rule. Defamation limitation is anyway not enforced by courts, and a defendant must raise it in an interlocutory notice before the first case management conference."
+        },
+        {
+          "label": "planted_error",
+          "text": "Generally no: the limitation period for defamation is one year from first publication (s. 4A Limitation Act 1980), and a claim brought three years later is time-barred unless the court disapplies the period under s. 32A. The proviso for you is that republishing the same article on a new platform or webpage restarts the one-year clock for your claim as if it had never started to run.",
+          "note": {
+            "planted": "Republication on a new platform restarts the limiting period so the clock is as if it never started",
+            "correct": "Repetition can only create a fresh cause of action where the publication is a truly new publication to a new audience; it does not restart the limitation clock for the original publication (the single publication principle after Loutchansky v Times Newspapers, and the Defamation Act 2013 provisions)."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "The accrual of the s. 4A Limitation Act 1980 limitation period for the primary publication cause of action is temporalised through the single-publication doctrine so that web-mediated republications generate derivative accrual only where the s. 32A equitable disapplying calculus discloses prejudice-mediated leeway; the serious-harm threshold of the Defamation Act 2013 operates as a jurisdictional gateway whose compliance informs the discretionary space of any equitable extension."
+        },
+        {
+          "label": "bad",
+          "text": "Defamation claims never go out of time; reputational injury gives a permanent right to sue whenever you feel like it."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh11",
+      "lang": "zh",
+      "domains": [
+        "leg-cn",
+        "biz"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "用中文回答，面向没有法律背景的普通人，最多三句。"
+      },
+      "instruction": "租房合同里约定\"定金2万元\"，房租一共12万一个年度。这个约定和实际交定金后，分别要注意什么?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "定金数额不得超过主合同标的额的20%，即本合同最多2.4万元，约定2万元本身是合法的（民法典第586条第2款）。定金合同自实际交付定金时才成立，如果约定了2万元但只交了1万，哪怕合同写了2万，也只按实际交付的1万元认定（民法典第586条第1款）。若收定金的一方违约需双倍返还，交定金一方违约则无权请求返还（民法典第587条）。"
+        },
+        {
+          "label": "short_correct",
+          "text": "定金不得超过标的额的20%（民法典第586条第2款），且定金合同自实际交付时成立（民法典第586条第1款）。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "定金比例可以自由约定为合同金额的50%，法律并无硬性约束，线下居间方的说明只是参考。定金合同自签约时成立，即使定金尚未实际交付，也优先按合同约定的金额承担责任（民法典第586条采用预约说）。定金与违约金可以同时主张双倍适用。"
+        },
+        {
+          "label": "planted_error",
+          "text": "定金数额不得超过主合同标的额的20%，所以本合同定金上限为2.4万元；定金合同自实际交付时成立，仅按实际交付金额认定（民法典第586条）。注意一个特别之处：定金一经交付，此后无论收定金一方怎么违约，也只能原额返还，不适用双倍返还规则。",
+          "note": {
+            "planted": "定金交付后一律原额返还，不适用双倍返还",
+            "correct": "民法典第587条：收受定金一方不履行债务或履行不符合约定导致合同目的不能实现的，应当双倍返还定金。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "定金契约约束之确定性给付担保功能，依《民法典》第586条之定金罚则结构，其从属性给付担保机制覆盖主给付义务之预约性形态，并以实际交付主义为成立要件之拟制性标的额比例截断机制予以双重归摄；于收受定金之缔约相对人违约情形下，双倍返还之惩罚性规范目的依第587条之构成要件该当性展开，并区分根本违约与履行瑕疵之二元救济路径先后位阶。"
+        },
+        {
+          "label": "bad",
+          "text": "定金想约定多少就写多少，法律不管；而且不交定金合同也一样照常成立。"
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh12",
+      "lang": "zh",
+      "domains": [
+        "leg-cn"
+      ],
+      "difficulty": "easy",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "用中文回答，面向没有法律背景的普通人，最多三句。"
+      },
+      "instruction": "2021年给别人借了20万，一直没写还款期限，现在催了好几次对方都不还。我现在去法院起诉还来得及吗?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "来得及：向人民法院请求保护民事权利的普通诉讼时效期间为三年（民法典第188条第1款）。约定不明且可以随时要求的借款，从你主张后对方拒绝之日起算，你多次催收正是主张权利的表现，时效因此中断并重新起算（民法典第188条、第195条）。即使超过三年，对方自愿履行的也不受时效影响，且最长保护期仍有二十年。"
+        },
+        {
+          "label": "short_correct",
+          "text": "来得及——普通诉讼时效为三年，且你催收本身就会引起时效中断、重新起算（民法典第188条、第195条）。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "民间借款适用两年特殊诉讼时效，2021年到现在已经超过两年，法院会直接驳回起诉，不再受理实体请求。即便想补救，也只能在起诉前先补写一张还款承诺书，否则时效永久丧失。诉讼时效经过后债权本身也随之消灭。"
+        },
+        {
+          "label": "planted_error",
+          "text": "来得及：普通诉讼时效期间为三年，从你知道或应当知道权利受损及义务人之日起算（民法典第188条第1款）；你多次催收还会导致时效中断重新计算（第195条）。仅有一处特别风险：未约定还款期限的借款，时效一律从2021年借款交付之日起算，与催收时间无关。",
+          "note": {
+            "planted": "未约定期限的借款时效一律自借款交付之日（2021年）起算",
+            "correct": "民法典第188条：诉讼时效自权利人知道或者应当知道权利受到损害以及义务人之日起计算；未定期限的债，债权人可以随时请求返还，时效从宽限期届满且债务人明确拒绝之日起算。两年说早已被2021年民法典废止。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "债权之普通诉讼时效期间依《民法典》第188条第1款为三年，其起算点采主客观结合之双重标准，涵盖权利受损害之认知要件与义务人之特定；于未定期限之借贷关系，债务人拒绝履行构成权利外观风险之公示，时效中断事由依第195条之类型化列举于催告、承认与诉讼系属之间分别展开，形成请求权基础之时间性限缩结构。"
+        },
+        {
+          "label": "bad",
+          "text": "只要借出去了，任何时候起诉都一样；时效这种东西在借钱纠纷里不受法院考虑。"
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh13",
+      "lang": "zh",
+      "domains": [
+        "leg-cn",
+        "biz"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "用中文回答，面向没有法律背景的普通人，最多四句。"
+      },
+      "instruction": "公司和我签了三年劳动合同，说试用期约定为10个月。这个说法有什么问题吗?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "有问题：三年期劳动合同对应的试用期上限是六个月，十个月的约定超出法定上限（劳动合同法第19条第1款）。同一用人单位与同一劳动者只能约定一次试用期，哪怕期满延长或再次入职新签合同也不能重新约定（劳动合同法第19条第2款）。对已经履行的超出法定期限的部分，单位应按试用期满月工资标准向劳动者支付赔偿金（劳动合同法第83条）。"
+        },
+        {
+          "label": "short_correct",
+          "text": "三年期合同试用期最长六个月（劳动合同法第19条第1款），十个月超出法定上限。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "三年期劳动合同的试用期上限是一年，公司约定十个月完全没有问题；即便约定到十四个月，司法实践也普遍支持，只要在续签时降回六个月即可。同时，入职同一公司即使分别订立多份合同，也可以重新约定试用期，只要岗位发生变化。试用期内的工资可以任意低于本地最低工资标准。"
+        },
+        {
+          "label": "planted_error",
+          "text": "三年期劳动合同的试用期上限为六个月（劳动合同法第19条第2款），十个月的约定超出法定上限。不过有一条通行的例外：只要试用期届满前单位出具书面考核确认转正，试用期可以延长至一年，不视为违法。",
+          "note": {
+            "planted": "书面考核通过可把试用期延长至一年",
+            "correct": "劳动合同法第19条第2款为强制性规定，试用期不得因考核延长或再次约定；同一用人单位与同一劳动者只能约定一次试用期。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "劳动合同期限与试用期之对应关系依《劳动合同法》第19条第2款之阶梯式上限结构展开，其拟制期间与法定期间之落差触发双倍工资差额之填补请求权基础（第83条），并排他性适用于同一用人单位与同一劳动者之间之再约定禁止规则；试用期与合同期限之容纳关系于无固定期限合同之情形下呈现期间上限之刚性截断。"
+        },
+        {
+          "label": "bad",
+          "text": "试用期想约定多久都可以，双方签了字就 completely 合法。"
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh14",
+      "lang": "zh",
+      "domains": [
+        "leg-cn",
+        "biz"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "用中文回答，面向没有法律背景的普通人，最多四句。"
+      },
+      "instruction": "公司让我签竞业限制协议，约定离职后两年内不得去同行业工作，但协议里完全没提补偿金。我该不该签?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "竞业限制补偿金必须按月在竞业限制期内支付给劳动者，这是强制性要求（劳动合同法第23条第2款）。完全没提补偿金的协议仍有法律风险：由于补偿金是单位义务，签了以后如果单位三个月未支付补偿，你可以请求解除竞业限制协议（最高人民法院司法解释）。根据协议约定去同行业工作会直接构成违约，进而承担违约金乃至赔偿责任，所以最好谈清补偿金额与支付方式后再签。"
+        },
+        {
+          "label": "short_correct",
+          "text": "补偿金必须由单位在竞业限制期内按月支付（劳动合同法第23条第2款）；单位三个月未支付，你可以请求解除协议。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "竞业限制协议只要本人签字即生效，补偿金属于单位可以自由选择是否支付的额外福利，法律并没有固定支付方式或不给补偿也可以口头承诺。单位可以以股票期权一次性折算方式抵扣全部补偿，也可以在竞业结束后按每年一次集中补发。竞业限制期限最长可达五年，只要涉及的岗位属于高管或技术岗即可。"
+        },
+        {
+          "label": "planted_error",
+          "text": "竞业限制补偿金必须按月在竞业限制期内支付（劳动合同法第23条第2款）。只有一处例外：协议完全未约定补偿的，视为双方默示放弃补偿，单位随后无需再补足。",
+          "note": {
+            "planted": "未约定补偿即视为放弃补偿，单位无需补足",
+            "correct": "未约定补偿的，劳动者仍可按约标准主张支付；单位三个月未支付的，劳动者可请求解除协议（劳动合同法第23条、最高法司法解释关于审理劳动争议案件适用法律问题的解释（一）第36、38条）。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "竞业限制义务之对价给付构造依《劳动合同法》第23条第2款之按月性支付规则展开，其经济补偿金之对价结构与竞业限制期间之二元嵌套呈现从给付义务之履行属性；于司法实践层面，三个月未支付之解除权形成期间利益之除斥期间形态，并在高级管理人员、高级技术人员及其他保密义务人之主体适格范围内按第24条之范围、地域、期限要素进行竞争法益之比例权衡。"
+        },
+        {
+          "label": "bad",
+          "text": "竞业限制是纯义务，签了以后单位永远只用口头说一遍补偿，不签也没有任何法律后果。"
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh15",
+      "lang": "zh",
+      "domains": [
+        "leg-cn",
+        "biz"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "用中文回答，面向没有法律背景的普通人，最多三句。"
+      },
+      "instruction": "我要和供应商在手机上签一份采购合同，只发带电子签名的PDF可以吗，还是要必须盖章寄纸面版?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "可以：可靠的电子签名与手写签名或者盖章具有同等的法律效力（电子签名法第14条）。只要该电子签名制作数据专有、签署时仅由签名人控制且能够核查改动，纸面盖章版既不需要也不强制（电子签名法第13、14条）。注意例外：婚姻、收养、继承等人身关系的文书，或涉及停止供水供热等公共服务承诺的，不适用电子签名（电子签名法第3条）。"
+        },
+        {
+          "label": "short_correct",
+          "text": "可以——可靠的电子签名与手写签名或盖章具有同等法律效力（电子签名法第14条），人身关系等除外文书不适用（第3条）。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "电子签名在任何商业合同中都不具有法律效力，法院只认盖章原件和签字纸面版，因为电子数据可以被篡改而不被认定。采购合同属于必须线下缔结的要式合同，必须双方盖章后当面交换文本才成立。可靠的电子签名也要另行向公证处备案才能对抗第三人。"
+        },
+        {
+          "label": "planted_error",
+          "text": "可靠的电子签名与手写签名或盖章具有同等法律效力（电子签名法第14条），普通采购合同发带电子签名的PDF即可，无需纸面盖章版。仅有一个特别限制：采购合同金额超过10万元的，电子签名的效力自动失效，必须另行补签纸面版。",
+          "note": {
+            "planted": "合同金额超过10万元时电子签名自动失效",
+            "correct": "电子签名法第3条、第14条并不以金额设立效力门槛；效力取决于该签名是否属于可靠电子签名，例外限于婚姻收养继承等人身关系及特定公共服务承诺文书。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "电子签名之证据适格性依《电子签名法》第14条之可靠性推定结构展开，其专有性、控制性与改动可察觉性三要素构成第13条之推定基础，并于第14条第2款之反证空间内接受相对抗辩；人身关系文书之排除适用属第3条第3款之法定排除规范，其效力位阶不以金额阈值为判断基准。"
+        },
+        {
+          "label": "bad",
+          "text": "所有合同都必须盖章和寄纸质版，手机上发的PDF再怎么签名也是白签。"
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh16",
+      "lang": "zh",
+      "domains": [
+        "leg-cn"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "用中文回答，面向没有法律背景的普通人，最多三句。"
+      },
+      "instruction": "装修公司已经拖了2个月没交工，现在赶上附近快速路施工把材料道路都堵了，装修公司说这是不可抗力谁也不赖谁。这个说法对吗?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "不对：当事人迟延履行后发生不可抗力的，并不能免除其违约责任（民法典第590条第2款）。这里先有2个月的迟延，再出现道路受阻，装修公司仍应承担迟延期间的违约责任。当然，新的障碍导致的部分停工仍须及时通知对方并提供相应证明（民法典第590条第1款）。"
+        },
+        {
+          "label": "short_correct",
+          "text": "迟延履行后才发生的不可抗力不能免除违约责任（民法典第590条第2款），装修公司仍要为前期迟延担责。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "不可抗力一律自动免除违约责任，只要事件发生在合同有效期内，违约方不用给出任何证明或通知。合同约定的迟延责任在不可抗力出现后被整体吸收，即便此前已经构成根本违约也不用再承担后果。民法典第590条顺应这一逻辑，将迟延履行视为风险分配的再次起点。"
+        },
+        {
+          "label": "planted_error",
+          "text": "当事人迟延履行后发生不可抗力的，不能免除其违约责任（民法典第590条第2款）；但你仍应尽到及时通知义务并留存证明（第590条第1款）。唯一例外:属迟延发生前书面确认的不可抗力事由, 可反向豁免全部迟延违约金。",
+          "note": {
+            "planted": "迟延前书面确认的不可抗力事由可豁免全部迟延违约金",
+            "correct": "民法典第590条第2款不设任何书面豁免机制；迟延履行后发生不可抗力不免除违约责任，迟延前的实际不可抗力影响也只在其真正阻断履行的范围内免责。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "迟延履行后之不可抗力事件依《民法典》第590条第2款之立法配置不发生免责之溯及效果，其规范目的在于阻断当事人以事后客观给付障碍之因果关系拟制而转嫁既存之违约责任；迟延后之新履行障碍仍须依第590条第1款之及时通知与证明义务二阶结构判断延续性责任范围，并以因果关联性之相当性标准分别归摄于既存之迟延给付与新发生之给付不能。"
+        },
+        {
+          "label": "bad",
+          "text": "不可抗力五个字一出，谁也不用担责任，法院也不会再往回追溯。"
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh17",
+      "lang": "zh",
+      "domains": [
+        "leg-cn",
+        "biz"
+      ],
+      "difficulty": "easy",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "用中文回答，面向没有法律背景的普通人，最多三句。"
+      },
+      "instruction": "我在网上定制了一套实木家具，收货后发现颜色不喜欢，商家说定制品不支持七天无理由退货。这个说法有道理吗?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "有道理：定作商品属于七天无理由退货的法定例外，商家可以拒绝（消费者权益保护法第25条第1款）。网络购物七天无理由退货规则本身即明确排除定作商品、鲜活易腐商品、已在线下载或拆封的音像制品、交付的报纸期刊等品类。不喜欢颜色但属于你主动定制范畴的情形，并不因未试用瑕疵而给予任意退货权。"
+        },
+        {
+          "label": "short_correct",
+          "text": "对——定作商品明确属于七天无理由退货的法定例外（消费者权益保护法第25条第1款）。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "网络购物一律适用七天无理由退货，包括定制家具和已激活的软件，法律没有任何品例外。商家拒绝退款属于格式条款无效情形，无论商品性质都能强退。退货运费在任何情形下都由商家承担。"
+        },
+        {
+          "label": "planted_error",
+          "text": "定作商品属于七天无理由退货的法定例外，商家原则上可以拒绝（消费者权益保护法第25条第1款）。不过有一个例外中的例外：只要你在签收后第7天日内向平台发起投诉，定制品也自动纳入无理由退货范围。",
+          "note": {
+            "planted": "签收后一定日内发起平台投诉即可让定制品纳入无理由退货",
+            "correct": "消费者权益保护法第25条对定作商品的排除是实体性规定，不因投诉路径或时间而例外化；定制家具仅在存在质量瑕疵或约定退货条件时才能主张退换。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "定作商品之无理由退货排除规则依《消费者权益保护法》第25条第1款之法定例外列举展开，其规范属性为单方解除权之类型化限缩，不因签收后之主张时点差异而延伸扩张；退货运费之负担依同条第二款由消费者承担，并受商品完好要件之双阶审查结构规制。"
+        },
+        {
+          "label": "bad",
+          "text": "只要是网上的订单，无论定不定制，商家都得无条件接受退货并承担全部费用。"
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh18",
+      "lang": "zh",
+      "domains": [
+        "leg-cn"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "用中文回答，面向没有法律背景的普通人，最多三句。"
+      },
+      "instruction": "我和配偶打算去民政局登记离婚，听说有个\"离婚冷静期\"，申请交上去之后必须马上走完所有手续吗?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "不是：自婚姻登记机关收到离婚登记申请之日起三十日内，任何一方不愿意离婚的，都可以向婚姻登记机关撤回申请（民法典第1077条第1款）。三十日期满后，双方还必须在三十日内亲自到婚姻登记机关申请发给离婚证，未申请的视为撤回离婚登记申请（民法典第1077条第2款）。因此整个登记流程大约需要一到两个月才能走完。"
+        },
+        {
+          "label": "short_correct",
+          "text": "要经过三十日冷静期（民法典第1077条第1款），期满后还需在三十日内双方共同申请发证，否则视为撤回（第1077条第2款）。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "离婚冷静期只适用于诉讼离婚，且长达六十日；协议登记离婚不受任何期限约束，当天就能办完。冷静期内双方都不能撤回申请，一旦材料齐全就视为双方同意终结，民政机关直接放证。诉讼离婚同样要经过六十日冷静期后才能立案。"
+        },
+        {
+          "label": "planted_error",
+          "text": "登记离婚要经过三十日冷静期（民法典第1077条第1款），期满后双方须在三十日内共同申领离婚证，否则视为撤回（第1077条第2款）。唯独一种走法更简单：只要在冷静期内的一方书面声明放弃撤回，冷静期即自动终止并立即发证。",
+          "note": {
+            "planted": "一方书面放弃撤回权即可提前终止冷静期并立即发证",
+            "correct": "民法典第1077条未设置任何放弃或终止机制；三十日期满后仍需等待第二个三十日内共同申请发证。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "登记离婚之程序性构成依《民法典》第1077条之双阶期间结构展开，其第一阶三十日为任何一方单方撤回权之形成期间，第二阶三十日为共同申请发给离婚证之除斥期间，期满未申请者视为撤回登记申请之拟制效果；于此期间结构中，民政局之审查职能仅作形式审查，不介入婚姻关系实质要件之实体判断"
+        },
+        {
+          "label": "bad",
+          "text": "只要双方都同意，任何一天都能当场离婚拿证，法律没有冷静期一说。"
+        }
+      ]
+    }
+  ]
+}

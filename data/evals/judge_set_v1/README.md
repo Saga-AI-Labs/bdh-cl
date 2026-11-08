@@ -168,7 +168,12 @@ restale risk).
 - [x] author fixes: cert_de03 rewritten (good/short_correct/long_wrong now
       constraint-compliant bullets, single-defect attribution preserved), leaks ruled out
 - [ ] cert run pass + report (2026-11-08 run in flight; timeout math in §3)
-- [ ] cert stage 2: 30 items (next stage; adds legalese-heavy de-slice stress for the Qwen check)
+- [x] cert stage 2: 30 items (14 heavy-legalese de / 8 en / 8 zh) authored as a
+      SEPARATE draft file `cert_items_stage2.json` (status DRAFT-for-review), so
+      the in-flight run's `cert_items.json` snapshot stays untouched; merge into
+      the frozen set happens at the freeze commit per §8. Rules 1-7 (§5) apply,
+      incl. rule 6 (constraint compliance by role) and the artifact scan (rule 7).
+- [ ] cert stage 2 review (Quinn): cell-by-cell, incl. fact checks in de/zh/en
 - [ ] pool C2/C3
 - [ ] Qwen de-slice cross-check (only if gemma cert passes)
 - [ ] freeze commit + hash into prereg §4.4b
