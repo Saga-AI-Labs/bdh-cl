@@ -51,6 +51,16 @@ Anchors:
   in the run meta. Endpoint identity is part of the judge's audit trail; a re-quantized
   endpoint is a different judge until re-certified.
 
+**Run logistics (observed 2026-11-08):** the full cert pass is **300 judge calls**
+(20 non-stability items × 6 × 1 + 10 stability items × 6 × 3). At the observed
+186–222 s/call on the certificate endpoint that is ~17–20 h wall clock — a 6 h timeout
+is insufficient, and `cert.json` is written only after the last row, so an interrupted
+run leaves only the log (rows are recoverable from the log). Budget the timeout,
+or slice the run; never shorten the protocol knobs to fit a schedule.
+**Cert-status interim (while the 2026-11-08 run was live):** early judge reads
+(cert_de01/good, first repeats) landed borderline-4 with slow, self-checking reasoning —
+watch the 3/4-boundary in the analysis rather than pre-deciding.
+
 ## 4. Certification criteria (the judge passes if all rows hold)
 
 Aggregated over the cert run per variant, per language slice where stated:
@@ -97,6 +107,18 @@ Hard content rules baked into the authoring checklist (Quinn verifies these):
    the instruction — the judge must be able to read the constraint in the prompt.
 4. `short_correct` must omit ≥ half the key points while staying factually right.
 5. `long_wrong` must be factually wrong at the core — not merely shallow.
+6. **Constraint-compliance is part of the role, not an accident.** Every variant whose
+   defect is *not* the constraint miss (`good`, `short_correct`, `planted_error`,
+   `long_wrong`) must satisfy the item's stated constraint — otherwise a low score is
+   ambiguous between the designed defect and a format violation, and the
+   `audience_violation` row loses its discriminating power (the cert_de03 lesson: its
+   first draft had a prose `good` next to a "three bullet points" constraint). Only the
+   `bad`/`audience_violation` roles may violate the constraint.
+7. **No leaked authoring artifacts.** Variant text must contain no prompt/auth markers,
+   no mojibake, no zero-width characters, no stray tokens (the cert_de03 `_INTERNAL`
+   lesson). An automated token-artifact scan runs pre-commit; it is a filter, the
+   cell-by-cell read remains the verdict (Quinn 2026-11-08 §3: automated pass = filter,
+   not verdict).
 
 ## 6. Pool design and staging
 
@@ -141,9 +163,14 @@ restale risk).
 - [x] README/spec (this file)
 - [x] cert stage 1: 30 items (10 en / 10 de / 10 zh), all 6 variants, notes incl. planted-fact citations
 - [x] pool cohort C1: 60 instructions (20 en / 20 de / 20 zh), 0 reference answers
+- [x] Quinn cell-by-cell review (83151bb): LGTM with two fixes, both cert_de03
+      (prose `good` under a bullet-constraint; `_INTERNAL` token in `long_wrong`)
+- [x] author fixes: cert_de03 rewritten (good/short_correct/long_wrong now
+      constraint-compliant bullets, single-defect attribution preserved), leaks ruled out
+- [ ] cert run pass + report (2026-11-08 run in flight; timeout math in §3)
 - [ ] cert stage 2: 30 items (next stage; adds legalese-heavy de-slice stress for the Qwen check)
 - [ ] pool C2/C3
-- [ ] Quinn review + LGTM
+- [ ] Qwen de-slice cross-check (only if gemma cert passes)
 - [ ] freeze commit + hash into prereg §4.4b
 
 **One protocol change Quinn's harness needs before the cert run:** the system prompt
