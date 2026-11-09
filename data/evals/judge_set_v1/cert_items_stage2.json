@@ -1,6 +1,6 @@
 {
   "schema": "judge_set_v1_cert_stage2",
-  "status": "DRAFT-for-review",
+  "status": "FROZEN",
   "note": "Stage 2 batch: 30 new cert items, 14 heavy legalese de / 8 en / 8 zh. Separate file so the in-flight cert run's cert_items.json snapshot stays untouched; merge into the frozen set happens at the freeze commit (README section 8). README section 5 rules 1-7 apply, incl. rule 6 (only audience_violation/bad may violate the item constraint) and rule 7 (no leaked artifacts).",
   "items": [
     {
@@ -227,6 +227,7 @@
     },
     {
       "item_id": "cert_de16",
+      "contested": true,
       "lang": "de",
       "domains": [
         "leg-de",

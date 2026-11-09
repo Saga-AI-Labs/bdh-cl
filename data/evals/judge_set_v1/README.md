@@ -218,11 +218,22 @@ restale risk).
       recomputed stage hashes (the 17:06 build embedded pre-commit sources and
       the folded-ASCII de13); freeze re-run rescore scope: 4 items (zh05, de13,
       de16, de24) + 14 NULL cells, fresh run not --resume against the rebuilt set
+- [x] cert-set FREEZE (2026-11-09): rescore complete (480 rows/judge), all three files
+      `STATUS: FROZEN`; hashes registered in prereg §4.4b with the criteria table,
+      the contested subset (de16, de17, de18, de20, en08) and the 14 not-evaluable
+      Qwen NULL cells (outside all denominators). cert_items_merged.json is now
+      tracked (was gitignored under /data/); force-added and the .gitignore note
+      retired. Any post-freeze item change = set version v2.
 - [x] pool cohort C2: 180 instructions (60 en / 60 de / 60 zh), 0 reference answers,
       authored as a SEPARATE draft file `pool_instructions_c2.json` (status
       DRAFT-for-review, cert stage 2 pattern); merge into `pool_instructions.json`
       happens at the freeze per §8; scene table + validation report +
       review priorities in docs/notes/2026-11-09_pool-c2-ready.md
+- [x] pool cohort C2 review (Quinn, 2026-11-09): LGTM with the p_en46 wording fix
+      (the instruction names the mechanism it tests). Structure clean: 0 mojibake,
+      0 6-gram dupes > 0.30, 0 unbalanced zh quotes, 7 CJK hits all legitimate
+      contract vocabulary. Coverage limit stated: not a full cell-by-cell read of
+      180 items. See docs/notes/2026-11-09_pool-c2-review.md.
 - [ ] pool C3 (~180, fills the pool toward ~500 pre-discard; ~15 % discard expected
       in review)
 - [x] second-model de-slice check: resolved by the cert runs — Qwen judges German

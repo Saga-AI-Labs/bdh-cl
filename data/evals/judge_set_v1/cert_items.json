@@ -1,547 +1,1334 @@
 {
   "schema": "judge_set_v1_cert",
-  "status": "DRAFT-for-review",
+  "status": "FROZEN",
   "note_on_labels": "Labels are design roles; the judge never sees them. See README.md section 5.",
   "items": [
     {
       "item_id": "cert_de01",
       "lang": "de",
-      "domains": ["leg-de"],
+      "domains": [
+        "leg-de"
+      ],
       "difficulty": "medium",
       "stability": true,
-      "constraint": {"type": "audience", "text": "Antworte auf Deutsch, für Laien ohne Juristendeutsch, in höchstens vier Sätzen."},
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für Laien ohne Juristendeutsch, in höchstens vier Sätzen."
+      },
       "instruction": "Erkläre, warum ein Grundstückskaufvertrag in Deutschland notariell beurkundet werden muss.",
       "variants": [
-        {"label": "good", "text": "Das Gesetz will verhindern, dass jemand bei einem großen, langfristigen Kauf unüberlegt zusagt – deshalb schreibt § 311b BGB die notarielle Beurkundung vor. Der Notar prüft dabei Identität, Vollmachten und das Grundbuch, damit beide Seiten wissen, welche Lasten auf dem Grundstück liegen. Ohne diese Form ist der Vertrag von Anfang an unwirksam (§ 125 BGB), und der Formfehler lässt sich erst beheben, wenn die Eigentumsübertragung im Grundbuch eingetragen ist (§ 311b Abs. 1 S. 2 BGB). Damit bleibt der wichtige Übergang formal dokumentiert und beweisbar."},
-        {"label": "short_correct", "text": "Weil § 311b BGB es so vorschreibt: Ohne notarielle Beurkundung ist der Grundstückskaufvertrag nichtig."},
-        {"label": "long_wrong", "text": "Die notarielle Beurkundung dient in erster Linie der Eigentumsübertragung: Sofort mit der Unterzeichnung geht das Grundstück auf den Käufer über, das Grundbuch ist nur eine nachträgliche Flüchtigkeitskontrolle. Wer die Beurkundung vermeiden will, genügt der Schriftform vor zwei Zeugen, und die jeweilige Stadtverwaltung trägt den Kauf dann vom Amts wegen ein. Der Notar ist deshalb im Wesentlichen ein Zeremonienmeister ohne rechtliche Funktion."},
-        {"label": "planted_error", "text": "Das Gesetz will verhindern, dass jemand bei einem großen, langfristigen Kauf unüberlegt zusagt – deshalb schreibt § 311b BGB die notarielle Beurkundung vor. Der Notar prüft dabei Identität, Vollmachten und das Grundbuch. Beachte: Diese Beurkundungspflicht gilt nur für unbebaute Grundstücke – bei bebauten Grundstücken genügt die einfache Schriftform.",
-          "note": {"planted": "Beurkundungspflicht gelte nur für unbebaute Grundstücke", "correct": "§ 311b Abs. 1 BGB stellt auf das Grundstück ab, unabhängig von Bauten; der wichtige Verlauf bei bebauten Grundstücken ist derselbe."}},
-        {"label": "audience_violation", "text": "§ 311b Abs. 1 S. 1 BGB konstituiert formelle Verbindlichkeit des Grundstückskaufvertrags in Wesensgestalt der Notariatsbeurkundung; ein Formverstoß führt nach § 125 S. 1 BGB zur Nichtigkeit, dessen Heilung sich allein über § 311b Abs. 1 S. 2 BGB und vollendeten Eintragung der Übereignung im Grundbuch ergibt. Der konstitutive Formzwang trägt legitimatorisches Zwischenverhältnis einer Beurkundungskausalität."},
-        {"label": "bad", "text": "Grundstücke müssen beim Notar gekauft werden, weil sonst die Gemeinde sie nicht ins Handelsregister eintragen kann."}
+        {
+          "label": "good",
+          "text": "Das Gesetz will verhindern, dass jemand bei einem großen, langfristigen Kauf unüberlegt zusagt – deshalb schreibt § 311b BGB die notarielle Beurkundung vor. Der Notar prüft dabei Identität, Vollmachten und das Grundbuch, damit beide Seiten wissen, welche Lasten auf dem Grundstück liegen. Ohne diese Form ist der Vertrag von Anfang an unwirksam (§ 125 BGB), und der Formfehler lässt sich erst beheben, wenn die Eigentumsübertragung im Grundbuch eingetragen ist (§ 311b Abs. 1 S. 2 BGB). Damit bleibt der wichtige Übergang formal dokumentiert und beweisbar."
+        },
+        {
+          "label": "short_correct",
+          "text": "Weil § 311b BGB es so vorschreibt: Ohne notarielle Beurkundung ist der Grundstückskaufvertrag nichtig."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Die notarielle Beurkundung dient in erster Linie der Eigentumsübertragung: Sofort mit der Unterzeichnung geht das Grundstück auf den Käufer über, das Grundbuch ist nur eine nachträgliche Flüchtigkeitskontrolle. Wer die Beurkundung vermeiden will, genügt der Schriftform vor zwei Zeugen, und die jeweilige Stadtverwaltung trägt den Kauf dann vom Amts wegen ein. Der Notar ist deshalb im Wesentlichen ein Zeremonienmeister ohne rechtliche Funktion."
+        },
+        {
+          "label": "planted_error",
+          "text": "Das Gesetz will verhindern, dass jemand bei einem großen, langfristigen Kauf unüberlegt zusagt – deshalb schreibt § 311b BGB die notarielle Beurkundung vor. Der Notar prüft dabei Identität, Vollmachten und das Grundbuch. Beachte: Diese Beurkundungspflicht gilt nur für unbebaute Grundstücke – bei bebauten Grundstücken genügt die einfache Schriftform.",
+          "note": {
+            "planted": "Beurkundungspflicht gelte nur für unbebaute Grundstücke",
+            "correct": "§ 311b Abs. 1 BGB stellt auf das Grundstück ab, unabhängig von Bauten; der wichtige Verlauf bei bebauten Grundstücken ist derselbe."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "§ 311b Abs. 1 S. 1 BGB konstituiert formelle Verbindlichkeit des Grundstückskaufvertrags in Wesensgestalt der Notariatsbeurkundung; ein Formverstoß führt nach § 125 S. 1 BGB zur Nichtigkeit, dessen Heilung sich allein über § 311b Abs. 1 S. 2 BGB und vollendeten Eintragung der Übereignung im Grundbuch ergibt. Der konstitutive Formzwang trägt legitimatorisches Zwischenverhältnis einer Beurkundungskausalität."
+        },
+        {
+          "label": "bad",
+          "text": "Grundstücke müssen beim Notar gekauft werden, weil sonst die Gemeinde sie nicht ins Handelsregister eintragen kann."
+        }
       ]
     },
     {
       "item_id": "cert_de02",
       "lang": "de",
-      "domains": ["leg-de", "leg-cn"],
+      "domains": [
+        "leg-de",
+        "leg-cn"
+      ],
       "difficulty": "hard",
       "stability": true,
-      "constraint": {"type": "language", "text": "Antworte auf Deutsch, in höchstens fünf Sätzen, und nenne in genau einem Satz die entscheidende Rechtsquellen-Differenz."},
+      "constraint": {
+        "type": "language",
+        "text": "Antworte auf Deutsch, in höchstens fünf Sätzen, und nenne in genau einem Satz die entscheidende Rechtsquellen-Differenz."
+      },
       "instruction": "Was unterscheidet deutsches und chinesisches Vertragsrecht beim Zustandekommen von Verträgen?",
       "variants": [
-        {"label": "good", "text": "In Deutschland beruht der Vertrag auf Privatautonomie: Angebot und Annahme genügen, und die Auslegung richtet sich nach dem gemeinsamen Willen sowie Treu und Glauben (§§ 133, 157, 242 BGB). In China steht das Vertragsrecht seitt 2021 im Zivilgesetzbuch (民法典)； daneben greifen bei bestimmten Branchen und Gegenständen administrative Genehmigungen und Registrierungen. Die entscheidende Rechtsquellen-Differenz: Deutschland ergänzt die Kodifikation durch gefestigte Rechtsprechung, China durch Verwaltungsakte und Genehmigungsregime."},
-        {"label": "short_correct", "text": "In Deutschland gilt das BGB, in China der 民法典. Beide Rechtssysteme kennen Vertragsfreiheit."},
-        {"label": "long_wrong", "text": "Chinesisches Vertragsrecht erkennt Verträge grundsätzlich nicht als eigenständig bindend an: Erst ein Verwaltungsbescheid erzeugt die Rechtswirkung, und ohne eine Genehmigung ist eine Vereinbarung ausschließlich ein Textprodukt ohne Rechtskraft. Auslegung findet nur nach fest vom Staat vorgegebenen Wortmustern statt. Deutschland dagegen kennt Privatautonomie nicht als eigenständige Rechtsquelle; alle Verträge bedürfen der notariellen Volltextprüfung."},
-        {"label": "planted_error", "text": "In Deutschland beruht der Vertrag auf Privatautonomie, Auslegung nach Willenserklärung und Treu und Glauben. In China steht das Vertragsrecht im 民法典. Wichtig für die Praxis: Nach diesem Kodifikationsstand muss jeder B2B-Vertrag von der örtlichen Industrie- und Handelskammer notariell bestätigt werden, sonst ist er nichtig.",
-          "note": {"planted": "B2B-Verträge bedürfen der notariellen Bestätigung durch die Industrie- und Handelskammer", "correct": "Eine solche generelle Bestätigungspflicht gibt es nicht; administrative Genehmigungen betreffen nur bestimmte Branchen und Gegenstände, nicht Verträge allgemein."}},
-        {"label": "audience_violation", "text": "German contract formation rests on private autonomy: offer and acceptance suffice, interpretation follows joint intent plus good faith (BGB §§ 133, 157, 242). Chinese contract law lives in the 民法典 effective 2021, layered with administrative steering for designated sectors. The key source-of-law difference: German doctrine supplements codification through settled case law, Chinese practice through approval regimes."},
-        {"label": "bad", "text": "Verträge sind überall gleich zustande gekommen; es handelt sich nur um eine Frage der Sprache."}
+        {
+          "label": "good",
+          "text": "In Deutschland beruht der Vertrag auf Privatautonomie: Angebot und Annahme genügen, und die Auslegung richtet sich nach dem gemeinsamen Willen sowie Treu und Glauben (§§ 133, 157, 242 BGB). In China steht das Vertragsrecht seitt 2021 im Zivilgesetzbuch (民法典)； daneben greifen bei bestimmten Branchen und Gegenständen administrative Genehmigungen und Registrierungen. Die entscheidende Rechtsquellen-Differenz: Deutschland ergänzt die Kodifikation durch gefestigte Rechtsprechung, China durch Verwaltungsakte und Genehmigungsregime."
+        },
+        {
+          "label": "short_correct",
+          "text": "In Deutschland gilt das BGB, in China der 民法典. Beide Rechtssysteme kennen Vertragsfreiheit."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Chinesisches Vertragsrecht erkennt Verträge grundsätzlich nicht als eigenständig bindend an: Erst ein Verwaltungsbescheid erzeugt die Rechtswirkung, und ohne eine Genehmigung ist eine Vereinbarung ausschließlich ein Textprodukt ohne Rechtskraft. Auslegung findet nur nach fest vom Staat vorgegebenen Wortmustern statt. Deutschland dagegen kennt Privatautonomie nicht als eigenständige Rechtsquelle; alle Verträge bedürfen der notariellen Volltextprüfung."
+        },
+        {
+          "label": "planted_error",
+          "text": "In Deutschland beruht der Vertrag auf Privatautonomie, Auslegung nach Willenserklärung und Treu und Glauben. In China steht das Vertragsrecht im 民法典. Wichtig für die Praxis: Nach diesem Kodifikationsstand muss jeder B2B-Vertrag von der örtlichen Industrie- und Handelskammer notariell bestätigt werden, sonst ist er nichtig.",
+          "note": {
+            "planted": "B2B-Verträge bedürfen der notariellen Bestätigung durch die Industrie- und Handelskammer",
+            "correct": "Eine solche generelle Bestätigungspflicht gibt es nicht; administrative Genehmigungen betreffen nur bestimmte Branchen und Gegenstände, nicht Verträge allgemein."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "German contract formation rests on private autonomy: offer and acceptance suffice, interpretation follows joint intent plus good faith (BGB §§ 133, 157, 242). Chinese contract law lives in the 民法典 effective 2021, layered with administrative steering for designated sectors. The key source-of-law difference: German doctrine supplements codification through settled case law, Chinese practice through approval regimes."
+        },
+        {
+          "label": "bad",
+          "text": "Verträge sind überall gleich zustande gekommen; es handelt sich nur um eine Frage der Sprache."
+        }
       ]
     },
     {
       "item_id": "cert_de03",
       "lang": "de",
-      "domains": ["ml"],
+      "domains": [
+        "ml"
+      ],
       "difficulty": "medium",
       "stability": false,
-      "constraint": {"type": "format", "text": "Antworte mit genau drei Stichpunkten."},
+      "constraint": {
+        "type": "format",
+        "text": "Antworte mit genau drei Stichpunkten."
+      },
       "instruction": "Was ist der Unterschied zwischen einem LoRA-Adapter und einem vollen Fine-Tuning?",
       "variants": [
-        {"label": "good", "text": "· LoRA lernt nur kleine zusätzliche Matrizen: Das Basismodell bleibt komplett eingefroren.\n· Beim vollen Fine-Tuning werden dagegen alle Gewichte verändert, was deutlich mehr Speicher und Rechenzeit kostet.\n· LoRA-Adapter lassen sich auf demselben Basismodell austauschen; ein volles Fine-Tuning erzeugt immer ein eigenständiges neues Modell."},
-        {"label": "short_correct", "text": "· LoRA ist deutlich schneller und leichtgewichtiger als volles Fine-Tuning, weil es weniger Parameter trainiert.\n· Volles Fine-Tuning braucht dafür mehr Speicher und Zeit."},
-        {"label": "long_wrong", "text": "· LoRA setzt voraus, dass das Basismodell zuerst auf 4 Bit quantisiert wird – ohne diese Quantisierung startet das LoRA-Training gar nicht.\n· Dadurch ersetzt LoRA das Basismodell vollständig: Nach dem Training existiert das Ausgangsmodell technisch nicht mehr in seiner Ursprungsform.\n· Volles Fine-Tuning dagegen verändert das Modell selbst nicht: Es ist im Kern nur die Bezeichnung für das Exportieren eines Modells, die Gewichte bleiben unangetastet."},
-        {"label": "planted_error", "text": "· LoRA lernt nur kleine zusätzliche Matrizen, das Basismodell bleibt eingefroren – volles Fine-Tuning verändert alle Gewichte.\n· LoRA braucht deshalb deutlich weniger Speicher und Rechenzeit.\n· Nach dem Training werden die LoRA-Updates auf die Basismodelle zurückgeschrieben, sodass dieses selbst leicht verändert ist; mehrere Adapter lassen sich austauschen.",
-          "note": {"planted": "LoRA-Updates werden auf die Basismodelle zurückgeschrieben", "correct": "Das Basismodell bleibt komplett eingefroren; nur die zusätzlich eingeführten Low-Rank-Matrizen werden trainiert (Inferenz: W + ΔW)."}},
-        {"label": "audience_violation", "text": "LoRA parametrisiert das Update als Low-Rank-Faktorisierung ΔW = B·A in einem Subraum der Parameterdimension, während volles Fine-Tuning alle Parameter in der vollen Dimension aktualisiert. Optimizer-Zustand, Checkpoint-Grafik und Deployment-Semantik unterscheiden sich entsprechend; mehrere Adapter-Instanzen teilen sich dieselbe Basisgewichtsmenge."},
-        {"label": "bad", "text": "LoRA ist ein Datenformat, das Modelle schneller aus dem Internet lädt, so wie ZIP-Archive komprimiert werden."}
+        {
+          "label": "good",
+          "text": "· LoRA lernt nur kleine zusätzliche Matrizen: Das Basismodell bleibt komplett eingefroren.\n· Beim vollen Fine-Tuning werden dagegen alle Gewichte verändert, was deutlich mehr Speicher und Rechenzeit kostet.\n· LoRA-Adapter lassen sich auf demselben Basismodell austauschen; ein volles Fine-Tuning erzeugt immer ein eigenständiges neues Modell."
+        },
+        {
+          "label": "short_correct",
+          "text": "· LoRA ist deutlich schneller und leichtgewichtiger als volles Fine-Tuning, weil es weniger Parameter trainiert.\n· Volles Fine-Tuning braucht dafür mehr Speicher und Zeit."
+        },
+        {
+          "label": "long_wrong",
+          "text": "· LoRA setzt voraus, dass das Basismodell zuerst auf 4 Bit quantisiert wird – ohne diese Quantisierung startet das LoRA-Training gar nicht.\n· Dadurch ersetzt LoRA das Basismodell vollständig: Nach dem Training existiert das Ausgangsmodell technisch nicht mehr in seiner Ursprungsform.\n· Volles Fine-Tuning dagegen verändert das Modell selbst nicht: Es ist im Kern nur die Bezeichnung für das Exportieren eines Modells, die Gewichte bleiben unangetastet."
+        },
+        {
+          "label": "planted_error",
+          "text": "· LoRA lernt nur kleine zusätzliche Matrizen, das Basismodell bleibt eingefroren – volles Fine-Tuning verändert alle Gewichte.\n· LoRA braucht deshalb deutlich weniger Speicher und Rechenzeit.\n· Nach dem Training werden die LoRA-Updates auf die Basismodelle zurückgeschrieben, sodass dieses selbst leicht verändert ist; mehrere Adapter lassen sich austauschen.",
+          "note": {
+            "planted": "LoRA-Updates werden auf die Basismodelle zurückgeschrieben",
+            "correct": "Das Basismodell bleibt komplett eingefroren; nur die zusätzlich eingeführten Low-Rank-Matrizen werden trainiert (Inferenz: W + ΔW)."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "LoRA parametrisiert das Update als Low-Rank-Faktorisierung ΔW = B·A in einem Subraum der Parameterdimension, während volles Fine-Tuning alle Parameter in der vollen Dimension aktualisiert. Optimizer-Zustand, Checkpoint-Grafik und Deployment-Semantik unterscheiden sich entsprechend; mehrere Adapter-Instanzen teilen sich dieselbe Basisgewichtsmenge."
+        },
+        {
+          "label": "bad",
+          "text": "LoRA ist ein Datenformat, das Modelle schneller aus dem Internet lädt, so wie ZIP-Archive komprimiert werden."
+        }
       ]
     },
     {
       "item_id": "cert_de04",
       "lang": "de",
-      "domains": ["ml"],
+      "domains": [
+        "ml"
+      ],
       "difficulty": "hard",
       "stability": true,
-      "constraint": {"type": "audience", "text": "Erkläre es einem 12-jährigen Kind, ohne Fachwörter aus dem Maschinenlernen, in höchstens vier Sätzen."},
+      "constraint": {
+        "type": "audience",
+        "text": "Erkläre es einem 12-jährigen Kind, ohne Fachwörter aus dem Maschinenlernen, in höchstens vier Sätzen."
+      },
       "instruction": "Was macht das Aufmerksamkeits-Prinzip in einem Sprachmodell?",
       "variants": [
-        {"label": "good", "text": "Stell dir eine Klasse vor: Wenn jemand eine Frage stellt, hören die Mitschüler genau auf diejenigen, die die Antwort am besten kennen. Genau so funktioniert die Aufmerksamkeit im Sprachmodell: Jedes Wort „fragt herum“, wie viel jedes andere Wort zur Bedeutung beiträgt. Wichtige Wörter bekommen viele Aufmerksamkeit, unwichtige fast keine. So versteht das Modell Zusammenhänge, auch wenn sie im Satz weit auseinander liegen."},
-        {"label": "short_correct", "text": "Die Aufmerksamkeit sorgt dafür, dass das Modell die wichtigen Wörter im Satz stärker berücksichtigt als die unwichtigen."},
-        {"label": "long_wrong", "text": "Die Aufmerksamkeit ist im Kern ein Speicherverwaltungssystem: Das Modell legt jedes Wort in einem Cache ab und wirft nach dem LRU-Prinzip die ältesten Einträge wieder aus. Inhaltliche Relevanz spielt dabei keine Rolle, entscheidend ist allein die Speicherposition – deshalb kann man die Aufmerksamkeit vollständig über einfache Speicher-Swap-Strategien nachbauen. Die Literatur beschreibt diesen Mechanismus seit den 1990er-Jahren als Datenbank-Methode."},
-        {"label": "planted_error", "text": "Stell dir die Klasse mit der Frage vor: Jedes Wort „fragt herum“, wie viel die anderen zur Bedeutung beitragen, und wichtige Wörter bekommen mehr Aufmerksamkeit. Die Übereinstimmungsstärke berechnet das Modell dabei, indem es die Frage des Wortes direkt mit den Ergebnis-Inhalten der anderen Wörter.multipliziert; danach werden die Gewichte aufgeteilt.",
-          "note": {"planted": "Relevanz entsteht aus Abfrage × Ergebnis-Inhalten (Query × Value)", "correct": "Die Relevanz entsteht aus Abfrage × Schlüssel (Query × Key); der Value-Vektor wird erst danach zur gewichteten Mischung verwendet, nicht zur Relevanzbestimmung."}},
-        {"label": "audience_violation", "text": "Attention determiniert für jede Query die Dot-Product-Relevanz gegen alle Key-Tensoren, skaliert durch 1/√d_k und normalisiert über Softmax; die resultierende Verteilung wurde mit den Value-Matrizen gewichtet und dann aggregiert. Multi-Head-Aufteilungen laufen parallel über unabhängige Projektionsmatrizen."},
-        {"label": "bad", "text": "Das Aufmerksamkeits-Prinzip ist ein Programm, das Podcasts automatisch transkribiert und Untertitel dazu setzt."}
+        {
+          "label": "good",
+          "text": "Stell dir eine Klasse vor: Wenn jemand eine Frage stellt, hören die Mitschüler genau auf diejenigen, die die Antwort am besten kennen. Genau so funktioniert die Aufmerksamkeit im Sprachmodell: Jedes Wort „fragt herum“, wie viel jedes andere Wort zur Bedeutung beiträgt. Wichtige Wörter bekommen viele Aufmerksamkeit, unwichtige fast keine. So versteht das Modell Zusammenhänge, auch wenn sie im Satz weit auseinander liegen."
+        },
+        {
+          "label": "short_correct",
+          "text": "Die Aufmerksamkeit sorgt dafür, dass das Modell die wichtigen Wörter im Satz stärker berücksichtigt als die unwichtigen."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Die Aufmerksamkeit ist im Kern ein Speicherverwaltungssystem: Das Modell legt jedes Wort in einem Cache ab und wirft nach dem LRU-Prinzip die ältesten Einträge wieder aus. Inhaltliche Relevanz spielt dabei keine Rolle, entscheidend ist allein die Speicherposition – deshalb kann man die Aufmerksamkeit vollständig über einfache Speicher-Swap-Strategien nachbauen. Die Literatur beschreibt diesen Mechanismus seit den 1990er-Jahren als Datenbank-Methode."
+        },
+        {
+          "label": "planted_error",
+          "text": "Stell dir die Klasse mit der Frage vor: Jedes Wort „fragt herum“, wie viel die anderen zur Bedeutung beitragen, und wichtige Wörter bekommen mehr Aufmerksamkeit. Die Übereinstimmungsstärke berechnet das Modell dabei, indem es die Frage des Wortes direkt mit den Ergebnis-Inhalten der anderen Wörter.multipliziert; danach werden die Gewichte aufgeteilt.",
+          "note": {
+            "planted": "Relevanz entsteht aus Abfrage × Ergebnis-Inhalten (Query × Value)",
+            "correct": "Die Relevanz entsteht aus Abfrage × Schlüssel (Query × Key); der Value-Vektor wird erst danach zur gewichteten Mischung verwendet, nicht zur Relevanzbestimmung."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Attention determiniert für jede Query die Dot-Product-Relevanz gegen alle Key-Tensoren, skaliert durch 1/√d_k und normalisiert über Softmax; die resultierende Verteilung wurde mit den Value-Matrizen gewichtet und dann aggregiert. Multi-Head-Aufteilungen laufen parallel über unabhängige Projektionsmatrizen."
+        },
+        {
+          "label": "bad",
+          "text": "Das Aufmerksamkeits-Prinzip ist ein Programm, das Podcasts automatisch transkribiert und Untertitel dazu setzt."
+        }
       ]
     },
     {
       "item_id": "cert_de05",
       "lang": "de",
-      "domains": ["leg-x"],
+      "domains": [
+        "leg-x"
+      ],
       "difficulty": "hard",
       "stability": false,
-      "constraint": {"type": "audience", "text": "Antworte auf Deutsch, für Studierende im ersten Semester, erkläre Fachbegriffe bei der ersten Verwendung kurz."},
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für Studierende im ersten Semester, erkläre Fachbegriffe bei der ersten Verwendung kurz."
+      },
       "instruction": "Wann gilt das UN-Kaufrecht (CISG) zwischen einem deutschen und einem chinesischen Vertragspartner?",
       "variants": [
-        {"label": "good", "text": "Das UN-Kaufrecht (CISG) – ein internationales Einheitsgesetz für den Warenkauf – gilt automatisch, wenn Käufer und Verkäufer ihre Niederlassungen in verschiedenen Staaten haben und beide Staaten Vertragsstaaten sind; Deutschland und China sind das. Es erfasst Warengeschäfte zwischen Unternehmen, während Verbraucherverträge, Auktionen und Mietverhältnisse ausgeschlossen bleiben (Art. 2 CISG). Die Parteien können die Anwendbarkeit ausdrücklich ausschließen. Wichtig: Die CISG regelt Kauf- und Lieferansprüche, aber nicht die Haftung für Personenschäden durch die Ware (Art. 5 CISG)."},
-        {"label": "short_correct", "text": "Die CISG gilt zwischen Deutschland und China automatisch für Warengeschäfte zwischen Unternehmen, es sei denn, die Parteien schließen sie aus."},
-        {"label": "long_wrong", "text": "Die CISG erfasst grundsätzlich auch Verbraucherverträge, Software-Lizenzen und Mietverhältnisse, weil ihr Anwendungsdatenschutz keine Leitplanken kennt; Schadensersatz für Personenschäden regelt sie vollumfänglich mit. Ausschlussklauseln sind dagegen unwirksam: Sobald beide Parteien in Vertragsstaaten sitzen, gilt die CISG zwingend und reguliert damit auch die Haftung für Gewährleistungen und Mängel nach autochthonen Regeln."},
-        {"label": "planted_error", "text": "Deutschland und China sind beide Vertragsstaaten der CISG, sie gilt daher automatisch für Warengeschäfte zwischen Unternehmen, sofern nicht ausgeschlossen. Beachte für die Klausur: Sie regelt auch die Haftung für Personenschäden, die durch mangelhafte Ware verursacht werden, ausdrücklich mit.",
-          "note": {"planted": "CISG regelt ausdrücklich die Haftung für Personenschäden", "correct": "Art. 5 CISG nimmt Personenschäden aus dem Anwendungsbereich aus."}},
-        {"label": "audience_violation", "text": "The CISG (1980 Vienna Convention) applies to contracts of sale between parties whose places of business are in different Contracting States; both Germany and China are members, and Article 6 allows exclusion. Consumer transactions and auctions are carved out by Art. 2 CISG, and Art. 5 excludes product liability for death or personal injury. Students should also note the interplay with national implementation via German civil law rules."},
-        {"label": "bad", "text": "Das UN-Kaufrecht gilt nur zwischen Deutschland und Österreich, weil China es nicht unterzeichnet hat."}
+        {
+          "label": "good",
+          "text": "Das UN-Kaufrecht (CISG) – ein internationales Einheitsgesetz für den Warenkauf – gilt automatisch, wenn Käufer und Verkäufer ihre Niederlassungen in verschiedenen Staaten haben und beide Staaten Vertragsstaaten sind; Deutschland und China sind das. Es erfasst Warengeschäfte zwischen Unternehmen, während Verbraucherverträge, Auktionen und Mietverhältnisse ausgeschlossen bleiben (Art. 2 CISG). Die Parteien können die Anwendbarkeit ausdrücklich ausschließen. Wichtig: Die CISG regelt Kauf- und Lieferansprüche, aber nicht die Haftung für Personenschäden durch die Ware (Art. 5 CISG)."
+        },
+        {
+          "label": "short_correct",
+          "text": "Die CISG gilt zwischen Deutschland und China automatisch für Warengeschäfte zwischen Unternehmen, es sei denn, die Parteien schließen sie aus."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Die CISG erfasst grundsätzlich auch Verbraucherverträge, Software-Lizenzen und Mietverhältnisse, weil ihr Anwendungsdatenschutz keine Leitplanken kennt; Schadensersatz für Personenschäden regelt sie vollumfänglich mit. Ausschlussklauseln sind dagegen unwirksam: Sobald beide Parteien in Vertragsstaaten sitzen, gilt die CISG zwingend und reguliert damit auch die Haftung für Gewährleistungen und Mängel nach autochthonen Regeln."
+        },
+        {
+          "label": "planted_error",
+          "text": "Deutschland und China sind beide Vertragsstaaten der CISG, sie gilt daher automatisch für Warengeschäfte zwischen Unternehmen, sofern nicht ausgeschlossen. Beachte für die Klausur: Sie regelt auch die Haftung für Personenschäden, die durch mangelhafte Ware verursacht werden, ausdrücklich mit.",
+          "note": {
+            "planted": "CISG regelt ausdrücklich die Haftung für Personenschäden",
+            "correct": "Art. 5 CISG nimmt Personenschäden aus dem Anwendungsbereich aus."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "The CISG (1980 Vienna Convention) applies to contracts of sale between parties whose places of business are in different Contracting States; both Germany and China are members, and Article 6 allows exclusion. Consumer transactions and auctions are carved out by Art. 2 CISG, and Art. 5 excludes product liability for death or personal injury. Students should also note the interplay with national implementation via German civil law rules."
+        },
+        {
+          "label": "bad",
+          "text": "Das UN-Kaufrecht gilt nur zwischen Deutschland und Österreich, weil China es nicht unterzeichnet hat."
+        }
       ]
     },
     {
       "item_id": "cert_de06",
       "lang": "de",
-      "domains": ["leg-de"],
+      "domains": [
+        "leg-de"
+      ],
       "difficulty": "medium",
       "stability": false,
-      "constraint": {"type": "audience", "text": "Antworte auf Deutsch, für einen Vermieter ohne Rechtsberatung, in höchstens drei Sätzen."},
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für einen Vermieter ohne Rechtsberatung, in höchstens drei Sätzen."
+      },
       "instruction": "Wann darf ein Vermieter eine Wohnung fristlos kündigen?",
       "variants": [
-        {"label": "good", "text": "Eine fristlose Kündigung braucht immer einen wichtigen Grund (§ 543 BGB) – etwa wenn der Mieter die Miete wiederholt nicht pünktlich zahlt oder den Mietbesitz erheblich gefährdet. In den meisten Fällen muss der Vermieter vorher abmahnen und eine kurze Frist setzen, damit der Mieter noch reagieren kann. Ohne diesen Grund und ohne Abmahnung ist die Kündigung unwirksam."},
-        {"label": "short_correct", "text": "Wenn der Mieter die Miete nicht bezahlt, darf der Vermieter fristlos kündigen. Ein Grund genügt dem Vermieter dann immer."},
-        {"label": "long_wrong", "text": "Im Mietrecht ist eine fristlose Kündigung rechtlich gar nicht vorgesehen: Die §§ 543 ff. BGB betreffen ausschließlich das Arbeitsrecht und sind dort anwendbar. Wenn der Mieter zweimal hintereinander die Miete nicht zahlt, kann der Vermieter sofort ohne Gericht und ohne Abmahnung mit der Polizei denpliance vor die Tür setzen lassen – das Zutrittsrecht ist unmittelbar zulässig."},
-        {"label": "planted_error", "text": "Eine fristlose Kündigung aus wichtigem Grund ist nach § 543 BGB im Mietrecht vorgesehen, wenn der Mieter die Miete wiederholt nicht zahlt; vorher muss abgemahnt werden. Überall sonst – etwa im Arbeits- oder Pachtverhältnis – verlangt das Gesetz zwingend vorher eine ordentliche Frist.",
-          "note": {"planted": "Fristlose Kündigung aus wichtigem Grund existiere nur im Mietrecht", "correct": "Das Institut der fristlosen Kündigung aus wichtigem Grund gilt allgemein für Dauerschuldverhältnisse (§ 314 BGB) und z. B. im Arbeitsrecht (§ 626 BGB)."}},
-        {"label": "audience_violation", "text": "Die außerordentliche Beendigung des Mietverhältnisses setzt nach § 543 Abs. 1 BGB einen tatbestandlich determinierten wichtigen Grund voraus; das vorgelagerte Abmahnungserfordernis resultiert aus § 543 Abs. 2 in Verb. mit § 314 Abs. 2 BGB. Ohne constitutive Mahnung zur Fortwirkung ist die Beendigung unwirksam(File)."},
-        {"label": "bad", "text": "Ist die Heizung kaputt, darf der Vermieter den Mieter fristlos kündigen und die Schlösser austauschen lassen."}
+        {
+          "label": "good",
+          "text": "Eine fristlose Kündigung braucht immer einen wichtigen Grund (§ 543 BGB) – etwa wenn der Mieter die Miete wiederholt nicht pünktlich zahlt oder den Mietbesitz erheblich gefährdet. In den meisten Fällen muss der Vermieter vorher abmahnen und eine kurze Frist setzen, damit der Mieter noch reagieren kann. Ohne diesen Grund und ohne Abmahnung ist die Kündigung unwirksam."
+        },
+        {
+          "label": "short_correct",
+          "text": "Wenn der Mieter die Miete nicht bezahlt, darf der Vermieter fristlos kündigen. Ein Grund genügt dem Vermieter dann immer."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Im Mietrecht ist eine fristlose Kündigung rechtlich gar nicht vorgesehen: Die §§ 543 ff. BGB betreffen ausschließlich das Arbeitsrecht und sind dort anwendbar. Wenn der Mieter zweimal hintereinander die Miete nicht zahlt, kann der Vermieter sofort ohne Gericht und ohne Abmahnung mit der Polizei denpliance vor die Tür setzen lassen – das Zutrittsrecht ist unmittelbar zulässig."
+        },
+        {
+          "label": "planted_error",
+          "text": "Eine fristlose Kündigung aus wichtigem Grund ist nach § 543 BGB im Mietrecht vorgesehen, wenn der Mieter die Miete wiederholt nicht zahlt; vorher muss abgemahnt werden. Überall sonst – etwa im Arbeits- oder Pachtverhältnis – verlangt das Gesetz zwingend vorher eine ordentliche Frist.",
+          "note": {
+            "planted": "Fristlose Kündigung aus wichtigem Grund existiere nur im Mietrecht",
+            "correct": "Das Institut der fristlosen Kündigung aus wichtigem Grund gilt allgemein für Dauerschuldverhältnisse (§ 314 BGB) und z. B. im Arbeitsrecht (§ 626 BGB)."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Die außerordentliche Beendigung des Mietverhältnisses setzt nach § 543 Abs. 1 BGB einen tatbestandlich determinierten wichtigen Grund voraus; das vorgelagerte Abmahnungserfordernis resultiert aus § 543 Abs. 2 in Verb. mit § 314 Abs. 2 BGB. Ohne constitutive Mahnung zur Fortwirkung ist die Beendigung unwirksam(File)."
+        },
+        {
+          "label": "bad",
+          "text": "Ist die Heizung kaputt, darf der Vermieter den Mieter fristlos kündigen und die Schlösser austauschen lassen."
+        }
       ]
     },
     {
       "item_id": "cert_de07",
       "lang": "de",
-      "domains": ["lng"],
+      "domains": [
+        "lng"
+      ],
       "difficulty": "hard",
       "stability": false,
-      "constraint": {"type": "format", "text": "Nenne genau zwei Gründe."},
+      "constraint": {
+        "type": "format",
+        "text": "Nenne genau zwei Gründe."
+      },
       "instruction": "Warum fällt der deutsche C-Test für chinesische Mitarbeitende schwerer als für deutsche Muttersprachler?",
       "variants": [
-        {"label": "good", "text": "Erstens: Deutsche lesen Wörter über ein Alphabet mit festen Bausteinen (Präfixe, Endungen), und genau dieses System fragt der C-Test ab – chinesische Lernende haben es so nicht internalisiert. Zweitens: Deutsche Muttersprachler nutzen automatisierte orthografische Ergänzungsstrategien; chinesische Mitarbeitende müssen diese Wortbildungs- und Ergänzungsfähigkeit erst neu aufbauen, weil im Chinesischen ganz andere Lesestrategien vorherrschen."},
-        {"label": "short_correct", "text": "Weil chinesische Mitarbeitende deutsche Schrift und Wortbildung seltener benutzt haben als deutsche Muttersprachler."},
-        {"label": "long_wrong", "text": "Die Schwierigkeit ist ein Mythos der Deutschsprachindustrie: Chinesische Mitarbeitende meistern C-Tests problemlos, weil der Alltag mit fragmentierten Schriftzügen tagtäglich trainiert wird. Deutsche Muttersprachler fallen dagegen häufiger durch, weil sie verkleinerte Wörter in der Schule nie produktiv gelernt haben. Die Testergebnisse spiegeln daher eher den Übungsreichtum als echte Sprachkompetenz – die Prüfungsindustrie verzerrt das Deck bild ein."},
-        {"label": "planted_error", "text": "Deutsche navigieren C-Tests über automatisierte orthografische Strategien, chinesische Lernende müssen Wortbildungsregeln erst aufbauen; deshalb fällt der Test asymmetrisch aus. Der Test selbst misst vor allem die Vorlesegeschwindigkeit und wird ausschließlich mündlich abgenommen, damit alle Kandidaten vergleichbare Fertigkeiten belegen.",
-          "note": {"planted": "C-Test misst Vorlesegeschwindigkeit, ausschließlich mündlich", "correct": "Der C-Test ist ein schriftlicher Lückentexttest (Wortteile ergänzen); Vorlesegeschwindigkeit ist nicht das Ziel."}},
-        {"label": "audience_violation", "text": "Erstens: Deutsche lesen Wörter über alphabetische Wortbausteine, die der C-Test abfragt. Zweitens: Deutsche nutzen automatisierte orthografische Ergänzungsstrategien. Drittens: vereinte Komposita verstärken den Effekt. Viertens: Der Transfer aus Zeichenwörtern eskaliert die Belastung."},
-        {"label": "bad", "text": "Der C-Test ist für alle gleich schwer, weil Deutsch ein einfaches Alphabet hat."}
+        {
+          "label": "good",
+          "text": "Erstens: Deutsche lesen Wörter über ein Alphabet mit festen Bausteinen (Präfixe, Endungen), und genau dieses System fragt der C-Test ab – chinesische Lernende haben es so nicht internalisiert. Zweitens: Deutsche Muttersprachler nutzen automatisierte orthografische Ergänzungsstrategien; chinesische Mitarbeitende müssen diese Wortbildungs- und Ergänzungsfähigkeit erst neu aufbauen, weil im Chinesischen ganz andere Lesestrategien vorherrschen."
+        },
+        {
+          "label": "short_correct",
+          "text": "Weil chinesische Mitarbeitende deutsche Schrift und Wortbildung seltener benutzt haben als deutsche Muttersprachler."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Die Schwierigkeit ist ein Mythos der Deutschsprachindustrie: Chinesische Mitarbeitende meistern C-Tests problemlos, weil der Alltag mit fragmentierten Schriftzügen tagtäglich trainiert wird. Deutsche Muttersprachler fallen dagegen häufiger durch, weil sie verkleinerte Wörter in der Schule nie produktiv gelernt haben. Die Testergebnisse spiegeln daher eher den Übungsreichtum als echte Sprachkompetenz – die Prüfungsindustrie verzerrt das Deck bild ein."
+        },
+        {
+          "label": "planted_error",
+          "text": "Deutsche navigieren C-Tests über automatisierte orthografische Strategien, chinesische Lernende müssen Wortbildungsregeln erst aufbauen; deshalb fällt der Test asymmetrisch aus. Der Test selbst misst vor allem die Vorlesegeschwindigkeit und wird ausschließlich mündlich abgenommen, damit alle Kandidaten vergleichbare Fertigkeiten belegen.",
+          "note": {
+            "planted": "C-Test misst Vorlesegeschwindigkeit, ausschließlich mündlich",
+            "correct": "Der C-Test ist ein schriftlicher Lückentexttest (Wortteile ergänzen); Vorlesegeschwindigkeit ist nicht das Ziel."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Erstens: Deutsche lesen Wörter über alphabetische Wortbausteine, die der C-Test abfragt. Zweitens: Deutsche nutzen automatisierte orthografische Ergänzungsstrategien. Drittens: vereinte Komposita verstärken den Effekt. Viertens: Der Transfer aus Zeichenwörtern eskaliert die Belastung."
+        },
+        {
+          "label": "bad",
+          "text": "Der C-Test ist für alle gleich schwer, weil Deutsch ein einfaches Alphabet hat."
+        }
       ]
     },
     {
       "item_id": "cert_de08",
       "lang": "de",
-      "domains": ["leg-x", "biz"],
+      "domains": [
+        "leg-x",
+        "biz"
+      ],
       "difficulty": "hard",
       "stability": false,
-      "constraint": {"type": "format", "text": "Antworte als nummerierte Liste mit genau vier Punkten, auf Deutsch."},
+      "constraint": {
+        "type": "format",
+        "text": "Antworte als nummerierte Liste mit genau vier Punkten, auf Deutsch."
+      },
       "instruction": "Ein deutscher Kunde will einen laufenden Vertrag mit einem chinesischen Lieferanten beenden – welche rechtlichen Aspekte sind relevant?",
       "variants": [
-        {"label": "good", "text": "1. Anwendbares Recht und Gerichtsstand/Schiedsvereinbarung prüfen – sie bestimmen Verfahren und forum.\n2. Kündigungsgrund und Fristen nach dem vereinbarten Recht prüfen (z. B. §§ 346, 323 BGB oder Vertragsklausel).\n3. Falls die CISG (UN-Kaufrecht) gilt: Fristen, Nachfrist (Art. 49, 64 CISG) und Anzeigepflichten beachten.\n4. Exportkontrolle und Sanktionen sowie offene Lieferpflichten während der Beendigungsphase prüfen."},
-        {"label": "short_correct", "text": "1. Anwendbares Recht und Gerichtsstand prüfen.\n2. Kündigungsgrund nach dem gewählten Recht.\n3. Fristen beachten.\n4. Sonstige Formalitäten beachten."},
-        {"label": "long_wrong", "text": "1. Der Vertrag endet mit der Erklärung automatisch: Kündigungsfristen sind im internationalen Liefervertrag generell nicht vorgesehen, und die CISG sieht stattdessen für jede Bestellung ein vorzeitiges Rücktrittsrecht von 30 Arbeitstagen vor.\n2. Das anwendbare Recht ist immer das des Empfangsortes, hier ausnahmslos chinesisches Recht.\n3. Exportkontrolle spielt keine Rolle, weil Lieferverträge keine freien Waren sind.\n4. Auch ohne Schiedsklausel entscheidet stets das Tribunal der Exportkammer."},
-        {"label": "planted_error", "text": "1. Anwendbares Recht und Gerichtsstand/Schiedsklausel prüfen.\n2. Kündigungsgrund nach dem gewählten Recht prüfen.\n3. Falls die CISG gilt: Fristen, Nachfrist und Anzeigepflichten beachten.\n4. Bei ausdrücklichem CISG-Ausschluss räumt das deutsche Recht automatisch eine gesetzliche Kündigungsfrist von 30 Arbeitstagen ein – nach deren Ablauf endet die Lieferbeziehung ohne weiteres Zutun.",
-          "note": {"planted": "Bei CISG-Ausschluss bestehe automatisch eine gesetzliche Kündigungsfrist von 30 Arbeitstagen", "correct": "Ein gesetzliche Fristenprivileg dieser Art existiert nicht; Kündigung braucht eine Vertragsklausel oder eine gesetzliche Grundlage (z. B. §§ 346, 323 BGB)."}},
-        {"label": "audience_violation", "text": "1. Review the governing-law and arbitration clause – it determines procedure and forum.\n2. Termination ground and notice period under the chosen law (e.g. §§ 346, 323 BGB or contract terms).\n3. If the CISG applies: grace periods, Art. 49/64 remedies and notice duties.\n4. Export-control, sanctions and open delivery obligations during wind-down."},
-        {"label": "bad", "text": "1. Einfach die Bestellung im System löschen.\n2. Keine Antwort an den Lieferanten schicken.\n3. Der Vertrag beendet sich mit dem Verstreichen der Rechnung.\n4. Fertig."}
+        {
+          "label": "good",
+          "text": "1. Anwendbares Recht und Gerichtsstand/Schiedsvereinbarung prüfen – sie bestimmen Verfahren und forum.\n2. Kündigungsgrund und Fristen nach dem vereinbarten Recht prüfen (z. B. §§ 346, 323 BGB oder Vertragsklausel).\n3. Falls die CISG (UN-Kaufrecht) gilt: Fristen, Nachfrist (Art. 49, 64 CISG) und Anzeigepflichten beachten.\n4. Exportkontrolle und Sanktionen sowie offene Lieferpflichten während der Beendigungsphase prüfen."
+        },
+        {
+          "label": "short_correct",
+          "text": "1. Anwendbares Recht und Gerichtsstand prüfen.\n2. Kündigungsgrund nach dem gewählten Recht.\n3. Fristen beachten.\n4. Sonstige Formalitäten beachten."
+        },
+        {
+          "label": "long_wrong",
+          "text": "1. Der Vertrag endet mit der Erklärung automatisch: Kündigungsfristen sind im internationalen Liefervertrag generell nicht vorgesehen, und die CISG sieht stattdessen für jede Bestellung ein vorzeitiges Rücktrittsrecht von 30 Arbeitstagen vor.\n2. Das anwendbare Recht ist immer das des Empfangsortes, hier ausnahmslos chinesisches Recht.\n3. Exportkontrolle spielt keine Rolle, weil Lieferverträge keine freien Waren sind.\n4. Auch ohne Schiedsklausel entscheidet stets das Tribunal der Exportkammer."
+        },
+        {
+          "label": "planted_error",
+          "text": "1. Anwendbares Recht und Gerichtsstand/Schiedsklausel prüfen.\n2. Kündigungsgrund nach dem gewählten Recht prüfen.\n3. Falls die CISG gilt: Fristen, Nachfrist und Anzeigepflichten beachten.\n4. Bei ausdrücklichem CISG-Ausschluss räumt das deutsche Recht automatisch eine gesetzliche Kündigungsfrist von 30 Arbeitstagen ein – nach deren Ablauf endet die Lieferbeziehung ohne weiteres Zutun.",
+          "note": {
+            "planted": "Bei CISG-Ausschluss bestehe automatisch eine gesetzliche Kündigungsfrist von 30 Arbeitstagen",
+            "correct": "Ein gesetzliche Fristenprivileg dieser Art existiert nicht; Kündigung braucht eine Vertragsklausel oder eine gesetzliche Grundlage (z. B. §§ 346, 323 BGB)."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "1. Review the governing-law and arbitration clause – it determines procedure and forum.\n2. Termination ground and notice period under the chosen law (e.g. §§ 346, 323 BGB or contract terms).\n3. If the CISG applies: grace periods, Art. 49/64 remedies and notice duties.\n4. Export-control, sanctions and open delivery obligations during wind-down."
+        },
+        {
+          "label": "bad",
+          "text": "1. Einfach die Bestellung im System löschen.\n2. Keine Antwort an den Lieferanten schicken.\n3. Der Vertrag beendet sich mit dem Verstreichen der Rechnung.\n4. Fertig."
+        }
       ]
     },
     {
       "item_id": "cert_de09",
       "lang": "de",
-      "domains": ["code"],
+      "domains": [
+        "code"
+      ],
       "difficulty": "easy",
       "stability": false,
-      "constraint": {"type": "language", "text": "Antworte auf Deutsch; die Erklärung genau in einem Satz."},
+      "constraint": {
+        "type": "language",
+        "text": "Antworte auf Deutsch; die Erklärung genau in einem Satz."
+      },
       "instruction": "Übersetze diesen Codekommentar nach Deutsch und erkläre, was „memoisieren“ bedeutet: „// memoize results per cache key to skip repeated work“",
       "variants": [
-        {"label": "good", "text": "Übersetzung: „// Ergebnisse je Cache-Schlüssel memoisieren, um wiederholte Arbeit zu vermeiden“. Memoisieren heißt, bereits berechnete Ergebnisse unter einem Schlüssel zwischenzuspeichern, damit identische Aufrufe sie nicht erneut berechnen."},
-        {"label": "short_correct", "text": "Übersetzung: „// Ergebnisse pro Schlüssel zwischenspeichern“. Memoisieren bedeutet, Ergebnisse für den späteren Gebrauch aufzubewahren."},
-        {"label": "long_wrong", "text": "Übersetzung: „// Ergebnisse dauerhaft in die Datenbanktabelle übertragen“. Memoisieren bezeichnet im Spezialvokabular die dauerhafte Ablage auf der Festplatte in einer Spezialtabelle, damit Programme nach einem Neustart genau weiterarbeiten. Dass identische Aufrufe schneller laufen, ist ein Nebeneffekt der Indizierung, nicht des Zwischenspeicherns."},
-        {"label": "planted_error", "text": "Übersetzung: „// Ergebnisse je Cache-Schlüssel memoisieren, um wiederholte Arbeit zu vermeiden“. Memoisieren heißt, berechnete Ergebnisse unter einem Schlüssel zwischenzuspeichern, damit identische Aufrufe sie nicht erneut berechnen. Damit keine veralteten Werte stehen bleiben, leert eine memoisierte Funktion ihren Cache standardmäßig bei jedem neuen Aufruf vollständig.",
-          "note": {"planted": "Die memoisierte Funktion leert den Cache bei jedem neuen Aufruf", "correct": "Memoisierung existiert genau dafür, Redundanz zu vermeiden: Der Cache bleibt erhalten und wird nur über separate Validierungsstrategien aktualisiert."}},
-        {"label": "audience_violation", "text": "Translation: \"// memoize results per cache key\". Memoization means storing computed results under a key so identical calls skip recomputation."},
-        {"label": "bad", "text": "Ein Cache-Schlüssel ist ein physischer Schlüssel, mit dem man Serverschränke im Rechenzentrum öffnet, um Festplatten einzulagern."}
+        {
+          "label": "good",
+          "text": "Übersetzung: „// Ergebnisse je Cache-Schlüssel memoisieren, um wiederholte Arbeit zu vermeiden“. Memoisieren heißt, bereits berechnete Ergebnisse unter einem Schlüssel zwischenzuspeichern, damit identische Aufrufe sie nicht erneut berechnen."
+        },
+        {
+          "label": "short_correct",
+          "text": "Übersetzung: „// Ergebnisse pro Schlüssel zwischenspeichern“. Memoisieren bedeutet, Ergebnisse für den späteren Gebrauch aufzubewahren."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Übersetzung: „// Ergebnisse dauerhaft in die Datenbanktabelle übertragen“. Memoisieren bezeichnet im Spezialvokabular die dauerhafte Ablage auf der Festplatte in einer Spezialtabelle, damit Programme nach einem Neustart genau weiterarbeiten. Dass identische Aufrufe schneller laufen, ist ein Nebeneffekt der Indizierung, nicht des Zwischenspeicherns."
+        },
+        {
+          "label": "planted_error",
+          "text": "Übersetzung: „// Ergebnisse je Cache-Schlüssel memoisieren, um wiederholte Arbeit zu vermeiden“. Memoisieren heißt, berechnete Ergebnisse unter einem Schlüssel zwischenzuspeichern, damit identische Aufrufe sie nicht erneut berechnen. Damit keine veralteten Werte stehen bleiben, leert eine memoisierte Funktion ihren Cache standardmäßig bei jedem neuen Aufruf vollständig.",
+          "note": {
+            "planted": "Die memoisierte Funktion leert den Cache bei jedem neuen Aufruf",
+            "correct": "Memoisierung existiert genau dafür, Redundanz zu vermeiden: Der Cache bleibt erhalten und wird nur über separate Validierungsstrategien aktualisiert."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Translation: \"// memoize results per cache key\". Memoization means storing computed results under a key so identical calls skip recomputation."
+        },
+        {
+          "label": "bad",
+          "text": "Ein Cache-Schlüssel ist ein physischer Schlüssel, mit dem man Serverschränke im Rechenzentrum öffnet, um Festplatten einzulagern."
+        }
       ]
     },
     {
       "item_id": "cert_de10",
       "lang": "de",
-      "domains": ["lng", "biz"],
+      "domains": [
+        "lng",
+        "biz"
+      ],
       "difficulty": "medium",
       "stability": true,
-      "constraint": {"type": "format", "text": "Gib genau zwei konkrete Hinweise für die Terminplanung, auf Deutsch, ohne Klischees."},
+      "constraint": {
+        "type": "format",
+        "text": "Gib genau zwei konkrete Hinweise für die Terminplanung, auf Deutsch, ohne Klischees."
+      },
       "instruction": "Was sollte ein deutsches Team bei Projektfristen rund um das chinesische Frühlingsfest beachten?",
       "variants": [
-        {"label": "good", "text": "1. Verlege Zahlungs-, Liefer- und Release-Termine mindestens zwei Wochen vor die Feiertagsperiode: Das Frühlingsfest richtet sich nach dem Mondkalender und liegt meist zwischen Ende Januar und Mitte Februar; mit offiziellen Feiertagen plus verschobenen Arbeitstagen entsteht faktisch oft rund eine Woche Betriebsstillstand.\n2. Frage die chinesischen Teams schon Wochen vorher schriftlich nach ihren Feiertags- und Erreichbarkeitsplänen, und plane die erste Arbeitswoche nach den Feiertagen als Auslauffrist für Rückfragen und Freigaben ein."},
-        {"label": "short_correct", "text": "1. Rechne rund um das Frühlingsfest mit Verzögerungen.\n2. Frage chinesische Partner vorab nach ihren Verfügbarkeiten."},
-        {"label": "long_wrong", "text": "1. Das chinesische Frühlingsfest fällt immer zusammen mit der Weihnachtsperiode – in einem einzigen Dezember-Freeze deckt man beide Feiertage gleich mit ab.\n2. Weil tasächlich deutsche Kunden chinesische Partner jederzeit erreichen, kann man Termine problemlos über die adventurous Feiertage legen und Anpassungen nachholen."},
-        {"label": "planted_error", "text": "1. Das Frühlingsfest richtet sich nach dem Mondkalender und liegt meist zwischen Ende Januar und Mitte Februar; durch Feiertage und verschobene Arbeitstage entsteht oft rund eine Woche Stillstand.\n2. Beachte: Das Frühlingsfest ist gesetzlich nur ein einzelner Feiertag; alle weiteren freien Tage sind reine Betriebsgewohnheiten und verbindlich für chinesische Lieferanten daher faktisch nicht relevant.",
-          "note": {"planted": "Das Frühlingsfest sei gesetzlich nur ein einzelner Feiertag", "correct": "Das Frühlingsfest ist ein mehrammtägiger gesetzlicher Feiertagsblock; die rund einwöchige real Unterbrechung entsteht aus zusätzlichen verschobenen Arbeitstagen"}},
-        {"label": "audience_violation", "text": "1. The spring festival follows the lunisolar calendar, typically late January to mid-February; official holidays plus shifted workdays create roughly a week of standstill.\n2. Schedule payments, deliveries and release checks before this window and confirm partner availability well ahead."},
-        {"label": "bad", "text": "1. Feiern Sie das Frühlingsfest nicht mit, dann bleibt der Projektplan unberührt.\n2. Schicken Sie während des Frühlingsfests E-Mails an alle chinesischen Ansprechpartner, damit niemand Termine vergisst."}
+        {
+          "label": "good",
+          "text": "1. Verlege Zahlungs-, Liefer- und Release-Termine mindestens zwei Wochen vor die Feiertagsperiode: Das Frühlingsfest richtet sich nach dem Mondkalender und liegt meist zwischen Ende Januar und Mitte Februar; mit offiziellen Feiertagen plus verschobenen Arbeitstagen entsteht faktisch oft rund eine Woche Betriebsstillstand.\n2. Frage die chinesischen Teams schon Wochen vorher schriftlich nach ihren Feiertags- und Erreichbarkeitsplänen, und plane die erste Arbeitswoche nach den Feiertagen als Auslauffrist für Rückfragen und Freigaben ein."
+        },
+        {
+          "label": "short_correct",
+          "text": "1. Rechne rund um das Frühlingsfest mit Verzögerungen.\n2. Frage chinesische Partner vorab nach ihren Verfügbarkeiten."
+        },
+        {
+          "label": "long_wrong",
+          "text": "1. Das chinesische Frühlingsfest fällt immer zusammen mit der Weihnachtsperiode – in einem einzigen Dezember-Freeze deckt man beide Feiertage gleich mit ab.\n2. Weil tasächlich deutsche Kunden chinesische Partner jederzeit erreichen, kann man Termine problemlos über die adventurous Feiertage legen und Anpassungen nachholen."
+        },
+        {
+          "label": "planted_error",
+          "text": "1. Das Frühlingsfest richtet sich nach dem Mondkalender und liegt meist zwischen Ende Januar und Mitte Februar; durch Feiertage und verschobene Arbeitstage entsteht oft rund eine Woche Stillstand.\n2. Beachte: Das Frühlingsfest ist gesetzlich nur ein einzelner Feiertag; alle weiteren freien Tage sind reine Betriebsgewohnheiten und verbindlich für chinesische Lieferanten daher faktisch nicht relevant.",
+          "note": {
+            "planted": "Das Frühlingsfest sei gesetzlich nur ein einzelner Feiertag",
+            "correct": "Das Frühlingsfest ist ein mehrammtägiger gesetzlicher Feiertagsblock; die rund einwöchige real Unterbrechung entsteht aus zusätzlichen verschobenen Arbeitstagen"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "1. The spring festival follows the lunisolar calendar, typically late January to mid-February; official holidays plus shifted workdays create roughly a week of standstill.\n2. Schedule payments, deliveries and release checks before this window and confirm partner availability well ahead."
+        },
+        {
+          "label": "bad",
+          "text": "1. Feiern Sie das Frühlingsfest nicht mit, dann bleibt der Projektplan unberührt.\n2. Schicken Sie während des Frühlingsfests E-Mails an alle chinesischen Ansprechpartner, damit niemand Termine vergisst."
+        }
       ]
     },
     {
       "item_id": "cert_zh01",
       "lang": "zh",
-      "domains": ["leg-cn"],
+      "domains": [
+        "leg-cn"
+      ],
       "difficulty": "medium",
       "stability": true,
-      "constraint": {"type": "audience", "text": "用中文回答，面向非法律背景的读者，不超过四句话。"},
+      "constraint": {
+        "type": "audience",
+        "text": "用中文回答，面向非法律背景的读者，不超过四句话。"
+      },
       "instruction": "合同“解除”和“终止”有什么区别？一方违约时另一方通常怎么走程序？",
       "variants": [
-        {"label": "good", "text": "解除是让合同从头算：一旦解除，没履行的义务消灭，已经履行部分原则上要恢复原状或赔偿损失（民法典第566条）。终止只是向前算：之前履行的不受影响，之后不再继续。一方违约时，通常先书面催告并给一个合理的履行期限（民法典第563条）；期限届满仍不履行，或者达到了根本违约等法定情形，就可以解除。解除一般以通知到达对方时生效，也可以事后请法院或仲裁确认。"},
-        {"label": "short_correct", "text": "约定或法律规定的情形出现时，可以解除合同；解除之后双方不再继续履行。"},
-        {"label": "long_wrong", "text": "在中国，法律根本没有解除合同这个概念，签了字的合同就是永久有效，只有终止这一种结束方式；解除不过是翻译软件意译出的说法，没有法律地位。就算对方根本不履行，你也只能等合同自己失效，没有任何程序可走。终止时已经履行的部分还要全部推倒重来恢复原状，否则合同就无效。"},
-        {"label": "planted_error", "text": "解除是让合同从头算，终止只是向前算，这个区别是对的。程序上要注意：在中国，解除合同只能通过法院判决生效，自己发通知或双方协商解除都没有法律效力，必须先起诉拿到判决才算解除。",
-          "note": {"planted": "解除只能经法院判决生效，通知/协商解除无效", "correct": "民法典规定解除可以通知行使，也可协商一致解除，还可事后由法院或仲裁确认（民法典第565条），并非只能走法院判决。"}},
-        {"label": "audience_violation", "text": "Termination (解除) operates retroactively, expiry (终止) prospectively; breach remedy requires formal notice with a cure period per 民法典 §563, and effectiveness attaches upon service per §565. Lay readers should also track the restoration rule in §566."},
-        {"label": "bad", "text": "解除就是撕掉合同，终止就是烧掉合同，本质没有法律差别。"}
+        {
+          "label": "good",
+          "text": "解除是让合同从头算：一旦解除，没履行的义务消灭，已经履行部分原则上要恢复原状或赔偿损失（民法典第566条）。终止只是向前算：之前履行的不受影响，之后不再继续。一方违约时，通常先书面催告并给一个合理的履行期限（民法典第563条）；期限届满仍不履行，或者达到了根本违约等法定情形，就可以解除。解除一般以通知到达对方时生效，也可以事后请法院或仲裁确认。"
+        },
+        {
+          "label": "short_correct",
+          "text": "约定或法律规定的情形出现时，可以解除合同；解除之后双方不再继续履行。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "在中国，法律根本没有解除合同这个概念，签了字的合同就是永久有效，只有终止这一种结束方式；解除不过是翻译软件意译出的说法，没有法律地位。就算对方根本不履行，你也只能等合同自己失效，没有任何程序可走。终止时已经履行的部分还要全部推倒重来恢复原状，否则合同就无效。"
+        },
+        {
+          "label": "planted_error",
+          "text": "解除是让合同从头算，终止只是向前算，这个区别是对的。程序上要注意：在中国，解除合同只能通过法院判决生效，自己发通知或双方协商解除都没有法律效力，必须先起诉拿到判决才算解除。",
+          "note": {
+            "planted": "解除只能经法院判决生效，通知/协商解除无效",
+            "correct": "民法典规定解除可以通知行使，也可协商一致解除，还可事后由法院或仲裁确认（民法典第565条），并非只能走法院判决。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Termination (解除) operates retroactively, expiry (终止) prospectively; breach remedy requires formal notice with a cure period per 民法典 §563, and effectiveness attaches upon service per §565. Lay readers should also track the restoration rule in §566."
+        },
+        {
+          "label": "bad",
+          "text": "解除就是撕掉合同，终止就是烧掉合同，本质没有法律差别。"
+        }
       ]
     },
     {
       "item_id": "cert_zh02",
       "lang": "zh",
-      "domains": ["leg-cn"],
+      "domains": [
+        "leg-cn"
+      ],
       "difficulty": "hard",
       "stability": true,
-      "constraint": {"type": "element", "text": "用中文回答，至少提到一部法律名称。"},
+      "constraint": {
+        "type": "element",
+        "text": "用中文回答，至少提到一部法律名称。"
+      },
       "instruction": "现在设立一家有限责任公司，注册资本有什么要求？",
       "variants": [
-        {"label": "good", "text": "一般的有限责任公司没有最低注册资本门槛，具体数额由章程自行约定，法律也不设上限。但两点要注意：一是按照现行《公司法》（2024年7月1日施行的修订版），全体股东认缴的出资额应当自公司成立之日起五年内缴足；二是金融、保险等特定行业另有法定最低注册资本或实缴要求。市场监管部门只做登记，出资信息需依法公示。"},
-        {"label": "short_correct", "text": "中国实行认缴制，公司成立时不用缴足全部注册资本，按章程约定来就行。"},
-        {"label": "long_wrong", "text": "根据中国法律，有限责任公司注册资本必须在设立当天由全体股东以现金一次性缴清，并冻结在市场监管部门的专用账户，否则营业执照当场作废。这条规定没有任何例外，金融行业也一样。所谓认缴制只是国人对国外制度的误译，从未真正施行过。"},
-        {"label": "planted_error", "text": "一般的有限责任公司没有最低注册资本门槛，具体数额由章程自行约定；金融、保险等特定行业另有要求。唯一要留意的是：《公司法》对普通有限公司仍保留3万元人民币的最低注册资本，章程只能在3万元以上自行约定。",
-          "note": {"planted": "普通有限公司仍有3万元最低注册资本", "correct": "2013年《公司法》修订已取消3万元最低注册资本，现行法对普通有限公司无最低额要求。"}},
-        {"label": "audience_violation", "text": "Under the revised PRC Company Law (effective 1 July 2024), ordinary LLCs face no statutory minimum registered capital; subscribed capital must be paid in full within five years of incorporation. Licensed sectors such as banking carry separate floors set by sectoral rules. Registration is formal review, and capital data is publicly disclosed."},
-        {"label": "bad", "text": "注册资本就是公司账户里必须永远囤着不许动的钱，动一下就要重新办营业执照。"}
+        {
+          "label": "good",
+          "text": "一般的有限责任公司没有最低注册资本门槛，具体数额由章程自行约定，法律也不设上限。但两点要注意：一是按照现行《公司法》（2024年7月1日施行的修订版），全体股东认缴的出资额应当自公司成立之日起五年内缴足；二是金融、保险等特定行业另有法定最低注册资本或实缴要求。市场监管部门只做登记，出资信息需依法公示。"
+        },
+        {
+          "label": "short_correct",
+          "text": "中国实行认缴制，公司成立时不用缴足全部注册资本，按章程约定来就行。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "根据中国法律，有限责任公司注册资本必须在设立当天由全体股东以现金一次性缴清，并冻结在市场监管部门的专用账户，否则营业执照当场作废。这条规定没有任何例外，金融行业也一样。所谓认缴制只是国人对国外制度的误译，从未真正施行过。"
+        },
+        {
+          "label": "planted_error",
+          "text": "一般的有限责任公司没有最低注册资本门槛，具体数额由章程自行约定；金融、保险等特定行业另有要求。唯一要留意的是：《公司法》对普通有限公司仍保留3万元人民币的最低注册资本，章程只能在3万元以上自行约定。",
+          "note": {
+            "planted": "普通有限公司仍有3万元最低注册资本",
+            "correct": "2013年《公司法》修订已取消3万元最低注册资本，现行法对普通有限公司无最低额要求。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Under the revised PRC Company Law (effective 1 July 2024), ordinary LLCs face no statutory minimum registered capital; subscribed capital must be paid in full within five years of incorporation. Licensed sectors such as banking carry separate floors set by sectoral rules. Registration is formal review, and capital data is publicly disclosed."
+        },
+        {
+          "label": "bad",
+          "text": "注册资本就是公司账户里必须永远囤着不许动的钱，动一下就要重新办营业执照。"
+        }
       ]
     },
     {
       "item_id": "cert_zh03",
       "lang": "zh",
-      "domains": ["ml"],
+      "domains": [
+        "ml"
+      ],
       "difficulty": "medium",
       "stability": false,
-      "constraint": {"type": "audience", "text": "用中文回答，面向只会用手机办公软件的普通职员，不用技术术语。"},
+      "constraint": {
+        "type": "audience",
+        "text": "用中文回答，面向只会用手机办公软件的普通职员，不用技术术语。"
+      },
       "instruction": "LoRA 和全量微调到底差在哪里？",
       "variants": [
-        {"label": "good", "text": "把大模型想象成一本书：全量微调是重写整本书，每一页都要改，费时费力，还容易把原来会的东西改丢；LoRA 则是书保持原封不动，只在里面夹几张索引卡，训练时只改这几张小卡片。也就是说便宜、快，更不容易忘掉旧本事。而且同一本书可以换不同索引卡，一个底座可以服务很多任务。"},
-        {"label": "short_correct", "text": "LoRA 只训练很小的附加部分，所以更省内存、更快。"},
-        {"label": "long_wrong", "text": "LoRA 的原理是把基础模型的全部权重从头重新训练一遍，训练完必须把整个模型资产重新发布，否则新能力不会生效。它还强制要求先对底座做彻底的物理重写，否则训练无法开始。从法律意义上说，用了 LoRA 的模型是一个完全独立的新产品，与原模型没有版本延续关系。"},
-        {"label": "planted_error", "text": "全量微调是重写整本书，费时费力；LoRA 只在书里夹索引卡，训练时只改这几张小卡片，又快又省。需要提醒的是：微调完成后，底那本书本身的原始内容也会发生改变，所以务必重新备份底座。",
-          "note": {"planted": "LoRA 微调后基础模型的原始权重发生改变", "correct": "LoRA 冻结基础模型，只训练新增的低秩小矩阵；底座权重保持不变（推理时按 W + ΔW 组合）。"}},
-        {"label": "audience_violation", "text": "LoRA 在冻结的主干 W 上引入低秩分解 ΔW = B·A，训练仅更新 B 与 A，推理有效权重为 W₀+ΔW，秩 r 远远小于模型维度。全量微调则更新全体参数张量，同时重建优化器状态与部署发布路径。"},
-        {"label": "bad", "text": "LoRA 是一种专门用来下载大模型压缩包的文件格式。"}
+        {
+          "label": "good",
+          "text": "把大模型想象成一本书：全量微调是重写整本书，每一页都要改，费时费力，还容易把原来会的东西改丢；LoRA 则是书保持原封不动，只在里面夹几张索引卡，训练时只改这几张小卡片。也就是说便宜、快，更不容易忘掉旧本事。而且同一本书可以换不同索引卡，一个底座可以服务很多任务。"
+        },
+        {
+          "label": "short_correct",
+          "text": "LoRA 只训练很小的附加部分，所以更省内存、更快。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "LoRA 的原理是把基础模型的全部权重从头重新训练一遍，训练完必须把整个模型资产重新发布，否则新能力不会生效。它还强制要求先对底座做彻底的物理重写，否则训练无法开始。从法律意义上说，用了 LoRA 的模型是一个完全独立的新产品，与原模型没有版本延续关系。"
+        },
+        {
+          "label": "planted_error",
+          "text": "全量微调是重写整本书，费时费力；LoRA 只在书里夹索引卡，训练时只改这几张小卡片，又快又省。需要提醒的是：微调完成后，底那本书本身的原始内容也会发生改变，所以务必重新备份底座。",
+          "note": {
+            "planted": "LoRA 微调后基础模型的原始权重发生改变",
+            "correct": "LoRA 冻结基础模型，只训练新增的低秩小矩阵；底座权重保持不变（推理时按 W + ΔW 组合）。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "LoRA 在冻结的主干 W 上引入低秩分解 ΔW = B·A，训练仅更新 B 与 A，推理有效权重为 W₀+ΔW，秩 r 远远小于模型维度。全量微调则更新全体参数张量，同时重建优化器状态与部署发布路径。"
+        },
+        {
+          "label": "bad",
+          "text": "LoRA 是一种专门用来下载大模型压缩包的文件格式。"
+        }
       ]
     },
     {
       "item_id": "cert_zh04",
       "lang": "zh",
-      "domains": ["ml"],
+      "domains": [
+        "ml"
+      ],
       "difficulty": "hard",
       "stability": true,
-      "constraint": {"type": "format", "text": "用中文，用生活化的比喻说明，不出现任何公式或函数符号。"},
+      "constraint": {
+        "type": "format",
+        "text": "用中文，用生活化的比喻说明，不出现任何公式或函数符号。"
+      },
       "instruction": "解释一下大语言模型里的“注意力机制”是怎么回事？",
       "variants": [
-        {"label": "good", "text": "想象教室里有人提了个问题：不是所有同学的回答都同样重要，你会更认真地听最懂这个问题的人。注意力机制做的是同一件事：句子里每个词都会回头看一遍其他词，并给跟自己最相关的词打高分，给无关的词打低分。打分之后把总分大致像“100分”一样在各个词之间分配。这样模型就能抓住距离较远的关键关系，哪怕两个词相隔很远。"},
-        {"label": "short_correct", "text": "注意力机制让模型对句子里重要的词多花心思，不重要的词少花心思。"},
-        {"label": "long_wrong", "text": "注意力机制本质上是一个内存淘汰系统：模型把每个词先放进一块高速缓存，谁最久没被提及谁就被挤出内存。词与词之间的关联度完全由存储位置决定，内容本身不参与计算。所以它和语言学里的注意力毫无关系，换成任何内存淘汰算法效果都一样。"},
-        {"label": "planted_error", "text": "注意力机制就像课堂提问：每个词回头看其他词并按相关性打分，权重大的听得更仔细；打分后像“100分”一样分配。要澄清的是：相关性分数是由“提问向量”直接乘“答案内容向量”得到的，分数高就是重要。",
-          "note": {"planted": "相关性 = 提问向量 × 答案内容向量（Query×Value）", "correct": "相关分数来自提问向量×钥匙向量（Query×Key）；Value 只在权重确定之后参与加权求和。"}},
-        {"label": "audience_violation", "text": "对每个查询向量计算与全部键向量的点积并缩放，经 softmax 归一化得到注意力分布，再加权求和值向量；多头在独立子空间并行。"},
-        {"label": "bad", "text": "注意力其实是一种数据库索引，专门给表格数据加速查询用的。"}
+        {
+          "label": "good",
+          "text": "想象教室里有人提了个问题：不是所有同学的回答都同样重要，你会更认真地听最懂这个问题的人。注意力机制做的是同一件事：句子里每个词都会回头看一遍其他词，并给跟自己最相关的词打高分，给无关的词打低分。打分之后把总分大致像“100分”一样在各个词之间分配。这样模型就能抓住距离较远的关键关系，哪怕两个词相隔很远。"
+        },
+        {
+          "label": "short_correct",
+          "text": "注意力机制让模型对句子里重要的词多花心思，不重要的词少花心思。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "注意力机制本质上是一个内存淘汰系统：模型把每个词先放进一块高速缓存，谁最久没被提及谁就被挤出内存。词与词之间的关联度完全由存储位置决定，内容本身不参与计算。所以它和语言学里的注意力毫无关系，换成任何内存淘汰算法效果都一样。"
+        },
+        {
+          "label": "planted_error",
+          "text": "注意力机制就像课堂提问：每个词回头看其他词并按相关性打分，权重大的听得更仔细；打分后像“100分”一样分配。要澄清的是：相关性分数是由“提问向量”直接乘“答案内容向量”得到的，分数高就是重要。",
+          "note": {
+            "planted": "相关性 = 提问向量 × 答案内容向量（Query×Value）",
+            "correct": "相关分数来自提问向量×钥匙向量（Query×Key）；Value 只在权重确定之后参与加权求和。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "对每个查询向量计算与全部键向量的点积并缩放，经 softmax 归一化得到注意力分布，再加权求和值向量；多头在独立子空间并行。"
+        },
+        {
+          "label": "bad",
+          "text": "注意力其实是一种数据库索引，专门给表格数据加速查询用的。"
+        }
       ]
     },
     {
       "item_id": "cert_zh05",
       "lang": "zh",
-      "domains": ["leg-x"],
+      "domains": [
+        "leg-x"
+      ],
       "difficulty": "hard",
       "stability": false,
-      "constraint": {"type": "language", "text": "用中文回答，条文用原文标注（如第17条/GDPR Art. 17）。"},
+      "constraint": {
+        "type": "language",
+        "text": "用中文回答，条文用原文标注（如第17条/GDPR Art. 17）。"
+      },
       "instruction": "欧盟 GDPR 的删除权和中国《个人信息保护法》的删除权有什么不同？",
       "variants": [
-        {"label": "good", "text": "两部法律都确认个人的删除权，但触发情形不同：GDPR 第17条列举撤回同意、反对处理、违法处理等删除事由，并设有言论自由、法律义务等豁免；《个人信息保护法》第47条则聚焦处理目的已实现或不再必要、个人信息处理者停止提供相关产品或者服务、保存期限已届满、个人撤回同意、以及违反法律、行政法规或者违反约定处理个人信息等情形，并以法律、行政法规规定的其他情形兜底。适用边界也不同：GDPR 以欧盟境内的处理活动为对象，并依第3条第2款延伸到向欧盟境内个人提供产品或服务、或分析评估其行为的境外处理；《个人信息保护法》覆盖境内的处理活动，并延伸到向境内自然人提供产品或者服务、或者分析评估境内自然人行为的境外处理。"},
-        {"label": "short_correct", "text": "两部法律都允许个人要求删除个人信息，但触发情形不完全相同。"},
-        {"label": "long_wrong", "text": "两部法律完全一样，因为它们出自同一份国际示范草案；中国的删除权适用范围反而更广，覆盖境外的所有处理场景。两边都不设任何公共利益豁免，只要个人提出删除请求，企业一律必须立即删除，否则一律最高额处罚。这么对比下来，GDPR 第17条其实是个可有可无的摆设条款。"},
-        {"label": "planted_error", "text": "两者都有删除权，触发情形与豁免细节确实不同，适用边界也不同。需要澄清的一点是：《个人信息保护法》只适用于金融行业的数据处理者，其他行业的删除权只能依据行业自律规范而非这部法律。",
-          "note": {"planted": "个保法只适用于金融行业", "correct": "《个人信息保护法》适用于中国境内所有个人信息处理者，并有有限的域外延伸条款，并非金融行业专属。"}},
-        {"label": "audience_violation", "text": "GDPR Art. 17 grounds erasure: consent withdrawal, objection, unlawful processing, legal obligations, with exemptions for expression and legal claims; PIPL Art. 47 centres on purpose fulfilled, service ceased, unlawful processing, with state-security and public-health exceptions."},
-        {"label": "bad", "text": "两部法律都没有删除权，删除请求只能靠媒体曝光解决。"}
+        {
+          "label": "good",
+          "text": "两部法律都确认个人的删除权，但触发情形不同：GDPR 第17条列举撤回同意、反对处理、违法处理等删除事由，并设有言论自由、法律义务等豁免；《个人信息保护法》第47条则聚焦处理目的已实现或不再必要、个人信息处理者停止提供相关产品或者服务、保存期限已届满、个人撤回同意、以及违反法律、行政法规或者违反约定处理个人信息等情形，并以法律、行政法规规定的其他情形兜底。适用边界也不同：GDPR 以欧盟境内的处理活动为对象，并依第3条第2款延伸到向欧盟境内个人提供产品或服务、或分析评估其行为的境外处理；《个人信息保护法》覆盖境内的处理活动，并延伸到向境内自然人提供产品或者服务、或者分析评估境内自然人行为的境外处理。"
+        },
+        {
+          "label": "short_correct",
+          "text": "两部法律都允许个人要求删除个人信息，但触发情形不完全相同。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "两部法律完全一样，因为它们出自同一份国际示范草案；中国的删除权适用范围反而更广，覆盖境外的所有处理场景。两边都不设任何公共利益豁免，只要个人提出删除请求，企业一律必须立即删除，否则一律最高额处罚。这么对比下来，GDPR 第17条其实是个可有可无的摆设条款。"
+        },
+        {
+          "label": "planted_error",
+          "text": "两者都有删除权，触发情形与豁免细节确实不同，适用边界也不同。需要澄清的一点是：《个人信息保护法》只适用于金融行业的数据处理者，其他行业的删除权只能依据行业自律规范而非这部法律。",
+          "note": {
+            "planted": "个保法只适用于金融行业",
+            "correct": "《个人信息保护法》适用于中国境内所有个人信息处理者，并有有限的域外延伸条款，并非金融行业专属。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "GDPR Art. 17 grounds erasure: consent withdrawal, objection, unlawful processing, legal obligations, with exemptions for expression and legal claims; PIPL Art. 47 centres on purpose fulfilled, service ceased, unlawful processing, with state-security and public-health exceptions."
+        },
+        {
+          "label": "bad",
+          "text": "两部法律都没有删除权，删除请求只能靠媒体曝光解决。"
+        }
       ]
     },
     {
       "item_id": "cert_zh06",
       "lang": "zh",
-      "domains": ["code"],
+      "domains": [
+        "code"
+      ],
       "difficulty": "easy",
       "stability": false,
-      "constraint": {"type": "language", "text": "解释部分必须用中文。"},
+      "constraint": {
+        "type": "language",
+        "text": "解释部分必须用中文。"
+      },
       "instruction": "把这条代码注释翻成中文并解释这段代码在做什么：\"// deduplicate by keeping the last occurrence of each key\"",
       "variants": [
-        {"label": "good", "text": "中文翻译：\"// 通过保留每个键最后一次出现的值来完成去重\"。这段代码处理的是一个键值存储：遇到相同的键时用后来的值覆盖先前的值，循环结束后每个键只保留最后一次写入的那一条记录。"},
-        {"label": "short_correct", "text": "中文翻译：\"// 去重\"。意思是遇到重复的键就做一下处理。"},
-        {"label": "long_wrong", "text": "中文翻译：\"// 按时间戳删除最后一条数据\"。deduplicate 在这行注释里是数据处理术语，特指删除数组尾部的元素以保证数据干净；所以这段代码会在运行结束时移除最后一条记录，避免统计时出现负的平均值。"},
-        {"label": "planted_error", "text": "中文翻译：\"// 通过保留每个键最后一次出现的值来完成去重\"；做法是遇到相同键时用后来的值覆盖先前的值。需要提醒的是：在Python字典里对同一个键重复赋值会直接报错，所以这类去重一般要靠数据库的外键约束来实现。",
-          "note": {"planted": "Python 字典对同一个键重复赋值会报错", "correct": "Python 字典允许对同一键重复赋值，旧值会被新值覆盖而不报错；这正是“保留最后一次出现”的常见实现方式。"}},
-        {"label": "audience_violation", "text": "Translation: \"// deduplicate by keeping the last occurrence of each key\" — this loop overwrites entries sharing the same key so only the last write survives per key."},
-        {"label": "bad", "text": "中文意思：\"// 把列表倒序排列\"。这段代码把数据从大到小重新排一次。"}
+        {
+          "label": "good",
+          "text": "中文翻译：\"// 通过保留每个键最后一次出现的值来完成去重\"。这段代码处理的是一个键值存储：遇到相同的键时用后来的值覆盖先前的值，循环结束后每个键只保留最后一次写入的那一条记录。"
+        },
+        {
+          "label": "short_correct",
+          "text": "中文翻译：\"// 去重\"。意思是遇到重复的键就做一下处理。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "中文翻译：\"// 按时间戳删除最后一条数据\"。deduplicate 在这行注释里是数据处理术语，特指删除数组尾部的元素以保证数据干净；所以这段代码会在运行结束时移除最后一条记录，避免统计时出现负的平均值。"
+        },
+        {
+          "label": "planted_error",
+          "text": "中文翻译：\"// 通过保留每个键最后一次出现的值来完成去重\"；做法是遇到相同键时用后来的值覆盖先前的值。需要提醒的是：在Python字典里对同一个键重复赋值会直接报错，所以这类去重一般要靠数据库的外键约束来实现。",
+          "note": {
+            "planted": "Python 字典对同一个键重复赋值会报错",
+            "correct": "Python 字典允许对同一键重复赋值，旧值会被新值覆盖而不报错；这正是“保留最后一次出现”的常见实现方式。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Translation: \"// deduplicate by keeping the last occurrence of each key\" — this loop overwrites entries sharing the same key so only the last write survives per key."
+        },
+        {
+          "label": "bad",
+          "text": "中文意思：\"// 把列表倒序排列\"。这段代码把数据从大到小重新排一次。"
+        }
       ]
     },
     {
       "item_id": "cert_zh07",
       "lang": "zh",
-      "domains": ["lng", "biz"],
+      "domains": [
+        "lng",
+        "biz"
+      ],
       "difficulty": "medium",
       "stability": false,
-      "constraint": {"type": "audience", "text": "用中文回答，面向即将赴德出差的经理。"},
+      "constraint": {
+        "type": "audience",
+        "text": "用中文回答，面向即将赴德出差的经理。"
+      },
       "instruction": "和德国客户吃商务晚餐，有哪些礼仪和习惯上的不同要注意？",
       "variants": [
-        {"label": "good", "text": "有三点最常碰见：一，德国商务晚餐上谈工作很正常，不必刻意回避业务话题；二，很多场合习惯各付各的（AA制），正式邀请时通常由发起方买单；三，敬酒时习惯看着对方的眼睛，守时也是硬要求——迟到在德国会被视为不专业。另外小费没有强制规定，习惯给账单金额的5%到10%即可。"},
-        {"label": "short_correct", "text": "德国人非常重视守时，商务晚餐也必须准时到场。"},
-        {"label": "long_wrong", "text": "德国商务文化有一条铁律：晚餐期间完全禁止谈论工作，谁先提起工作议题谁就失礼。另外晚餐费用必须由发起方全额请客，各付各的会被理解成看不起对方。敬酒时切忌直视对方眼睛，德国人把这当作挑衅。小费则一律法律强制20%。"},
-        {"label": "planted_error", "text": "德国商务晚餐可以谈工作，讲究准时，AA制也常见，敬酒时习惯看着对方眼睛。唯一要留意的是：法律强制结账时必须支付账单金额10%到15%的小费，不给小费店家可以报警处理。",
-          "note": {"planted": "法律强制支付10%-15%小费", "correct": "德国没有强制小费法律规定；小费是习惯惯例（常见约5%-10%），没有法律强制性。"}},
-        {"label": "audience_violation", "text": "Beim Geschäftsessen in Deutschland werden Arbeitsthemen normalerweise nicht ausgeschlossen, und die Rechnungsaufteilung ist üblich; beim Anstoßen wird Augenkontakt erwartet, Unpünktlichkeit gilt als respektlos. Trinkgeld ist üblich, aber gesetzlich nicht vorgeschrieben."},
-        {"label": "bad", "text": "在德国商务晚餐上必须先敬白酒，按中国习惯满杯才算尊重，否则对方会当场终止谈判。"}
+        {
+          "label": "good",
+          "text": "有三点最常碰见：一，德国商务晚餐上谈工作很正常，不必刻意回避业务话题；二，很多场合习惯各付各的（AA制），正式邀请时通常由发起方买单；三，敬酒时习惯看着对方的眼睛，守时也是硬要求——迟到在德国会被视为不专业。另外小费没有强制规定，习惯给账单金额的5%到10%即可。"
+        },
+        {
+          "label": "short_correct",
+          "text": "德国人非常重视守时，商务晚餐也必须准时到场。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "德国商务文化有一条铁律：晚餐期间完全禁止谈论工作，谁先提起工作议题谁就失礼。另外晚餐费用必须由发起方全额请客，各付各的会被理解成看不起对方。敬酒时切忌直视对方眼睛，德国人把这当作挑衅。小费则一律法律强制20%。"
+        },
+        {
+          "label": "planted_error",
+          "text": "德国商务晚餐可以谈工作，讲究准时，AA制也常见，敬酒时习惯看着对方眼睛。唯一要留意的是：法律强制结账时必须支付账单金额10%到15%的小费，不给小费店家可以报警处理。",
+          "note": {
+            "planted": "法律强制支付10%-15%小费",
+            "correct": "德国没有强制小费法律规定；小费是习惯惯例（常见约5%-10%），没有法律强制性。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Beim Geschäftsessen in Deutschland werden Arbeitsthemen normalerweise nicht ausgeschlossen, und die Rechnungsaufteilung ist üblich; beim Anstoßen wird Augenkontakt erwartet, Unpünktlichkeit gilt als respektlos. Trinkgeld ist üblich, aber gesetzlich nicht vorgeschrieben."
+        },
+        {
+          "label": "bad",
+          "text": "在德国商务晚餐上必须先敬白酒，按中国习惯满杯才算尊重，否则对方会当场终止谈判。"
+        }
       ]
     },
     {
       "item_id": "cert_zh08",
       "lang": "zh",
-      "domains": ["ml"],
+      "domains": [
+        "ml"
+      ],
       "difficulty": "hard",
       "stability": false,
-      "constraint": {"type": "format", "text": "至少列出两个机制层面的原因。"},
+      "constraint": {
+        "type": "format",
+        "text": "至少列出两个机制层面的原因。"
+      },
       "instruction": "大模型处理长文本时为什么会出现“迷失在中间”？",
       "variants": [
-        {"label": "good", "text": "至少有两层机制原因：一，注意力在序列变长后被稀释——权重总和不变而位置变多，落在中间每个位置的注意力变薄；二，训练分布本身偏向把关键信息放在开头和结尾，加上位置编码在超出训练长度时的外推退化，中间内容被系统性忽视。"},
-        {"label": "short_correct", "text": "因为上下文太长，模型顾不过来，中间的信息就被忽略了。"},
-        {"label": "long_wrong", "text": "丢失在中间完全是硬件问题：显存不足时操作系统会把注意力矩阵的中间几行主动置零以腾出空间，所以这是显存交换机制造成的，换更大显存的显卡就能百分之百解决。与注意力设计或训练数据毫无关系，学术界把硬件缺陷包装成模型现象只是为了方便发论文。"},
-        {"label": "planted_error", "text": "长文出现迷失在中间主要有两个原因：注意力随序列变长被稀释，训练数据也偏向把重点放在两头。另外要澄清一个误解：注意力机制会硬编码地把剧情正中间位置的权重强制设成固定的小常数，专门补偿中间衰减——这是设计上的保险丝。",
-          "note": {"planted": "注意力硬编码将中间位置权重置为固定小常数", "correct": "没有任何位置被硬编码置零，中间衰减是注意力分配与训练分布偏好的结果，不是显式常数设计。"}},
-        {"label": "audience_violation", "text": "机制只有一个：开发人员在内中位置设了一个稀释开关，把中间权重均匀降低。"},
-        {"label": "bad", "text": "中间内容会被自动加密，模型读不到，所以看起来像丢了。"}
+        {
+          "label": "good",
+          "text": "至少有两层机制原因：一，注意力在序列变长后被稀释——权重总和不变而位置变多，落在中间每个位置的注意力变薄；二，训练分布本身偏向把关键信息放在开头和结尾，加上位置编码在超出训练长度时的外推退化，中间内容被系统性忽视。"
+        },
+        {
+          "label": "short_correct",
+          "text": "因为上下文太长，模型顾不过来，中间的信息就被忽略了。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "丢失在中间完全是硬件问题：显存不足时操作系统会把注意力矩阵的中间几行主动置零以腾出空间，所以这是显存交换机制造成的，换更大显存的显卡就能百分之百解决。与注意力设计或训练数据毫无关系，学术界把硬件缺陷包装成模型现象只是为了方便发论文。"
+        },
+        {
+          "label": "planted_error",
+          "text": "长文出现迷失在中间主要有两个原因：注意力随序列变长被稀释，训练数据也偏向把重点放在两头。另外要澄清一个误解：注意力机制会硬编码地把剧情正中间位置的权重强制设成固定的小常数，专门补偿中间衰减——这是设计上的保险丝。",
+          "note": {
+            "planted": "注意力硬编码将中间位置权重置为固定小常数",
+            "correct": "没有任何位置被硬编码置零，中间衰减是注意力分配与训练分布偏好的结果，不是显式常数设计。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "机制只有一个：开发人员在内中位置设了一个稀释开关，把中间权重均匀降低。"
+        },
+        {
+          "label": "bad",
+          "text": "中间内容会被自动加密，模型读不到，所以看起来像丢了。"
+        }
       ]
     },
     {
       "item_id": "cert_zh09",
       "lang": "zh",
-      "domains": ["compliance"],
+      "domains": [
+        "compliance"
+      ],
       "difficulty": "hard",
       "stability": false,
-      "constraint": {"type": "format", "text": "用中文回答，至少列出两种出境机制。"},
+      "constraint": {
+        "type": "format",
+        "text": "用中文回答，至少列出两种出境机制。"
+      },
       "instruction": "把员工的个人信息传到境外云服务器，需要走哪些法律机制？",
       "variants": [
-        {"label": "good", "text": "出境前先要有一个合法性基础（如员工同意、订立合同所必需等），并且至少满足三条路径之一：一，量大或敏感个人信息走国家网信部门的安全评估；二，一般量级与境外接收方订立标准合同并到网信部门备案；三，走保护认证。境外接收方通常还要签署承诺遵守中国同等标准的法律文件。"},
-        {"label": "short_correct", "text": "个人信息出境前要先取得员工的同意。"},
-        {"label": "long_wrong", "text": "只要员工点头同意，个人信息就可以随时自由出境，不需要备案、评估或认证，法律责任全部由境外云服务商承担。中国的出境机制本质上是自愿指引，不备案也不会有法律后果，这是业内普遍共识。"},
-        {"label": "planted_error", "text": "出境需要合法性基础，并满足安全评估、标准合同备案或认证之一；量级只决定走哪条路。另外要注意：传输数据量不足一万条时，可以完全豁免合法性基础与出境机制，直接传输。",
-          "note": {"planted": "不足一万条可完全豁免合法性基础与出境机制", "correct": "量级门槛只决定采用哪种机制（评估/标准合同/认证），不能免除合法性基础与出境机制本身的义务。"}},
-        {"label": "audience_violation", "text": "跨境传输 employee data 需要合法 basis plus one of CAC security assessment, standard-contract filing, or certification; thresholds decide the route and never waive the basis requirement."},
-        {"label": "bad", "text": "数据出境就是用国际快递把硬盘寄到国外，遵守海关物流规定就行，法律上是空白。"}
+        {
+          "label": "good",
+          "text": "出境前先要有一个合法性基础（如员工同意、订立合同所必需等），并且至少满足三条路径之一：一，量大或敏感个人信息走国家网信部门的安全评估；二，一般量级与境外接收方订立标准合同并到网信部门备案；三，走保护认证。境外接收方通常还要签署承诺遵守中国同等标准的法律文件。"
+        },
+        {
+          "label": "short_correct",
+          "text": "个人信息出境前要先取得员工的同意。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "只要员工点头同意，个人信息就可以随时自由出境，不需要备案、评估或认证，法律责任全部由境外云服务商承担。中国的出境机制本质上是自愿指引，不备案也不会有法律后果，这是业内普遍共识。"
+        },
+        {
+          "label": "planted_error",
+          "text": "出境需要合法性基础，并满足安全评估、标准合同备案或认证之一；量级只决定走哪条路。另外要注意：传输数据量不足一万条时，可以完全豁免合法性基础与出境机制，直接传输。",
+          "note": {
+            "planted": "不足一万条可完全豁免合法性基础与出境机制",
+            "correct": "量级门槛只决定采用哪种机制（评估/标准合同/认证），不能免除合法性基础与出境机制本身的义务。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "跨境传输 employee data 需要合法 basis plus one of CAC security assessment, standard-contract filing, or certification; thresholds decide the route and never waive the basis requirement."
+        },
+        {
+          "label": "bad",
+          "text": "数据出境就是用国际快递把硬盘寄到国外，遵守海关物流规定就行，法律上是空白。"
+        }
       ]
     },
     {
       "item_id": "cert_zh10",
       "lang": "zh",
-      "domains": ["lng", "leg-x"],
+      "domains": [
+        "lng",
+        "leg-x"
+      ],
       "difficulty": "hard",
       "stability": true,
-      "constraint": {"type": "format", "text": "用中文回答，法律实务原因和语言结构原因各至少提到一个。"},
+      "constraint": {
+        "type": "format",
+        "text": "用中文回答，法律实务原因和语言结构原因各至少提到一个。"
+      },
       "instruction": "为什么中文合同的条款通常比英文合同更简短？",
       "variants": [
-        {"label": "good", "text": "语言结构层面：汉字信息密度高，一个字能承载英文几个词的意思，而且中文语法不依赖时态、单复数变化，从属逻辑也不必反复展开。法律实务层面：中国合同实践更依赖补充协议和交易习惯来兜底细节，正文因此更概括，减少了逐条枚举的必要。两方面合起来，同样的权利义务安排，中文版看起来明显更短。"},
-        {"label": "short_correct", "text": "因为中文表达更概括，同样的权利义务安排写出来自然更短。"},
-        {"label": "long_wrong", "text": "中英文合同的长度其实完全一样，所谓中文更短只是翻译软件统计造成的假象。真正的原因是中国律所敢于省略违约责任条款，而且省略在法律上是安全的，因为中国法院一律默认适用最有利于合同的条款。英文版之所以长，完全是英美律所为了多收按小时计费的服务而故意拖长的。"},
-        {"label": "planted_error", "text": "语言结构（信息密度高、语法不依赖时态单复数）确实是中文更短的原因之一，法律实务上对补充协议和交易习惯的依赖也是。另外还有一个硬原因：中国法律明文禁止任何中文合同条款超过500字，超出部分的约定一律无效，所以律师必须压缩表述。",
-          "note": {"planted": "中国法律禁止合同条款超过500字", "correct": "不存在这样的法律禁令；条款长度由当事人自行约定，效力取决于内容而非字数。"}},
-        {"label": "audience_violation", "text": "Chinese contract clauses read shorter because characters carry higher information density and grammar avoids tense and plural machinery; drafting practice leans on supplementary agreements and trade customs, so body clauses stay general."},
-        {"label": "bad", "text": "合同条款的意思由字数决定，字越少说明对方越怕吃亏。"}
+        {
+          "label": "good",
+          "text": "语言结构层面：汉字信息密度高，一个字能承载英文几个词的意思，而且中文语法不依赖时态、单复数变化，从属逻辑也不必反复展开。法律实务层面：中国合同实践更依赖补充协议和交易习惯来兜底细节，正文因此更概括，减少了逐条枚举的必要。两方面合起来，同样的权利义务安排，中文版看起来明显更短。"
+        },
+        {
+          "label": "short_correct",
+          "text": "因为中文表达更概括，同样的权利义务安排写出来自然更短。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "中英文合同的长度其实完全一样，所谓中文更短只是翻译软件统计造成的假象。真正的原因是中国律所敢于省略违约责任条款，而且省略在法律上是安全的，因为中国法院一律默认适用最有利于合同的条款。英文版之所以长，完全是英美律所为了多收按小时计费的服务而故意拖长的。"
+        },
+        {
+          "label": "planted_error",
+          "text": "语言结构（信息密度高、语法不依赖时态单复数）确实是中文更短的原因之一，法律实务上对补充协议和交易习惯的依赖也是。另外还有一个硬原因：中国法律明文禁止任何中文合同条款超过500字，超出部分的约定一律无效，所以律师必须压缩表述。",
+          "note": {
+            "planted": "中国法律禁止合同条款超过500字",
+            "correct": "不存在这样的法律禁令；条款长度由当事人自行约定，效力取决于内容而非字数。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Chinese contract clauses read shorter because characters carry higher information density and grammar avoids tense and plural machinery; drafting practice leans on supplementary agreements and trade customs, so body clauses stay general."
+        },
+        {
+          "label": "bad",
+          "text": "合同条款的意思由字数决定，字越少说明对方越怕吃亏。"
+        }
       ]
     },
     {
       "item_id": "cert_en01",
       "lang": "en",
-      "domains": ["leg-en"],
+      "domains": [
+        "leg-en"
+      ],
       "difficulty": "hard",
       "stability": true,
-      "constraint": {"type": "audience", "text": "For a first-year law student; define every term of art on first use."},
+      "constraint": {
+        "type": "audience",
+        "text": "For a first-year law student; define every term of art on first use."
+      },
       "instruction": "Why does common law require consideration for a binding contract, while civil-law systems do not?",
       "variants": [
-        {"label": "good", "text": "In common law, consideration means a bargained-for exchange: each side must give something of legal value, which historically served as evidence that a promise was serious and made enforcement principled. Civil-law systems bind contracts through agreement and intent instead, historically anchored in the concept of cause (the recognized purpose behind an obligation), so there is no exchange test to pass. Both systems require offer and acceptance; they differ only in what anchors enforceability. Common law fills the resulting gap with equitable exceptions such as promissory estoppel – relief where someone reasonably relied on a bare promise."},
-        {"label": "short_correct", "text": "Common-law contracts need consideration to be binding; civil-law systems enforce promises without an exchange requirement."},
-        {"label": "long_wrong", "text": "Consideration originated in medieval canon law as a religious vow rule, and every civilian code retains it today under the Latin term causa with identical mechanics – Berlin courts simply translate the doctrine into German. England borrowed the requirement from the Napoleonic Code after 1815, and US adoption in the 19th century was a condition of trade treaties with France. Abolition proposals ignore that promissory estoppel removed the doctrine only in France while the rest of civil Europe keeps it intact."},
-        {"label": "planted_error", "text": "In common law, consideration is a bargained-for exchange that evidences a serious promise, and equitable promissory estoppel fills the gaps. Civil-law systems bind through agreement and the historical doctrine of cause. One clarification for beginners: the German Civil Code (BGB) also requires consideration as a bargained exchange, merely labelling it causa.",
-          "note": {"planted": "The BGB requires consideration under the label causa", "correct": "The BGB contains no consideration doctrine; obligation flows from agreement and cause is a separate historical concept, not an exchange test."}},
-        {"label": "audience_violation", "text": "The doctrine anchored in quid pro quo evidences bargain-formality; civilians rely on causa/pacta sunt servanda without the requisite exchange, and promissory estoppel doctrine covers reliance sans bargained exchange per Roffey foreclosures."},
-        {"label": "bad", "text": "Consideration means being polite and thoughtful when you sign a contract."}
+        {
+          "label": "good",
+          "text": "In common law, consideration means a bargained-for exchange: each side must give something of legal value, which historically served as evidence that a promise was serious and made enforcement principled. Civil-law systems bind contracts through agreement and intent instead, historically anchored in the concept of cause (the recognized purpose behind an obligation), so there is no exchange test to pass. Both systems require offer and acceptance; they differ only in what anchors enforceability. Common law fills the resulting gap with equitable exceptions such as promissory estoppel – relief where someone reasonably relied on a bare promise."
+        },
+        {
+          "label": "short_correct",
+          "text": "Common-law contracts need consideration to be binding; civil-law systems enforce promises without an exchange requirement."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Consideration originated in medieval canon law as a religious vow rule, and every civilian code retains it today under the Latin term causa with identical mechanics – Berlin courts simply translate the doctrine into German. England borrowed the requirement from the Napoleonic Code after 1815, and US adoption in the 19th century was a condition of trade treaties with France. Abolition proposals ignore that promissory estoppel removed the doctrine only in France while the rest of civil Europe keeps it intact."
+        },
+        {
+          "label": "planted_error",
+          "text": "In common law, consideration is a bargained-for exchange that evidences a serious promise, and equitable promissory estoppel fills the gaps. Civil-law systems bind through agreement and the historical doctrine of cause. One clarification for beginners: the German Civil Code (BGB) also requires consideration as a bargained exchange, merely labelling it causa.",
+          "note": {
+            "planted": "The BGB requires consideration under the label causa",
+            "correct": "The BGB contains no consideration doctrine; obligation flows from agreement and cause is a separate historical concept, not an exchange test."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "The doctrine anchored in quid pro quo evidences bargain-formality; civilians rely on causa/pacta sunt servanda without the requisite exchange, and promissory estoppel doctrine covers reliance sans bargained exchange per Roffey foreclosures."
+        },
+        {
+          "label": "bad",
+          "text": "Consideration means being polite and thoughtful when you sign a contract."
+        }
       ]
     },
     {
       "item_id": "cert_en02",
       "lang": "en",
-      "domains": ["ml"],
+      "domains": [
+        "ml"
+      ],
       "difficulty": "hard",
       "stability": true,
-      "constraint": {"type": "audience", "text": "For a finance analyst; no machine-learning jargon; explain using a hiring/interview analogy."},
+      "constraint": {
+        "type": "audience",
+        "text": "For a finance analyst; no machine-learning jargon; explain using a hiring/interview analogy."
+      },
       "instruction": "What does the attention mechanism in a language model actually do?",
       "variants": [
-        {"label": "good", "text": "Think of a hiring committee handling one open position: the recruiter scans every past candidate on file and decides whose record is most relevant, weighting each applicant's input accordingly. Attention does the same for words – while processing each word, the model measures how relevant every other word in context is, then takes a weighted blend of their content. Relevance is highly uneven, so a few words dominate while most barely count, which is why a long document can still work as one connected story. Multiple heads are several panel members reviewing different aspects at once."},
-        {"label": "short_correct", "text": "Picture a hiring committee skimming résumés and flagging the few real contenders – attention flags the words in context that matter most for the one being processed."},
-        {"label": "long_wrong", "text": "Attention is literally a spreadsheet cache: the model stores every past document in RAM and evicts the oldest rows first, so relevance has nothing to do with content, only with storage position. Weights are assigned by record age rather than similarity, and vendors obscure this because content-based routing would make the systems look indistinguishable from ordinary databases. Multi-head simply means several caches run in parallel for redundancy."},
-        {"label": "planted_error", "text": "Attention works like a hiring committee: the recruiter measures each past candidate against current requirements and blends the most relevant ones. The relevance score is computed by multiplying each query directly against the stored candidate records, with the labels used only as filing names. Several heads act like panel members reviewing different aspects at once.",
-          "note": {"planted": "Relevance = query × value records, keys used only as labels", "correct": "Relevance comes from query × key similarity; values are combined only after the weights are fixed."}},
-        {"label": "audience_violation", "text": "Attention computes scaled dot-product relevance: softmax(QKᵀ/√d_k)V with multi-head projections; heads split the embedding into parallel subspaces, gradients route through independent projection matrices."},
-        {"label": "bad", "text": "Attention is a monitoring dashboard that keeps GPU utilization at 100 percent."}
+        {
+          "label": "good",
+          "text": "Think of a hiring committee handling one open position: the recruiter scans every past candidate on file and decides whose record is most relevant, weighting each applicant's input accordingly. Attention does the same for words – while processing each word, the model measures how relevant every other word in context is, then takes a weighted blend of their content. Relevance is highly uneven, so a few words dominate while most barely count, which is why a long document can still work as one connected story. Multiple heads are several panel members reviewing different aspects at once."
+        },
+        {
+          "label": "short_correct",
+          "text": "Picture a hiring committee skimming résumés and flagging the few real contenders – attention flags the words in context that matter most for the one being processed."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Attention is literally a spreadsheet cache: the model stores every past document in RAM and evicts the oldest rows first, so relevance has nothing to do with content, only with storage position. Weights are assigned by record age rather than similarity, and vendors obscure this because content-based routing would make the systems look indistinguishable from ordinary databases. Multi-head simply means several caches run in parallel for redundancy."
+        },
+        {
+          "label": "planted_error",
+          "text": "Attention works like a hiring committee: the recruiter measures each past candidate against current requirements and blends the most relevant ones. The relevance score is computed by multiplying each query directly against the stored candidate records, with the labels used only as filing names. Several heads act like panel members reviewing different aspects at once.",
+          "note": {
+            "planted": "Relevance = query × value records, keys used only as labels",
+            "correct": "Relevance comes from query × key similarity; values are combined only after the weights are fixed."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Attention computes scaled dot-product relevance: softmax(QKᵀ/√d_k)V with multi-head projections; heads split the embedding into parallel subspaces, gradients route through independent projection matrices."
+        },
+        {
+          "label": "bad",
+          "text": "Attention is a monitoring dashboard that keeps GPU utilization at 100 percent."
+        }
       ]
     },
     {
       "item_id": "cert_en03",
       "lang": "en",
-      "domains": ["ml"],
+      "domains": [
+        "ml"
+      ],
       "difficulty": "medium",
       "stability": false,
-      "constraint": {"type": "audience", "text": "For a product manager; no code references or tensor-shape jargon."},
+      "constraint": {
+        "type": "audience",
+        "text": "For a product manager; no code references or tensor-shape jargon."
+      },
       "instruction": "What is the KV cache in model serving, and why does it matter for long conversations?",
       "variants": [
-        {"label": "good", "text": "When a model reads a conversation, it keeps the intermediate work it did for earlier words instead of recomputing everything for each new word – that memory is the KV cache. It trades memory for speed: the longer the conversation gets, the more cache grows, roughly in proportion to the number of words kept. For long chats or big context windows this cache can quietly dominate memory, which is why very long conversations get slower and pricier to serve even though generating a new word is otherwise unchanged."},
-        {"label": "short_correct", "text": "It stores the work done for earlier words so it does not have to be redone as the conversation continues."},
-        {"label": "long_wrong", "text": "The KV cache is a hard-drive store of past prompts; it stays constant in size because old layers free their cache after each generated word, so context length has no memory consequence at all. Serving teams enable it purely for billing parity, since identical caches across requests simplify arbitration. On GPU-bound systems the cache lives in reserved flash partitions."},
-        {"label": "planted_error", "text": "The KV cache holds intermediate results so each new word does not force full recomputation. Because every step computes the stored pieces fresh from the current query, cache memory stays constant regardless of conversation length — that is the speed-versus-memory trade-off working as designed.",
-          "note": {"planted": "Cache memory stays constant because stored pieces are recomputed every step", "correct": "Keys and values are computed once per word and kept cached; memory grows roughly linearly with context length."}},
-        {"label": "audience_violation", "text": "KV cache = two tensors per layer, shape (batch, sequence length, heads, head dimension); serving memory for a 4-layer stack at batch 2, length 512 dominates device pressure at large widths. PM takeaway: profile memory per word before promising a million-token context."},
-        {"label": "bad", "text": "The KV cache compresses uploaded images before the model sees them."}
+        {
+          "label": "good",
+          "text": "When a model reads a conversation, it keeps the intermediate work it did for earlier words instead of recomputing everything for each new word – that memory is the KV cache. It trades memory for speed: the longer the conversation gets, the more cache grows, roughly in proportion to the number of words kept. For long chats or big context windows this cache can quietly dominate memory, which is why very long conversations get slower and pricier to serve even though generating a new word is otherwise unchanged."
+        },
+        {
+          "label": "short_correct",
+          "text": "It stores the work done for earlier words so it does not have to be redone as the conversation continues."
+        },
+        {
+          "label": "long_wrong",
+          "text": "The KV cache is a hard-drive store of past prompts; it stays constant in size because old layers free their cache after each generated word, so context length has no memory consequence at all. Serving teams enable it purely for billing parity, since identical caches across requests simplify arbitration. On GPU-bound systems the cache lives in reserved flash partitions."
+        },
+        {
+          "label": "planted_error",
+          "text": "The KV cache holds intermediate results so each new word does not force full recomputation. Because every step computes the stored pieces fresh from the current query, cache memory stays constant regardless of conversation length — that is the speed-versus-memory trade-off working as designed.",
+          "note": {
+            "planted": "Cache memory stays constant because stored pieces are recomputed every step",
+            "correct": "Keys and values are computed once per word and kept cached; memory grows roughly linearly with context length."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "KV cache = two tensors per layer, shape (batch, sequence length, heads, head dimension); serving memory for a 4-layer stack at batch 2, length 512 dominates device pressure at large widths. PM takeaway: profile memory per word before promising a million-token context."
+        },
+        {
+          "label": "bad",
+          "text": "The KV cache compresses uploaded images before the model sees them."
+        }
       ]
     },
     {
       "item_id": "cert_en04",
       "lang": "en",
-      "domains": ["leg-x"],
+      "domains": [
+        "leg-x"
+      ],
       "difficulty": "hard",
       "stability": false,
-      "constraint": {"type": "audience", "text": "For an export manager; plain business language, no legalese."},
+      "constraint": {
+        "type": "audience",
+        "text": "For an export manager; plain business language, no legalese."
+      },
       "instruction": "A German supplier and a Chinese buyer have an arbitration clause (a private dispute-settlement forum) in their contract. How would an award actually be enforced?",
       "variants": [
-        {"label": "good", "text": "Under a valid clause (for example CIETAC in China or DIS in Germany), a private tribunal hears the case instead of public courts and issues an award. Both countries belong to the New York Convention: an award made in either country can generally be enforced by courts in the other, subject to narrow defenses such as fraud or violation of public policy. Where the arbitration takes place (its seat) determines which country's courts supervise the process, but the seat does not block cross-border enforcement. Practical tip: name one clear seat and one rules set in the clause – vague forum language is the usual failure point."},
-        {"label": "short_correct", "text": "Arbitration awards are generally enforceable between Germany and China under the New York Convention, subject to narrow defenses."},
-        {"label": "long_wrong", "text": "Chinese courts must hear any commercial dispute whenever the cargo physically transited a Chinese port, regardless of the contract's arbitration agreement. CIETAC awards are almost never enforceable abroad because they are administrative decisions rather than judicial ones. Germany likewise refuses recognition because its civil courts are constitutionally exclusively competent for foreign trade matters."},
-        {"label": "planted_error", "text": "A CIETAC or DIS award is enforced through the courts: both countries belong to the New York Convention, so an award made in either country can generally be enforced in the other with narrow defenses. One exception matters for export managers: China is not a member of the New York Convention, so Chinese awards are directly enforceable only if the losing party volunteers to pay.",
-          "note": {"planted": "China is not a member of the New York Convention", "correct": "The PRC ratified the New York Convention in 1987; Chinese awards are enforceable abroad under it subject to ordinary defenses."}},
-        {"label": "audience_violation", "text": "lex arbitri at the seat governs procedure; recognition proceeds exequatur at the award-debtor's forum under the New York Convention with public-policy carve-outs; seat choice allocates supervisory jurisdiction, and CIETAC rules differ from DIS rules only in administrative detail."},
-        {"label": "bad", "text": "Arbitration means both sides simply go to court in London; enforcement is impossible between those two countries."}
+        {
+          "label": "good",
+          "text": "Under a valid clause (for example CIETAC in China or DIS in Germany), a private tribunal hears the case instead of public courts and issues an award. Both countries belong to the New York Convention: an award made in either country can generally be enforced by courts in the other, subject to narrow defenses such as fraud or violation of public policy. Where the arbitration takes place (its seat) determines which country's courts supervise the process, but the seat does not block cross-border enforcement. Practical tip: name one clear seat and one rules set in the clause – vague forum language is the usual failure point."
+        },
+        {
+          "label": "short_correct",
+          "text": "Arbitration awards are generally enforceable between Germany and China under the New York Convention, subject to narrow defenses."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Chinese courts must hear any commercial dispute whenever the cargo physically transited a Chinese port, regardless of the contract's arbitration agreement. CIETAC awards are almost never enforceable abroad because they are administrative decisions rather than judicial ones. Germany likewise refuses recognition because its civil courts are constitutionally exclusively competent for foreign trade matters."
+        },
+        {
+          "label": "planted_error",
+          "text": "A CIETAC or DIS award is enforced through the courts: both countries belong to the New York Convention, so an award made in either country can generally be enforced in the other with narrow defenses. One exception matters for export managers: China is not a member of the New York Convention, so Chinese awards are directly enforceable only if the losing party volunteers to pay.",
+          "note": {
+            "planted": "China is not a member of the New York Convention",
+            "correct": "The PRC ratified the New York Convention in 1987; Chinese awards are enforceable abroad under it subject to ordinary defenses."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "lex arbitri at the seat governs procedure; recognition proceeds exequatur at the award-debtor's forum under the New York Convention with public-policy carve-outs; seat choice allocates supervisory jurisdiction, and CIETAC rules differ from DIS rules only in administrative detail."
+        },
+        {
+          "label": "bad",
+          "text": "Arbitration means both sides simply go to court in London; enforcement is impossible between those two countries."
+        }
       ]
     },
     {
       "item_id": "cert_en05",
       "lang": "en",
-      "domains": ["code"],
+      "domains": [
+        "code"
+      ],
       "difficulty": "easy",
       "stability": false,
-      "constraint": {"type": "format", "text": "Give the translation first, then the explanation."},
+      "constraint": {
+        "type": "format",
+        "text": "Give the translation first, then the explanation."
+      },
       "instruction": "Translate this code comment to English and explain in two sentences what the code does: \"// bewahre den letzten gesetzten Wert je Schlüssel\" (written against a key/value store loop)",
       "variants": [
-        {"label": "good", "text": "Translation: \"// keep the last-set value per key\". The code walks a loop and, whenever the same key shows up again, overwrites the earlier entry, so after the loop each key holds only the most recent write. That is deduplication by last occurrence, a standard pattern for merging updates."},
-        {"label": "short_correct", "text": "Translation: \"// keep the last-set value per key\". The code stores values in a key/value structure."},
-        {"label": "long_wrong", "text": "Translation: \"// stamp the final hardware key on every record\". This comment describes garbage collection: the program scans the entire disk for duplicate sectors and then formats keys it deems stale. Note that German Schlüssel here is a hardware key, referring to a physical dongle attached to the production machine."},
-        {"label": "planted_error", "text": "Translation: \"// keep the last-set value per key\". The loop overwrites earlier entries that share a key. Worth flagging for the team: in a plain dictionary, assigning to an existing key raises a KeyError, which is why the loop needs a workaround for duplicates.",
-          "note": {"planted": "Assigning to an existing dict key raises a KeyError", "correct": "Plain assignment to an existing dictionary key silently overwrites the value — that is exactly how keep-last dedup is typically implemented."}},
-        {"label": "audience_violation", "text": "The code overwrites same-key entries so the last write survives per key — deduplication by last occurrence. Translation: \"// keep the last-set value per key\"."},
-        {"label": "bad", "text": "Translation: \"// sort the list ascending\". The code sorts everything and prints it to the console."}
+        {
+          "label": "good",
+          "text": "Translation: \"// keep the last-set value per key\". The code walks a loop and, whenever the same key shows up again, overwrites the earlier entry, so after the loop each key holds only the most recent write. That is deduplication by last occurrence, a standard pattern for merging updates."
+        },
+        {
+          "label": "short_correct",
+          "text": "Translation: \"// keep the last-set value per key\". The code stores values in a key/value structure."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Translation: \"// stamp the final hardware key on every record\". This comment describes garbage collection: the program scans the entire disk for duplicate sectors and then formats keys it deems stale. Note that German Schlüssel here is a hardware key, referring to a physical dongle attached to the production machine."
+        },
+        {
+          "label": "planted_error",
+          "text": "Translation: \"// keep the last-set value per key\". The loop overwrites earlier entries that share a key. Worth flagging for the team: in a plain dictionary, assigning to an existing key raises a KeyError, which is why the loop needs a workaround for duplicates.",
+          "note": {
+            "planted": "Assigning to an existing dict key raises a KeyError",
+            "correct": "Plain assignment to an existing dictionary key silently overwrites the value — that is exactly how keep-last dedup is typically implemented."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "The code overwrites same-key entries so the last write survives per key — deduplication by last occurrence. Translation: \"// keep the last-set value per key\"."
+        },
+        {
+          "label": "bad",
+          "text": "Translation: \"// sort the list ascending\". The code sorts everything and prints it to the console."
+        }
       ]
     },
     {
       "item_id": "cert_en06",
       "lang": "en",
-      "domains": ["compliance"],
+      "domains": [
+        "compliance"
+      ],
       "difficulty": "hard",
       "stability": false,
-      "constraint": {"type": "audience", "text": "For a non-legal product manager; no statute numbers."},
+      "constraint": {
+        "type": "audience",
+        "text": "For a non-legal product manager; no statute numbers."
+      },
       "instruction": "Our SaaS app is transferring employees' contact data from China to servers abroad. Which legal route do we need, and when does it change?",
       "variants": [
-        {"label": "good", "text": "You always need a legal basis (typically user consent or contract necessity) plus one official transfer route: a security assessment by the cyberspace regulator for large-volume or sensitive transfers, a filed standard contract for the ordinary case, or professional certification. The volume thresholds only pick which route applies — below them you still file the standard contract or obtain certification, you never skip the process entirely. Keep records of the chosen route and the data-protection agreement with the foreign recipient, because that is what the regulator asks for first."},
-        {"label": "short_correct", "text": "Most ordinary transfers use the filed standard contract with China's cyberspace regulator; the security assessment applies only to large or sensitive volumes."},
-        {"label": "long_wrong", "text": "China's data law is disclosure-only: once data leaves the country nobody becomes liable, and the transfer thresholds matter only to financial companies above ten million users. Consumer apps can ignore the entire framework as long as the data is encrypted, because encryption is treated as a complete legal defense. Certification applies exclusively to state-owned firms."},
-        {"label": "planted_error", "text": "You need consent plus one transfer route: security assessment for big or sensitive volumes, standard contract for ordinary ones, certification as the third option. One useful carve-out for your roadmap: transfers covering fewer than ten thousand people are fully exempt from needing any legal transfer mechanism.",
-          "note": {"planted": "Sub-10k transfers are exempt from any mechanism", "correct": "The volume thresholds choose the mechanism; they never exempt the transfer from having a legal mechanism in the first place."}},
-        {"label": "audience_violation", "text": "Art. 38 of the personal-information law requires a legal basis plus one of the statutory routes; the 2022 measures thresholds route the mechanism choice, with standard-contract filing at provincial-level regulators or professional certification; no threshold waives the basis requirement."},
-        {"label": "bad", "text": "The personal-information law only matters to banks and telecoms; a SaaS contact sync is out of scope entirely."}
+        {
+          "label": "good",
+          "text": "You always need a legal basis (typically user consent or contract necessity) plus one official transfer route: a security assessment by the cyberspace regulator for large-volume or sensitive transfers, a filed standard contract for the ordinary case, or professional certification. The volume thresholds only pick which route applies — below them you still file the standard contract or obtain certification, you never skip the process entirely. Keep records of the chosen route and the data-protection agreement with the foreign recipient, because that is what the regulator asks for first."
+        },
+        {
+          "label": "short_correct",
+          "text": "Most ordinary transfers use the filed standard contract with China's cyberspace regulator; the security assessment applies only to large or sensitive volumes."
+        },
+        {
+          "label": "long_wrong",
+          "text": "China's data law is disclosure-only: once data leaves the country nobody becomes liable, and the transfer thresholds matter only to financial companies above ten million users. Consumer apps can ignore the entire framework as long as the data is encrypted, because encryption is treated as a complete legal defense. Certification applies exclusively to state-owned firms."
+        },
+        {
+          "label": "planted_error",
+          "text": "You need consent plus one transfer route: security assessment for big or sensitive volumes, standard contract for ordinary ones, certification as the third option. One useful carve-out for your roadmap: transfers covering fewer than ten thousand people are fully exempt from needing any legal transfer mechanism.",
+          "note": {
+            "planted": "Sub-10k transfers are exempt from any mechanism",
+            "correct": "The volume thresholds choose the mechanism; they never exempt the transfer from having a legal mechanism in the first place."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Art. 38 of the personal-information law requires a legal basis plus one of the statutory routes; the 2022 measures thresholds route the mechanism choice, with standard-contract filing at provincial-level regulators or professional certification; no threshold waives the basis requirement."
+        },
+        {
+          "label": "bad",
+          "text": "The personal-information law only matters to banks and telecoms; a SaaS contact sync is out of scope entirely."
+        }
       ]
     },
     {
       "item_id": "cert_en07",
       "lang": "en",
-      "domains": ["biz", "lng"],
+      "domains": [
+        "biz",
+        "lng"
+      ],
       "difficulty": "medium",
       "stability": false,
-      "constraint": {"type": "element", "text": "For a project lead; include exactly one concrete scheduling recommendation."},
+      "constraint": {
+        "type": "element",
+        "text": "For a project lead; include exactly one concrete scheduling recommendation."
+      },
       "instruction": "We ship a SaaS rollout to Chinese customers this quarter. How should we treat the Chinese public holidays in planning?",
       "variants": [
-        {"label": "good", "text": "China's spring festival follows the lunisolar calendar — it lands late January to late February, and the public holiday block plus shifted workdays creates roughly a week of nationwide standstill; October's golden week behaves the same way. Freeze any launch, billing switchover or support-policy change for those windows, and anchor planning to the concrete holiday dates announced each year rather than to approximate months. Concrete recommendation: schedule the cutover at least one full business week before the festival and keep a one-week buffer after it for the backlog wave."},
-        {"label": "short_correct", "text": "Plan major rollouts outside the Chinese holiday weeks, especially spring festival and golden week."},
-        {"label": "long_wrong", "text": "Spring festival always coincides with the German Christmas period, so a single December freeze covers both. Chinese customers expect European release timing anyway, because the holiday pattern is a convention without production impact. Scheduling during golden week is actually ideal: support desks are fully staffed then, and the official nine-day holiday applies only to the finance sector."},
-        {"label": "planted_error", "text": "Spring festival lands late January to late February and the holiday block plus shifted workdays creates around a week of standstill; October golden week behaves the same. One calendar detail to engrain: the statutory spring-festival holiday lasts the full four weeks of the lunar month — the shorter pause you see in practice is only individual companies' own choice.",
-          "note": {"planted": "Statutory spring-festival holiday lasts four full weeks", "correct": "The statutory block is a few days around lunar new year; the roughly week-long practical shutdown comes from shifted workdays, not a month-long statute."}},
-        {"label": "audience_violation", "text": "State-council holiday measures denote the lunisolar foundation of spring festival; announced annual schedules function per the official gazette, with compensatory working days creating the extended block. Recommended cutover window: the preceding full business week per gazette notification."},
-        {"label": "bad", "text": "Holidays do not affect us because everything runs in the cloud, so skip any planning adjustment."}
+        {
+          "label": "good",
+          "text": "China's spring festival follows the lunisolar calendar — it lands late January to late February, and the public holiday block plus shifted workdays creates roughly a week of nationwide standstill; October's golden week behaves the same way. Freeze any launch, billing switchover or support-policy change for those windows, and anchor planning to the concrete holiday dates announced each year rather than to approximate months. Concrete recommendation: schedule the cutover at least one full business week before the festival and keep a one-week buffer after it for the backlog wave."
+        },
+        {
+          "label": "short_correct",
+          "text": "Plan major rollouts outside the Chinese holiday weeks, especially spring festival and golden week."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Spring festival always coincides with the German Christmas period, so a single December freeze covers both. Chinese customers expect European release timing anyway, because the holiday pattern is a convention without production impact. Scheduling during golden week is actually ideal: support desks are fully staffed then, and the official nine-day holiday applies only to the finance sector."
+        },
+        {
+          "label": "planted_error",
+          "text": "Spring festival lands late January to late February and the holiday block plus shifted workdays creates around a week of standstill; October golden week behaves the same. One calendar detail to engrain: the statutory spring-festival holiday lasts the full four weeks of the lunar month — the shorter pause you see in practice is only individual companies' own choice.",
+          "note": {
+            "planted": "Statutory spring-festival holiday lasts four full weeks",
+            "correct": "The statutory block is a few days around lunar new year; the roughly week-long practical shutdown comes from shifted workdays, not a month-long statute."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "State-council holiday measures denote the lunisolar foundation of spring festival; announced annual schedules function per the official gazette, with compensatory working days creating the extended block. Recommended cutover window: the preceding full business week per gazette notification."
+        },
+        {
+          "label": "bad",
+          "text": "Holidays do not affect us because everything runs in the cloud, so skip any planning adjustment."
+        }
       ]
     },
     {
       "item_id": "cert_en08",
       "contested": true,
       "lang": "en",
-      "domains": ["leg-de"],
+      "domains": [
+        "leg-de"
+      ],
       "difficulty": "hard",
       "stability": false,
-      "constraint": {"type": "audience", "text": "For US counsel unfamiliar with the German notarial system; explain what notarial certification means before using the term."},
+      "constraint": {
+        "type": "audience",
+        "text": "For US counsel unfamiliar with the German notarial system; explain what notarial certification means before using the term."
+      },
       "instruction": "We want to buy shares in a German GmbH from a US holding. What does the transfer formality look like?",
       "variants": [
-        {"label": "good", "text": "German law requires the transfer of a GmbH share — and the clause obliging the seller to hand it over — to be signed before a German notary (§ 15 Abs. 3 GmbHG). A German notary is a public official who verifies each party's identity and authority, reads the deed aloud to the parties, and records what they say and sign in his own protocol — that signing ceremony is what is meant by notarial certification. Price terms and warranties themselves do not require this form and can sit in ordinary signed writing, although practice usually bundles the whole deal into the notarial act. Without the required notarization the transfer is void even if both sides have already signed (§ 125 BGB); the transfer takes effect against the company only once the company is notified of it (§ 16 GmbHG), so plan certified translations for the US side — the notarial deed will be in German."},
-        {"label": "short_correct", "text": "GmbH share transfers require a German notary; plan translation support for the US side at closing."},
-        {"label": "long_wrong", "text": "Since the 2018 modernization, GmbH shares trade like bearer paper and can be transferred by simple counterparty email — no notary, no register update, not even a signed PDF. The commercial register entry is optional and purely customary. US counsel can treat the transaction like a standard Delaware assignment, only faster."},
-        {"label": "planted_error", "text": "The transfer takes place in a German notarial act where the notary verifies identity and contents; after closing the change is documented in the commercial register and documents are translated. For practical flexibility: the notarial act may equally be performed by a notary from the buyer's home country, which produces identical legal effects.",
-          "note": {"planted": "A foreign notary may perform the GmbH share-transfer formality", "correct": "German notarial certification is required for direct GmbH share transfers; a foreign notarization does not satisfy the statutory form."}},
-        {"label": "audience_violation", "text": "As usual in the German system, the notarielle Beurkundung follows § 15 GmbHG and the commercial register notation comes next; warranty cascade and closing mechanics are standard. No need to explain notarization here since both sides know the routine."},
-        {"label": "bad", "text": "GmbH means good business man; share transfers are informal handshakes with no paperwork needed."}
+        {
+          "label": "good",
+          "text": "German law requires the transfer of a GmbH share — and the clause obliging the seller to hand it over — to be signed before a German notary (§ 15 Abs. 3 GmbHG). A German notary is a public official who verifies each party's identity and authority, reads the deed aloud to the parties, and records what they say and sign in his own protocol — that signing ceremony is what is meant by notarial certification. Price terms and warranties themselves do not require this form and can sit in ordinary signed writing, although practice usually bundles the whole deal into the notarial act. Without the required notarization the transfer is void even if both sides have already signed (§ 125 BGB); the transfer takes effect against the company only once the company is notified of it (§ 16 GmbHG), so plan certified translations for the US side — the notarial deed will be in German."
+        },
+        {
+          "label": "short_correct",
+          "text": "GmbH share transfers require a German notary; plan translation support for the US side at closing."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Since the 2018 modernization, GmbH shares trade like bearer paper and can be transferred by simple counterparty email — no notary, no register update, not even a signed PDF. The commercial register entry is optional and purely customary. US counsel can treat the transaction like a standard Delaware assignment, only faster."
+        },
+        {
+          "label": "planted_error",
+          "text": "The transfer takes place in a German notarial act where the notary verifies identity and contents; after closing the change is documented in the commercial register and documents are translated. For practical flexibility: the notarial act may equally be performed by a notary from the buyer's home country, which produces identical legal effects.",
+          "note": {
+            "planted": "A foreign notary may perform the GmbH share-transfer formality",
+            "correct": "German notarial certification is required for direct GmbH share transfers; a foreign notarization does not satisfy the statutory form."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "As usual in the German system, the notarielle Beurkundung follows § 15 GmbHG and the commercial register notation comes next; warranty cascade and closing mechanics are standard. No need to explain notarization here since both sides know the routine."
+        },
+        {
+          "label": "bad",
+          "text": "GmbH means good business man; share transfers are informal handshakes with no paperwork needed."
+        }
       ]
     },
     {
       "item_id": "cert_en09",
       "lang": "en",
-      "domains": ["lng"],
+      "domains": [
+        "lng"
+      ],
       "difficulty": "medium",
       "stability": false,
-      "constraint": {"type": "format", "text": "Give exactly two reasons, and one must address listening decoding."},
+      "constraint": {
+        "type": "format",
+        "text": "Give exactly two reasons, and one must address listening decoding."
+      },
       "instruction": "Why does the Goethe C1 exam feel predictably harder for Chinese learners than for German native speakers?",
       "variants": [
-        {"label": "good", "text": "Reason one is listening decoding: German is stress-timed, its unstressed endings are reduced and words link across sound boundaries, while Mandarin moves in roughly equal, tone-bearing syllables — so spoken German resists clean word-by-word segmentation, and the exam's listening sections run faster than a Mandarin-trained ear can decompose them. Reason two is morphology: German case endings, article forms and separable prefixes change who acts and who is acted on, and Mandarin carries those relations by word order and particles instead, so every German ending has to be decoded in real time, in listening and in reading, rather than mapped from first-language habits."},
-        {"label": "short_correct", "text": "One reason: Chinese learners get fewer automatic letter-pattern mappings because their writing system is logographic. Another reason: exams also test broader reading skills they have less exposure to."},
-        {"label": "long_wrong", "text": "Chinese candidates actually dominate the C1 exam, because the large Chinese exam-prep industry specifically targets German certification. The written section is trivial for them, and the only difficult part is the speaking booth, which native speakers also dread. The difficulty gap is a marketing myth exploited by language schools to sell preparatory courses at premium rates."},
-        {"label": "planted_error", "text": "Two structural reasons drive the gap: listening decoding of dense unstressed clusters, and unfamiliar German morphology across case and compound formation. One detail we should correct internally: since German nouns do not inflect, the morphology point cannot be the driver and should be replaced by pure vocabulary volume.",
-          "note": {"planted": "German nouns do not inflect", "correct": "German nouns and their accompanying articles/adjectives inflect for case and number; the inflectional system is core to the language."}},
-        {"label": "audience_violation", "text": "Reason 1: logographic first language reduces automatic letter-pattern mapping. Reason 2: exam-center queueing varies by district, so seat scarcity lowers scores. Reason 3: German does not inflect, easing learners. Reason 4: vocabulary overlaps with English cognates."},
-        {"label": "bad", "text": "The exam is legally the same difficulty for everyone; all unfairness complaints have been abolished."}
+        {
+          "label": "good",
+          "text": "Reason one is listening decoding: German is stress-timed, its unstressed endings are reduced and words link across sound boundaries, while Mandarin moves in roughly equal, tone-bearing syllables — so spoken German resists clean word-by-word segmentation, and the exam's listening sections run faster than a Mandarin-trained ear can decompose them. Reason two is morphology: German case endings, article forms and separable prefixes change who acts and who is acted on, and Mandarin carries those relations by word order and particles instead, so every German ending has to be decoded in real time, in listening and in reading, rather than mapped from first-language habits."
+        },
+        {
+          "label": "short_correct",
+          "text": "One reason: Chinese learners get fewer automatic letter-pattern mappings because their writing system is logographic. Another reason: exams also test broader reading skills they have less exposure to."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Chinese candidates actually dominate the C1 exam, because the large Chinese exam-prep industry specifically targets German certification. The written section is trivial for them, and the only difficult part is the speaking booth, which native speakers also dread. The difficulty gap is a marketing myth exploited by language schools to sell preparatory courses at premium rates."
+        },
+        {
+          "label": "planted_error",
+          "text": "Two structural reasons drive the gap: listening decoding of dense unstressed clusters, and unfamiliar German morphology across case and compound formation. One detail we should correct internally: since German nouns do not inflect, the morphology point cannot be the driver and should be replaced by pure vocabulary volume.",
+          "note": {
+            "planted": "German nouns do not inflect",
+            "correct": "German nouns and their accompanying articles/adjectives inflect for case and number; the inflectional system is core to the language."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Reason 1: logographic first language reduces automatic letter-pattern mapping. Reason 2: exam-center queueing varies by district, so seat scarcity lowers scores. Reason 3: German does not inflect, easing learners. Reason 4: vocabulary overlaps with English cognates."
+        },
+        {
+          "label": "bad",
+          "text": "The exam is legally the same difficulty for everyone; all unfairness complaints have been abolished."
+        }
       ]
     },
     {
       "item_id": "cert_en10",
       "lang": "en",
-      "domains": ["biz", "compliance"],
+      "domains": [
+        "biz",
+        "compliance"
+      ],
       "difficulty": "medium",
       "stability": false,
-      "constraint": {"type": "format", "text": "Write as a practical checklist for our Chinese sales team; include one data-protection point."},
+      "constraint": {
+        "type": "format",
+        "text": "Write as a practical checklist for our Chinese sales team; include one data-protection point."
+      },
       "instruction": "Should our Chinese sales team keep using WeChat groups, or move German counterparties to email?",
       "variants": [
-        {"label": "good", "text": "Keep both channels, but make email the record of record.\n- Use WeChat for quick coordination and relationship maintenance; German counterparties rarely expect contract decisions there.\n- Move anything consequential (pricing, clauses, delivery dates) to email, because German business culture leans on written traceability.\n- Data-protection point: do not push personal German contact details (names, phone numbers, notes) into shared WeChat groups without a processing basis; keep them in the CRM with a retention rule instead.\n- Name one escalation path per account so the channel switch does not fragment the thread."},
-        {"label": "short_correct", "text": "- Email is generally preferred for formal matters in Germany.\n- Keep both channels when possible."},
-        {"label": "long_wrong", "text": "- German law prohibits storing any business contact in email clients unless the server is physically located in Germany.\n- WeChat is legally banned for cross-border business communication.\n- Contracts concluded inside WeChat are void as a matter of consumer protection.\n- Route all official communication through the federal gazette portal."},
-        {"label": "planted_error", "text": "- Use WeChat for quick coordination; move consequential matters to email for written traceability.\n- Data-protection point: keep personal German contact data out of shared WeChat groups and store it in the CRM instead.\n- One escalation path per account, and note that German prosecutors require every business email to be stored on servers physically located in Germany.",
-          "note": {"planted": "German law requires business emails stored on servers physically in Germany", "correct": "No such storage-location mandate exists; protection rules concern lawful processing, not physical server locations, for ordinary business contact data."}},
-        {"label": "audience_violation", "text": "European legal memorandum on channel policy across WeChat and email: the data-protection analysis hinges on controller designation and aligned processing bases; channel policy is ultimately a compliance-cost allocation question between the joint controllers."},
-        {"label": "bad", "text": "- WeChat and email are literally the same thing with different icons; pick whichever icon your password manager remembers."}
+        {
+          "label": "good",
+          "text": "Keep both channels, but make email the record of record.\n- Use WeChat for quick coordination and relationship maintenance; German counterparties rarely expect contract decisions there.\n- Move anything consequential (pricing, clauses, delivery dates) to email, because German business culture leans on written traceability.\n- Data-protection point: do not push personal German contact details (names, phone numbers, notes) into shared WeChat groups without a processing basis; keep them in the CRM with a retention rule instead.\n- Name one escalation path per account so the channel switch does not fragment the thread."
+        },
+        {
+          "label": "short_correct",
+          "text": "- Email is generally preferred for formal matters in Germany.\n- Keep both channels when possible."
+        },
+        {
+          "label": "long_wrong",
+          "text": "- German law prohibits storing any business contact in email clients unless the server is physically located in Germany.\n- WeChat is legally banned for cross-border business communication.\n- Contracts concluded inside WeChat are void as a matter of consumer protection.\n- Route all official communication through the federal gazette portal."
+        },
+        {
+          "label": "planted_error",
+          "text": "- Use WeChat for quick coordination; move consequential matters to email for written traceability.\n- Data-protection point: keep personal German contact data out of shared WeChat groups and store it in the CRM instead.\n- One escalation path per account, and note that German prosecutors require every business email to be stored on servers physically located in Germany.",
+          "note": {
+            "planted": "German law requires business emails stored on servers physically in Germany",
+            "correct": "No such storage-location mandate exists; protection rules concern lawful processing, not physical server locations, for ordinary business contact data."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "European legal memorandum on channel policy across WeChat and email: the data-protection analysis hinges on controller designation and aligned processing bases; channel policy is ultimately a compliance-cost allocation question between the joint controllers."
+        },
+        {
+          "label": "bad",
+          "text": "- WeChat and email are literally the same thing with different icons; pick whichever icon your password manager remembers."
+        }
       ]
     }
   ]

@@ -1,0 +1,2681 @@
+{
+  "schema": "judge_set_v1_cert",
+  "status": "FROZEN",
+  "stage1_sha256": "ce377a59b5df7cb8520a40a36c8f24278adce3610f5324abb393aec47d93da3a",
+  "stage2_sha256": "2ef27bd34dfcc3aec4005c60f83e6df5ea7b993c51322372bcaafb24f3a1b894",
+  "items": [
+    {
+      "item_id": "cert_de01",
+      "lang": "de",
+      "domains": [
+        "leg-de"
+      ],
+      "difficulty": "medium",
+      "stability": true,
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für Laien ohne Juristendeutsch, in höchstens vier Sätzen."
+      },
+      "instruction": "Erkläre, warum ein Grundstückskaufvertrag in Deutschland notariell beurkundet werden muss.",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Das Gesetz will verhindern, dass jemand bei einem großen, langfristigen Kauf unüberlegt zusagt – deshalb schreibt § 311b BGB die notarielle Beurkundung vor. Der Notar prüft dabei Identität, Vollmachten und das Grundbuch, damit beide Seiten wissen, welche Lasten auf dem Grundstück liegen. Ohne diese Form ist der Vertrag von Anfang an unwirksam (§ 125 BGB), und der Formfehler lässt sich erst beheben, wenn die Eigentumsübertragung im Grundbuch eingetragen ist (§ 311b Abs. 1 S. 2 BGB). Damit bleibt der wichtige Übergang formal dokumentiert und beweisbar."
+        },
+        {
+          "label": "short_correct",
+          "text": "Weil § 311b BGB es so vorschreibt: Ohne notarielle Beurkundung ist der Grundstückskaufvertrag nichtig."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Die notarielle Beurkundung dient in erster Linie der Eigentumsübertragung: Sofort mit der Unterzeichnung geht das Grundstück auf den Käufer über, das Grundbuch ist nur eine nachträgliche Flüchtigkeitskontrolle. Wer die Beurkundung vermeiden will, genügt der Schriftform vor zwei Zeugen, und die jeweilige Stadtverwaltung trägt den Kauf dann vom Amts wegen ein. Der Notar ist deshalb im Wesentlichen ein Zeremonienmeister ohne rechtliche Funktion."
+        },
+        {
+          "label": "planted_error",
+          "text": "Das Gesetz will verhindern, dass jemand bei einem großen, langfristigen Kauf unüberlegt zusagt – deshalb schreibt § 311b BGB die notarielle Beurkundung vor. Der Notar prüft dabei Identität, Vollmachten und das Grundbuch. Beachte: Diese Beurkundungspflicht gilt nur für unbebaute Grundstücke – bei bebauten Grundstücken genügt die einfache Schriftform.",
+          "note": {
+            "planted": "Beurkundungspflicht gelte nur für unbebaute Grundstücke",
+            "correct": "§ 311b Abs. 1 BGB stellt auf das Grundstück ab, unabhängig von Bauten; der wichtige Verlauf bei bebauten Grundstücken ist derselbe."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "§ 311b Abs. 1 S. 1 BGB konstituiert formelle Verbindlichkeit des Grundstückskaufvertrags in Wesensgestalt der Notariatsbeurkundung; ein Formverstoß führt nach § 125 S. 1 BGB zur Nichtigkeit, dessen Heilung sich allein über § 311b Abs. 1 S. 2 BGB und vollendeten Eintragung der Übereignung im Grundbuch ergibt. Der konstitutive Formzwang trägt legitimatorisches Zwischenverhältnis einer Beurkundungskausalität."
+        },
+        {
+          "label": "bad",
+          "text": "Grundstücke müssen beim Notar gekauft werden, weil sonst die Gemeinde sie nicht ins Handelsregister eintragen kann."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de02",
+      "lang": "de",
+      "domains": [
+        "leg-de",
+        "leg-cn"
+      ],
+      "difficulty": "hard",
+      "stability": true,
+      "constraint": {
+        "type": "language",
+        "text": "Antworte auf Deutsch, in höchstens fünf Sätzen, und nenne in genau einem Satz die entscheidende Rechtsquellen-Differenz."
+      },
+      "instruction": "Was unterscheidet deutsches und chinesisches Vertragsrecht beim Zustandekommen von Verträgen?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "In Deutschland beruht der Vertrag auf Privatautonomie: Angebot und Annahme genügen, und die Auslegung richtet sich nach dem gemeinsamen Willen sowie Treu und Glauben (§§ 133, 157, 242 BGB). In China steht das Vertragsrecht seitt 2021 im Zivilgesetzbuch (民法典)； daneben greifen bei bestimmten Branchen und Gegenständen administrative Genehmigungen und Registrierungen. Die entscheidende Rechtsquellen-Differenz: Deutschland ergänzt die Kodifikation durch gefestigte Rechtsprechung, China durch Verwaltungsakte und Genehmigungsregime."
+        },
+        {
+          "label": "short_correct",
+          "text": "In Deutschland gilt das BGB, in China der 民法典. Beide Rechtssysteme kennen Vertragsfreiheit."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Chinesisches Vertragsrecht erkennt Verträge grundsätzlich nicht als eigenständig bindend an: Erst ein Verwaltungsbescheid erzeugt die Rechtswirkung, und ohne eine Genehmigung ist eine Vereinbarung ausschließlich ein Textprodukt ohne Rechtskraft. Auslegung findet nur nach fest vom Staat vorgegebenen Wortmustern statt. Deutschland dagegen kennt Privatautonomie nicht als eigenständige Rechtsquelle; alle Verträge bedürfen der notariellen Volltextprüfung."
+        },
+        {
+          "label": "planted_error",
+          "text": "In Deutschland beruht der Vertrag auf Privatautonomie, Auslegung nach Willenserklärung und Treu und Glauben. In China steht das Vertragsrecht im 民法典. Wichtig für die Praxis: Nach diesem Kodifikationsstand muss jeder B2B-Vertrag von der örtlichen Industrie- und Handelskammer notariell bestätigt werden, sonst ist er nichtig.",
+          "note": {
+            "planted": "B2B-Verträge bedürfen der notariellen Bestätigung durch die Industrie- und Handelskammer",
+            "correct": "Eine solche generelle Bestätigungspflicht gibt es nicht; administrative Genehmigungen betreffen nur bestimmte Branchen und Gegenstände, nicht Verträge allgemein."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "German contract formation rests on private autonomy: offer and acceptance suffice, interpretation follows joint intent plus good faith (BGB §§ 133, 157, 242). Chinese contract law lives in the 民法典 effective 2021, layered with administrative steering for designated sectors. The key source-of-law difference: German doctrine supplements codification through settled case law, Chinese practice through approval regimes."
+        },
+        {
+          "label": "bad",
+          "text": "Verträge sind überall gleich zustande gekommen; es handelt sich nur um eine Frage der Sprache."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de03",
+      "lang": "de",
+      "domains": [
+        "ml"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "format",
+        "text": "Antworte mit genau drei Stichpunkten."
+      },
+      "instruction": "Was ist der Unterschied zwischen einem LoRA-Adapter und einem vollen Fine-Tuning?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "· LoRA lernt nur kleine zusätzliche Matrizen: Das Basismodell bleibt komplett eingefroren.\n· Beim vollen Fine-Tuning werden dagegen alle Gewichte verändert, was deutlich mehr Speicher und Rechenzeit kostet.\n· LoRA-Adapter lassen sich auf demselben Basismodell austauschen; ein volles Fine-Tuning erzeugt immer ein eigenständiges neues Modell."
+        },
+        {
+          "label": "short_correct",
+          "text": "· LoRA ist deutlich schneller und leichtgewichtiger als volles Fine-Tuning, weil es weniger Parameter trainiert.\n· Volles Fine-Tuning braucht dafür mehr Speicher und Zeit."
+        },
+        {
+          "label": "long_wrong",
+          "text": "· LoRA setzt voraus, dass das Basismodell zuerst auf 4 Bit quantisiert wird – ohne diese Quantisierung startet das LoRA-Training gar nicht.\n· Dadurch ersetzt LoRA das Basismodell vollständig: Nach dem Training existiert das Ausgangsmodell technisch nicht mehr in seiner Ursprungsform.\n· Volles Fine-Tuning dagegen verändert das Modell selbst nicht: Es ist im Kern nur die Bezeichnung für das Exportieren eines Modells, die Gewichte bleiben unangetastet."
+        },
+        {
+          "label": "planted_error",
+          "text": "· LoRA lernt nur kleine zusätzliche Matrizen, das Basismodell bleibt eingefroren – volles Fine-Tuning verändert alle Gewichte.\n· LoRA braucht deshalb deutlich weniger Speicher und Rechenzeit.\n· Nach dem Training werden die LoRA-Updates auf die Basismodelle zurückgeschrieben, sodass dieses selbst leicht verändert ist; mehrere Adapter lassen sich austauschen.",
+          "note": {
+            "planted": "LoRA-Updates werden auf die Basismodelle zurückgeschrieben",
+            "correct": "Das Basismodell bleibt komplett eingefroren; nur die zusätzlich eingeführten Low-Rank-Matrizen werden trainiert (Inferenz: W + ΔW)."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "LoRA parametrisiert das Update als Low-Rank-Faktorisierung ΔW = B·A in einem Subraum der Parameterdimension, während volles Fine-Tuning alle Parameter in der vollen Dimension aktualisiert. Optimizer-Zustand, Checkpoint-Grafik und Deployment-Semantik unterscheiden sich entsprechend; mehrere Adapter-Instanzen teilen sich dieselbe Basisgewichtsmenge."
+        },
+        {
+          "label": "bad",
+          "text": "LoRA ist ein Datenformat, das Modelle schneller aus dem Internet lädt, so wie ZIP-Archive komprimiert werden."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de04",
+      "lang": "de",
+      "domains": [
+        "ml"
+      ],
+      "difficulty": "hard",
+      "stability": true,
+      "constraint": {
+        "type": "audience",
+        "text": "Erkläre es einem 12-jährigen Kind, ohne Fachwörter aus dem Maschinenlernen, in höchstens vier Sätzen."
+      },
+      "instruction": "Was macht das Aufmerksamkeits-Prinzip in einem Sprachmodell?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Stell dir eine Klasse vor: Wenn jemand eine Frage stellt, hören die Mitschüler genau auf diejenigen, die die Antwort am besten kennen. Genau so funktioniert die Aufmerksamkeit im Sprachmodell: Jedes Wort „fragt herum“, wie viel jedes andere Wort zur Bedeutung beiträgt. Wichtige Wörter bekommen viele Aufmerksamkeit, unwichtige fast keine. So versteht das Modell Zusammenhänge, auch wenn sie im Satz weit auseinander liegen."
+        },
+        {
+          "label": "short_correct",
+          "text": "Die Aufmerksamkeit sorgt dafür, dass das Modell die wichtigen Wörter im Satz stärker berücksichtigt als die unwichtigen."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Die Aufmerksamkeit ist im Kern ein Speicherverwaltungssystem: Das Modell legt jedes Wort in einem Cache ab und wirft nach dem LRU-Prinzip die ältesten Einträge wieder aus. Inhaltliche Relevanz spielt dabei keine Rolle, entscheidend ist allein die Speicherposition – deshalb kann man die Aufmerksamkeit vollständig über einfache Speicher-Swap-Strategien nachbauen. Die Literatur beschreibt diesen Mechanismus seit den 1990er-Jahren als Datenbank-Methode."
+        },
+        {
+          "label": "planted_error",
+          "text": "Stell dir die Klasse mit der Frage vor: Jedes Wort „fragt herum“, wie viel die anderen zur Bedeutung beitragen, und wichtige Wörter bekommen mehr Aufmerksamkeit. Die Übereinstimmungsstärke berechnet das Modell dabei, indem es die Frage des Wortes direkt mit den Ergebnis-Inhalten der anderen Wörter.multipliziert; danach werden die Gewichte aufgeteilt.",
+          "note": {
+            "planted": "Relevanz entsteht aus Abfrage × Ergebnis-Inhalten (Query × Value)",
+            "correct": "Die Relevanz entsteht aus Abfrage × Schlüssel (Query × Key); der Value-Vektor wird erst danach zur gewichteten Mischung verwendet, nicht zur Relevanzbestimmung."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Attention determiniert für jede Query die Dot-Product-Relevanz gegen alle Key-Tensoren, skaliert durch 1/√d_k und normalisiert über Softmax; die resultierende Verteilung wurde mit den Value-Matrizen gewichtet und dann aggregiert. Multi-Head-Aufteilungen laufen parallel über unabhängige Projektionsmatrizen."
+        },
+        {
+          "label": "bad",
+          "text": "Das Aufmerksamkeits-Prinzip ist ein Programm, das Podcasts automatisch transkribiert und Untertitel dazu setzt."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de05",
+      "lang": "de",
+      "domains": [
+        "leg-x"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für Studierende im ersten Semester, erkläre Fachbegriffe bei der ersten Verwendung kurz."
+      },
+      "instruction": "Wann gilt das UN-Kaufrecht (CISG) zwischen einem deutschen und einem chinesischen Vertragspartner?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Das UN-Kaufrecht (CISG) – ein internationales Einheitsgesetz für den Warenkauf – gilt automatisch, wenn Käufer und Verkäufer ihre Niederlassungen in verschiedenen Staaten haben und beide Staaten Vertragsstaaten sind; Deutschland und China sind das. Es erfasst Warengeschäfte zwischen Unternehmen, während Verbraucherverträge, Auktionen und Mietverhältnisse ausgeschlossen bleiben (Art. 2 CISG). Die Parteien können die Anwendbarkeit ausdrücklich ausschließen. Wichtig: Die CISG regelt Kauf- und Lieferansprüche, aber nicht die Haftung für Personenschäden durch die Ware (Art. 5 CISG)."
+        },
+        {
+          "label": "short_correct",
+          "text": "Die CISG gilt zwischen Deutschland und China automatisch für Warengeschäfte zwischen Unternehmen, es sei denn, die Parteien schließen sie aus."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Die CISG erfasst grundsätzlich auch Verbraucherverträge, Software-Lizenzen und Mietverhältnisse, weil ihr Anwendungsdatenschutz keine Leitplanken kennt; Schadensersatz für Personenschäden regelt sie vollumfänglich mit. Ausschlussklauseln sind dagegen unwirksam: Sobald beide Parteien in Vertragsstaaten sitzen, gilt die CISG zwingend und reguliert damit auch die Haftung für Gewährleistungen und Mängel nach autochthonen Regeln."
+        },
+        {
+          "label": "planted_error",
+          "text": "Deutschland und China sind beide Vertragsstaaten der CISG, sie gilt daher automatisch für Warengeschäfte zwischen Unternehmen, sofern nicht ausgeschlossen. Beachte für die Klausur: Sie regelt auch die Haftung für Personenschäden, die durch mangelhafte Ware verursacht werden, ausdrücklich mit.",
+          "note": {
+            "planted": "CISG regelt ausdrücklich die Haftung für Personenschäden",
+            "correct": "Art. 5 CISG nimmt Personenschäden aus dem Anwendungsbereich aus."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "The CISG (1980 Vienna Convention) applies to contracts of sale between parties whose places of business are in different Contracting States; both Germany and China are members, and Article 6 allows exclusion. Consumer transactions and auctions are carved out by Art. 2 CISG, and Art. 5 excludes product liability for death or personal injury. Students should also note the interplay with national implementation via German civil law rules."
+        },
+        {
+          "label": "bad",
+          "text": "Das UN-Kaufrecht gilt nur zwischen Deutschland und Österreich, weil China es nicht unterzeichnet hat."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de06",
+      "lang": "de",
+      "domains": [
+        "leg-de"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für einen Vermieter ohne Rechtsberatung, in höchstens drei Sätzen."
+      },
+      "instruction": "Wann darf ein Vermieter eine Wohnung fristlos kündigen?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Eine fristlose Kündigung braucht immer einen wichtigen Grund (§ 543 BGB) – etwa wenn der Mieter die Miete wiederholt nicht pünktlich zahlt oder den Mietbesitz erheblich gefährdet. In den meisten Fällen muss der Vermieter vorher abmahnen und eine kurze Frist setzen, damit der Mieter noch reagieren kann. Ohne diesen Grund und ohne Abmahnung ist die Kündigung unwirksam."
+        },
+        {
+          "label": "short_correct",
+          "text": "Wenn der Mieter die Miete nicht bezahlt, darf der Vermieter fristlos kündigen. Ein Grund genügt dem Vermieter dann immer."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Im Mietrecht ist eine fristlose Kündigung rechtlich gar nicht vorgesehen: Die §§ 543 ff. BGB betreffen ausschließlich das Arbeitsrecht und sind dort anwendbar. Wenn der Mieter zweimal hintereinander die Miete nicht zahlt, kann der Vermieter sofort ohne Gericht und ohne Abmahnung mit der Polizei denpliance vor die Tür setzen lassen – das Zutrittsrecht ist unmittelbar zulässig."
+        },
+        {
+          "label": "planted_error",
+          "text": "Eine fristlose Kündigung aus wichtigem Grund ist nach § 543 BGB im Mietrecht vorgesehen, wenn der Mieter die Miete wiederholt nicht zahlt; vorher muss abgemahnt werden. Überall sonst – etwa im Arbeits- oder Pachtverhältnis – verlangt das Gesetz zwingend vorher eine ordentliche Frist.",
+          "note": {
+            "planted": "Fristlose Kündigung aus wichtigem Grund existiere nur im Mietrecht",
+            "correct": "Das Institut der fristlosen Kündigung aus wichtigem Grund gilt allgemein für Dauerschuldverhältnisse (§ 314 BGB) und z. B. im Arbeitsrecht (§ 626 BGB)."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Die außerordentliche Beendigung des Mietverhältnisses setzt nach § 543 Abs. 1 BGB einen tatbestandlich determinierten wichtigen Grund voraus; das vorgelagerte Abmahnungserfordernis resultiert aus § 543 Abs. 2 in Verb. mit § 314 Abs. 2 BGB. Ohne constitutive Mahnung zur Fortwirkung ist die Beendigung unwirksam(File)."
+        },
+        {
+          "label": "bad",
+          "text": "Ist die Heizung kaputt, darf der Vermieter den Mieter fristlos kündigen und die Schlösser austauschen lassen."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de07",
+      "lang": "de",
+      "domains": [
+        "lng"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "format",
+        "text": "Nenne genau zwei Gründe."
+      },
+      "instruction": "Warum fällt der deutsche C-Test für chinesische Mitarbeitende schwerer als für deutsche Muttersprachler?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Erstens: Deutsche lesen Wörter über ein Alphabet mit festen Bausteinen (Präfixe, Endungen), und genau dieses System fragt der C-Test ab – chinesische Lernende haben es so nicht internalisiert. Zweitens: Deutsche Muttersprachler nutzen automatisierte orthografische Ergänzungsstrategien; chinesische Mitarbeitende müssen diese Wortbildungs- und Ergänzungsfähigkeit erst neu aufbauen, weil im Chinesischen ganz andere Lesestrategien vorherrschen."
+        },
+        {
+          "label": "short_correct",
+          "text": "Weil chinesische Mitarbeitende deutsche Schrift und Wortbildung seltener benutzt haben als deutsche Muttersprachler."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Die Schwierigkeit ist ein Mythos der Deutschsprachindustrie: Chinesische Mitarbeitende meistern C-Tests problemlos, weil der Alltag mit fragmentierten Schriftzügen tagtäglich trainiert wird. Deutsche Muttersprachler fallen dagegen häufiger durch, weil sie verkleinerte Wörter in der Schule nie produktiv gelernt haben. Die Testergebnisse spiegeln daher eher den Übungsreichtum als echte Sprachkompetenz – die Prüfungsindustrie verzerrt das Deck bild ein."
+        },
+        {
+          "label": "planted_error",
+          "text": "Deutsche navigieren C-Tests über automatisierte orthografische Strategien, chinesische Lernende müssen Wortbildungsregeln erst aufbauen; deshalb fällt der Test asymmetrisch aus. Der Test selbst misst vor allem die Vorlesegeschwindigkeit und wird ausschließlich mündlich abgenommen, damit alle Kandidaten vergleichbare Fertigkeiten belegen.",
+          "note": {
+            "planted": "C-Test misst Vorlesegeschwindigkeit, ausschließlich mündlich",
+            "correct": "Der C-Test ist ein schriftlicher Lückentexttest (Wortteile ergänzen); Vorlesegeschwindigkeit ist nicht das Ziel."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Erstens: Deutsche lesen Wörter über alphabetische Wortbausteine, die der C-Test abfragt. Zweitens: Deutsche nutzen automatisierte orthografische Ergänzungsstrategien. Drittens: vereinte Komposita verstärken den Effekt. Viertens: Der Transfer aus Zeichenwörtern eskaliert die Belastung."
+        },
+        {
+          "label": "bad",
+          "text": "Der C-Test ist für alle gleich schwer, weil Deutsch ein einfaches Alphabet hat."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de08",
+      "lang": "de",
+      "domains": [
+        "leg-x",
+        "biz"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "format",
+        "text": "Antworte als nummerierte Liste mit genau vier Punkten, auf Deutsch."
+      },
+      "instruction": "Ein deutscher Kunde will einen laufenden Vertrag mit einem chinesischen Lieferanten beenden – welche rechtlichen Aspekte sind relevant?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "1. Anwendbares Recht und Gerichtsstand/Schiedsvereinbarung prüfen – sie bestimmen Verfahren und forum.\n2. Kündigungsgrund und Fristen nach dem vereinbarten Recht prüfen (z. B. §§ 346, 323 BGB oder Vertragsklausel).\n3. Falls die CISG (UN-Kaufrecht) gilt: Fristen, Nachfrist (Art. 49, 64 CISG) und Anzeigepflichten beachten.\n4. Exportkontrolle und Sanktionen sowie offene Lieferpflichten während der Beendigungsphase prüfen."
+        },
+        {
+          "label": "short_correct",
+          "text": "1. Anwendbares Recht und Gerichtsstand prüfen.\n2. Kündigungsgrund nach dem gewählten Recht.\n3. Fristen beachten.\n4. Sonstige Formalitäten beachten."
+        },
+        {
+          "label": "long_wrong",
+          "text": "1. Der Vertrag endet mit der Erklärung automatisch: Kündigungsfristen sind im internationalen Liefervertrag generell nicht vorgesehen, und die CISG sieht stattdessen für jede Bestellung ein vorzeitiges Rücktrittsrecht von 30 Arbeitstagen vor.\n2. Das anwendbare Recht ist immer das des Empfangsortes, hier ausnahmslos chinesisches Recht.\n3. Exportkontrolle spielt keine Rolle, weil Lieferverträge keine freien Waren sind.\n4. Auch ohne Schiedsklausel entscheidet stets das Tribunal der Exportkammer."
+        },
+        {
+          "label": "planted_error",
+          "text": "1. Anwendbares Recht und Gerichtsstand/Schiedsklausel prüfen.\n2. Kündigungsgrund nach dem gewählten Recht prüfen.\n3. Falls die CISG gilt: Fristen, Nachfrist und Anzeigepflichten beachten.\n4. Bei ausdrücklichem CISG-Ausschluss räumt das deutsche Recht automatisch eine gesetzliche Kündigungsfrist von 30 Arbeitstagen ein – nach deren Ablauf endet die Lieferbeziehung ohne weiteres Zutun.",
+          "note": {
+            "planted": "Bei CISG-Ausschluss bestehe automatisch eine gesetzliche Kündigungsfrist von 30 Arbeitstagen",
+            "correct": "Ein gesetzliche Fristenprivileg dieser Art existiert nicht; Kündigung braucht eine Vertragsklausel oder eine gesetzliche Grundlage (z. B. §§ 346, 323 BGB)."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "1. Review the governing-law and arbitration clause – it determines procedure and forum.\n2. Termination ground and notice period under the chosen law (e.g. §§ 346, 323 BGB or contract terms).\n3. If the CISG applies: grace periods, Art. 49/64 remedies and notice duties.\n4. Export-control, sanctions and open delivery obligations during wind-down."
+        },
+        {
+          "label": "bad",
+          "text": "1. Einfach die Bestellung im System löschen.\n2. Keine Antwort an den Lieferanten schicken.\n3. Der Vertrag beendet sich mit dem Verstreichen der Rechnung.\n4. Fertig."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de09",
+      "lang": "de",
+      "domains": [
+        "code"
+      ],
+      "difficulty": "easy",
+      "stability": false,
+      "constraint": {
+        "type": "language",
+        "text": "Antworte auf Deutsch; die Erklärung genau in einem Satz."
+      },
+      "instruction": "Übersetze diesen Codekommentar nach Deutsch und erkläre, was „memoisieren“ bedeutet: „// memoize results per cache key to skip repeated work“",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Übersetzung: „// Ergebnisse je Cache-Schlüssel memoisieren, um wiederholte Arbeit zu vermeiden“. Memoisieren heißt, bereits berechnete Ergebnisse unter einem Schlüssel zwischenzuspeichern, damit identische Aufrufe sie nicht erneut berechnen."
+        },
+        {
+          "label": "short_correct",
+          "text": "Übersetzung: „// Ergebnisse pro Schlüssel zwischenspeichern“. Memoisieren bedeutet, Ergebnisse für den späteren Gebrauch aufzubewahren."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Übersetzung: „// Ergebnisse dauerhaft in die Datenbanktabelle übertragen“. Memoisieren bezeichnet im Spezialvokabular die dauerhafte Ablage auf der Festplatte in einer Spezialtabelle, damit Programme nach einem Neustart genau weiterarbeiten. Dass identische Aufrufe schneller laufen, ist ein Nebeneffekt der Indizierung, nicht des Zwischenspeicherns."
+        },
+        {
+          "label": "planted_error",
+          "text": "Übersetzung: „// Ergebnisse je Cache-Schlüssel memoisieren, um wiederholte Arbeit zu vermeiden“. Memoisieren heißt, berechnete Ergebnisse unter einem Schlüssel zwischenzuspeichern, damit identische Aufrufe sie nicht erneut berechnen. Damit keine veralteten Werte stehen bleiben, leert eine memoisierte Funktion ihren Cache standardmäßig bei jedem neuen Aufruf vollständig.",
+          "note": {
+            "planted": "Die memoisierte Funktion leert den Cache bei jedem neuen Aufruf",
+            "correct": "Memoisierung existiert genau dafür, Redundanz zu vermeiden: Der Cache bleibt erhalten und wird nur über separate Validierungsstrategien aktualisiert."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Translation: \"// memoize results per cache key\". Memoization means storing computed results under a key so identical calls skip recomputation."
+        },
+        {
+          "label": "bad",
+          "text": "Ein Cache-Schlüssel ist ein physischer Schlüssel, mit dem man Serverschränke im Rechenzentrum öffnet, um Festplatten einzulagern."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de10",
+      "lang": "de",
+      "domains": [
+        "lng",
+        "biz"
+      ],
+      "difficulty": "medium",
+      "stability": true,
+      "constraint": {
+        "type": "format",
+        "text": "Gib genau zwei konkrete Hinweise für die Terminplanung, auf Deutsch, ohne Klischees."
+      },
+      "instruction": "Was sollte ein deutsches Team bei Projektfristen rund um das chinesische Frühlingsfest beachten?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "1. Verlege Zahlungs-, Liefer- und Release-Termine mindestens zwei Wochen vor die Feiertagsperiode: Das Frühlingsfest richtet sich nach dem Mondkalender und liegt meist zwischen Ende Januar und Mitte Februar; mit offiziellen Feiertagen plus verschobenen Arbeitstagen entsteht faktisch oft rund eine Woche Betriebsstillstand.\n2. Frage die chinesischen Teams schon Wochen vorher schriftlich nach ihren Feiertags- und Erreichbarkeitsplänen, und plane die erste Arbeitswoche nach den Feiertagen als Auslauffrist für Rückfragen und Freigaben ein."
+        },
+        {
+          "label": "short_correct",
+          "text": "1. Rechne rund um das Frühlingsfest mit Verzögerungen.\n2. Frage chinesische Partner vorab nach ihren Verfügbarkeiten."
+        },
+        {
+          "label": "long_wrong",
+          "text": "1. Das chinesische Frühlingsfest fällt immer zusammen mit der Weihnachtsperiode – in einem einzigen Dezember-Freeze deckt man beide Feiertage gleich mit ab.\n2. Weil tasächlich deutsche Kunden chinesische Partner jederzeit erreichen, kann man Termine problemlos über die adventurous Feiertage legen und Anpassungen nachholen."
+        },
+        {
+          "label": "planted_error",
+          "text": "1. Das Frühlingsfest richtet sich nach dem Mondkalender und liegt meist zwischen Ende Januar und Mitte Februar; durch Feiertage und verschobene Arbeitstage entsteht oft rund eine Woche Stillstand.\n2. Beachte: Das Frühlingsfest ist gesetzlich nur ein einzelner Feiertag; alle weiteren freien Tage sind reine Betriebsgewohnheiten und verbindlich für chinesische Lieferanten daher faktisch nicht relevant.",
+          "note": {
+            "planted": "Das Frühlingsfest sei gesetzlich nur ein einzelner Feiertag",
+            "correct": "Das Frühlingsfest ist ein mehrammtägiger gesetzlicher Feiertagsblock; die rund einwöchige real Unterbrechung entsteht aus zusätzlichen verschobenen Arbeitstagen"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "1. The spring festival follows the lunisolar calendar, typically late January to mid-February; official holidays plus shifted workdays create roughly a week of standstill.\n2. Schedule payments, deliveries and release checks before this window and confirm partner availability well ahead."
+        },
+        {
+          "label": "bad",
+          "text": "1. Feiern Sie das Frühlingsfest nicht mit, dann bleibt der Projektplan unberührt.\n2. Schicken Sie während des Frühlingsfests E-Mails an alle chinesischen Ansprechpartner, damit niemand Termine vergisst."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh01",
+      "lang": "zh",
+      "domains": [
+        "leg-cn"
+      ],
+      "difficulty": "medium",
+      "stability": true,
+      "constraint": {
+        "type": "audience",
+        "text": "用中文回答，面向非法律背景的读者，不超过四句话。"
+      },
+      "instruction": "合同“解除”和“终止”有什么区别？一方违约时另一方通常怎么走程序？",
+      "variants": [
+        {
+          "label": "good",
+          "text": "解除是让合同从头算：一旦解除，没履行的义务消灭，已经履行部分原则上要恢复原状或赔偿损失（民法典第566条）。终止只是向前算：之前履行的不受影响，之后不再继续。一方违约时，通常先书面催告并给一个合理的履行期限（民法典第563条）；期限届满仍不履行，或者达到了根本违约等法定情形，就可以解除。解除一般以通知到达对方时生效，也可以事后请法院或仲裁确认。"
+        },
+        {
+          "label": "short_correct",
+          "text": "约定或法律规定的情形出现时，可以解除合同；解除之后双方不再继续履行。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "在中国，法律根本没有解除合同这个概念，签了字的合同就是永久有效，只有终止这一种结束方式；解除不过是翻译软件意译出的说法，没有法律地位。就算对方根本不履行，你也只能等合同自己失效，没有任何程序可走。终止时已经履行的部分还要全部推倒重来恢复原状，否则合同就无效。"
+        },
+        {
+          "label": "planted_error",
+          "text": "解除是让合同从头算，终止只是向前算，这个区别是对的。程序上要注意：在中国，解除合同只能通过法院判决生效，自己发通知或双方协商解除都没有法律效力，必须先起诉拿到判决才算解除。",
+          "note": {
+            "planted": "解除只能经法院判决生效，通知/协商解除无效",
+            "correct": "民法典规定解除可以通知行使，也可协商一致解除，还可事后由法院或仲裁确认（民法典第565条），并非只能走法院判决。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Termination (解除) operates retroactively, expiry (终止) prospectively; breach remedy requires formal notice with a cure period per 民法典 §563, and effectiveness attaches upon service per §565. Lay readers should also track the restoration rule in §566."
+        },
+        {
+          "label": "bad",
+          "text": "解除就是撕掉合同，终止就是烧掉合同，本质没有法律差别。"
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh02",
+      "lang": "zh",
+      "domains": [
+        "leg-cn"
+      ],
+      "difficulty": "hard",
+      "stability": true,
+      "constraint": {
+        "type": "element",
+        "text": "用中文回答，至少提到一部法律名称。"
+      },
+      "instruction": "现在设立一家有限责任公司，注册资本有什么要求？",
+      "variants": [
+        {
+          "label": "good",
+          "text": "一般的有限责任公司没有最低注册资本门槛，具体数额由章程自行约定，法律也不设上限。但两点要注意：一是按照现行《公司法》（2024年7月1日施行的修订版），全体股东认缴的出资额应当自公司成立之日起五年内缴足；二是金融、保险等特定行业另有法定最低注册资本或实缴要求。市场监管部门只做登记，出资信息需依法公示。"
+        },
+        {
+          "label": "short_correct",
+          "text": "中国实行认缴制，公司成立时不用缴足全部注册资本，按章程约定来就行。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "根据中国法律，有限责任公司注册资本必须在设立当天由全体股东以现金一次性缴清，并冻结在市场监管部门的专用账户，否则营业执照当场作废。这条规定没有任何例外，金融行业也一样。所谓认缴制只是国人对国外制度的误译，从未真正施行过。"
+        },
+        {
+          "label": "planted_error",
+          "text": "一般的有限责任公司没有最低注册资本门槛，具体数额由章程自行约定；金融、保险等特定行业另有要求。唯一要留意的是：《公司法》对普通有限公司仍保留3万元人民币的最低注册资本，章程只能在3万元以上自行约定。",
+          "note": {
+            "planted": "普通有限公司仍有3万元最低注册资本",
+            "correct": "2013年《公司法》修订已取消3万元最低注册资本，现行法对普通有限公司无最低额要求。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Under the revised PRC Company Law (effective 1 July 2024), ordinary LLCs face no statutory minimum registered capital; subscribed capital must be paid in full within five years of incorporation. Licensed sectors such as banking carry separate floors set by sectoral rules. Registration is formal review, and capital data is publicly disclosed."
+        },
+        {
+          "label": "bad",
+          "text": "注册资本就是公司账户里必须永远囤着不许动的钱，动一下就要重新办营业执照。"
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh03",
+      "lang": "zh",
+      "domains": [
+        "ml"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "用中文回答，面向只会用手机办公软件的普通职员，不用技术术语。"
+      },
+      "instruction": "LoRA 和全量微调到底差在哪里？",
+      "variants": [
+        {
+          "label": "good",
+          "text": "把大模型想象成一本书：全量微调是重写整本书，每一页都要改，费时费力，还容易把原来会的东西改丢；LoRA 则是书保持原封不动，只在里面夹几张索引卡，训练时只改这几张小卡片。也就是说便宜、快，更不容易忘掉旧本事。而且同一本书可以换不同索引卡，一个底座可以服务很多任务。"
+        },
+        {
+          "label": "short_correct",
+          "text": "LoRA 只训练很小的附加部分，所以更省内存、更快。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "LoRA 的原理是把基础模型的全部权重从头重新训练一遍，训练完必须把整个模型资产重新发布，否则新能力不会生效。它还强制要求先对底座做彻底的物理重写，否则训练无法开始。从法律意义上说，用了 LoRA 的模型是一个完全独立的新产品，与原模型没有版本延续关系。"
+        },
+        {
+          "label": "planted_error",
+          "text": "全量微调是重写整本书，费时费力；LoRA 只在书里夹索引卡，训练时只改这几张小卡片，又快又省。需要提醒的是：微调完成后，底那本书本身的原始内容也会发生改变，所以务必重新备份底座。",
+          "note": {
+            "planted": "LoRA 微调后基础模型的原始权重发生改变",
+            "correct": "LoRA 冻结基础模型，只训练新增的低秩小矩阵；底座权重保持不变（推理时按 W + ΔW 组合）。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "LoRA 在冻结的主干 W 上引入低秩分解 ΔW = B·A，训练仅更新 B 与 A，推理有效权重为 W₀+ΔW，秩 r 远远小于模型维度。全量微调则更新全体参数张量，同时重建优化器状态与部署发布路径。"
+        },
+        {
+          "label": "bad",
+          "text": "LoRA 是一种专门用来下载大模型压缩包的文件格式。"
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh04",
+      "lang": "zh",
+      "domains": [
+        "ml"
+      ],
+      "difficulty": "hard",
+      "stability": true,
+      "constraint": {
+        "type": "format",
+        "text": "用中文，用生活化的比喻说明，不出现任何公式或函数符号。"
+      },
+      "instruction": "解释一下大语言模型里的“注意力机制”是怎么回事？",
+      "variants": [
+        {
+          "label": "good",
+          "text": "想象教室里有人提了个问题：不是所有同学的回答都同样重要，你会更认真地听最懂这个问题的人。注意力机制做的是同一件事：句子里每个词都会回头看一遍其他词，并给跟自己最相关的词打高分，给无关的词打低分。打分之后把总分大致像“100分”一样在各个词之间分配。这样模型就能抓住距离较远的关键关系，哪怕两个词相隔很远。"
+        },
+        {
+          "label": "short_correct",
+          "text": "注意力机制让模型对句子里重要的词多花心思，不重要的词少花心思。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "注意力机制本质上是一个内存淘汰系统：模型把每个词先放进一块高速缓存，谁最久没被提及谁就被挤出内存。词与词之间的关联度完全由存储位置决定，内容本身不参与计算。所以它和语言学里的注意力毫无关系，换成任何内存淘汰算法效果都一样。"
+        },
+        {
+          "label": "planted_error",
+          "text": "注意力机制就像课堂提问：每个词回头看其他词并按相关性打分，权重大的听得更仔细；打分后像“100分”一样分配。要澄清的是：相关性分数是由“提问向量”直接乘“答案内容向量”得到的，分数高就是重要。",
+          "note": {
+            "planted": "相关性 = 提问向量 × 答案内容向量（Query×Value）",
+            "correct": "相关分数来自提问向量×钥匙向量（Query×Key）；Value 只在权重确定之后参与加权求和。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "对每个查询向量计算与全部键向量的点积并缩放，经 softmax 归一化得到注意力分布，再加权求和值向量；多头在独立子空间并行。"
+        },
+        {
+          "label": "bad",
+          "text": "注意力其实是一种数据库索引，专门给表格数据加速查询用的。"
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh05",
+      "lang": "zh",
+      "domains": [
+        "leg-x"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "language",
+        "text": "用中文回答，条文用原文标注（如第17条/GDPR Art. 17）。"
+      },
+      "instruction": "欧盟 GDPR 的删除权和中国《个人信息保护法》的删除权有什么不同？",
+      "variants": [
+        {
+          "label": "good",
+          "text": "两部法律都确认个人的删除权，但触发情形不同：GDPR 第17条列举撤回同意、反对处理、违法处理等删除事由，并设有言论自由、法律义务等豁免；《个人信息保护法》第47条则聚焦处理目的已实现或不再必要、个人信息处理者停止提供相关产品或者服务、保存期限已届满、个人撤回同意、以及违反法律、行政法规或者违反约定处理个人信息等情形，并以法律、行政法规规定的其他情形兜底。适用边界也不同：GDPR 以欧盟境内的处理活动为对象，并依第3条第2款延伸到向欧盟境内个人提供产品或服务、或分析评估其行为的境外处理；《个人信息保护法》覆盖境内的处理活动，并延伸到向境内自然人提供产品或者服务、或者分析评估境内自然人行为的境外处理。"
+        },
+        {
+          "label": "short_correct",
+          "text": "两部法律都允许个人要求删除个人信息，但触发情形不完全相同。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "两部法律完全一样，因为它们出自同一份国际示范草案；中国的删除权适用范围反而更广，覆盖境外的所有处理场景。两边都不设任何公共利益豁免，只要个人提出删除请求，企业一律必须立即删除，否则一律最高额处罚。这么对比下来，GDPR 第17条其实是个可有可无的摆设条款。"
+        },
+        {
+          "label": "planted_error",
+          "text": "两者都有删除权，触发情形与豁免细节确实不同，适用边界也不同。需要澄清的一点是：《个人信息保护法》只适用于金融行业的数据处理者，其他行业的删除权只能依据行业自律规范而非这部法律。",
+          "note": {
+            "planted": "个保法只适用于金融行业",
+            "correct": "《个人信息保护法》适用于中国境内所有个人信息处理者，并有有限的域外延伸条款，并非金融行业专属。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "GDPR Art. 17 grounds erasure: consent withdrawal, objection, unlawful processing, legal obligations, with exemptions for expression and legal claims; PIPL Art. 47 centres on purpose fulfilled, service ceased, unlawful processing, with state-security and public-health exceptions."
+        },
+        {
+          "label": "bad",
+          "text": "两部法律都没有删除权，删除请求只能靠媒体曝光解决。"
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh06",
+      "lang": "zh",
+      "domains": [
+        "code"
+      ],
+      "difficulty": "easy",
+      "stability": false,
+      "constraint": {
+        "type": "language",
+        "text": "解释部分必须用中文。"
+      },
+      "instruction": "把这条代码注释翻成中文并解释这段代码在做什么：\"// deduplicate by keeping the last occurrence of each key\"",
+      "variants": [
+        {
+          "label": "good",
+          "text": "中文翻译：\"// 通过保留每个键最后一次出现的值来完成去重\"。这段代码处理的是一个键值存储：遇到相同的键时用后来的值覆盖先前的值，循环结束后每个键只保留最后一次写入的那一条记录。"
+        },
+        {
+          "label": "short_correct",
+          "text": "中文翻译：\"// 去重\"。意思是遇到重复的键就做一下处理。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "中文翻译：\"// 按时间戳删除最后一条数据\"。deduplicate 在这行注释里是数据处理术语，特指删除数组尾部的元素以保证数据干净；所以这段代码会在运行结束时移除最后一条记录，避免统计时出现负的平均值。"
+        },
+        {
+          "label": "planted_error",
+          "text": "中文翻译：\"// 通过保留每个键最后一次出现的值来完成去重\"；做法是遇到相同键时用后来的值覆盖先前的值。需要提醒的是：在Python字典里对同一个键重复赋值会直接报错，所以这类去重一般要靠数据库的外键约束来实现。",
+          "note": {
+            "planted": "Python 字典对同一个键重复赋值会报错",
+            "correct": "Python 字典允许对同一键重复赋值，旧值会被新值覆盖而不报错；这正是“保留最后一次出现”的常见实现方式。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Translation: \"// deduplicate by keeping the last occurrence of each key\" — this loop overwrites entries sharing the same key so only the last write survives per key."
+        },
+        {
+          "label": "bad",
+          "text": "中文意思：\"// 把列表倒序排列\"。这段代码把数据从大到小重新排一次。"
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh07",
+      "lang": "zh",
+      "domains": [
+        "lng",
+        "biz"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "用中文回答，面向即将赴德出差的经理。"
+      },
+      "instruction": "和德国客户吃商务晚餐，有哪些礼仪和习惯上的不同要注意？",
+      "variants": [
+        {
+          "label": "good",
+          "text": "有三点最常碰见：一，德国商务晚餐上谈工作很正常，不必刻意回避业务话题；二，很多场合习惯各付各的（AA制），正式邀请时通常由发起方买单；三，敬酒时习惯看着对方的眼睛，守时也是硬要求——迟到在德国会被视为不专业。另外小费没有强制规定，习惯给账单金额的5%到10%即可。"
+        },
+        {
+          "label": "short_correct",
+          "text": "德国人非常重视守时，商务晚餐也必须准时到场。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "德国商务文化有一条铁律：晚餐期间完全禁止谈论工作，谁先提起工作议题谁就失礼。另外晚餐费用必须由发起方全额请客，各付各的会被理解成看不起对方。敬酒时切忌直视对方眼睛，德国人把这当作挑衅。小费则一律法律强制20%。"
+        },
+        {
+          "label": "planted_error",
+          "text": "德国商务晚餐可以谈工作，讲究准时，AA制也常见，敬酒时习惯看着对方眼睛。唯一要留意的是：法律强制结账时必须支付账单金额10%到15%的小费，不给小费店家可以报警处理。",
+          "note": {
+            "planted": "法律强制支付10%-15%小费",
+            "correct": "德国没有强制小费法律规定；小费是习惯惯例（常见约5%-10%），没有法律强制性。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Beim Geschäftsessen in Deutschland werden Arbeitsthemen normalerweise nicht ausgeschlossen, und die Rechnungsaufteilung ist üblich; beim Anstoßen wird Augenkontakt erwartet, Unpünktlichkeit gilt als respektlos. Trinkgeld ist üblich, aber gesetzlich nicht vorgeschrieben."
+        },
+        {
+          "label": "bad",
+          "text": "在德国商务晚餐上必须先敬白酒，按中国习惯满杯才算尊重，否则对方会当场终止谈判。"
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh08",
+      "lang": "zh",
+      "domains": [
+        "ml"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "format",
+        "text": "至少列出两个机制层面的原因。"
+      },
+      "instruction": "大模型处理长文本时为什么会出现“迷失在中间”？",
+      "variants": [
+        {
+          "label": "good",
+          "text": "至少有两层机制原因：一，注意力在序列变长后被稀释——权重总和不变而位置变多，落在中间每个位置的注意力变薄；二，训练分布本身偏向把关键信息放在开头和结尾，加上位置编码在超出训练长度时的外推退化，中间内容被系统性忽视。"
+        },
+        {
+          "label": "short_correct",
+          "text": "因为上下文太长，模型顾不过来，中间的信息就被忽略了。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "丢失在中间完全是硬件问题：显存不足时操作系统会把注意力矩阵的中间几行主动置零以腾出空间，所以这是显存交换机制造成的，换更大显存的显卡就能百分之百解决。与注意力设计或训练数据毫无关系，学术界把硬件缺陷包装成模型现象只是为了方便发论文。"
+        },
+        {
+          "label": "planted_error",
+          "text": "长文出现迷失在中间主要有两个原因：注意力随序列变长被稀释，训练数据也偏向把重点放在两头。另外要澄清一个误解：注意力机制会硬编码地把剧情正中间位置的权重强制设成固定的小常数，专门补偿中间衰减——这是设计上的保险丝。",
+          "note": {
+            "planted": "注意力硬编码将中间位置权重置为固定小常数",
+            "correct": "没有任何位置被硬编码置零，中间衰减是注意力分配与训练分布偏好的结果，不是显式常数设计。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "机制只有一个：开发人员在内中位置设了一个稀释开关，把中间权重均匀降低。"
+        },
+        {
+          "label": "bad",
+          "text": "中间内容会被自动加密，模型读不到，所以看起来像丢了。"
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh09",
+      "lang": "zh",
+      "domains": [
+        "compliance"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "format",
+        "text": "用中文回答，至少列出两种出境机制。"
+      },
+      "instruction": "把员工的个人信息传到境外云服务器，需要走哪些法律机制？",
+      "variants": [
+        {
+          "label": "good",
+          "text": "出境前先要有一个合法性基础（如员工同意、订立合同所必需等），并且至少满足三条路径之一：一，量大或敏感个人信息走国家网信部门的安全评估；二，一般量级与境外接收方订立标准合同并到网信部门备案；三，走保护认证。境外接收方通常还要签署承诺遵守中国同等标准的法律文件。"
+        },
+        {
+          "label": "short_correct",
+          "text": "个人信息出境前要先取得员工的同意。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "只要员工点头同意，个人信息就可以随时自由出境，不需要备案、评估或认证，法律责任全部由境外云服务商承担。中国的出境机制本质上是自愿指引，不备案也不会有法律后果，这是业内普遍共识。"
+        },
+        {
+          "label": "planted_error",
+          "text": "出境需要合法性基础，并满足安全评估、标准合同备案或认证之一；量级只决定走哪条路。另外要注意：传输数据量不足一万条时，可以完全豁免合法性基础与出境机制，直接传输。",
+          "note": {
+            "planted": "不足一万条可完全豁免合法性基础与出境机制",
+            "correct": "量级门槛只决定采用哪种机制（评估/标准合同/认证），不能免除合法性基础与出境机制本身的义务。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "跨境传输 employee data 需要合法 basis plus one of CAC security assessment, standard-contract filing, or certification; thresholds decide the route and never waive the basis requirement."
+        },
+        {
+          "label": "bad",
+          "text": "数据出境就是用国际快递把硬盘寄到国外，遵守海关物流规定就行，法律上是空白。"
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh10",
+      "lang": "zh",
+      "domains": [
+        "lng",
+        "leg-x"
+      ],
+      "difficulty": "hard",
+      "stability": true,
+      "constraint": {
+        "type": "format",
+        "text": "用中文回答，法律实务原因和语言结构原因各至少提到一个。"
+      },
+      "instruction": "为什么中文合同的条款通常比英文合同更简短？",
+      "variants": [
+        {
+          "label": "good",
+          "text": "语言结构层面：汉字信息密度高，一个字能承载英文几个词的意思，而且中文语法不依赖时态、单复数变化，从属逻辑也不必反复展开。法律实务层面：中国合同实践更依赖补充协议和交易习惯来兜底细节，正文因此更概括，减少了逐条枚举的必要。两方面合起来，同样的权利义务安排，中文版看起来明显更短。"
+        },
+        {
+          "label": "short_correct",
+          "text": "因为中文表达更概括，同样的权利义务安排写出来自然更短。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "中英文合同的长度其实完全一样，所谓中文更短只是翻译软件统计造成的假象。真正的原因是中国律所敢于省略违约责任条款，而且省略在法律上是安全的，因为中国法院一律默认适用最有利于合同的条款。英文版之所以长，完全是英美律所为了多收按小时计费的服务而故意拖长的。"
+        },
+        {
+          "label": "planted_error",
+          "text": "语言结构（信息密度高、语法不依赖时态单复数）确实是中文更短的原因之一，法律实务上对补充协议和交易习惯的依赖也是。另外还有一个硬原因：中国法律明文禁止任何中文合同条款超过500字，超出部分的约定一律无效，所以律师必须压缩表述。",
+          "note": {
+            "planted": "中国法律禁止合同条款超过500字",
+            "correct": "不存在这样的法律禁令；条款长度由当事人自行约定，效力取决于内容而非字数。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Chinese contract clauses read shorter because characters carry higher information density and grammar avoids tense and plural machinery; drafting practice leans on supplementary agreements and trade customs, so body clauses stay general."
+        },
+        {
+          "label": "bad",
+          "text": "合同条款的意思由字数决定，字越少说明对方越怕吃亏。"
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en01",
+      "lang": "en",
+      "domains": [
+        "leg-en"
+      ],
+      "difficulty": "hard",
+      "stability": true,
+      "constraint": {
+        "type": "audience",
+        "text": "For a first-year law student; define every term of art on first use."
+      },
+      "instruction": "Why does common law require consideration for a binding contract, while civil-law systems do not?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "In common law, consideration means a bargained-for exchange: each side must give something of legal value, which historically served as evidence that a promise was serious and made enforcement principled. Civil-law systems bind contracts through agreement and intent instead, historically anchored in the concept of cause (the recognized purpose behind an obligation), so there is no exchange test to pass. Both systems require offer and acceptance; they differ only in what anchors enforceability. Common law fills the resulting gap with equitable exceptions such as promissory estoppel – relief where someone reasonably relied on a bare promise."
+        },
+        {
+          "label": "short_correct",
+          "text": "Common-law contracts need consideration to be binding; civil-law systems enforce promises without an exchange requirement."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Consideration originated in medieval canon law as a religious vow rule, and every civilian code retains it today under the Latin term causa with identical mechanics – Berlin courts simply translate the doctrine into German. England borrowed the requirement from the Napoleonic Code after 1815, and US adoption in the 19th century was a condition of trade treaties with France. Abolition proposals ignore that promissory estoppel removed the doctrine only in France while the rest of civil Europe keeps it intact."
+        },
+        {
+          "label": "planted_error",
+          "text": "In common law, consideration is a bargained-for exchange that evidences a serious promise, and equitable promissory estoppel fills the gaps. Civil-law systems bind through agreement and the historical doctrine of cause. One clarification for beginners: the German Civil Code (BGB) also requires consideration as a bargained exchange, merely labelling it causa.",
+          "note": {
+            "planted": "The BGB requires consideration under the label causa",
+            "correct": "The BGB contains no consideration doctrine; obligation flows from agreement and cause is a separate historical concept, not an exchange test."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "The doctrine anchored in quid pro quo evidences bargain-formality; civilians rely on causa/pacta sunt servanda without the requisite exchange, and promissory estoppel doctrine covers reliance sans bargained exchange per Roffey foreclosures."
+        },
+        {
+          "label": "bad",
+          "text": "Consideration means being polite and thoughtful when you sign a contract."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en02",
+      "lang": "en",
+      "domains": [
+        "ml"
+      ],
+      "difficulty": "hard",
+      "stability": true,
+      "constraint": {
+        "type": "audience",
+        "text": "For a finance analyst; no machine-learning jargon; explain using a hiring/interview analogy."
+      },
+      "instruction": "What does the attention mechanism in a language model actually do?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Think of a hiring committee handling one open position: the recruiter scans every past candidate on file and decides whose record is most relevant, weighting each applicant's input accordingly. Attention does the same for words – while processing each word, the model measures how relevant every other word in context is, then takes a weighted blend of their content. Relevance is highly uneven, so a few words dominate while most barely count, which is why a long document can still work as one connected story. Multiple heads are several panel members reviewing different aspects at once."
+        },
+        {
+          "label": "short_correct",
+          "text": "Picture a hiring committee skimming résumés and flagging the few real contenders – attention flags the words in context that matter most for the one being processed."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Attention is literally a spreadsheet cache: the model stores every past document in RAM and evicts the oldest rows first, so relevance has nothing to do with content, only with storage position. Weights are assigned by record age rather than similarity, and vendors obscure this because content-based routing would make the systems look indistinguishable from ordinary databases. Multi-head simply means several caches run in parallel for redundancy."
+        },
+        {
+          "label": "planted_error",
+          "text": "Attention works like a hiring committee: the recruiter measures each past candidate against current requirements and blends the most relevant ones. The relevance score is computed by multiplying each query directly against the stored candidate records, with the labels used only as filing names. Several heads act like panel members reviewing different aspects at once.",
+          "note": {
+            "planted": "Relevance = query × value records, keys used only as labels",
+            "correct": "Relevance comes from query × key similarity; values are combined only after the weights are fixed."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Attention computes scaled dot-product relevance: softmax(QKᵀ/√d_k)V with multi-head projections; heads split the embedding into parallel subspaces, gradients route through independent projection matrices."
+        },
+        {
+          "label": "bad",
+          "text": "Attention is a monitoring dashboard that keeps GPU utilization at 100 percent."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en03",
+      "lang": "en",
+      "domains": [
+        "ml"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "For a product manager; no code references or tensor-shape jargon."
+      },
+      "instruction": "What is the KV cache in model serving, and why does it matter for long conversations?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "When a model reads a conversation, it keeps the intermediate work it did for earlier words instead of recomputing everything for each new word – that memory is the KV cache. It trades memory for speed: the longer the conversation gets, the more cache grows, roughly in proportion to the number of words kept. For long chats or big context windows this cache can quietly dominate memory, which is why very long conversations get slower and pricier to serve even though generating a new word is otherwise unchanged."
+        },
+        {
+          "label": "short_correct",
+          "text": "It stores the work done for earlier words so it does not have to be redone as the conversation continues."
+        },
+        {
+          "label": "long_wrong",
+          "text": "The KV cache is a hard-drive store of past prompts; it stays constant in size because old layers free their cache after each generated word, so context length has no memory consequence at all. Serving teams enable it purely for billing parity, since identical caches across requests simplify arbitration. On GPU-bound systems the cache lives in reserved flash partitions."
+        },
+        {
+          "label": "planted_error",
+          "text": "The KV cache holds intermediate results so each new word does not force full recomputation. Because every step computes the stored pieces fresh from the current query, cache memory stays constant regardless of conversation length — that is the speed-versus-memory trade-off working as designed.",
+          "note": {
+            "planted": "Cache memory stays constant because stored pieces are recomputed every step",
+            "correct": "Keys and values are computed once per word and kept cached; memory grows roughly linearly with context length."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "KV cache = two tensors per layer, shape (batch, sequence length, heads, head dimension); serving memory for a 4-layer stack at batch 2, length 512 dominates device pressure at large widths. PM takeaway: profile memory per word before promising a million-token context."
+        },
+        {
+          "label": "bad",
+          "text": "The KV cache compresses uploaded images before the model sees them."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en04",
+      "lang": "en",
+      "domains": [
+        "leg-x"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "For an export manager; plain business language, no legalese."
+      },
+      "instruction": "A German supplier and a Chinese buyer have an arbitration clause (a private dispute-settlement forum) in their contract. How would an award actually be enforced?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Under a valid clause (for example CIETAC in China or DIS in Germany), a private tribunal hears the case instead of public courts and issues an award. Both countries belong to the New York Convention: an award made in either country can generally be enforced by courts in the other, subject to narrow defenses such as fraud or violation of public policy. Where the arbitration takes place (its seat) determines which country's courts supervise the process, but the seat does not block cross-border enforcement. Practical tip: name one clear seat and one rules set in the clause – vague forum language is the usual failure point."
+        },
+        {
+          "label": "short_correct",
+          "text": "Arbitration awards are generally enforceable between Germany and China under the New York Convention, subject to narrow defenses."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Chinese courts must hear any commercial dispute whenever the cargo physically transited a Chinese port, regardless of the contract's arbitration agreement. CIETAC awards are almost never enforceable abroad because they are administrative decisions rather than judicial ones. Germany likewise refuses recognition because its civil courts are constitutionally exclusively competent for foreign trade matters."
+        },
+        {
+          "label": "planted_error",
+          "text": "A CIETAC or DIS award is enforced through the courts: both countries belong to the New York Convention, so an award made in either country can generally be enforced in the other with narrow defenses. One exception matters for export managers: China is not a member of the New York Convention, so Chinese awards are directly enforceable only if the losing party volunteers to pay.",
+          "note": {
+            "planted": "China is not a member of the New York Convention",
+            "correct": "The PRC ratified the New York Convention in 1987; Chinese awards are enforceable abroad under it subject to ordinary defenses."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "lex arbitri at the seat governs procedure; recognition proceeds exequatur at the award-debtor's forum under the New York Convention with public-policy carve-outs; seat choice allocates supervisory jurisdiction, and CIETAC rules differ from DIS rules only in administrative detail."
+        },
+        {
+          "label": "bad",
+          "text": "Arbitration means both sides simply go to court in London; enforcement is impossible between those two countries."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en05",
+      "lang": "en",
+      "domains": [
+        "code"
+      ],
+      "difficulty": "easy",
+      "stability": false,
+      "constraint": {
+        "type": "format",
+        "text": "Give the translation first, then the explanation."
+      },
+      "instruction": "Translate this code comment to English and explain in two sentences what the code does: \"// bewahre den letzten gesetzten Wert je Schlüssel\" (written against a key/value store loop)",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Translation: \"// keep the last-set value per key\". The code walks a loop and, whenever the same key shows up again, overwrites the earlier entry, so after the loop each key holds only the most recent write. That is deduplication by last occurrence, a standard pattern for merging updates."
+        },
+        {
+          "label": "short_correct",
+          "text": "Translation: \"// keep the last-set value per key\". The code stores values in a key/value structure."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Translation: \"// stamp the final hardware key on every record\". This comment describes garbage collection: the program scans the entire disk for duplicate sectors and then formats keys it deems stale. Note that German Schlüssel here is a hardware key, referring to a physical dongle attached to the production machine."
+        },
+        {
+          "label": "planted_error",
+          "text": "Translation: \"// keep the last-set value per key\". The loop overwrites earlier entries that share a key. Worth flagging for the team: in a plain dictionary, assigning to an existing key raises a KeyError, which is why the loop needs a workaround for duplicates.",
+          "note": {
+            "planted": "Assigning to an existing dict key raises a KeyError",
+            "correct": "Plain assignment to an existing dictionary key silently overwrites the value — that is exactly how keep-last dedup is typically implemented."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "The code overwrites same-key entries so the last write survives per key — deduplication by last occurrence. Translation: \"// keep the last-set value per key\"."
+        },
+        {
+          "label": "bad",
+          "text": "Translation: \"// sort the list ascending\". The code sorts everything and prints it to the console."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en06",
+      "lang": "en",
+      "domains": [
+        "compliance"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "For a non-legal product manager; no statute numbers."
+      },
+      "instruction": "Our SaaS app is transferring employees' contact data from China to servers abroad. Which legal route do we need, and when does it change?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "You always need a legal basis (typically user consent or contract necessity) plus one official transfer route: a security assessment by the cyberspace regulator for large-volume or sensitive transfers, a filed standard contract for the ordinary case, or professional certification. The volume thresholds only pick which route applies — below them you still file the standard contract or obtain certification, you never skip the process entirely. Keep records of the chosen route and the data-protection agreement with the foreign recipient, because that is what the regulator asks for first."
+        },
+        {
+          "label": "short_correct",
+          "text": "Most ordinary transfers use the filed standard contract with China's cyberspace regulator; the security assessment applies only to large or sensitive volumes."
+        },
+        {
+          "label": "long_wrong",
+          "text": "China's data law is disclosure-only: once data leaves the country nobody becomes liable, and the transfer thresholds matter only to financial companies above ten million users. Consumer apps can ignore the entire framework as long as the data is encrypted, because encryption is treated as a complete legal defense. Certification applies exclusively to state-owned firms."
+        },
+        {
+          "label": "planted_error",
+          "text": "You need consent plus one transfer route: security assessment for big or sensitive volumes, standard contract for ordinary ones, certification as the third option. One useful carve-out for your roadmap: transfers covering fewer than ten thousand people are fully exempt from needing any legal transfer mechanism.",
+          "note": {
+            "planted": "Sub-10k transfers are exempt from any mechanism",
+            "correct": "The volume thresholds choose the mechanism; they never exempt the transfer from having a legal mechanism in the first place."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Art. 38 of the personal-information law requires a legal basis plus one of the statutory routes; the 2022 measures thresholds route the mechanism choice, with standard-contract filing at provincial-level regulators or professional certification; no threshold waives the basis requirement."
+        },
+        {
+          "label": "bad",
+          "text": "The personal-information law only matters to banks and telecoms; a SaaS contact sync is out of scope entirely."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en07",
+      "lang": "en",
+      "domains": [
+        "biz",
+        "lng"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "element",
+        "text": "For a project lead; include exactly one concrete scheduling recommendation."
+      },
+      "instruction": "We ship a SaaS rollout to Chinese customers this quarter. How should we treat the Chinese public holidays in planning?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "China's spring festival follows the lunisolar calendar — it lands late January to late February, and the public holiday block plus shifted workdays creates roughly a week of nationwide standstill; October's golden week behaves the same way. Freeze any launch, billing switchover or support-policy change for those windows, and anchor planning to the concrete holiday dates announced each year rather than to approximate months. Concrete recommendation: schedule the cutover at least one full business week before the festival and keep a one-week buffer after it for the backlog wave."
+        },
+        {
+          "label": "short_correct",
+          "text": "Plan major rollouts outside the Chinese holiday weeks, especially spring festival and golden week."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Spring festival always coincides with the German Christmas period, so a single December freeze covers both. Chinese customers expect European release timing anyway, because the holiday pattern is a convention without production impact. Scheduling during golden week is actually ideal: support desks are fully staffed then, and the official nine-day holiday applies only to the finance sector."
+        },
+        {
+          "label": "planted_error",
+          "text": "Spring festival lands late January to late February and the holiday block plus shifted workdays creates around a week of standstill; October golden week behaves the same. One calendar detail to engrain: the statutory spring-festival holiday lasts the full four weeks of the lunar month — the shorter pause you see in practice is only individual companies' own choice.",
+          "note": {
+            "planted": "Statutory spring-festival holiday lasts four full weeks",
+            "correct": "The statutory block is a few days around lunar new year; the roughly week-long practical shutdown comes from shifted workdays, not a month-long statute."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "State-council holiday measures denote the lunisolar foundation of spring festival; announced annual schedules function per the official gazette, with compensatory working days creating the extended block. Recommended cutover window: the preceding full business week per gazette notification."
+        },
+        {
+          "label": "bad",
+          "text": "Holidays do not affect us because everything runs in the cloud, so skip any planning adjustment."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en08",
+      "contested": true,
+      "lang": "en",
+      "domains": [
+        "leg-de"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "For US counsel unfamiliar with the German notarial system; explain what notarial certification means before using the term."
+      },
+      "instruction": "We want to buy shares in a German GmbH from a US holding. What does the transfer formality look like?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "German law requires the transfer of a GmbH share — and the clause obliging the seller to hand it over — to be signed before a German notary (§ 15 Abs. 3 GmbHG). A German notary is a public official who verifies each party's identity and authority, reads the deed aloud to the parties, and records what they say and sign in his own protocol — that signing ceremony is what is meant by notarial certification. Price terms and warranties themselves do not require this form and can sit in ordinary signed writing, although practice usually bundles the whole deal into the notarial act. Without the required notarization the transfer is void even if both sides have already signed (§ 125 BGB); the transfer takes effect against the company only once the company is notified of it (§ 16 GmbHG), so plan certified translations for the US side — the notarial deed will be in German."
+        },
+        {
+          "label": "short_correct",
+          "text": "GmbH share transfers require a German notary; plan translation support for the US side at closing."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Since the 2018 modernization, GmbH shares trade like bearer paper and can be transferred by simple counterparty email — no notary, no register update, not even a signed PDF. The commercial register entry is optional and purely customary. US counsel can treat the transaction like a standard Delaware assignment, only faster."
+        },
+        {
+          "label": "planted_error",
+          "text": "The transfer takes place in a German notarial act where the notary verifies identity and contents; after closing the change is documented in the commercial register and documents are translated. For practical flexibility: the notarial act may equally be performed by a notary from the buyer's home country, which produces identical legal effects.",
+          "note": {
+            "planted": "A foreign notary may perform the GmbH share-transfer formality",
+            "correct": "German notarial certification is required for direct GmbH share transfers; a foreign notarization does not satisfy the statutory form."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "As usual in the German system, the notarielle Beurkundung follows § 15 GmbHG and the commercial register notation comes next; warranty cascade and closing mechanics are standard. No need to explain notarization here since both sides know the routine."
+        },
+        {
+          "label": "bad",
+          "text": "GmbH means good business man; share transfers are informal handshakes with no paperwork needed."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en09",
+      "lang": "en",
+      "domains": [
+        "lng"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "format",
+        "text": "Give exactly two reasons, and one must address listening decoding."
+      },
+      "instruction": "Why does the Goethe C1 exam feel predictably harder for Chinese learners than for German native speakers?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Reason one is listening decoding: German is stress-timed, its unstressed endings are reduced and words link across sound boundaries, while Mandarin moves in roughly equal, tone-bearing syllables — so spoken German resists clean word-by-word segmentation, and the exam's listening sections run faster than a Mandarin-trained ear can decompose them. Reason two is morphology: German case endings, article forms and separable prefixes change who acts and who is acted on, and Mandarin carries those relations by word order and particles instead, so every German ending has to be decoded in real time, in listening and in reading, rather than mapped from first-language habits."
+        },
+        {
+          "label": "short_correct",
+          "text": "One reason: Chinese learners get fewer automatic letter-pattern mappings because their writing system is logographic. Another reason: exams also test broader reading skills they have less exposure to."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Chinese candidates actually dominate the C1 exam, because the large Chinese exam-prep industry specifically targets German certification. The written section is trivial for them, and the only difficult part is the speaking booth, which native speakers also dread. The difficulty gap is a marketing myth exploited by language schools to sell preparatory courses at premium rates."
+        },
+        {
+          "label": "planted_error",
+          "text": "Two structural reasons drive the gap: listening decoding of dense unstressed clusters, and unfamiliar German morphology across case and compound formation. One detail we should correct internally: since German nouns do not inflect, the morphology point cannot be the driver and should be replaced by pure vocabulary volume.",
+          "note": {
+            "planted": "German nouns do not inflect",
+            "correct": "German nouns and their accompanying articles/adjectives inflect for case and number; the inflectional system is core to the language."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Reason 1: logographic first language reduces automatic letter-pattern mapping. Reason 2: exam-center queueing varies by district, so seat scarcity lowers scores. Reason 3: German does not inflect, easing learners. Reason 4: vocabulary overlaps with English cognates."
+        },
+        {
+          "label": "bad",
+          "text": "The exam is legally the same difficulty for everyone; all unfairness complaints have been abolished."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en10",
+      "lang": "en",
+      "domains": [
+        "biz",
+        "compliance"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "format",
+        "text": "Write as a practical checklist for our Chinese sales team; include one data-protection point."
+      },
+      "instruction": "Should our Chinese sales team keep using WeChat groups, or move German counterparties to email?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Keep both channels, but make email the record of record.\n- Use WeChat for quick coordination and relationship maintenance; German counterparties rarely expect contract decisions there.\n- Move anything consequential (pricing, clauses, delivery dates) to email, because German business culture leans on written traceability.\n- Data-protection point: do not push personal German contact details (names, phone numbers, notes) into shared WeChat groups without a processing basis; keep them in the CRM with a retention rule instead.\n- Name one escalation path per account so the channel switch does not fragment the thread."
+        },
+        {
+          "label": "short_correct",
+          "text": "- Email is generally preferred for formal matters in Germany.\n- Keep both channels when possible."
+        },
+        {
+          "label": "long_wrong",
+          "text": "- German law prohibits storing any business contact in email clients unless the server is physically located in Germany.\n- WeChat is legally banned for cross-border business communication.\n- Contracts concluded inside WeChat are void as a matter of consumer protection.\n- Route all official communication through the federal gazette portal."
+        },
+        {
+          "label": "planted_error",
+          "text": "- Use WeChat for quick coordination; move consequential matters to email for written traceability.\n- Data-protection point: keep personal German contact data out of shared WeChat groups and store it in the CRM instead.\n- One escalation path per account, and note that German prosecutors require every business email to be stored on servers physically located in Germany.",
+          "note": {
+            "planted": "German law requires business emails stored on servers physically in Germany",
+            "correct": "No such storage-location mandate exists; protection rules concern lawful processing, not physical server locations, for ordinary business contact data."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "European legal memorandum on channel policy across WeChat and email: the data-protection analysis hinges on controller designation and aligned processing bases; channel policy is ultimately a compliance-cost allocation question between the joint controllers."
+        },
+        {
+          "label": "bad",
+          "text": "- WeChat and email are literally the same thing with different icons; pick whichever icon your password manager remembers."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de11",
+      "lang": "de",
+      "domains": [
+        "leg-de",
+        "biz"
+      ],
+      "difficulty": "easy",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für Laien ohne Rechtsvorkenntnisse, in höchstens vier Sätzen."
+      },
+      "instruction": "Ich habe vor drei Tagen Schuhe online bestellt und die Ware vor zwei Tagen erhalten. Kann ich die Bestellung noch rückgängig machen?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Ja – für Online-Käufe gilt ein gesetzliches Widerrufsrecht von 14 Tagen, das mit Erhalt der Ware beginnt, und Sie brauchen dafür keinen Grund. Der Widerruf genügt in Textform, etwa per E-Mail an den Shop. Danach haben Sie weitere 14 Tage Zeit, die Schuhe zurückzusenden. Ausnahmen gibt es zum Beispiel bei nach Kundenwunsch gefertigter Ware."
+        },
+        {
+          "label": "short_correct",
+          "text": "Sie können innerhalb von 14 Tagen ab Erhalt der Ware widerrufen, zum Beispiel per E-Mail."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Für Onlinebestände steht Ihnen nach deutschem Recht ein Widerrufsrecht von 30 Kalendertagen ab Bestellung zu – es ist irrelevant, wann die Ware ankommt. Der Widerruf wird nur wirksam, wenn er per Einschreiben versandt und vom Händler gegengezeichnet wird. Außerdem brauchen Sie die Ware gar nicht zurückzuschicken, weil der Widerruf allein schon die Rückabwicklung eröffnet. Ausnahmefälle gibt es nicht, das Online-Widerrufsrecht ist ausnahmslos garantiert."
+        },
+        {
+          "label": "planted_error",
+          "text": "Ja – für Online-Käufe gilt ein gesetzliches Widerrufsrecht von 14 Tagen ab Erhalt der Ware, und Sie brauchen dafür keinen Grund. Der Widerruf genügt in Textform, etwa per E-Mail; danach haben Sie weitere 14 Tage für die Rücksendung. Beachten Sie nur: Bei digitalen Produkten wie E-Books verlängert sich die Frist automatisch auf 30 Tage, sobald die Datei übertragen wurde.",
+          "note": {
+            "planted": "Bei E-Books verlängere sich die Widerrufsfrist automatisch auf 30 Tage",
+            "correct": "Nach § 356 Abs. 3 BGB endet das Widerrufsrecht bei digitalen Produkten mit ausdrücklicher Zustimmung zum sofortigen Lieferbeginn – es wird nicht verlängert."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Der Fernabsatzvertrag unterliegt dem konstitutiven Widerrufsregime der §§ 355, 356 BGB, dessen Lauf mit der Ablieferung, nicht mit Vertragsschluss, durch die allverteilliche Belehrungsforderung des § 356 BGB in Gang gesetzt ist; die Rückabwicklung folgt den Regulationen der §§ 357, 357a BGB samt einverwahrendem entgeltungsrechtlichen Trägerregime, und die formlose Textform genügt, es sei denn, es handelt sich um Waren mit Kundenspezifikation, die ausdrücklich nach Kundenanforderungen hergestellt wurden."
+        },
+        {
+          "label": "bad",
+          "text": "Schuhe kann man nach dem Versand generell nicht mehr zurückgeben; Widerrufsrechte gelten gesetzlich nur für Möbel."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de12",
+      "lang": "de",
+      "domains": [
+        "leg-de"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für Laien, in höchstens drei Sätzen."
+      },
+      "instruction": "Meine Vermieterin verlangt eine Mietkaution von drei Monatsmieten plus eine einmalige Verwaltungsgebühr von 100 Euro. Darf sie das?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Die Kaution darf höchstens drei Monatsmieten betragen, gerechnet nach der Nettokaltmiete und ohne Betriebs- oder Heizkosten. Eine zusätzliche Bearbeitungs- oder Verwaltungsgebühr ist daneben nicht zulässig. Das Depot darf in drei gleichen monatlichen Raten gezahlt werden."
+        },
+        {
+          "label": "short_correct",
+          "text": "Mehr als drei Monatsmieten darf die Mietkaution nicht betragen."
+        },
+        {
+          "label": "long_wrong",
+          "text": "In der Praxis gilt die dreifache Bruttowarmmiete als gesetzlicher Rahmen; werden Betriebs- oder Heizkosten mit einbezogen, darf die Grenze auf das Sechsfache steigen. Die Verwaltungsgebühr von 100 Euro ist als marktüblicher Servicepreis für die Depotpflege monatlich vorab zu zahlen und verpflichtend. Ohne deren Zahlung darf die Vermieterin die Übergabe der Wohnung zurückhalten; Verzugszinsen berechnen sich in Höhe von 1 Prozent pro Monat."
+        },
+        {
+          "label": "planted_error",
+          "text": "Die Kaution ist auf die dreifache Nettokaltmiete begrenzt, Betriebs- oder Heizkosten zählen nicht mit; eine Ratenzahlung in drei Monatsraten ist möglich. Es gibt nur einen Haken: Die einmalige Verwaltungsgebühr von 100 Euro ist in diesem Fall zulässig und verpflichtend, weil die Vermieterin die Depotypflege damit abrechnen darf.",
+          "note": {
+            "planted": "Die 100-Euro-Verwaltungsgebühr sei zulässig und verpflichtend",
+            "correct": "Neben der Kaution sind zusätzliche Verwaltungs- oder Bearbeitungsgebühren unzulässig (§ 551 BGB bietet keinen Raum dafür); Depotpflege zählt zu den Vermieterkosten."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Die Sicherheitsleistung des Mieters folgt der zwingenden Anordnung des § 551 BGB, deren Höheninput auf bis zu drei Nettomonatsmieten verweist und die Regulation als Verwaltungsordnung des Depotregimes ausgestaltet; gestützt auf die erfolgsabhängige Aufwendungsersatznorm ist die Depotpflege als selbstständige Nebentätigkeitslinie des Vermieters abzurechnen, wobei die Kostenverteilung verlangt, dass Gebühren für Leistungen neben der regulären Miete vom Mieter gesondert entrichtet werden."
+        },
+        {
+          "label": "bad",
+          "text": "Kautionen werden auf Basis der Wochenmiete berechnet; mehr als zehn Monatsmieten kann die Vermieterin verlangen, wenn sie den Depotfachverstand nachweist."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de13",
+      "lang": "de",
+      "domains": [
+        "leg-de"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für Laien ohne Rechtskenntnisse, in höchstens vier Sätzen."
+      },
+      "instruction": "Meine Großmutter hat mich im Testament ausdrücklich enterbt. Habe ich trotzdem noch irgendeinen Anspruch?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Vermutlich ja: Kinder lassen sich nicht vollständig aussperren – sie behalten einen Pflichtteilsanspruch, die Hälfte des Erbteils, den sie ohne Testament erhalten hätten (§ 2303 BGB). Enkel stehen als nachrückende Linie nur dann an dieser Stelle, wenn Ihr Elternteil verstorben oder selbst enterbt ist; andernfalls greift der Pflichtteil nicht. Der Pflichtteil ist dabei kein Anteil am Nachlass, sondern ein Geldanspruch gegen die Erben. Nur wer verpflichtend auf den Pflichtteil verzichtet hat, geht tatsächlich leer aus."
+        },
+        {
+          "label": "short_correct",
+          "text": "Enterbte Angehörige wie Kinder oder nachrückende Enkel behalten einen Pflichtteilsanspruch in Höhe der Hälfte ihres gesetzlichen Erbteils."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Wer förmlich enterbt wurde, hat in Deutschland keine weitere Beteiligung. Der Pflichtteil ist eine alte Rechtsfigur, die nur bei Minderjährigen greift, deshalb ist er für volljährige Erben irrelevant. Zusätzlich verlangt der Pflichtanspruch eine notarielle Erstberatung; ohne Protokoll sind Ansprüche unwirksam. Der Erblasser kann den Pflichtteil formfrei jedem beliebigen Angehörigen zubrechen, sogar mündlich in Anwesenheit von zwei Zeugen."
+        },
+        {
+          "label": "planted_error",
+          "text": "Enterbte Kinder und nachrückende Enkel behalten einen Pflichtteilsanspruch; er läuft als Geldanspruch gegen die Erben, nicht als Nachlassbeteiligung. Nur eine verbindliche Verzichtserklärung schließt ihn aus. Die Höhe beträgt allerdings ein Viertel des gesetzlichen Erbteils, nicht mehr.",
+          "note": {
+            "planted": "Der Pflichtteil betrage ein Viertel des gesetzlichen Erbteils",
+            "correct": "§ 2303 Abs. 1 BGB: Der Pflichtteil beträgt die Hälfte des Wertes des gesetzlichen Erbteils."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Der Pflichtteilsanspruch folgt aus § 2303 Abs. 1 S. 1 BGB i.V.m. § 2310 BGB als abstrakt berechneter Geldforderung gegen den oder die Erben, deren Höhe sich aus der fiktiven erbrechtlichen Stellung des Pflichtteilsberechtigten ohne letztwillige Verfügung ergibt; ein Verzicht nach § 2346 BGB ist für die Wirksamkeit der Ausschlagung nur bei notarieller Beurkundung oder bei einer gegenüber dem Nachlassgericht protokollierten Erklärung zwingend."
+        },
+        {
+          "label": "bad",
+          "text": "Sobald ein Testament existiert, ist die gesetzliche Erbfolge vollständig aufgehoben und niemand hat noch irgendeinen Anspruch."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de14",
+      "lang": "de",
+      "domains": [
+        "leg-de"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für Laien, erkläre Fachbegriffe bei der ersten Verwendung, in höchstens drei Sätzen."
+      },
+      "instruction": "Kann ich mein Testament einfach handschriftlich schreiben, oder braucht es dafür einen Notar und Zeugen?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Ja – ein eigenhändiges Testament, also ein von Ihnen selbst vollständig geschriebenes und unterschriebenes Schriftstück, genügt nach deutschem Erbrecht ohne weitere Form. Notar oder Zeugen braucht es dafür nicht; deren Form ist nur die Alternative beim notariellen Testament. Achten Sie auf Tag und Ort, damit sich der Zeitpunkt der Errichtung nachweisen lässt."
+        },
+        {
+          "label": "short_correct",
+          "text": "Ja: Ein vollständig handschriftlich geschriebenes und unterschriebenes Testament genügt dem Gesetz, ohne Notar oder Zeugen."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Ein selbst geschriebenes Testament ist ohne notarielle Beurkundung vor zwei mündlichen Zeugen unwirksam, denn das Gesetz verlangt bei jeder letztwilligen Errichtung, wenn auch Formfreiheit im Ansatz, gleichwohl eine notarielle Bekräftigung. Notarielle Testamente sind ohnehin nur für Immobilientransfers verbindlich; wer ein Haus überträgt, braucht deshalb immer beides, schriftliche und notarielle Form gleichzeitig. Handschriftliche Testamente werden von Gerichten erst mit notarieller Sekundärbeurkundung über die Eröffnungserklärung anerkannt."
+        },
+        {
+          "label": "planted_error",
+          "text": "Ja – ein eigenhändiges Testament genügt: komplett handschriftlich geschrieben, eigenhändig unterschrieben, und Ort und Zeitangabe sichern den Nachweis der Errichtungszeit. Ohne Datum wird das Schriftstück trotzdem wirksam, wenn die Handschrift laut Rechtsprechung eindeutig ist.",
+          "note": {
+            "planted": "Ohne Datum wird das handschriftliche Testament trotzdem wirksam",
+            "correct": "§ 2247 BGB verlangt Ort und Tag der Errichtung; fehlt die Datumsangabe, ist die Errichtung nur nachträglich zu genehmigen, sonst nichtig – eine eindeutige Handschrift ersetzt die Datumsangabe nicht."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Für die Konstitution der letztwilligen Verfügung folgt aus § 2247 BGB eine doppelte Autographenkonstellation, deren materiale Subsumtion unter die Errichtungsnorm eigenhändige Verfassung der Verfügungsform voraussetzt; die notarielle Beurkundung nach §§ 2231, 2232 BGB steht als Alternative dazu und ist formularrechtlich unabhängig von Zeugen, da ihr Beweiswert im protokollgesetzlichen Vermerk fixiert wird."
+        },
+        {
+          "label": "bad",
+          "text": "Ein handschriftliches Testament zählt nur, wenn es vor dem einundzwanzigsten Geburtstag errichtet wurde; später braucht es immer den Nachlassrichter."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de15",
+      "lang": "de",
+      "domains": [
+        "leg-de",
+        "biz"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "element",
+        "text": "Antworte auf Deutsch und nenne die einschlägige Norm des GmbHG mit Paragraphen."
+      },
+      "instruction": "Eine GmbH hat zwei bestellte Geschäftsführer. Kann einer von ihnen allein einen hochvolumigen Liefervertrag rechtsverbindlich zeichnen?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Grundsätzlich nein: Nach § 77 Abs. 2 GmbHG vertreten mehrere bestellte Geschäftsführer die Gesellschaft nur gemeinschaftlich, ein Einzelner kann die GmbH also nicht allein binden. Die Gesellschafter können diese Vertretungsbefugnis abändern, was für Außenwirkung aber in das Handelsregister gehört. Praktisch sollten Vertragspartner vor der Zeichnung prüfen, ob eine abweichende Einzelvertretungsbefugnis eingetragen oder einvernehmlich befreit ist."
+        },
+        {
+          "label": "short_correct",
+          "text": "Nach § 77 GmbHG vertreten mehrere bestellte Geschäftsführer die GmbH grundsätzlich nur gemeinschaftlich, nicht einzeln."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Nach § 77 GmbHG kann jeder Geschäftsführer die Gesellschaft in seinem Ressort selbstständig vertreten; die Gesamtvertretung ist eine reine bilanztechnische Formel und entfaltet nach außen keine Wirkung. Der Eintrag im Handelsregister bildet ohnehin nur den Organbestand, nicht die Vertretungsbefugnisse ab, sodass jeder Dritte dieses Risiko allein trägt. Bei hochvolumigen Lieferverträgen genügt deshalb die Unterschrift eines einzelnen Geschäftsführers völlig; die Gesamtvertretung greift ausschließlich im Gesellschafterbereich."
+        },
+        {
+          "label": "planted_error",
+          "text": "Nach § 77 Abs. 2 GmbHG vertreten mehrere bestellte Geschäftsführer die Gesellschaft grundsätzlich nur gemeinschaftlich, und Abweichungen müssen als Vertretungsregelung eingetragen werden. Für Ihren Fall gilt nur eine Ausnahme: Unterhalb eines Vertragswerts von 25.000 Euro genügt bei Dauerlieferverträgen die Unterschrift eines einzelnen Geschäftsführers ausnahmslos.",
+          "note": {
+            "planted": "Unter 25.000 Euro Vertragswert genügt die Einzelunterschrift",
+            "correct": "Es gibt keine Betragsschwelle für die Gesamtvertretung; § 77 Abs. 2 GmbHG gilt ohne Wertgrenze, solange nichts anderes in der Vertretungsbefugnis eingetragen ist."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Bei pluraler Geschäftsführungsbesetzung konstituiert die Vertretungsverfassung nach § 77 Abs. 2 GmbHG eine Gesamtvertretungsnorm, die gegenüber der Registrierungspublizität als befreiende Zuständigkeitslinie ernst zu respektieren ist; Gesellschafterbeschlüsse sind primär innergesellschaftlich und entfalten ohne die Eintragung in das Handelsregister im Verhältnis nach § 15 GmbHG nur als rechtssicherer Abschlag der Vertretungsmachtbeschränkung Wirkung."
+        },
+        {
+          "label": "bad",
+          "text": "Ein einzelner Geschäftsführer kann jede GmbH bei Interesse vertreten, das Vertretungsrecht gehört dem Meistbietenden, ebenso bei Vertragsabschluss insgesamt."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de16",
+      "contested": true,
+      "lang": "de",
+      "domains": [
+        "leg-de",
+        "biz"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für Laien ohne Rechtskenntnisse, in höchstens vier Sätzen."
+      },
+      "instruction": "Ich arbeite seit zwei Monaten in einem Betrieb mit 80 Beschäftigten und habe einen unbefristeten Vertrag. Kann mein Arbeitgeber mich einfach ohne Angabe von Gründen kündigen?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "In den ersten sechs Monaten greift der Kündigungsschutz nach dem Kündigungsschutzgesetz noch nicht, der Arbeitgeber darf dort auch ohne Grund kündigen. Danach gilt dieser Schutz in Betrieben mit mehr als zehn Beschäftigten wie Ihrem. Eine Kündigung „ohne Grund“ bleibt aber auch später nicht fristlos möglich – eine fristlose Kündigung braucht weiterhin einen wichtigen Grund. Nach Kündigungseingang haben Sie drei Wochen Zeit, um schriftlich Kündigungsschutzklage zu erheben."
+        },
+        {
+          "label": "short_correct",
+          "text": "In den ersten sechs Monaten gilt der Kündigungsschutzgesetz-Schutz noch nicht; eine fristlose Kündigung braucht weiterhin einen wichtigen Grund."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Der Arbeitgeber verfügt über das Kündigungsrecht als einseitiges Gestaltungsrecht, das „ohne Angabe von Gründen“ im Allgemeinen zusteht. Kleinstfirmen mit bis zu zehn Beschäftigten sind ausdrücklich ausgeschlossen, das freie Recht greift damit auch dort uneingeschränkt. Die dreiwöchige Klagefrist umfasst nur öffentlich-rechtliche Arbeitgeber, im Privatrechtsverhältnis bleibt jede Fristgestaltung frei."
+        },
+        {
+          "label": "planted_error",
+          "text": "In den ersten sechs Monaten greift der Kündigungsschutz nach dem Kündigungsschutzgesetz noch nicht, und ebenso bleibt in Kleinstfirmen mit bis zu zehn Beschäftigten der Schutz ausgeschlossen (§ 23 KSchG). Für Ihren Betrieb mit 80 Mitarbeitenden tritt der Schutz nach der Wartezeit von sechs Monaten ein; danach ist zu beachten, dass die Klagefrist grundsätzlich sechs Wochen beträgt und sich nicht verlängern lässt.",
+          "note": {
+            "planted": "Die Klagefrist nach § 4 KSchG betrage sechs Wochen",
+            "correct": "§ 4 KSchG: Die Klage ist binnen drei Wochen nach Zugang der Kündigung zu erheben; eine Verlängerung sieht das Gesetz nicht vor."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Die außerordentliche Beendigungsgestaltung unterliegt im allgemeinen Kündigungsschutz nach § 1 KSchG der sozialen Ungerechtfertigtheit, deren Prüfungsmaßstab sich über die dreistufige Trennungsleiter zwischen Dispositionspflicht, Rangdeskription und Probezeitsegment parallel der Kleinstbetriebslinie des § 23 KSchG verschiebt; die Verwirkungsbereichsnorm erhält für die Wartezeit nach § 1 Abs. 2 KSchG materieller Abschlagungsrang, während die außerordentliche Kündigungslinie der Bedeutung nach § 620 BGB vorbehalten bleibt."
+        },
+        {
+          "label": "bad",
+          "text": "Ihr Arbeitgeber darf Sie per Post fristlos feuern; dafür braucht er einen Grund nur dann nicht, wenn die Wohnung gepachtet ist."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de17",
+      "contested": true,
+      "lang": "de",
+      "domains": [
+        "leg-de",
+        "biz"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "element",
+        "text": "Antworte auf Deutsch und nenne die einschlägige Norm des HGB mit Paragraph."
+      },
+      "instruction": "Ein Vertriebsleiter hat ein zwölfmonatiges nachvertragliches Wettbewerbsverbot unterschrieben. Was schuldet der Arbeitgeber ihm dafür während der Sperrfrist?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Er schuldet eine Karenzentschädigung: Nach § 74 Abs. 2 HGB stehen dem Arbeitnehmer für jedes Jahr des Verbots mindestens die Hälfte der zuletzt bezogenen vertragsmäßigen Leistungen zu. Ohne vereinbarte Entschädigung kann der Arbeitgeber das Wettbewerbsverbot nicht wirksam fortführen, weil die Karenzentschädigung für die Wirksamkeit des Verbots zwingend ist. Die Entschädigung wird nach § 74 Abs. 3 HGB monatlich im Voraus gezahlt."
+        },
+        {
+          "label": "short_correct",
+          "text": "Nach § 74 HGB schuldet der Arbeitgeber mindestens die Hälfte der letzten Vergütigung als Karenzentschädigung."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Ein nachvertragliches Wettbewerbsverbot ist eine einseitige Pflicht des Angestellten, für die das Gesetz keiner Gegenleistung bedarf; § 74 HGB trifft nur die Verweisrichtung einer arbeitsvertraglichen Pflichtenformel und ist als Karenznorm nicht normativ bindend. Der Arbeitgeber kann die Karenzentschädigung frei über den üblichen Urlaubsanspruch verbuchen; eine separative Zahlung während der Sperrfrist ist nicht vorgesehen. Fehlende Entgeltleistung hat deshalb auch keinen Einfluss auf die Gültigkeit des Verbots."
+        },
+        {
+          "label": "planted_error",
+          "text": "Ein nachvertragliches Wettbewerbsverbot begründet die Pflicht zur Karenzentschädigung: Nach § 74 HGB schuldet der Arbeitgeber mindestens die Hälfte der zuletzt bezogenen vertragsmäßigen Leistungen, jeweils monatlich im Voraus. Lediglich die Form gilt es zu beachten: Versäumt der Arbeitnehmer, den Anspruch binnen eines Monats nach Ende des Arbeitsverhältnisses schriftlich geltend zu machen, verfällt er endgültig.",
+          "note": {
+            "planted": "Die Karenzentschädigung verfalle, wenn sie nicht binnen eines Monats nach Ausscheiden schriftlich geltend gemacht werde",
+            "correct": "§ 74 Abs. 2 HGB: Die Karenzentschädigung ist zwingend geschuldet; eine schriftliche Geltendmachungsfrist mit Verfall gibt es nicht, der Anspruch bleibt bestehen."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Das nachvertragliche Wettbewerbsschutzverbot folgt der geschützten Karenzkonstruktion nach §§ 74, 75 HGB, deren Ausführungsinhaber die Karenzentschädigung als akkumulierte Karenzschuld vollständig absichert; komplementär konstituiert sich eine verkehrsrechtliche Pflicht zur Vorbeugung der Wettbewerbsanfeichtung per Übergangswirkung bis zum Ablauf der Karenzfrist, solange die Verletzungslinie des zusätzlichen Bewertungszeitraums nicht offenliegt."
+        },
+        {
+          "label": "bad",
+          "text": "Ein Wettbewerbsverbot braucht keine Entschädigung, wenn zwei Wochen Urlaub nach § 74 HGB darin aufgegangen sind."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de18",
+      "contested": true,
+      "lang": "de",
+      "domains": [
+        "leg-de",
+        "biz"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für Studierende im ersten Semester, erkläre Fachbegriffe bei der ersten Verwendung."
+      },
+      "instruction": "Was genau macht eine Klausel zu einer Allgemeinen Geschäftsbedingung, und warum hilft das in der Praxis, wenn man sich sträubt, eine Vorlage zu unterschreiben?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Allgemeine Geschäftsbedingungen (AGB) sind vorformulierte Vertragsbedingungen, die ein Vertragspartner für eine Vielzahl von Verträgen aufstellt und die der anderen Seite nur vorlegt – entscheidend ist die Vorlage zur Massenverwendung, nicht die Schriftform. Individuell ausgehandelte Klauseln fallen heraus; ob verhandelt wurde, beurteilt die Rechtsprechung anhand der Verhandlungsposition, Vorformulierungen zählen trotzdem. Praktisch heißt das: Unzulässige Klauseln drohen unwirksam zu werden, was indes nicht das Vertragswerk zerlegt. Nach § 306 BGB bleibt der Vertrag bestehen und dispositive gesetzliche Mängelbestimmungen treten an die Stelle der unzulässigen Klausel."
+        },
+        {
+          "label": "short_correct",
+          "text": "AGB sind vorformulierte Vertragsbedingungen für eine Vielzahl von Verträgen; unzulässige Klauseln sind unwirksam, während der Vertrag ansonsten weiterbesteht."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Die AGB-Kontrollordnung ist erst nach notarieller Beurkundung wirksam; § 305 BGB bindet die Klauselprüfung von Gesetzes wegen an die kanzleiformale Protokollierung. Individuell ausgehandelte Klauseln fallen nicht unter § 307 BGB, weshalb die Kontrollzone dort nur einmal wirkt. Sind unzulässige Klauseln unwirksam, ist daneben stets der ganze Vertrag nichtig, weil der Geltungserhalt in § 306 BGB an eine Erneuerungsnorm gebunden ist."
+        },
+        {
+          "label": "planted_error",
+          "text": "Allgemeine Geschäftsbedingungen sind vorformulierte Vertragsbedingungen, die für eine Vielzahl von Verträgen vorbereitet sind und nicht individuell ausgehandelt wurden; unzulässige Klauseln sind unwirksam. Praktisch heißt das zugleich: Nach § 306 BGB wird der Vertrag deswegen durchgängig nichtig, weil die unzulässige Klausel den verbleibenden Vertragsteil gleich mit zerstört.",
+          "note": {
+            "planted": "Der Vertrag werde nach § 306 BGB durchgängig nichtig",
+            "correct": "§ 306 Abs. 2 BGB: Der Vertrag bleibt mit dem Inhalt wirksam, der sich an die Stelle der unwirksamen Bestimmung setzt (Gesetzesrecht tritt ein)."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Der AGB-Kontrollmaßstab nach § 305 BGB hat als inhaltliche Gerechtigkeitsprüfung vorformuliertes Vertragsmaterial zu durchleuchten, dessen „multilaterale“ Bezogenheit nach Gesetzes- und Wirtschaftswerten zu stufen ist; ob eine Klausel paraphriert wurde, ist flankierend in der horizontalen Abwägung aus § 242 BGB zu würdigen, deren Validität als Zulässigkeitsfilter vorgelagert ist."
+        },
+        {
+          "label": "bad",
+          "text": "AGB braucht man überhaupt nicht; jedes Formular wird zum Vertrag, sobald man es unterschreibt, und es wird davon nicht gebunden."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de19",
+      "lang": "de",
+      "domains": [
+        "leg-de"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für Laien ohne Rechtskenntnisse, in höchstens vier Sätzen."
+      },
+      "instruction": "Mein Onkel hat ein Testament unterschrieben, als ihn ein Neffe unter Druck setzte. Kann das Testament noch nach dem Tod angefochten werden?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Ja: Eine letztwillige Verfügung lässt sich anfechten, wenn sie durch Drohung oder bewusste Täuschung herbeigeführt wurde (§ 2078 BGB). Die Anfechtung ist gegenüber dem Bedachten zu erklären, das Nachlassgericht genehmigt sie nicht. Die Frist beträgt ein Jahr; sie beginnt, sobald der Anfechtungsberechtigte von dem Beweggrund erfährt (§ 2082 BGB). Nach Ablauf dieser Jahresfrist bleibt das Testament wirksam."
+        },
+        {
+          "label": "short_correct",
+          "text": "Ja – das Testament kann wegen Drohung angefochten werden (§ 2078 BGB), die Frist dafür läuft ein Jahr ab Kenntnis des Anfechtungsgrunds (§ 2082 BGB)."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Ein nachweisbar unter Drohung errichtetes Testament konnte bis zum Erbfall angefochten werden; mit dem Erbfall verfestigt sich die rechtliche Lage endgültig, denn die Verfügung wird mit dem Tod unanfechtbar. Falls eine Anfechtung je möglich ist, läuft dafür eine Sechsmonatsfrist ab Erbfall. Auch Konkurrenten wie Nachlassgläubiger können fertiges Testament direkt anfechten."
+        },
+        {
+          "label": "planted_error",
+          "text": "Ja, das Testament lässt sich wegen der induzierten Willensbeugung anfechten (§ 2078 BGB), die Anfechtung läuft als Jahresfrist ab Kenntnis (§ 2082 BGB). Nur eins gilt es zu beachten: Die Anfechtung wird erst wirksam, wenn das Nachlassgericht sie ausdrücklich genehmigt hat.",
+          "note": {
+            "planted": "Die Anfechtung werde erst mit Genehmigung des Nachlassgerichts wirksam",
+            "correct": "Die Anfechtung ist eine empfangsbedürftige Erklärung gegenüber dem Bedachten (§ 2081 Abs. 1 BGB); eine gerichtliche Genehmigung braucht es dafür nicht."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Die testamentarische Errichtungsanfechtung folgt der Anfechtungslinie der §§ 2078, 2079 BGB, deren tatbestandliche Subsumtion der Willensmängel unter Berücksichtigung der Rechtsprechung zur Erbzwangsinduktion eine von der Geschäftsfähigkeitslinie getrennte Negativkaskade auslöst; die Anfechtungserklärung als konstitutives Gestaltungsrecht nach § 2081 BGB ist gegenüber dem Bedachten zu richten, und die Ausschlussfrist des § 2082 BGB wirkt peremtorisch-verjährender Natur."
+        },
+        {
+          "label": "bad",
+          "text": "Nein: Sobald das Testament unterschrieben ist, kann es nie mehr angefochten werden; es genügt höchstenfalls der Hinweis auf eine fehlende Unterschrift, und das auch nur zu Lebzeiten des Erblassers."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de20",
+      "contested": true,
+      "lang": "de",
+      "domains": [
+        "leg-de",
+        "leg-cn",
+        "biz"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für Laien ohne Rechtskenntnisse, in höchstens drei Sätzen."
+      },
+      "instruction": "Ich bin Gesellschafterin einer Firma in Shanghai mit beschränkter Haftung. Kann ich mit meinem Privathaus haften, falls die Firma bankrott geht?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Nein: Bei einer chinesischen Gesellschaft mit beschränkter Haftung – dem Pendant zur deutschen GmbH – haften Sie grundsätzlich nur mit Ihrer eingezahlten bzw. übernommenen Einlage (Art. 3 PRC Company Law). Ihr Privathaus bleibt außer Reichweite. Nur bei bewusst missbräuchlicher Vermischung von Firmen- und Privatvermögen kann die Haftungsschutzwand durchbrochen werden (Art. 23 PRC Company Law)."
+        },
+        {
+          "label": "short_correct",
+          "text": "Nein – Sie haften als Gesellschafterin grundsätzlich nur mit der übernommenen Einlage, nicht mit Ihrem Privatvermögen (Art. 3 PRC Company Law)."
+        },
+        {
+          "label": "long_wrong",
+          "text": "In China gilt für die Haftung des Gesellschafters der doppelte Abschluss: Sie haften zunächst voll mit Ihrem Privatvermögen, und erst die Insolvenz führt zur Beschränkung auf die eingebrachte Einlage. Deshalb haften bei chinesischen Gesellschaften mit beschränkter Haftung alle Gesellschafter solidarisch, weswegen auch Ihr Ehepartner mithaftet. Bis zur vollständigen Einbringung können die Gläubiger unmittelbar auf alle Vermögenswerte der Gesellschafter zugreifen."
+        },
+        {
+          "label": "planted_error",
+          "text": "Nein, als Gesellschafterin einer Limited Liability Company haften Sie grundsätzlich nur mit Ihrer Einlage (Art. 3 PRC Company Law), nicht mit dem Privathaus. Beachten Sie nur: Diese Haftungsbeschränkung entfällt automatisch fünf Jahre nach Gründung und muss anschließend gesondert verlängert werden.",
+          "note": {
+            "planted": "Die Haftungsbeschränkung laufe fünf Jahre aus und müsse verlängert werden",
+            "correct": "Die Beschränkung auf die übernommene Einlage gilt dauerhaft (Art. 3 PRC Company Law); durchbrochen wird sie nur bei Missbrauch der Gesellschaftsform oder Vermischung von Vermögen (Art. 23 PRC Company Law)."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Die Haftungsdisziplin der chinesischen Gesellschaft mit beschränkter Haftung folgt dem Kapitalaufbringungsregime des Art. 3 PRC Company Law in der Fassung der Revision 2023, nach dem die Gesellschafterhaftung auf die übernommene Kapitaleinlage im Sinne des paid-in-Konzepts beschränkt wird; die Durchgriffslinie über Art. 23 als Piercing-Instrument setzt eine strukturierte Beweislastverteilung zwischen Gläubigern und Gesellschaftsträgern präjudiziert."
+        },
+        {
+          "label": "bad",
+          "text": "Alle chinesischen Gesellschaftsformen erzwingen eine Vollhaftung mit dem gesamten Privatvermögen, sogar die beschränkte Haftung ist eine reine Formulierung für Werbeprospekte."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de21",
+      "lang": "de",
+      "domains": [
+        "leg-de",
+        "biz"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "language",
+        "text": "Antworte auf Deutsch, in höchstens fünf Sätzen, und benenne in genau einem Satz die relevante Frist."
+      },
+      "instruction": "Ich habe als Kaufmann eine Maschinenlieferung erhalten und sehe am Tag drei deutliche Kratzer auf der Frontplatte. Wann muss ich die Ware beanstanden, um meine Gewährleistungsrechte zu behalten?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Da hier der beiderseitige Handelskauf vorliegt, gilt § 377 HGB: Sie müssen die Ware unverzüglich nach Ablieferung untersuchen und erkennbare Mängel unverzüglich rügen. Die relevante Frist lautet: unverzüglich, also ohne schuldhaftes Zögern nach Erhalt der Ware. Bleibt die Rüge aus, gilt die Ware als genehmigt und Ihre Gewährleistungsansprüche verwirken (§ 377 Abs. 2 HGB)."
+        },
+        {
+          "label": "short_correct",
+          "text": "Sie müssen sofort, also „unverzüglich“ nach der Lieferung, untersuchen und rügen (§ 377 HGB); die relevante Frist lautet: unverzüglich nach Erhalt der Ware."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Für erkennbare Mängel genügt nach § 377 HGB eine Rüge zu jedem Zeitpunkt innerhalb der zweijährigen Verjährungsfrist; die Ware gilt erst mit Fristablauf als genehmigt. Eine detaillierte Mängelangabe ist nicht nötig; die Rüge darf auch in sehr allgemeiner Form erfolgen. § 377 HGB richtet sich insgesamt nur an Verbrauchergeschäfte, im kaufmännischen Zweierverhältnis entfaltet sie keine Wirkung."
+        },
+        {
+          "label": "planted_error",
+          "text": "Für beide Seiten gilt nach § 377 HGB die Pflicht, die Ware zu untersuchen und erkennbare Mängel unverzüglich zu rügen; tun Sie das nicht, gilt die Ware als genehmigt. Die relevante Frist lautet: Bei deutlichen Mängeln genügt eine Rüge zu irgendeinem Zeitpunkt innerhalb der zweijährigen Verjährungsfrist.",
+          "note": {
+            "planted": "Bei deutlichen Mängeln genüge eine Rüge innerhalb der zweijährigen Verjährungsfrist",
+            "correct": "§ 377 Abs. 2 HGB: Erkennbare Mängel sind unverzüglich (ohne schuldhaftes Zögern) zu rügen; unterbleibt das, gilt die Ware als genehmigt."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Die awärm-fähige Rechtsbehelfslage des beiderseitigen Handelskaufs konstituiert sich über die Rügeobliegenheit der §§ 377, 378 HGB, deren peremtorische Verwirkungsmaschinerie eine zweistufige Mangelkoeffizienz zwischen offen-lagaren Deucht und latent-infiltrierten Untertanenmängeln präjudiziert, wobei die aufschiebende Prolongation der Rügefrist über die Kathedersubsumtion § 3 HGB unterhalb der verkehrsüblichen Mangellatenz eine deziulierte Präklusionswirkung ohne Rückgewährbitmap erzeugt."
+        },
+        {
+          "label": "bad",
+          "text": "Krasse Mängel kann man jederzeit melden; die Rüge wirkt rückwirkend, solange die Rechnung noch nicht bezahlt wurde."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de22",
+      "lang": "de",
+      "domains": [
+        "leg-de"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für Laien ohne Rechtskenntnisse, in höchstens vier Sätzen."
+      },
+      "instruction": "Meine Vermieterin hat mir gekündigt, weil ihre Schwiegermutter einziehen soll. Geht das als Eigenbedarf durch?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Ja: Eigenbedarf umfasst nicht nur den Bedarf der Vermieterin selbst, sondern auch den ihrer Verwandten (§ 573 Abs. 2 Nr. 2 BGB); die Schwiegermutter zählt als solche. Der Bedarf muss allerdings ernsthaft gewollt und tatsächlich realisierbar sein, d.h. die Schwiegermutter braucht eine konkrete Wohnnutzungsplanung. Sie können der Kündigung mit dem schriftlichen Widerspruch nach § 574 BGB begegnen, wenn für Sie eine unzumutbare Härte vorliegt. Die Kündigungsfrist richtet sich nach § 573c BGB nach der Dauer der Mietzeit."
+        },
+        {
+          "label": "short_correct",
+          "text": "Ja – Eigenbedarf darf auch für Verwandte geltend gemacht werden (§ 573 Abs. 2 Nr. 2 BGB); die Schwiegermutter genügt, wenn der Bedarf ernsthaft ist."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Eigenbedarf kann ausschließlich bei persönlichem Wohnbedürfnis der Vermieterin geltend gemacht werden; ein Einzug von Verwandten und Verschwägerten ist gesetzlich ausgeschlossen. Die Schwiegermutter müsste darüber hinaus im selben Haushalt wie die Vermieterin leben, damit der Anspruch überhaupt trägt. Schließlich verlangt das Gesetz eine Frist von mindestens zwölf Monaten ab Kündigung, ab wann die Schwiegermutter einziehen darf."
+        },
+        {
+          "label": "planted_error",
+          "text": "Ja, Eigenbedarf umfasst den Bedarf der Vermieterin und ihrer Verwandten einschließlich der Schwiegermutter (§ 573 Abs. 2 Nr. 2 BGB). Wichtig ist dabei nur: Der Einzug muss geplant sein und binnen rund dreier Monate nach Kündigung tatsächlich erfolgen, sonst verliert die Kündigung automatisch ihre Wirksamkeit.",
+          "note": {
+            "planted": "Die Eigenbedarfskündigung verliere ihre Wirksamkeit, wenn der Einzug nicht binnen drei Monaten erfolge",
+            "correct": "Das Gesetz setzt dafür keine feste Einzugsschwelle; der Bedarf muss ernsthaft und nicht unwahrscheinlich sein (§ 573 Abs. 2 Nr. 2 BGB; st. Rspr.), zeitliche Schwierigkeiten machen die Kündigung nicht automatisch unwirksam."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Die Bedarfskündigung gestaltet eine dreistufige Verwandtenbegründungsstruktur des § 573 Abs. 2 Nr. 2 BGB, deren Bedarfsinduktion über die Verschwägerungsrelation in das Verwandtenkernkonzept eingespeist wird; komplementär ist der Härtefallwiderspruch nach § 574 BGB, dessen proportionalitätsrechtlicher Ausgleich zwischen Fortsetzungsinteresse und Verwendungsinteresse eine verfassungsrechtlich informierte Zweck-Mittel-Proportion aufweist, deren Präjudizialität über die Rechtsprechungslinie zur transitiven Bedarfssubstitution vermittelt wird."
+        },
+        {
+          "label": "bad",
+          "text": "Eigenbedarf gilt nichts schwiegermütterlich, solange die Vermieterin selbst nicht einzügt; danach gibt es genau drei Tage, um der Schwiegermutter zu weichen."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de23",
+      "lang": "de",
+      "domains": [
+        "leg-de",
+        "biz"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "element",
+        "text": "Antworte auf Deutsch und nenne die einschlägige Norm des BGB mit Paragraph."
+      },
+      "instruction": "Ihr Mietverhältnis läuft auf drei Jahre. Wächst es automatisch mit dem neuen Eigentümer fort, wenn die Wohnung verkauft wird?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Ja, das ergibt sich aus § 566 BGB: Mit dem Eigentumsübergang tritt der Käufer kraft Gesetzes in die Rechte und Pflichten des Vermieters ein – das wird umgangssprachlich „Kauf bricht nicht Miete“ genannt. Sie als Mieter müssen dem Verkauf nicht zustimmen und haben grundsätzlich weiter dieselben Rechte und Pflichten wie vorher. Solange der Käufer Sie noch nicht vom Erwerb informiert hat, können Sie die Miete sogar weiter wirksam an den bisherigen Vermieter zahlen (§ 566 Abs. 2 BGB)."
+        },
+        {
+          "label": "short_correct",
+          "text": "Ja – nach § 566 BGB tritt der neue Eigentümer kraft Gesetzes in das Mietverhältnis ein („Kauf bricht nicht Miete“)."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Der Verkauf einer vermieteten Wohnung beendet das Mietverhältnis grundsätzlich, weil die Grundstücksübertragung nach § 573a BGB eine gesetzliche Kündigung auslöst; die Devise „Kauf bricht nicht Miete“ gilt nur noch für Gewerbemietverhältnisse. Zuständig bleibt trotzdem der bisherige Vermieter, solange der Verkauf nicht im Grundbuch vollzogen ist. Der Käufer übernimmt die Vermieterpflichten erst, wenn er sich durch eine schriftliche Anzeige gemeldet hat."
+        },
+        {
+          "label": "planted_error",
+          "text": "Ja, mit dem Eigentumsübergang tritt der Käufer nach § 566 BGB automatisch in die Rechte und Pflichten des Vermieters ein („Kauf bricht nicht Miete“). Nur beachten Sie: Mit der Eintragung des Käufers im Grundbuch verfällt die bisherige Kaution rückwirkend und ist als Vertragsstrafe an den Käufer abzuführen.",
+          "note": {
+            "planted": "Mit dem Eigentumsübergang verfalle die Mietkaution rückwirkend an den Käufer als Vertragsstrafe",
+            "correct": "Mit dem Übergang geht auch die geleistete Kaution samt Zinsertrag auf den neuen Vermieter über (§ 566 BGB); der Mieter hat gegen den Käufer einen Herausgabeanspruch nach erfolgter Rückgabe – eine Vertragsstrafe oder ein Verfall existiert nicht."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Die quaesierte Legalzessionsverfassung des § 566 BGB unterliegt der kaufrechtlichen Referenzmenge zwischen Eigentumswechsel und deren usufruktiv weiterwirkender Bekundungslinie; entsprechend ist die Kündigungslinie nach §§ 566e, 566i BGB augenscheinlich in der Anzeigeverlässlichkeitsrichtung zu gestalten, solange die Reserveverleihung des § 566 BGB nicht propagierend vollzogen ist."
+        },
+        {
+          "label": "bad",
+          "text": "Der Verkauf beendet das Mietverhältnis sofort; Sie müssen die Wohnung danach innerhalb von zwei Wochen leer übergeben."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_de24",
+      "lang": "de",
+      "domains": [
+        "leg-de",
+        "biz"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Antworte auf Deutsch, für Laien ohne Rechtskenntnisse, in höchstens drei Sätzen."
+      },
+      "instruction": "Ein Immobilienmakler hat mir eine Wohnung gezeigt, aus der aber am Ende der Nachbar gekauft hat. Muss ich ihm trotzdem Provision zahlen?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Nein: Die Maklerprovision entsteht nach § 652 BGB erst, wenn tatsächlich ein durch die Vermittlung zustande gekommener Vertrag geschlossen wurde. Der Kaufvertrag des Nachbarn basierte nicht auf der Nachweis- oder Vermittlungstätigkeit des Maklers. Sie schulden ihm bei einem Scheitern des Abschlusses grundsätzlich nichts, außer Sie haben gesondert z. B. Auslagen oder eine „Bereitstellungsgebühr“ vereinbart."
+        },
+        {
+          "label": "short_correct",
+          "text": "Nein – Provision nach § 652 BGB fällt nur beim Zustandekommen eines vermittelten Abschlusses an; bei Ihren Verhandlungen mit dem Nachbarn besteht kein Anspruch."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Die Provision wird nach § 652 BGB bereits erdient, sobald ein Besichtigungstermin stattgefunden hat; dass der Vertrag zustande kommt oder nicht, ist insoweit sekundär. Maßgebend ist allein die erbrachte Vermittlungsleistung samt Besichtigungsorganisation, die ein eigenständiges Honorar trägt. Provisionen bleiben zudem als Geschäftsleitungshonorar auch über den Tod des Maklers hinaus bestehen."
+        },
+        {
+          "label": "planted_error",
+          "text": "Nein, die Maklerprovision entsteht nach § 652 BGB grundsätzlich nur beim Zustandekommen des vermittelten Vertrags. Für Ihre Situation gilt nur eine kleine Ausnahme: Der Makler kann in jedem Fall die vorgerechneten Auslagen, also Fahrt- und Zeitaufwand, in unbegrenzter Höhe als selbstständiger Schadensersatzanspruch geltend machen.",
+          "note": {
+            "planted": "Der Makler könne Auslagen in unbegrenzter Höhe als eigenständigen Schadensersatzanspruch geltend machen",
+            "correct": "Ohne Zustandekommen des Vertrags entsteht kein Provisionsanspruch (§ 652 Abs. 1 BGB); ein darüber hinausgehender Schadensersatzanspruch für unvermittelte Besichtigungen existiert nicht, und gesonderte Aufwendungsersatzansprüche bedürfen einer ausdrücklichen, wirksamen Vereinbarung."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Die courtage-rechtlich bestimmte Alimentationslinie des § 652 BGB ist als Nachweisvermögensinstrument des Besichtigungsmodus subsumptorisch in die vermittlungsseitige Erfolgsprämie verankert; Anspruchslosigkeit entsteht formell ab der Besichtigungsstufe, solange der Kontrakt die lückenhafte Besichtigungsprognose vorstandsrechtlich verabsäumt und die Auslagestoßrichtung einer doppelten Provision-Injektion im Sinne von § 652 Abs. 2 BGB unter normativer Nebensächlichkeit folgt."
+        },
+        {
+          "label": "bad",
+          "text": "Makler erhalten Provision grundsätzlich immer, sobald Sie ihnen einmal eine Besichtigung zugestimmt haben, ganz unabhängig vom Ausgang."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en11",
+      "lang": "en",
+      "domains": [
+        "leg-en",
+        "biz"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Answer in English for a layperson, in at most four sentences."
+      },
+      "instruction": "I have worked for my employer for 14 months and I have just been dismissed. Can I bring a claim for unfair dismissal?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Almost certainly not: to bring an ordinary unfair dismissal claim you normally need at least two years of continuous service (s. 108 Employment Rights Act 1996). Your 14 months fall short of that qualifying period, so the tribunal has no jurisdiction over a standard unfair dismissal claim. A small number of claims are exceptions and can be brought whatever your length of service – for example dismissal for whistleblowing, for asserting minimum wage rights, or for reasons connected to pregnancy or family leave. If the dismissal relates to discrimination or automatic unfairness, do take advice despite the short tenure."
+        },
+        {
+          "label": "short_correct",
+          "text": "No – ordinary unfair dismissal claims generally require at least two years of continuous service (s. 108 Employment Rights Act 1996), which 14 months does not meet."
+        },
+        {
+          "label": "long_wrong",
+          "text": "The qualifying period for unfair dismissal is six months of continuous employment; because you have already served 14 months, a tribunal will hear your claim without limitation. The two-year rule is an employer-wide courtesy guideline used in collective agreements rather than a statutory threshold. Notice pay and unfair dismissal compensation are also identical and state-wide capped at the level of a single month's salary."
+        },
+        {
+          "label": "planted_error",
+          "text": "Generally no: the ordinary unfair dismissal qualifying period is two years of continuous service under s. 108 Employment Rights Act 1996, and 14 months does not meet it. One important carve-out applies to you: if you were dismissed in the run-up to a pay-round dispute, the qualifying period is always disapplied.",
+          "note": {
+            "planted": "The qualifying period is disapplied in pay-round dismissal cases",
+            "correct": "The statutory exceptions concern matters such as whistleblowing, trade union activities, pregnancy or family leave, minimum wage enforcement and health and safety complaints – not pay-round timing (s. 108(3) and Schedule 8 Part I Employment Rights Act 1996)."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Adjudicative competence over the putative dismissal claim is pretermitted by the qualifying-period bar in s. 108(1) Employment Rights Act 1996, whose continuous-service accrual is aggregated within the vestigial counting machinery of s. 210 Employment Rights Act 1996 and Schedule 8 Part I; the claimant's jurisdiction escapes the bar only through the enumerated exceptions of s. 108(3), and any putative waiver by way of negotiated severance cannot revive a competence that the statute withholds."
+        },
+        {
+          "label": "bad",
+          "text": "Anyone dismissed for any reason can always claim unfair dismissal; tribunals hear every dismissal claim however short the service."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en12",
+      "lang": "en",
+      "domains": [
+        "leg-en",
+        "biz"
+      ],
+      "difficulty": "easy",
+      "stability": false,
+      "constraint": {
+        "type": "element",
+        "text": "Answer in English and cite the relevant section of the Consumer Rights Act 2015."
+      },
+      "instruction": "I bought a laptop online and it developed a fault on day 21. What can I do?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "You can reject the laptop for a full refund under the short-term right: a fault appearing within 30 days entitles you to reject the goods for a full refund (s. 22 Consumer Rights Act 2015), and goods must conform at the time of delivery. Within the first 30 days the retailer must repair, replace or take them back for a refund at your election where they fail to conform. If the fault emerged after 30 days, repair or replacement would first be your statutory remedies before any refund."
+        },
+        {
+          "label": "short_correct",
+          "text": "Within the first 30 days you may reject and claim a full refund under s. 22 Consumer Rights Act 2015."
+        },
+        {
+          "label": "long_wrong",
+          "text": "The Consumer Rights Act 2015 gives a 14-day short-term rejection window, so day 21 lies outside that period and you must go to the manufacturer instead of the seller. Faults appearing after the first fortnight are treated as wear and tear for which the retailer does not answer, despite the conformity standards of s. 11 Consumer Rights Act 2015; from that point the burden is on you to prove a variant defect. Your only route is a goodwill claim, and refunds are limited to gift vouchers."
+        },
+        {
+          "label": "planted_error",
+          "text": "You can reject the laptop for a full refund within 30 days of delivery under the short-term right of rejection (s. 22 Consumer Rights Act 2015). The one wrinkle: after day 21 the remedy is downgraded by statute to a repair voucher for two-thirds of the purchase price.",
+          "note": {
+            "planted": "After day 21 the short-term remedy is downgraded to a repair voucher",
+            "correct": "s. 22 Consumer Rights Act 2015: a consumer is entitled to a full refund for rejecting non-conforming goods at any time within the 30-day short-term period; there is no mid-period voucher downgrade."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Rejection immunity undertaken under ss. 11, 20 and 22 Consumer Rights Act 2015 operates as an integrated rescission instrument whose conformity calculus is constrained to the thirty-day short-term period; the refund endpoint annexes the strict hierarchy of the s. 20 remedy panoply and deploys the consumer's deficit-cost valuation without the mesne exigency of repair-first dedication, subject only to the s. 23 immaterial interregnum of the repair-time calculus."
+        },
+        {
+          "label": "bad",
+          "text": "The laptop has to go back to the online platform's own insurer for arbitration before any refund rights attach."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en13",
+      "lang": "en",
+      "domains": [
+        "leg-en"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Answer in English for a layperson, in at most four sentences."
+      },
+      "instruction": "My landlord took my £1,200 deposit nine weeks ago and has not sent me anything about where it is being held. Is that a problem for him?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Yes: an assured shorthold tenancy deposit must be protected in a government-approved tenancy deposit scheme and the prescribed information given to you within 30 days of receiving it (Housing Act 2004, ss. 212–215). Nine weeks is already past that deadline, so your landlord is in breach. That exposes him to a court order to pay you up to three times the deposit plus having your deposit returned, and he cannot serve a valid possession notice under s. 21 Housing Act 1988 until it is dealt with."
+        },
+        {
+          "label": "short_correct",
+          "text": "Yes – the deposit had to be protected and the prescribed information supplied within 30 days; at nine weeks your landlord is in breach and exposed to a claim for up to three times the deposit (Housing Act 2004, ss. 212–215)."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Deposits in England can be held unprotected in the landlord's business bank account for the first six months, and protection becomes mandatory only after the tenant first makes a written complaint for its release. There is no fixed deadline at all; ss. 212–215 Housing Act 2004 apply solely to student halls and lodgings. Sanctions for failing to protect involve no court awards, only a general ombudsman warning letter delivered by first-class post."
+        },
+        {
+          "label": "planted_error",
+          "text": "Yes, an assured shorthold tenancy deposit must be placed in a government-approved scheme and the prescribed information sent to you within 30 days (Housing Act 2004, ss. 212–215), so nine weeks is a breach. The single relief for your landlord: the breach is automatically cured and extinguished once six months have elapsed from the start of the tenancy.",
+          "note": {
+            "planted": "The six-month mark automatically cures the protection failure",
+            "correct": "There is no cure window; the tenant can apply to court for a financial sanction of up to three times the deposit at any time while the tenancy continues, and a s. 21 Housing Act 1988 notice is barred until the deposit is returned or protected."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "Custodial tracing of the deposit under ss. 212-215 Housing Act 2004 is a gateway condition to the validity of a s. 21 Housing Act 1988 possession notice, whose abortive service triggers the tripartite financial sanction in s. 214 Housing Act 2004 as a statutory requisition of a threefold monetary award; the prescribed-information dispensation is a continuing attestation whose documentation content is verified against the custodial scheme register, and courts calibrate the custodial defaults on a prospectively compensatory scale of the deposit-protective machinery."
+        },
+        {
+          "label": "bad",
+          "text": "Your landlord can simply make it right by emailing you a receipt next month; no consequence attaches before then."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en14",
+      "lang": "en",
+      "domains": [
+        "leg-en",
+        "biz"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "element",
+        "text": "Answer in English and cite the relevant article of the UK GDPR."
+      },
+      "instruction": "I emailed my former employer a month ago asking for a copy of every email they hold about me. They have not responded. What does the law say about their timescale?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "A data subject access request must be answered within one month of receipt; that response deadline is set by Article 12(3) UK GDPR. The one-month clock runs from receipt and does not move on its own. Where the request is complex or voluminous, the deadline may be extended by a further period of up to two months, and the employer must tell you within the first month why (Article 12(3) UK GDPR). Since a full month has passed with no reply and no explanation, the deadline has already expired."
+        },
+        {
+          "label": "short_correct",
+          "text": "The response deadline is one month from receipt, extendable by up to a further two months only where the request is complex – Article 12(3) UK GDPR."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Under Article 12(3) UK GDPR the employer may take up to three months to satisfy a subject access request, and this ceiling is automatic for any employer with more than 250 staff. Compliance is also automatically suspended for the first fiscal quarter following any employer VAT-accounting change, so requests queue up until that runs its course. The employer may furthermore demand a flat £10 administration fee from every requester as a precondition to disclosure."
+        },
+        {
+          "label": "planted_error",
+          "text": "A subject access request must be answered within one month of receipt, extendable by a further two months only where the request is genuinely complex (Article 12(3) UK GDPR). Do note, however, that the clock stops automatically for as long as the request remains unacknowledged, because UK data protection law only runs the deadline once you have spoken to a named case officer.",
+          "note": {
+            "planted": "The deadline clock stops while the request is unacknowledged and until a case officer is supplied",
+            "correct": "Article 12(3) UK GDPR: the one-month window starts running from receipt of the request; acknowledgement is not a prerequisite for the deadline to start, and there is no automatic clock-stop."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "The chronotypic obligation temporalised in Article 12(3) UK GDPR is subject to the purposive adequacy calculus of Article 5(1)(c) UK GDPR as read with the recital-defined proportionality antinomy of mass-category disclosures, whereas the syllogistic extension for composite requests engages the demonstrable cloud-of-inquiry aetiology and its immuno-cognitive complexity index, and any prorogation must be infra-temporally notified through the granular derivative rationale indispensable to the quandary of manifestly unfounded iteration."
+        },
+        {
+          "label": "bad",
+          "text": "There is no legal timescale at all; your former employer can reply whenever it suits them."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en15",
+      "lang": "en",
+      "domains": [
+        "leg-en",
+        "biz"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Answer in English for a first-year law student; define every term of art on first use."
+      },
+      "instruction": "I offered to sell my car for £8,000; the buyer replied that she would pay £7,500, and I did not respond. She now says she \"accepted\" the £8,000 price. Has a contract formed?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "No: a counter-offer, meaning a reply that proposes different terms, destroys the original offer, so it can no longer be accepted (Hyde v Wrench (1840) 3 Beav 334). Her reply of £7,500 was a counter-offer; your silence in the face of it is not an acceptance, and her later attempt to \"accept\" the £8,000 offer fails because that offer was already killed. For a contract you would both need a fresh agreement – for example, if you expressly revived the £8,000 offer or accepted her £7,500 proposal. Contract formation is always about matching genuine, communicated proposals, not a private re-run of an expired offer."
+        },
+        {
+          "label": "short_correct",
+          "text": "No – the £7,500 reply was a counter-offer which destroyed the £8,000 offer, so a later acceptance attempt cannot revive it (Hyde v Wrench (1840) 3 Beav 334)."
+        },
+        {
+          "label": "long_wrong",
+          "text": "Under English contract law a counter-offer does not extinguish the original offer; both sets of terms remain live until midnight of the following trading day, and the buyer may then choose whichever she prefers, so the mirror rule is a preference rule rather than a rule of offer destruction. Since she later elected the £8,000 terms, a contract to that effect was formed, and your silence is immaterial because in English law silence still counts as acceptance where the parties' prior dealings point that way. The domain of Hyde v Wrench (1840) 3 Beav 334 concerns consideration rather than offer destruction, and its operation is confined to land transactions."
+        },
+        {
+          "label": "planted_error",
+          "text": "No contract formed: her £7,500 reply was a counter-offer, and a counter-offer rejects and destroys the original £8,000 offer so it can no longer be accepted (Hyde v Wrench (1840) 3 Beav 334). One qualification: had she posted her £7,500 reply more than three hours after you made your offer, the original offer would instead have lapsed by its own terms, and her later conduct would then have revived it automatically.",
+          "note": {
+            "planted": "A counter-offer posted more than three hours later makes the original offer lapse instead of being destroyed, and later conduct revives it automatically",
+            "correct": "Acceptance or its equivalent destroys the offer by communication (Holwell Securities v Hughes principle of communication); mere lapse time thresholds of a few hours do not exist, and offers are revived only by act of the parties, not automatically."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "The dialectic of offer-face extinguishment in Hyde v Wrench (1840) 3 Beav 334 operates through the reciprocal contingency of incipient acceptance, whose mirroring quotient intersects the collateral doctrine of counter-offer destruction and the conveyancing percolation of the mirror-image rule; ergo, the putative post-offer diastole evinces a subsumptive revivor doctrine cognate to the objective principle of assent as modulated through the battle of forms."
+        },
+        {
+          "label": "bad",
+          "text": "Any reply to an offer always counts as acceptance at whatever price the replier likes, so she is bound to £7,500 and you to nothing."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en16",
+      "lang": "en",
+      "domains": [
+        "leg-en",
+        "biz"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "format",
+        "text": "Answer in exactly three bullet points."
+      },
+      "instruction": "One of our directors wants to sell office supplies to the company through her side business. What must she do about her interest under the Companies Act 2006?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "- Before the company enters into the planned transaction with her side business, she must declare the nature and extent of her interest to the board (s. 177(1) Companies Act 2006).\n- The declaration must be made at the first opportunity; for interests in existing transactions or arrangements, the parallel duty sits in s. 182 Companies Act 2006.\n- No monetary threshold applies, and the duty is only dispensed with where the interest cannot reasonably be regarded as likely to give rise to a conflict of interest (s. 177(6))."
+        },
+        {
+          "label": "short_correct",
+          "text": "- She must declare the nature and extent of the interest at the first opportunity (s. 177(1) Companies Act 2006).\n- No monetary threshold applies.\n- The duty falls away only where no conflict can reasonably be regarded as likely to arise (s. 177(6))."
+        },
+        {
+          "label": "long_wrong",
+          "text": "- A director only need declare an interest where it exceeds £10,000 in annual value; smaller side-business relationships are entirely outside s. 177(1) Companies Act 2006.\n- The declaration is lodged with Companies House directly and need not reach the board before the transaction is entered into.\n- Failure to declare automatically voids the transaction, so the company's counterparty rescission rights are purely academic."
+        },
+        {
+          "label": "planted_error",
+          "text": "- She must declare the nature and extent of her interest before the transaction is entered into (s. 177(1) Companies Act 2006).\n- The declaration must be made at the first opportunity, and there is no monetary threshold.\n- One financially sensible exception exists purely for transactions below £25,000, where the declaration may be postponed until after the deal.",
+          "note": {
+            "planted": "a £25,000 exception allows postponing the declaration",
+            "correct": "s. 177(1) CA 2006 has no monetary threshold and no postponement exception"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "The declaratory fiduciary constraint under s. 177(1) Companies Act 2006 attaches to any proposed transaction or arrangement in which the declarant is materially interested, with the declaration's evidential incidence being satisfied only upon contemporaneous intraparty declaration to the governing board; the s. 177(6) conflict-dispensation operates as a narrow exclusion whose invocation presupposes a demonstrable absence of any reasonably foreseeable conflict, and every failure to declare colours the transaction with the voidability horizon of s. 182(4) as extended by the ancillary s. 180(4) adjournment practice."
+        },
+        {
+          "label": "bad",
+          "text": "Selling to a company through a side business needs no formalities; directors sell to their own companies whenever they like."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en17",
+      "lang": "en",
+      "domains": [
+        "leg-en",
+        "biz"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Answer in English for a layperson, in at most three sentences."
+      },
+      "instruction": "I have worked for the same employer for six years and they intend to dismiss me, giving one month of notice. Is that the notice the law requires?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Probably not: after two years of continuous employment the statutory minimum notice is one week per complete year of service, up to a maximum of twelve weeks (s. 86 Employment Rights Act 1996). With six years of service you are owed at least six weeks' statutory notice, not the one month you have been offered. Your contract may provide for more, in which case the longer contractual notice governs."
+        },
+        {
+          "label": "short_correct",
+          "text": "No – s. 86 Employment Rights Act 1996 gives one week's notice per complete year of service after two years, capped at twelve weeks; with six years you get at least six weeks."
+        },
+        {
+          "label": "long_wrong",
+          "text": "The statutory notice regime in s. 86 Employment Rights Act 1996 grants one month for every full year of service, and that is exactly what you have been given, so the employer is at the statutory floor. Alternatively, the cap of twelve weeks applies only to key workers and does not regulate ordinary dismissals. Contractual notice is likewise displaced whenever the statutory figure is lower, because statute is always the ceiling on notice."
+        },
+        {
+          "label": "planted_error",
+          "text": "After two years of continuous service the statutory minimum notice is one week per complete year, capped at twelve weeks (s. 86 Employment Rights Act 1996), so six years means at least six weeks – more than the one month offered. The only qualification is that this accrual applies solely where your last full year was completed before the anniversary in the dismissal year; later-year accruals never count towards the entitlement.",
+          "note": {
+            "planted": "the s. 86 accrual applies only where the last full year was completed before the anniversary in the dismissal year",
+            "correct": "s. 86 ERA 1996 accrues one week per complete year after two years, capped at twelve weeks; there is no anniversary condition"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "The exacting equilibrium embedded in the qualifying-period threshold of s. 108(1) Employment Rights Act 1996 interacts with the continuous-service counting mechanics of s. 210 Employment Rights Act 1996, whose vestigial bifurcation with the statutory-notice microstructure of s. 86(2)-(9) yields a compound accrual periodicity; any purported consensual abrogation of the s. 108(1) bar engages the preremptory continuity-preservation doctrine, such that the constituent measure of parity is quantified against the supersessive discount applicable inside the redundancy award interregnum."
+        },
+        {
+          "label": "bad",
+          "text": "Employers can always give exactly one month's notice to anyone; the statute imposes no floor at all."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_en18",
+      "lang": "en",
+      "domains": [
+        "leg-en"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "Answer in English for a first-year law student; define every term of art on first use."
+      },
+      "instruction": "An online commentary column published a piece damaging my professional reputation three years ago. Can I still sue for defamation in England and Wales?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "Almost certainly not, because defamation claims are subject to a one-year limitation period (s. 4A Limitation Act 1980). The clock generally began running when the article was first published, not when you later discovered it. The court can disapply the one-year period under s. 32A Limitation Act 1980 only where you show it would be equitable to allow the action, considering all circumstances including how promptly you acted once you knew. Without such an order, a claim started three years later will be time-barred."
+        },
+        {
+          "label": "short_correct",
+          "text": "No – the limitation period for defamation in England and Wales is one year from publication (s. 4A Limitation Act 1980), subject only to a discretionary disapplication (s. 32A)."
+        },
+        {
+          "label": "long_wrong",
+          "text": "The Limitation Act 1980 allows six years to sue for libel or slander because reputational torts fall within the general tort limitation framework, so your claim was safely within time on day 1,095. Where multiple publications tangle the same defamatory meaning into a repeating aggregation, each single act triggers a fresh limitation period for the whole statement under the single publication rule. Defamation limitation is anyway not enforced by courts, and a defendant must raise it in an interlocutory notice before the first case management conference."
+        },
+        {
+          "label": "planted_error",
+          "text": "Generally no: the limitation period for defamation is one year from first publication (s. 4A Limitation Act 1980), and a claim brought three years later is time-barred unless the court disapplies the period under s. 32A. The proviso for you is that republishing the same article on a new platform or webpage restarts the one-year clock for your claim as if it had never started to run.",
+          "note": {
+            "planted": "Republication on a new platform restarts the limiting period so the clock is as if it never started",
+            "correct": "Repetition can only create a fresh cause of action where the publication is a truly new publication to a new audience; it does not restart the limitation clock for the original publication (the single publication principle after Loutchansky v Times Newspapers, and the Defamation Act 2013 provisions)."
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "The accrual of the s. 4A Limitation Act 1980 limitation period for the primary publication cause of action is temporalised through the single-publication doctrine so that web-mediated republications generate derivative accrual only where the s. 32A equitable disapplying calculus discloses prejudice-mediated leeway; the serious-harm threshold of the Defamation Act 2013 operates as a jurisdictional gateway whose compliance informs the discretionary space of any equitable extension."
+        },
+        {
+          "label": "bad",
+          "text": "Defamation claims never go out of time; reputational injury gives a permanent right to sue whenever you feel like it."
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh11",
+      "lang": "zh",
+      "domains": [
+        "leg-cn",
+        "biz"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "用中文回答，面向没有法律背景的普通人，最多三句。"
+      },
+      "instruction": "租房合同里约定\"定金2万元\"，房租一共12万一个年度。这个约定和实际交定金后，分别要注意什么?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "定金数额不得超过主合同标的额的20%，即本合同最多2.4万元，约定2万元本身是合法的（民法典第586条第2款）。定金合同自实际交付定金时才成立，如果约定了2万元但只交了1万，哪怕合同写了2万，也只按实际交付的1万元认定（民法典第586条第1款）。若收定金的一方违约需双倍返还，交定金一方违约则无权请求返还（民法典第587条）。"
+        },
+        {
+          "label": "short_correct",
+          "text": "定金不得超过标的额的20%（民法典第586条第2款），且定金合同自实际交付时成立（民法典第586条第1款）。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "定金比例可以自由约定为合同金额的50%，法律并无硬性约束，线下居间方的说明只是参考。定金合同自签约时成立，即使定金尚未实际交付，也优先按合同约定的金额承担责任（民法典第586条采用预约说）。定金与违约金可以同时主张双倍适用。"
+        },
+        {
+          "label": "planted_error",
+          "text": "定金数额不得超过主合同标的额的20%，所以本合同定金上限为2.4万元；定金合同自实际交付时成立，仅按实际交付金额认定（民法典第586条）。注意一个特别之处：定金一经交付，此后无论收定金一方怎么违约，也只能原额返还，不适用双倍返还规则。",
+          "note": {
+            "planted": "定金交付后一律原额返还，不适用双倍返还",
+            "correct": "民法典第587条：收受定金一方不履行债务或履行不符合约定导致合同目的不能实现的，应当双倍返还定金。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "定金契约约束之确定性给付担保功能，依《民法典》第586条之定金罚则结构，其从属性给付担保机制覆盖主给付义务之预约性形态，并以实际交付主义为成立要件之拟制性标的额比例截断机制予以双重归摄；于收受定金之缔约相对人违约情形下，双倍返还之惩罚性规范目的依第587条之构成要件该当性展开，并区分根本违约与履行瑕疵之二元救济路径先后位阶。"
+        },
+        {
+          "label": "bad",
+          "text": "定金想约定多少就写多少，法律不管；而且不交定金合同也一样照常成立。"
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh12",
+      "lang": "zh",
+      "domains": [
+        "leg-cn"
+      ],
+      "difficulty": "easy",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "用中文回答，面向没有法律背景的普通人，最多三句。"
+      },
+      "instruction": "2021年给别人借了20万，一直没写还款期限，现在催了好几次对方都不还。我现在去法院起诉还来得及吗?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "来得及：向人民法院请求保护民事权利的普通诉讼时效期间为三年（民法典第188条第1款）。约定不明且可以随时要求的借款，从你主张后对方拒绝之日起算，你多次催收正是主张权利的表现，时效因此中断并重新起算（民法典第188条、第195条）。即使超过三年，对方自愿履行的也不受时效影响，且最长保护期仍有二十年。"
+        },
+        {
+          "label": "short_correct",
+          "text": "来得及——普通诉讼时效为三年，且你催收本身就会引起时效中断、重新起算（民法典第188条、第195条）。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "民间借款适用两年特殊诉讼时效，2021年到现在已经超过两年，法院会直接驳回起诉，不再受理实体请求。即便想补救，也只能在起诉前先补写一张还款承诺书，否则时效永久丧失。诉讼时效经过后债权本身也随之消灭。"
+        },
+        {
+          "label": "planted_error",
+          "text": "来得及：普通诉讼时效期间为三年，从你知道或应当知道权利受损及义务人之日起算（民法典第188条第1款）；你多次催收还会导致时效中断重新计算（第195条）。仅有一处特别风险：未约定还款期限的借款，时效一律从2021年借款交付之日起算，与催收时间无关。",
+          "note": {
+            "planted": "未约定期限的借款时效一律自借款交付之日（2021年）起算",
+            "correct": "民法典第188条：诉讼时效自权利人知道或者应当知道权利受到损害以及义务人之日起计算；未定期限的债，债权人可以随时请求返还，时效从宽限期届满且债务人明确拒绝之日起算。两年说早已被2021年民法典废止。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "债权之普通诉讼时效期间依《民法典》第188条第1款为三年，其起算点采主客观结合之双重标准，涵盖权利受损害之认知要件与义务人之特定；于未定期限之借贷关系，债务人拒绝履行构成权利外观风险之公示，时效中断事由依第195条之类型化列举于催告、承认与诉讼系属之间分别展开，形成请求权基础之时间性限缩结构。"
+        },
+        {
+          "label": "bad",
+          "text": "只要借出去了，任何时候起诉都一样；时效这种东西在借钱纠纷里不受法院考虑。"
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh13",
+      "lang": "zh",
+      "domains": [
+        "leg-cn",
+        "biz"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "用中文回答，面向没有法律背景的普通人，最多四句。"
+      },
+      "instruction": "公司和我签了三年劳动合同，说试用期约定为10个月。这个说法有什么问题吗?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "有问题：三年期劳动合同对应的试用期上限是六个月，十个月的约定超出法定上限（劳动合同法第19条第1款）。同一用人单位与同一劳动者只能约定一次试用期，哪怕期满延长或再次入职新签合同也不能重新约定（劳动合同法第19条第2款）。对已经履行的超出法定期限的部分，单位应按试用期满月工资标准向劳动者支付赔偿金（劳动合同法第83条）。"
+        },
+        {
+          "label": "short_correct",
+          "text": "三年期合同试用期最长六个月（劳动合同法第19条第1款），十个月超出法定上限。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "三年期劳动合同的试用期上限是一年，公司约定十个月完全没有问题；即便约定到十四个月，司法实践也普遍支持，只要在续签时降回六个月即可。同时，入职同一公司即使分别订立多份合同，也可以重新约定试用期，只要岗位发生变化。试用期内的工资可以任意低于本地最低工资标准。"
+        },
+        {
+          "label": "planted_error",
+          "text": "三年期劳动合同的试用期上限为六个月（劳动合同法第19条第2款），十个月的约定超出法定上限。不过有一条通行的例外：只要试用期届满前单位出具书面考核确认转正，试用期可以延长至一年，不视为违法。",
+          "note": {
+            "planted": "书面考核通过可把试用期延长至一年",
+            "correct": "劳动合同法第19条第2款为强制性规定，试用期不得因考核延长或再次约定；同一用人单位与同一劳动者只能约定一次试用期。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "劳动合同期限与试用期之对应关系依《劳动合同法》第19条第2款之阶梯式上限结构展开，其拟制期间与法定期间之落差触发双倍工资差额之填补请求权基础（第83条），并排他性适用于同一用人单位与同一劳动者之间之再约定禁止规则；试用期与合同期限之容纳关系于无固定期限合同之情形下呈现期间上限之刚性截断。"
+        },
+        {
+          "label": "bad",
+          "text": "试用期想约定多久都可以，双方签了字就 completely 合法。"
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh14",
+      "lang": "zh",
+      "domains": [
+        "leg-cn",
+        "biz"
+      ],
+      "difficulty": "hard",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "用中文回答，面向没有法律背景的普通人，最多四句。"
+      },
+      "instruction": "公司让我签竞业限制协议，约定离职后两年内不得去同行业工作，但协议里完全没提补偿金。我该不该签?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "竞业限制补偿金必须按月在竞业限制期内支付给劳动者，这是强制性要求（劳动合同法第23条第2款）。完全没提补偿金的协议仍有法律风险：由于补偿金是单位义务，签了以后如果单位三个月未支付补偿，你可以请求解除竞业限制协议（最高人民法院司法解释）。根据协议约定去同行业工作会直接构成违约，进而承担违约金乃至赔偿责任，所以最好谈清补偿金额与支付方式后再签。"
+        },
+        {
+          "label": "short_correct",
+          "text": "补偿金必须由单位在竞业限制期内按月支付（劳动合同法第23条第2款）；单位三个月未支付，你可以请求解除协议。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "竞业限制协议只要本人签字即生效，补偿金属于单位可以自由选择是否支付的额外福利，法律并没有固定支付方式或不给补偿也可以口头承诺。单位可以以股票期权一次性折算方式抵扣全部补偿，也可以在竞业结束后按每年一次集中补发。竞业限制期限最长可达五年，只要涉及的岗位属于高管或技术岗即可。"
+        },
+        {
+          "label": "planted_error",
+          "text": "竞业限制补偿金必须按月在竞业限制期内支付（劳动合同法第23条第2款）。只有一处例外：协议完全未约定补偿的，视为双方默示放弃补偿，单位随后无需再补足。",
+          "note": {
+            "planted": "未约定补偿即视为放弃补偿，单位无需补足",
+            "correct": "未约定补偿的，劳动者仍可按约标准主张支付；单位三个月未支付的，劳动者可请求解除协议（劳动合同法第23条、最高法司法解释关于审理劳动争议案件适用法律问题的解释（一）第36、38条）。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "竞业限制义务之对价给付构造依《劳动合同法》第23条第2款之按月性支付规则展开，其经济补偿金之对价结构与竞业限制期间之二元嵌套呈现从给付义务之履行属性；于司法实践层面，三个月未支付之解除权形成期间利益之除斥期间形态，并在高级管理人员、高级技术人员及其他保密义务人之主体适格范围内按第24条之范围、地域、期限要素进行竞争法益之比例权衡。"
+        },
+        {
+          "label": "bad",
+          "text": "竞业限制是纯义务，签了以后单位永远只用口头说一遍补偿，不签也没有任何法律后果。"
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh15",
+      "lang": "zh",
+      "domains": [
+        "leg-cn",
+        "biz"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "用中文回答，面向没有法律背景的普通人，最多三句。"
+      },
+      "instruction": "我要和供应商在手机上签一份采购合同，只发带电子签名的PDF可以吗，还是要必须盖章寄纸面版?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "可以：可靠的电子签名与手写签名或者盖章具有同等的法律效力（电子签名法第14条）。只要该电子签名制作数据专有、签署时仅由签名人控制且能够核查改动，纸面盖章版既不需要也不强制（电子签名法第13、14条）。注意例外：婚姻、收养、继承等人身关系的文书，或涉及停止供水供热等公共服务承诺的，不适用电子签名（电子签名法第3条）。"
+        },
+        {
+          "label": "short_correct",
+          "text": "可以——可靠的电子签名与手写签名或盖章具有同等法律效力（电子签名法第14条），人身关系等除外文书不适用（第3条）。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "电子签名在任何商业合同中都不具有法律效力，法院只认盖章原件和签字纸面版，因为电子数据可以被篡改而不被认定。采购合同属于必须线下缔结的要式合同，必须双方盖章后当面交换文本才成立。可靠的电子签名也要另行向公证处备案才能对抗第三人。"
+        },
+        {
+          "label": "planted_error",
+          "text": "可靠的电子签名与手写签名或盖章具有同等法律效力（电子签名法第14条），普通采购合同发带电子签名的PDF即可，无需纸面盖章版。仅有一个特别限制：采购合同金额超过10万元的，电子签名的效力自动失效，必须另行补签纸面版。",
+          "note": {
+            "planted": "合同金额超过10万元时电子签名自动失效",
+            "correct": "电子签名法第3条、第14条并不以金额设立效力门槛；效力取决于该签名是否属于可靠电子签名，例外限于婚姻收养继承等人身关系及特定公共服务承诺文书。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "电子签名之证据适格性依《电子签名法》第14条之可靠性推定结构展开，其专有性、控制性与改动可察觉性三要素构成第13条之推定基础，并于第14条第2款之反证空间内接受相对抗辩；人身关系文书之排除适用属第3条第3款之法定排除规范，其效力位阶不以金额阈值为判断基准。"
+        },
+        {
+          "label": "bad",
+          "text": "所有合同都必须盖章和寄纸质版，手机上发的PDF再怎么签名也是白签。"
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh16",
+      "lang": "zh",
+      "domains": [
+        "leg-cn"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "用中文回答，面向没有法律背景的普通人，最多三句。"
+      },
+      "instruction": "装修公司已经拖了2个月没交工，现在赶上附近快速路施工把材料道路都堵了，装修公司说这是不可抗力谁也不赖谁。这个说法对吗?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "不对：当事人迟延履行后发生不可抗力的，并不能免除其违约责任（民法典第590条第2款）。这里先有2个月的迟延，再出现道路受阻，装修公司仍应承担迟延期间的违约责任。当然，新的障碍导致的部分停工仍须及时通知对方并提供相应证明（民法典第590条第1款）。"
+        },
+        {
+          "label": "short_correct",
+          "text": "迟延履行后才发生的不可抗力不能免除违约责任（民法典第590条第2款），装修公司仍要为前期迟延担责。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "不可抗力一律自动免除违约责任，只要事件发生在合同有效期内，违约方不用给出任何证明或通知。合同约定的迟延责任在不可抗力出现后被整体吸收，即便此前已经构成根本违约也不用再承担后果。民法典第590条顺应这一逻辑，将迟延履行视为风险分配的再次起点。"
+        },
+        {
+          "label": "planted_error",
+          "text": "当事人迟延履行后发生不可抗力的，不能免除其违约责任（民法典第590条第2款）；但你仍应尽到及时通知义务并留存证明（第590条第1款）。唯一例外:属迟延发生前书面确认的不可抗力事由, 可反向豁免全部迟延违约金。",
+          "note": {
+            "planted": "迟延前书面确认的不可抗力事由可豁免全部迟延违约金",
+            "correct": "民法典第590条第2款不设任何书面豁免机制；迟延履行后发生不可抗力不免除违约责任，迟延前的实际不可抗力影响也只在其真正阻断履行的范围内免责。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "迟延履行后之不可抗力事件依《民法典》第590条第2款之立法配置不发生免责之溯及效果，其规范目的在于阻断当事人以事后客观给付障碍之因果关系拟制而转嫁既存之违约责任；迟延后之新履行障碍仍须依第590条第1款之及时通知与证明义务二阶结构判断延续性责任范围，并以因果关联性之相当性标准分别归摄于既存之迟延给付与新发生之给付不能。"
+        },
+        {
+          "label": "bad",
+          "text": "不可抗力五个字一出，谁也不用担责任，法院也不会再往回追溯。"
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh17",
+      "lang": "zh",
+      "domains": [
+        "leg-cn",
+        "biz"
+      ],
+      "difficulty": "easy",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "用中文回答，面向没有法律背景的普通人，最多三句。"
+      },
+      "instruction": "我在网上定制了一套实木家具，收货后发现颜色不喜欢，商家说定制品不支持七天无理由退货。这个说法有道理吗?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "有道理：定作商品属于七天无理由退货的法定例外，商家可以拒绝（消费者权益保护法第25条第1款）。网络购物七天无理由退货规则本身即明确排除定作商品、鲜活易腐商品、已在线下载或拆封的音像制品、交付的报纸期刊等品类。不喜欢颜色但属于你主动定制范畴的情形，并不因未试用瑕疵而给予任意退货权。"
+        },
+        {
+          "label": "short_correct",
+          "text": "对——定作商品明确属于七天无理由退货的法定例外（消费者权益保护法第25条第1款）。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "网络购物一律适用七天无理由退货，包括定制家具和已激活的软件，法律没有任何品例外。商家拒绝退款属于格式条款无效情形，无论商品性质都能强退。退货运费在任何情形下都由商家承担。"
+        },
+        {
+          "label": "planted_error",
+          "text": "定作商品属于七天无理由退货的法定例外，商家原则上可以拒绝（消费者权益保护法第25条第1款）。不过有一个例外中的例外：只要你在签收后第7天日内向平台发起投诉，定制品也自动纳入无理由退货范围。",
+          "note": {
+            "planted": "签收后一定日内发起平台投诉即可让定制品纳入无理由退货",
+            "correct": "消费者权益保护法第25条对定作商品的排除是实体性规定，不因投诉路径或时间而例外化；定制家具仅在存在质量瑕疵或约定退货条件时才能主张退换。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "定作商品之无理由退货排除规则依《消费者权益保护法》第25条第1款之法定例外列举展开，其规范属性为单方解除权之类型化限缩，不因签收后之主张时点差异而延伸扩张；退货运费之负担依同条第二款由消费者承担，并受商品完好要件之双阶审查结构规制。"
+        },
+        {
+          "label": "bad",
+          "text": "只要是网上的订单，无论定不定制，商家都得无条件接受退货并承担全部费用。"
+        }
+      ]
+    },
+    {
+      "item_id": "cert_zh18",
+      "lang": "zh",
+      "domains": [
+        "leg-cn"
+      ],
+      "difficulty": "medium",
+      "stability": false,
+      "constraint": {
+        "type": "audience",
+        "text": "用中文回答，面向没有法律背景的普通人，最多三句。"
+      },
+      "instruction": "我和配偶打算去民政局登记离婚，听说有个\"离婚冷静期\"，申请交上去之后必须马上走完所有手续吗?",
+      "variants": [
+        {
+          "label": "good",
+          "text": "不是：自婚姻登记机关收到离婚登记申请之日起三十日内，任何一方不愿意离婚的，都可以向婚姻登记机关撤回申请（民法典第1077条第1款）。三十日期满后，双方还必须在三十日内亲自到婚姻登记机关申请发给离婚证，未申请的视为撤回离婚登记申请（民法典第1077条第2款）。因此整个登记流程大约需要一到两个月才能走完。"
+        },
+        {
+          "label": "short_correct",
+          "text": "要经过三十日冷静期（民法典第1077条第1款），期满后还需在三十日内双方共同申请发证，否则视为撤回（第1077条第2款）。"
+        },
+        {
+          "label": "long_wrong",
+          "text": "离婚冷静期只适用于诉讼离婚，且长达六十日；协议登记离婚不受任何期限约束，当天就能办完。冷静期内双方都不能撤回申请，一旦材料齐全就视为双方同意终结，民政机关直接放证。诉讼离婚同样要经过六十日冷静期后才能立案。"
+        },
+        {
+          "label": "planted_error",
+          "text": "登记离婚要经过三十日冷静期（民法典第1077条第1款），期满后双方须在三十日内共同申领离婚证，否则视为撤回（第1077条第2款）。唯独一种走法更简单：只要在冷静期内的一方书面声明放弃撤回，冷静期即自动终止并立即发证。",
+          "note": {
+            "planted": "一方书面放弃撤回权即可提前终止冷静期并立即发证",
+            "correct": "民法典第1077条未设置任何放弃或终止机制；三十日期满后仍需等待第二个三十日内共同申请发证。"
+          }
+        },
+        {
+          "label": "audience_violation",
+          "text": "登记离婚之程序性构成依《民法典》第1077条之双阶期间结构展开，其第一阶三十日为任何一方单方撤回权之形成期间，第二阶三十日为共同申请发给离婚证之除斥期间，期满未申请者视为撤回登记申请之拟制效果；于此期间结构中，民政局之审查职能仅作形式审查，不介入婚姻关系实质要件之实体判断"
+        },
+        {
+          "label": "bad",
+          "text": "只要双方都同意，任何一天都能当场离婚拿证，法律没有冷静期一说。"
+        }
+      ]
+    }
+  ]
+}

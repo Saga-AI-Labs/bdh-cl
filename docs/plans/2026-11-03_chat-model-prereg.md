@@ -1,6 +1,6 @@
 # Usable BDH-CL Chat Model - Preregistration v0.2 (DRAFT)
 
-**Status:** DRAFT v0.2 · v0.1 drafted 2026-11-03 · v0.2 2026-11-07 after the masked-serving measurements
+**Status:** DRAFT v0.2 · v0.1 drafted 2026-11-03 · v0.2 2026-11-07 after the masked-serving measurements · **§4.4b FROZEN 2026-11-09** (judge set certified, hashes registered)
 
 **Changelog v0.1 -> v0.2:** (1) §3 gains the scope decision - the first chat model is a
 routable specialist library, not a generalist, with composition at prompt level;
@@ -267,6 +267,69 @@ difference between X and Y", "translate this code comment and explain the logic"
 The structure is fixed before training; the judge choice and the item count are the
 open parts. The threshold is **not** fixed here — it follows the judge calibration,
 and fixing it before calibration is the R-gate error in a new form.
+
+#### 4.4b FROZEN registration (2026-11-09)
+
+The judge calibration is complete. The registered topology is a **two-judge
+cross-check**, not a council: the third seat (GLM on `.50`) is unavailable, and the
+cloud path is closed by provider policy, not capacity. Disagreement is reported,
+not resolved.
+
+**Set identity** (sha256, raw bytes):
+
+```
+783427ee9064b5c5a0a4320e12b4a4e23bfa8eda7c74005ac4f98a294bdd3ed7  cert_items.json        (stage 1, 30 items)
+1b25f526db404f17842e3e1876df8264160b43ab34a6cecd27646b6085382281  cert_items_stage2.json (stage 2, 30 items)
+8570d8cdd4e5227dddc9a6ae187bcc981d2e2f59c72ee1b7a33ece0122c6ce50  cert_items_merged.json (60 items, FROZEN)
+```
+
+All three carry `status: FROZEN`. Any post-freeze item change is set version v2;
+these hashes stay historical.
+
+**Certification criteria** (480 calls per judge, 60 items, rescore complete):
+
+| criterion | gate | Gemma-4-31b-it | Qwen3.8-Flash-Next | primary |
+|---|---|---|---|---|
+| separation | gap ≥ 0,8 AND ≥ 80 % good ≥ 4 | **0,900 / 96,7 % pass** | 0,632 / 75,9 % fail | Gemma (cross-check) |
+| fact-checking | ≥ 80 % planted ≤ 3 AND 0 % == 5 | 86,7 % / 11,7 % = 5 **fail** | **96,6 % / 0 % pass** | Qwen (primary) |
+| constraint awareness | ≥ 80 % audience ≤ 3 | 66,7 % **fail** | **89,3 % pass** | Qwen (primary) |
+| brevity bias | ≥ 80 % ≤ 2 AND mean ≤ 2,5 | pass | pass | both |
+| floor | ≥ 70 % = 1 AND mean ≤ 1,5 | pass | pass | both |
+| stability | ≥ 70 % exact AND ≥ 95 % ±1 | 78,3 % / 98,3 % pass | **100 % / 100 % pass** | both |
+| ordinal | per item | 59/60 fail | 49/56 fail | — |
+
+**Contested subset** (5 items, flagged in the set, excluded from ordinal
+interpretation): `cert_de16`, `cert_de17`, `cert_de18`, `cert_de20`,
+`cert_en08`. Their gold labels encode one position among several defensible ones;
+the disagreement is legitimate, not a defect. See
+`docs/notes/2026-11-09_judge-set-ambiguity.md`.
+
+**Not-evaluable cells** (14 Qwen rows): `finish_reason=length`, `attempts=2`,
+the 4096-token retry budget consumed by reasoning. They stay outside every gate
+denominator; Qwen's ordinal denominator is 56, not 60. Gemma has 0 NULLs. A
+larger retry budget or a reasoning-effort knob is a **set version v2** change.
+
+**Acceptance thresholds** (anchor-normalized, per language, from the frozen
+anchors):
+
+| gate | rule |
+|---|---|
+| fact | any item judged factually wrong (≤ 2) is a hard fail — no averaging |
+| constraint | any accepted constraint violation (≤ 3) is a hard fail |
+| quality | mean ≥ `anchor_good − 0,5` and worst item ≥ `anchor_good − 1,5` |
+| stability | ≥ 95 % within ±1 on a scored-twice subset |
+
+Frozen anchors (`anchor_good`): Gemma de 4,83 / en 5,00 / zh 4,83; Qwen de 3,70 /
+en 4,06 / zh 4,22. The anchor-refresh rule (> 0,4 shift) was tested and did not
+trigger on the merged run.
+
+**Environment:** Qwen3.8-Flash-Next on a DGX Spark (128 GB shared memory,
+TensorFold recipe, fp8 KV drafts, MTP, 262.144 context); gemma-4-31b-it on an
+RTX 4090 (24 GB VRAM, GGUF Q4_K_S, LM Studio). The judges are different kinds of
+instrument, not two samples of one.
+
+**Pool C2/C3 is a separate freeze.** The pool serves the chat model, which does
+not exist yet; the cert-set freeze is independent.
 
 ## 5. What this prereg does not establish
 
