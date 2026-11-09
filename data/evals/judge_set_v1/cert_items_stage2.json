@@ -242,7 +242,7 @@
       "variants": [
         {
           "label": "good",
-          "text": "In den ersten sechs Monaten greift der Kündigungsschutz nach dem Kündigungsschutzgesetz noch nicht, der Arbeitgeber darf dort auch ohne Grund kündigen. Danach gilt dieser Schutz in Betrieben mit mehr als zehn Beschäftigten wie Ihrem. Eine Kündigung „ohne Grund“ bleibt aber auch später nicht fristlos möglich – eine fristlose Kündigung braucht weiterhin einen wichtigen Grund. Nach Kündigungseingang haben Sie drei Wochen Zeit, um schriftlich hingegeben Klage zu erheben."
+          "text": "In den ersten sechs Monaten greift der Kündigungsschutz nach dem Kündigungsschutzgesetz noch nicht, der Arbeitgeber darf dort auch ohne Grund kündigen. Danach gilt dieser Schutz in Betrieben mit mehr als zehn Beschäftigten wie Ihrem. Eine Kündigung „ohne Grund“ bleibt aber auch später nicht fristlos möglich – eine fristlose Kündigung braucht weiterhin einen wichtigen Grund. Nach Kündigungseingang haben Sie drei Wochen Zeit, um schriftlich Kündigungsschutzklage zu erheben."
         },
         {
           "label": "short_correct",
@@ -272,6 +272,7 @@
     },
     {
       "item_id": "cert_de17",
+      "contested": true,
       "lang": "de",
       "domains": [
         "leg-de",
@@ -603,11 +604,11 @@
       "variants": [
         {
           "label": "good",
-          "text": "Nein: Die Maklerprovision entsteht nach § 652 BGB erst, wenn tatsächlich ein durch die Vermittlung zustande gekommener Vertrag geschlossen wurde. Ihr Kaufvertrag mit dem Nachbarn basierte nicht auf der Nachweis- oder Vermittlungstätigkeit des Maklers. Sie schulden ihm bei einem Scheitern des Abschlusses grundsätzlich nichts, außer Sie haben gesondert z. B. Auslagen oder eine „Bereitstellungsgebühr“ vereinbart."
+          "text": "Nein: Die Maklerprovision entsteht nach § 652 BGB erst, wenn tatsächlich ein durch die Vermittlung zustande gekommener Vertrag geschlossen wurde. Der Kaufvertrag des Nachbarn basierte nicht auf der Nachweis- oder Vermittlungstätigkeit des Maklers. Sie schulden ihm bei einem Scheitern des Abschlusses grundsätzlich nichts, außer Sie haben gesondert z. B. Auslagen oder eine „Bereitstellungsgebühr“ vereinbart."
         },
         {
           "label": "short_correct",
-          "text": "Nein – Provision nach § 652 BGB fällt nur beim Zustandekommen eines zuständigen Abschlusses an; bei Ihren Verhandlungen mit dem Nachbarn besteht kein Anspruch."
+          "text": "Nein – Provision nach § 652 BGB fällt nur beim Zustandekommen eines vermittelten Abschlusses an; bei Ihren Verhandlungen mit dem Nachbarn besteht kein Anspruch."
         },
         {
           "label": "long_wrong",
