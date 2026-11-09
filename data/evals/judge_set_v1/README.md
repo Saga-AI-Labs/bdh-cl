@@ -167,15 +167,32 @@ restale risk).
       (prose `good` under a bullet-constraint; `_INTERNAL` token in `long_wrong`)
 - [x] author fixes: cert_de03 rewritten (good/short_correct/long_wrong now
       constraint-compliant bullets, single-defect attribution preserved), leaks ruled out
-- [ ] cert run pass + report (2026-11-08 run in flight; timeout math in §3)
+- [x] cert run pass + report (Quinn's harness, 2026-11-08, 6cab936): both judges end to
+      end on this set — gemma 300 calls / 0 failures; qwen 299 scored + 1 NULL row
+      (cert_de06/audience rep1, 4096-token reasoning exhausted, gate robust at 80.0 %).
+      Countercheck of every §4 gate against the raw rows: docs/notes/
+      2026-11-09_judge-cert-recommendation.md
 - [x] cert stage 2: 30 items (14 heavy-legalese de / 8 en / 8 zh) authored as a
       SEPARATE draft file `cert_items_stage2.json` (status DRAFT-for-review), so
       the in-flight run's `cert_items.json` snapshot stays untouched; merge into
       the frozen set happens at the freeze commit per §8. Rules 1-7 (§5) apply,
       incl. rule 6 (constraint compliance by role) and the artifact scan (rule 7).
-- [ ] cert stage 2 review (Quinn): cell-by-cell, incl. fact checks in de/zh/en
+- [x] cert stage 2 review (Quinn): cell-by-cell incl. fact checks in de/zh/en (fcb7296)
+      — LGTM; comments were the two missing cert_en16/cert_en17 planted notes (added in
+      this branch with Quinn's exact proposed texts) and the no-stability-marker design
+      note
+- [x] round-2 item fixes from the certification rows (2026-11-09): five gold rewrites
+      (cert_de01/good false-effectiveness claim, cert_de10/good corruption, cert_en08/
+      good notarial-act overclaim, cert_en09/good writing-system claim, cert_zh05/good
+      false PIPL Art. 47 exceptions), cert_de01/audience word fix, and cert_de02/
+      long_wrong corruption found in the validation scan — evidence + §4.4b draft
+      thresholds in docs/notes/2026-11-09_judge-cert-recommendation.md
 - [ ] pool C2/C3
-- [ ] Qwen de-slice cross-check (only if gemma cert passes)
+- [x] second-model de-slice check: resolved by the cert runs — Qwen judges German
+      (de-slice fact 100 %, constraint 88.9 % on valid rows); topology recommendation
+      (Qwen primary / Gemma cross-check, gate not ranking) in the note above; the formal
+      §4.4a agreement metric moves to the composition run's cross-judge overlap subset,
+      anchor-normalized
 - [ ] freeze commit + hash into prereg §4.4b
 
 **One protocol change Quinn's harness needs before the cert run:** the system prompt
