@@ -139,7 +139,7 @@ labels. Cohorts, committed in stages to keep the four-eyes quality loop honest:
 | cohort | size | status |
 |---|---|---|
 | C1 | 60 (20/lang) | this commit, review target |
-| C2 | ~180 | asb authors next, after C1 review |
+| C2 | ~180 | draft authored as a separate DRAFT-for-review file `pool_instructions_c2.json`; merge into this pool at the freeze commit |
 | C3 | ~180 | fills to ~500; ~15 % discard expected in review |
 | C4 | reserve | optional top-up only if freeze-survivor count < 400 |
 
@@ -218,7 +218,13 @@ restale risk).
       recomputed stage hashes (the 17:06 build embedded pre-commit sources and
       the folded-ASCII de13); freeze re-run rescore scope: 4 items (zh05, de13,
       de16, de24) + 14 NULL cells, fresh run not --resume against the rebuilt set
-- [ ] pool C2/C3
+- [x] pool cohort C2: 180 instructions (60 en / 60 de / 60 zh), 0 reference answers,
+      authored as a SEPARATE draft file `pool_instructions_c2.json` (status
+      DRAFT-for-review, cert stage 2 pattern); merge into `pool_instructions.json`
+      happens at the freeze per §8; scene table + validation report +
+      review priorities in docs/notes/2026-11-09_pool-c2-ready.md
+- [ ] pool C3 (~180, fills the pool toward ~500 pre-discard; ~15 % discard expected
+      in review)
 - [x] second-model de-slice check: resolved by the cert runs — Qwen judges German
       (de-slice fact 100 %, constraint 88.9 % on valid rows); topology recommendation
       (Qwen primary / Gemma cross-check, gate not ranking) in the note above; the formal
