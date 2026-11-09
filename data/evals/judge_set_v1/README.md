@@ -76,6 +76,14 @@ Aggregated over the cert run per variant, per language slice where stated:
 | stability | ≥ 70 % exact-match across the 3 repeats of the subslice; ≥ 95 % within ±1 | scores are reproducible |
 | per-language | every criterion holds on the en-, de-, and zh-slices separately | no silent language blind spot |
 
+**Ordinal-gate scope (2026-11-09, Quinn's ambiguity note + GLM round 3):** items
+flagged `"contested": true` are excluded from the ordinal criterion — where the
+gold encodes one defensible position among several, low good scores measure the
+judge's dissent, not item quality. Flagged items remain in every other
+criterion. NULL rows (no score) stay outside every gate's denominator as
+"not evaluable"; they are not counted as fails. Flagged so far: en08, de17,
+de18, de20.
+
 **Decision rules:** gemma passes → primary judge candidate confirmed; fails any
 fact-checking or stability row → judge rejected, model choice re-opened. Qwen3.8-Next-Flash
 runs the same cert set; its **de-slice result answers "can a second local model judge
@@ -187,6 +195,29 @@ restale risk).
       false PIPL Art. 47 exceptions), cert_de01/audience word fix, and cert_de02/
       long_wrong corruption found in the validation scan — evidence + §4.4b draft
       thresholds in docs/notes/2026-11-09_judge-cert-recommendation.md
+- [x] merged-set run (60 items, both judges, 2026-11-09, driver start 02:44):
+      counterchecked from raw rows (docs/notes/2026-11-09_judge-cert-countercheck-
+      round3.md) — zero-overlap ordinal fails; 14 Qwen NULL rows ("not evaluable",
+      outside all denominators); good-anchor shifts ≤ +0.19 → the draft-threshold
+      refresh rule is NOT triggered, the §4.4b draft numbers stand
+- [x] Quinn's round-3 repairs verified against fetched sources: cert_zh05
+      (PIPL Art. 47(3) 撤回同意 + (4) 违反约定 + GDPR Art. 3(2); no 「或者本人
+      死亡」 in the final law) and cert_de13 (§ 2303 Abs. 1 + § 1924 Abs. 2/3
+      nachrücken; current text has no 「übergangen」 branch)
+- [x] round-3 fixes (this commit): cert_de16/good 「hingegeben Klage」→
+      「Kündigungsschutzklage」, cert_de24/good wrong-subject phrase
+      「Ihr Kaufvertrag mit dem Nachbarn」, cert_de24/short_correct
+      「zuständigen Abschlusses」→「vermittelten Abschlusses」 — row-verbatim
+      evidence in docs/notes/2026-11-09_judge-cert-countercheck-round3.md §3;
+      cert_de17 `"contested": true` (Qwen strictness on the settled § 74 HGB
+      doctrine, gold unchanged); zh13 gold verified statute-perfect (19-1/2 +
+      83 verbatim) — Gemma's Art.-83 claim is a judge-side misattribution
+      (double wage = 第82条), no item change; de21/de23 documented as
+      Qwen-strictness on verified gold
+- [x] untracked cert_items_merged.json rebuilt from the current stage files with
+      recomputed stage hashes (the 17:06 build embedded pre-commit sources and
+      the folded-ASCII de13); freeze re-run rescore scope: 4 items (zh05, de13,
+      de16, de24) + 14 NULL cells, fresh run not --resume against the rebuilt set
 - [ ] pool C2/C3
 - [x] second-model de-slice check: resolved by the cert runs — Qwen judges German
       (de-slice fact 100 %, constraint 88.9 % on valid rows); topology recommendation
