@@ -1,13 +1,21 @@
-# Judge certification final: rescore results, environment, and the de16 finding
+# Judge certification final: rescore results, environment, and the contested de16
 
 **Date:** 2026-11-09
 **Question:** after the round-3 repairs, do the two local judges certify the 60-item
 set, and what does the rescore reveal that the pre-repair run hid?
 **Answer:** both judges are certified for their complementary roles. The rescore confirms
-two repairs (zh05, de13), exposes one real doctrinal defect that the round-3
-corruption fix uncovered (de16), and leaves the contested items as legitimate
+two repairs (zh05, de13), exposes a real clarity gap in a third cell (de16) that the
+round-3 corruption fix made legible, and leaves the contested items as legitimate
 disagreement. The 14 Qwen NULL cells are a reasoning-budget signature, not a judge
 failure. Environment and cloud-path limits are documented.
+
+**Correction (2026-11-09, operator-sourced):** the de16 classification was
+overstated. The good variant's core answer is correct — the first six months of
+employment may be terminated without stated reasons (Wartezeit, § 23 KSchG;
+source: mws-arbeitsrecht.de/kuendigung/wartezeit/). The defect is a clarity gap in
+the second half of the answer, not a false core. de16 is therefore reclassified as
+contested, and the earlier "three measured instances" claim is reduced to two
+(zh05, de13), where the item was verifiably wrong and Gemma missed it.
 
 ## 1. Final numbers (rescore complete, 480 rows each)
 
@@ -30,35 +38,36 @@ failure. Environment and cloud-path limits are documented.
 
 **Zero overlap remains.** Gemma's single failure (zh13) is a misattribution of
 劳动合同法 Art. 83 (probation) to Art. 82 (written-contract double wage). Qwen's
-seven failures split into one real defect (de16), three contested items (de18,
-de20, en08), one contested item flagged this round (de17), and two strictness
-items (de21, de23).
+seven failures split into one contested item with a real clarity gap (de16),
+three contested items (de18, de20, en08), one contested item flagged this round
+(de17), and two strictness items (de21, de23).
 
-## 2. The de16 finding: a repair that uncovered a real defect
+## 2. The de16 finding: a repair that made a clarity gap visible
 
 Round 3 repaired a corruption in `cert_de16/good` — the literal "hingegeben Klage"
 was corrected to "Kündigungsschutzklage". The rescore then produced a **new**
-ordinal failure on the same cell, and Qwen's rationale is the finding:
+ordinal failure on the same cell, and Qwen's rationale is:
 
 > *"Enthält einen wesentlichen Fehler: Nach sechs Monaten ist eine ordentliche
 > Kündigung ohne sozialen Grund nicht möglich; die Antwort ist dazu unklar/irreführend."*
 
-The good variant conflates **ordentliche** and **außerordentliche** Kündigung.
-After six months, an ordinary termination under the KSchG requires **social
-justification** (§ 1 KSchG); it is not merely "not without notice". The sentence
-*"Eine Kündigung „ohne Grund" bleibt aber auch später nicht fristlos möglich"* is
-misleading because it implies that an ordinary termination without reason is
-possible with notice — which is false.
+**Reclassified as contested.** The good variant answers the question correctly:
+the first six months may be terminated without stated reasons (Wartezeit, § 23
+KSchG). The gap is in the second half: the sentence *"Eine Kündigung „ohne Grund"
+bleibt aber auch später nicht fristlos möglich"* can be read as implying that an
+ordinary termination without reason is possible with notice after six months,
+which is false — an ordinary termination then requires social justification
+(§ 1 KSchG). The variant does state *"Danach gilt dieser Schutz"*, so the core is
+present; the defect is a clarity gap, not a false core.
 
-**Why this matters:** the corruption fix did not introduce the defect; it
-**uncovered** it. The corrupted token made the sentence unreadable, so no judge
-could evaluate the doctrine. Once the text became legible, Qwen found a real
-legal error that Gemma missed (Gemma scores the cell 5).
+**The corruption fix still mattered:** the corrupted token made the sentence
+unreadable, so no judge could evaluate it. Once legible, Qwen raised a real
+clarity criticism that Gemma did not. That is a legitimate disagreement on a
+defensible-but-imperfect gold label, not a defect Qwen alone discovered.
 
-**This is the third case where Qwen catches a defect Gemma misses** — after the
-PIPL Art. 47 omissions (zh05) and the § 2303 BGB condition (de13). It is the
-strongest evidence for the two-judge topology: the complementarity is not
-theoretical, it is now three measured instances.
+**This is the second case where Qwen raises a criticism Gemma does not** — after
+the PIPL Art. 47 omissions (zh05) and the § 2303 BGB condition (de13), which are
+the two cases where the item was verifiably wrong and Gemma missed it.
 
 ## 3. The repairs that worked
 
@@ -67,11 +76,12 @@ theoretical, it is now three measured instances.
 | cert_zh05/good | 2 | **4** | 5 | **repaired** |
 | cert_de13/good | 2 | **4** | 5 | **repaired** |
 | cert_de24/good | 2 | **5** | 5 | **repaired** |
-| cert_de16/good | 2 | 2 | 5 | **new defect found** |
+| cert_de16/good | 2 | 2 | 5 | **contested: clarity gap** |
 
 zh05 and de13 now score 4 (Qwen) and 5 (Gemma) — both above `short_correct`, so
 the ordinal gate holds. de24's subject correction (`Ihr Kaufvertrag` → `Der
-Kaufvertrag des Nachbarn`) restored Qwen to 5.
+Kaufvertrag des Nachbarn`) restored Qwen to 5. de16 remains a Qwen criticism that
+the operator's source does not support as a defect of the core answer.
 
 ## 4. The 14 NULL cells: a reasoning-budget signature, not a judge failure
 
@@ -138,11 +148,13 @@ planted error is real, not a tiebreaker.
    criteria are final. The two-judge topology is registered: Qwen primary
    (fact-checking 96,6 %, constraint 89,3 %, stability 100 %), Gemma cross-check
    (separation 0,900).
-2. **The contested subset is recorded:** `cert_de18`, `cert_de20`, `cert_en08`,
-   `cert_de17`. These are legitimate disagreement, not defects.
-3. **de16 needs a decision.** The repair uncovered a real doctrinal error. Options:
-   (a) repair the good variant to state the social-justification requirement,
-   (b) flag it contested, or (c) document it as a known Qwen-caught defect.
+2. **The contested subset is recorded:** `cert_de16`, `cert_de17`, `cert_de18`,
+   `cert_de20`, `cert_en08`. These are legitimate disagreement or clarity gaps, not
+   defects.
+3. **de16 is resolved as contested.** The operator's source (mws-arbeitsrecht.de,
+   Wartezeit) confirms the core answer is correct; the second-half clarity gap is
+   a defensible-but-imperfect phrasing, not a false core. A future set version may
+   tighten the sentence to state the social-justification requirement explicitly.
 4. **The 14 NULL cells need a harness decision.** They are outside the gate
    denominators, but they are also 14 cells with no verdict. A larger retry budget
    or a reasoning-effort knob would resolve them; `--resume` against the same
@@ -167,8 +179,10 @@ data/evals/judge_set_v1/cert_items_merged.json  60-item merged set
 ## 10. What I did not verify
 
 - **The de16 doctrinal claim beyond Qwen's rationale.** I did not fetch § 1 KSchG
-  myself. Qwen's reasoning is internally coherent and matches the KSchG structure,
-  but the legal substance is not independently verified by me.
+  myself. After the operator's correction, the classification rests on
+  mws-arbeitsrecht.de for the Wartezeit core and on Qwen's reading for the
+  second-half clarity gap; the social-justification requirement is not
+  independently fetched by me.
 - **The 14 NULL cells' content.** They are empty by definition; the reasoning
   traces are in the log but were not read for this report.
 - **Grok's environment.** It ran in chat, not over a certified endpoint; its
