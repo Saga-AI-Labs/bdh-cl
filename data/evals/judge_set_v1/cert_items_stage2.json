@@ -882,7 +882,11 @@
         },
         {
           "label": "planted_error",
-          "text": "- She must declare the nature and extent of her interest before the transaction is entered into (s. 177(1) Companies Act 2006).\n- The declaration must be made at the first opportunity, and there is no monetary threshold.\n- One financially sensible exception exists purely for transactions below £25,000, where the declaration may be postponed until after the deal."
+          "text": "- She must declare the nature and extent of her interest before the transaction is entered into (s. 177(1) Companies Act 2006).\n- The declaration must be made at the first opportunity, and there is no monetary threshold.\n- One financially sensible exception exists purely for transactions below £25,000, where the declaration may be postponed until after the deal.",
+          "note": {
+            "planted": "a £25,000 exception allows postponing the declaration",
+            "correct": "s. 177(1) CA 2006 has no monetary threshold and no postponement exception"
+          }
         },
         {
           "label": "audience_violation",
@@ -923,7 +927,11 @@
         },
         {
           "label": "planted_error",
-          "text": "After two years of continuous service the statutory minimum notice is one week per complete year, capped at twelve weeks (s. 86 Employment Rights Act 1996), so six years means at least six weeks – more than the one month offered. The only qualification is that this accrual applies solely where your last full year was completed before the anniversary in the dismissal year; later-year accruals never count towards the entitlement."
+          "text": "After two years of continuous service the statutory minimum notice is one week per complete year, capped at twelve weeks (s. 86 Employment Rights Act 1996), so six years means at least six weeks – more than the one month offered. The only qualification is that this accrual applies solely where your last full year was completed before the anniversary in the dismissal year; later-year accruals never count towards the entitlement.",
+          "note": {
+            "planted": "the s. 86 accrual applies only where the last full year was completed before the anniversary in the dismissal year",
+            "correct": "s. 86 ERA 1996 accrues one week per complete year after two years, capped at twelve weeks; there is no anniversary condition"
+          }
         },
         {
           "label": "audience_violation",
