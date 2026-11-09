@@ -108,7 +108,7 @@
       "variants": [
         {
           "label": "good",
-          "text": "Vermutlich ja: Nahe Angehörige wie Kinder oder – als nachrückende Linie – Enkel lassen sich nicht vollständig aussperren, sie behalten einen Pflichtteilsanspruch. Er beträgt die Hälfte des Erbteils, den sie ohne Testament erhalten hätten. Der Pflichtteil ist dabei kein Anteil am Nachlass, sondern ein Geldanspruch gegen die Erben. Nur wer verpflichtend auf den Pflichtteil verzichtet hat, geht tatsächlich leer aus."
+          "text": "Vermutlich ja: Kinder lassen sich nicht vollständig aussperren – sie behalten einen Pflichtteilsanspruch, die Hälfte des Erbteils, den sie ohne Testament erhalten hätten (§ 2303 BGB). Enkel stehen als nachrückende Linie nur dann an dieser Stelle, wenn Ihr Elternteil verstorben oder selbst enterbt ist; andernfalls greift der Pflichtteil nicht. Der Pflichtteil ist dabei kein Anteil am Nachlass, sondern ein Geldanspruch gegen die Erben. Nur wer verpflichtend auf den Pflichtteil verzichtet hat, geht tatsächlich leer aus."
         },
         {
           "label": "short_correct",
@@ -317,6 +317,7 @@
     },
     {
       "item_id": "cert_de18",
+      "contested": true,
       "lang": "de",
       "domains": [
         "leg-de",
@@ -406,6 +407,7 @@
     },
     {
       "item_id": "cert_de20",
+      "contested": true,
       "lang": "de",
       "domains": [
         "leg-de",
