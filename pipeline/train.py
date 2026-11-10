@@ -53,6 +53,12 @@ def build_route_mask(model, cfg: Config, device):
     return mask
 
 
+# Eval memory: without this guard the autograd graph of the full forward is
+# retained from model(x, y) until loss leaves scope. At mult 1024 / batch 4
+# the eval peak passed 112 GiB and OOM'd the routed-probe evals of 2026-11-10;
+# the live GB10 matrix puts no_grad b4 at 62.56 GiB vs grad b2 at 77.84 GiB
+# (grad retention costs more than doubling the batch).
+@torch.no_grad()
 def estimate_loss(model, data, cfg: Config, device, ctx, split: str,
                   neuron_mask=None) -> float:
     model.eval()
@@ -70,10 +76,17 @@ def estimate_loss(model, data, cfg: Config, device, ctx, split: str,
                 _, loss, state = model(x, y, state, neuron_mask=neuron_mask)
             losses.append(loss.item())
     else:
+        # collect_state=False: the third return is discarded on this path
+        # anyway, so results are identical while the per-forward state
+        # assembly is skipped. The stateful branch above must keep the
+        # collected state or the stream carry silently breaks (new_state
+        # would come back None on every iteration).
+        batch = cfg.eval_batch_size or cfg.batch_size
         for _ in range(cfg.eval_iters):
-            x, y = data.get_batch(split, cfg.block_size, cfg.batch_size, device)
+            x, y = data.get_batch(split, cfg.block_size, batch, device)
             with ctx:
-                _, loss, _ = model(x, y, None, neuron_mask=neuron_mask)
+                _, loss, _ = model(x, y, None, neuron_mask=neuron_mask,
+                                  collect_state=False)
             losses.append(loss.item())
     model.train()
     return sum(losses) / len(losses)

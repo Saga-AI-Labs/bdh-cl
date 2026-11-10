@@ -21,6 +21,7 @@ class Config:
     baseline_n_layer: int = 0              # transformer only; 0 = auto-match BDH params
     chunk_size: int = 64                   # bdh-linear only; attention scan chunk size
     batch_size: int = 32
+    eval_batch_size: int = 0               # eval only (stateless path); 0 = fall back to batch_size
     max_iters: int = 300
     learning_rate: float = 1e-3
     weight_decay: float = 0.1

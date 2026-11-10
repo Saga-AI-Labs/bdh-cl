@@ -1,5 +1,6 @@
 """Evaluation: load a checkpoint, report perplexity, and generate samples."""
 
+import gc
 import math
 import os
 from contextlib import nullcontext
@@ -25,6 +26,18 @@ def load_checkpoint(cfg: Config, tag: str):
         model_cfg = Config(**model_cfg)
     model = build_model(model_cfg).to("cpu")
     model.load_state_dict(ckpt["model_state"])
+    # Trim before returning. The full dict stays resident through the whole
+    # eval and, on the GB10 unified-memory box, competes with the CUDA pool:
+    # zh_last carries ~24 GB of Adam state on top of the weights, and the
+    # routed-probe evals ran with it pinned (2026-11-10 OOM session). The
+    # weights live in the model now; keep only the metadata evaluate() prints.
+    step = ckpt.get("step", 0)
+    best_val = ckpt.get("best_val", float("inf"))
+    ckpt.clear()
+    ckpt["cfg"] = model_cfg
+    ckpt["step"] = step
+    ckpt["best_val"] = best_val
+    gc.collect()
     return model, ckpt
 
 
