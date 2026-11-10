@@ -328,8 +328,13 @@ TensorFold recipe, fp8 KV drafts, MTP, 262.144 context); gemma-4-31b-it on an
 RTX 4090 (24 GB VRAM, GGUF Q4_K_S, LM Studio). The judges are different kinds of
 instrument, not two samples of one.
 
-**Pool C2/C3 is a separate freeze.** The pool serves the chat model, which does
-not exist yet; the cert-set freeze is independent.
+**Pool freeze (2026-11-10, separate).** C1+C2+C3 merged into `pool_instructions.json`
+(420 items, 140 per language, `status: FROZEN`, sha256
+`07740b035e9a7245665d5c58df5c1f65d3e118e62d7356908b5b26e7d25d2dfe`). Cohort source
+hashes: C1 `6b24f69c…`, C2 `434fda85…`, C3 `993ebbb9…`. The A/B split (cohort A
+~60 % scored, cohort B ~40 % held out) is a separate decision, not part of this
+commit. The pool serves the chat model, which does not exist yet; the cert-set
+freeze of 2026-11-09 is independent of it.
 
 ## 5. What this prereg does not establish
 
