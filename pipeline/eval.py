@@ -8,7 +8,7 @@ import torch
 
 from pipeline.config import Config, build_model, param_count, resolve_device, resolve_dtype
 from pipeline.data import load_dataset
-from pipeline.train import checkpoint_path, estimate_loss
+from pipeline.train import build_route_mask, checkpoint_path, estimate_loss
 
 
 def load_checkpoint(cfg: Config, tag: str):
@@ -44,10 +44,14 @@ def evaluate(cfg: Config, tag: str = "best", num_samples: int = 3, max_new_token
     model.eval()
 
     data = load_dataset(cfg)
-    val_loss = estimate_loss(model, data, cfg, device, ctx, "val")
+    # Routed-grow probe P2: --mask-old-mult 896 evaluates a grown checkpoint with
+    # only the pre-existing neuron prefix active. The grown checkpoint's own config
+    # carries the grown multiplier, so the old width is supplied on the CLI.
+    neuron_mask = build_route_mask(model, cfg, device)
+    val_loss = estimate_loss(model, data, cfg, device, ctx, "val", neuron_mask=neuron_mask)
     print(f"val_loss {val_loss:.4f} | perplexity {math.exp(val_loss):.2f} | bits/byte {val_loss / math.log(2):.3f}")
     if data.test is not None:
-        test_loss = estimate_loss(model, data, cfg, device, ctx, "test")
+        test_loss = estimate_loss(model, data, cfg, device, ctx, "test", neuron_mask=neuron_mask)
         print(f"test_loss {test_loss:.4f} | perplexity {math.exp(test_loss):.2f} | bits/byte {test_loss / math.log(2):.3f}")
 
     print("\n--- samples ---")

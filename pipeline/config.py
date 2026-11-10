@@ -68,6 +68,21 @@ class Config:
     route_aware: bool = False              # route-aware training: zero out old neurons in forward, compute loss on prefix-only logits
     route_alpha: float = 0.9               # prefix fraction: loss = alpha*prefix_loss + (1-alpha)*full_loss (higher = stronger route-aware signal; 0.9 = 10% full mix, the registered setting)
     route_split_backward: bool = False     # route-aware only: backward the prefix and full passes separately (gradient accumulation) so both activation graphs never coexist; at mult 864 / block 512 this lowers the peak from 106.77 to 91.36 GiB at a ~2e-8 relative gradient difference (below bf16 resolution)
+    # Routed-grow probe (docs/plans/2026-11-10_routed-grow-probe.md): which neuron
+    # side the route mask keeps active.
+    #   "new" - only the grown neurons contribute (the bridge setting: old block
+    #           frozen by zero gradients, new block learns against a full-width
+    #           reference loss).
+    #   "old" - only the pre-existing neurons contribute; the grown block receives
+    #           zero gradient. This is the P2 isolation mode: it tests whether the
+    #           old domain survives a grow step when the new block is silent.
+    #   "none" - no mask (plain full-width training).
+    route_mask_side: str = "new"
+    # Evaluation-side mask (P2 of the routed-grow probe): when > 0, build a forward
+    # mask that keeps neurons [0, mask_old_mult * n_embd // n_head) active and zeros
+    # the grown tail. The grown checkpoint's own config carries only the grown
+    # multiplier, so the old width must be supplied here. 0 = no mask.
+    mask_old_mult: int = 0
 
 
 def estimate_bdh_params(cfg: Config) -> int:

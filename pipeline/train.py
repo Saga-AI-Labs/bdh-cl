@@ -29,7 +29,32 @@ def get_lr(it: int, cfg: Config) -> float:
 
 
 @torch.no_grad()
-def estimate_loss(model, data, cfg: Config, device, ctx, split: str) -> float:
+def build_route_mask(model, cfg: Config, device):
+    """Forward mask for the routed-grow probe's P2 isolation evaluation.
+
+    Keeps neurons [0, mask_old_mult * n_embd // n_head) active and zeros the
+    grown tail. Returns None when cfg.mask_old_mult <= 0 (plain full-width
+    evaluation). The mask is built in the activation dtype: an fp32 mask
+    promotes every masked activation to fp32 and triples the memory footprint
+    (the serving_eval OOM lesson).
+    """
+    if not cfg.mask_old_mult:
+        return None
+    n = cfg.mask_old_mult * cfg.n_embd // cfg.n_head
+    total = cfg.mlp_internal_dim_multiplier * cfg.n_embd // cfg.n_head
+    if n <= 0 or n >= total:
+        raise ValueError(
+            f"mask_old_mult={cfg.mask_old_mult} gives {n} of {total} neurons; "
+            "it must be a strict prefix of the grown width")
+    dtype = resolve_dtype(cfg, device)
+    mask = torch.zeros(total, device=device, dtype=dtype)
+    mask[:n] = 1.0
+    print(f"eval mask: keep {n} of {total} neurons per head (old prefix)")
+    return mask
+
+
+def estimate_loss(model, data, cfg: Config, device, ctx, split: str,
+                  neuron_mask=None) -> float:
     model.eval()
     losses = []
     if cfg.stateful_eval:
@@ -42,13 +67,13 @@ def estimate_loss(model, data, cfg: Config, device, ctx, split: str) -> float:
         for _ in range(cfg.eval_iters):
             x, y = stream.next_batch(device)
             with ctx:
-                _, loss, state = model(x, y, state)
+                _, loss, state = model(x, y, state, neuron_mask=neuron_mask)
             losses.append(loss.item())
     else:
         for _ in range(cfg.eval_iters):
             x, y = data.get_batch(split, cfg.block_size, cfg.batch_size, device)
             with ctx:
-                _, loss, _ = model(x, y)
+                _, loss, _ = model(x, y, None, neuron_mask=neuron_mask)
             losses.append(loss.item())
     model.train()
     return sum(losses) / len(losses)
@@ -203,6 +228,20 @@ def train(cfg: Config) -> None:
             new_f = 1.0 / (2 ** 16 ** ((idx // 2 * 2) / n_new)) / (2 * math.pi)
             freqs = torch.cat([old_f, new_f])
             raw_model.attn.freqs.data[:] = freqs.view(1, 1, 1, n_new)
+            # Hard stop on the freq invariant: the old slice must be bit-identical to
+            # the source, and the new slice must be strictly positive and strictly
+            # decreasing. Physical slicing without recomputation degrades (the
+            # merge_prune lesson), and a shifted phase table poisons the whole run,
+            # so this is checked here rather than assumed.
+            got_old = raw_model.attn.freqs.data.reshape(-1)[:n_old]
+            if not torch.equal(got_old, old_f):
+                raise RuntimeError(
+                    "grow freq invariant broken: old slice is not bit-identical")
+            if not (new_f > 0).all():
+                raise RuntimeError("grow freq invariant broken: non-positive new freq")
+            if n_new - n_old > 1 and not (new_f[1:] < new_f[:-1]).all():
+                raise RuntimeError(
+                    "grow freq invariant broken: new slice not strictly decreasing")
         # Release the parent checkpoint now that its weights have been copied.
         # At mult 832 it is ~30 GB (fp32 weights plus a full Adam state) and,
         # if kept alive, stays resident in the unified CPU+GPU memory pool for
@@ -222,9 +261,30 @@ def train(cfg: Config) -> None:
             (raw_model.encoder_v, keep.view(1, 1, -1)),
             (raw_model.decoder, keep.repeat(nh).unsqueeze(1)),        # (nh*N, D)
         ]
-        route_neuron_mask = keep.clone() if cfg.route_aware else None
+        # Routed-grow probe: which side the forward mask keeps active.
+        #   "new"  - grown neurons active (the bridge setting; old block frozen
+        #            by zero gradients, new block learns against a full-width
+        #            reference loss)
+        #   "old"  - pre-existing neurons active, grown block masked out. With the
+        #            gate_param_masks above, old neurons also receive zero
+        #            gradient, so this mode trains nothing: it is the P2 isolation
+        #            evaluation, not a training phase.
+        #   "none" - no mask
+        side = getattr(cfg, "route_mask_side", "new")
+        if side not in ("new", "old", "none"):
+            raise ValueError(f"route_mask_side must be new/old/none, got {side!r}")
         if cfg.route_aware:
-            print(f"route-aware: prefix mask {n_old}..{n_new} | "
+            if side == "new":
+                route_neuron_mask = keep.clone()
+            elif side == "old":
+                route_neuron_mask = (1.0 - keep).clone()
+            else:
+                route_neuron_mask = None
+        else:
+            route_neuron_mask = None
+        if cfg.route_aware:
+            active = "new" if side == "new" else ("old" if side == "old" else "none")
+            print(f"route-aware: mask side={active} | prefix {n_old}..{n_new} | "
                   f"loss = {cfg.route_alpha}*prefix + {1 - cfg.route_alpha}*full")
         # Bit-exact frozen path (F-decay-leak fix): the zero-grad mask stops
         # learning but not AdamW's decoupled weight decay, which multiplies
