@@ -238,6 +238,21 @@ restale risk).
       "corpus" → "source material", "fragments" dropped; single-line diff in
       pool_instructions_c2.json (raw sha256 28729c78… → 434fda85…); record in
       docs/notes/2026-11-10_pool-c2-en46-fix.md
+- [x] pool cohort C3: 180 draft instructions (60 per language, IDs 81–140), separate
+      DRAFT-for-review file, scene table + validation + review priorities in
+      docs/notes/2026-11-10_pool-c3-ready.md; Quinn review
+      docs/notes/2026-11-10_pool-c3-review.md (LGTM, no required fix; the two wordlist
+      hits are false positives — "variant" in the ordinary technical sense)
+- [x] pool FREEZE (2026-11-10): C1+C2+C3 merged into `pool_instructions.json` (420
+      items, 140 per language, `status: FROZEN`). Cohort source hashes:
+      C1 6b24f69c…, C2 434fda85…, C3 993ebbb9…; merged pool sha256
+      07740b035e9a7245665d5c58df5c1f65d3e118e62d7356908b5b26e7d25d2dfe.
+      The cohort draft files keep their own hashes as historical record. The A/B
+      split (cohort A ~60 % scored, cohort B ~40 % held out) is a separate decision,
+      not part of this commit — §6 records the design, not the assignment.
+      Any post-freeze item change = pool version v2; these hashes stay historical.
+- [ ] A/B split of the 420-item pool (cohort A scored benchmark, cohort B held out)
+- [ ] pool C4 reserve top-up (only if the split leaves fewer than 400 survivors)
 - [x] pool cohort C3 (2026-11-10): 180 instructions (60 en / 60 de / 60 zh, IDs
       81-140), 0 reference answers, separate DRAFT-for-review file
       `pool_instructions_c3.json` (stage-2 pattern); merge into
