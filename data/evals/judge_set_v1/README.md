@@ -140,7 +140,7 @@ labels. Cohorts, committed in stages to keep the four-eyes quality loop honest:
 |---|---|---|
 | C1 | 60 (20/lang) | this commit, review target |
 | C2 | ~180 | draft authored as a separate DRAFT-for-review file `pool_instructions_c2.json`; merge into this pool at the freeze commit |
-| C3 | ~180 | fills to ~500; ~15 % discard expected in review |
+| C3 | 180 | draft authored as a separate DRAFT-for-review file `pool_instructions_c3.json` (IDs 81-140 per language); merge into this pool at the pool freeze — C1-C3 = 420 pre-discard, ~15 % discard expected in review |
 | C4 | reserve | optional top-up only if freeze-survivor count < 400 |
 
 At freeze the pool splits into cohort A (~60 %, the scored benchmark) and cohort B
@@ -234,8 +234,16 @@ restale risk).
       0 6-gram dupes > 0.30, 0 unbalanced zh quotes, 7 CJK hits all legitimate
       contract vocabulary. Coverage limit stated: not a full cell-by-cell read of
       180 items. See docs/notes/2026-11-09_pool-c2-review.md.
-- [ ] pool C3 (~180, fills the pool toward ~500 pre-discard; ~15 % discard expected
-      in review)
+- [x] pool C2 p_en46 fix (2026-11-10): applied as the review instructed —
+      "corpus" → "source material", "fragments" dropped; single-line diff in
+      pool_instructions_c2.json (raw sha256 28729c78… → 434fda85…); record in
+      docs/notes/2026-11-10_pool-c2-en46-fix.md
+- [x] pool cohort C3 (2026-11-10): 180 instructions (60 en / 60 de / 60 zh, IDs
+      81-140), 0 reference answers, separate DRAFT-for-review file
+      `pool_instructions_c3.json` (stage-2 pattern); merge into
+      `pool_instructions.json` at the pool freeze, C1+C2+C3 = 420 pre-discard;
+      scene table + validation + review priorities in
+      docs/notes/2026-11-10_pool-c3-ready.md
 - [x] second-model de-slice check: resolved by the cert runs — Qwen judges German
       (de-slice fact 100 %, constraint 88.9 % on valid rows); topology recommendation
       (Qwen primary / Gemma cross-check, gate not ranking) in the note above; the formal
