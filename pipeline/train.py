@@ -252,9 +252,19 @@ def train(cfg: Config) -> None:
                     "grow freq invariant broken: old slice is not bit-identical")
             if not (new_f > 0).all():
                 raise RuntimeError("grow freq invariant broken: non-positive new freq")
-            if n_new - n_old > 1 and not (new_f[1:] < new_f[:-1]).all():
-                raise RuntimeError(
-                    "grow freq invariant broken: new slice not strictly decreasing")
+            # The freq table is pair-quantized (q=2: idx//2*2), so frequencies are
+            # equal within a pair and strictly decreasing across pairs. A strictly
+            # decreasing check is wrong here - it fires on the correct table.
+            if n_new - n_old > 1:
+                if not (new_f[1:] <= new_f[:-1]).all():
+                    raise RuntimeError(
+                        "grow freq invariant broken: new slice not non-increasing")
+                if not (new_f[0::2] == new_f[1::2]).all():
+                    raise RuntimeError(
+                        "grow freq invariant broken: pair structure broken")
+                if not (new_f[2::2] < new_f[:-2:2]).all():
+                    raise RuntimeError(
+                        "grow freq invariant broken: pair starts not strictly decreasing")
         # Release the parent checkpoint now that its weights have been copied.
         # At mult 832 it is ~30 GB (fp32 weights plus a full Adam state) and,
         # if kept alive, stays resident in the unified CPU+GPU memory pool for
