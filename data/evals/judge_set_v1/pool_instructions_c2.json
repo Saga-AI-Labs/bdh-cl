@@ -296,7 +296,7 @@
     {"item_id": "p_en45", "lang": "en", "domains": ["compliance", "lng"], "difficulty": "medium", "constraint": null,
      "instruction": "Account opening stalls because the executive's family-name order on the passport, the business card's English rendering, and the signature all disagree. Explain to the onboarding clerk why name conventions trip this check — and what documentation restores it."},
     {"item_id": "p_en46", "lang": "en", "domains": ["ml", "lng"], "difficulty": "easy", "constraint": null,
-     "instruction": "Our FAQ model answers Chinese queries with German or English fragments, though the corpus is single-language. Explain in plain terms which signal a model uses to pick its reply language, why it misfires, and which two small fixes help."},
+     "instruction": "Our FAQ model answers Chinese queries in German or English, though the source material is single-language. Explain in plain terms which signal a model uses to pick its reply language, why it misfires, and which two small fixes help."},
     {"item_id": "p_en47", "lang": "en", "domains": ["ml", "code"], "difficulty": "medium", "constraint": null,
      "instruction": "To surface the right passage from a 480-page manual, the text is first cut into pieces. Explain to the dev team why fixed-length cuts that break mid-paragraph work poorly — and which signals tell whether the cuts are any good."},
     {"item_id": "p_en48", "lang": "en", "domains": ["ml", "biz"], "difficulty": "medium", "constraint": "Use exactly one everyday analogy.",
