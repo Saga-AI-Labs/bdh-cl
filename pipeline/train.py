@@ -117,12 +117,35 @@ def save_checkpoint(cfg: Config, model, optimizer, step: int, best_val: float, t
     )
 
 
+def apply_memory_cap(device) -> None:
+    # GB10 unified-memory hazard: CUDA allocations are invisible to the kernel
+    # OOM scorer (dmesg shows anon-rss ~0 next to total-vm ~321 GB), so an
+    # over-allocation does not fail in-process - it silently drains the shared
+    # CPU+GPU pool until the kernel sweeps unrelated processes. On 2026-11-10
+    # two such global sweeps killed the desktop session and the agent harness
+    # during P1 startup. BDH_MEM_FRACTION caps the caching allocator so an
+    # overrun surfaces as a clean torch.OutOfMemoryError inside this process.
+    frac = float(os.environ.get("BDH_MEM_FRACTION", "0") or 0)
+    if frac <= 0:
+        return
+    if getattr(device, "type", None) != "cuda":
+        print(f"warning: BDH_MEM_FRACTION={frac} set but device is {device}; "
+              f"cap not applied")
+        return
+    frac = min(frac, 1.0)
+    torch.cuda.set_per_process_memory_fraction(frac, 0)
+    total = torch.cuda.get_device_properties(0).total_memory
+    print(f"cuda memory cap: {frac * 100:.0f}% = {total * frac / 2**30:.2f} GiB "
+          f"of {total / 2**30:.2f} GiB (BDH_MEM_FRACTION)")
+
+
 def train(cfg: Config) -> None:
     torch.manual_seed(cfg.seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(cfg.seed)
 
     device = resolve_device(cfg)
+    apply_memory_cap(device)
     dtype = resolve_dtype(cfg, device)
     ctx = (
         torch.amp.autocast(device_type=device.type, dtype=dtype)
@@ -392,6 +415,13 @@ def train(cfg: Config) -> None:
     # TBPTT window would be pointless; force per-step detachment.
     horizon = 1 if cfg.no_bptt else max(1, cfg.tbptt_horizon)
 
+    # collect_state assembles the per-step attention state dict (K/V caches,
+    # on the order of 17 GiB/step transient at mult 1024 / block 512). On the
+    # non-carry paths that dict is discarded (state = None in the step tail),
+    # so building it is pure transient memory on an already tight peak. Only
+    # the carry branches consume new_state; there it must stay on.
+    collect = cfg.carry_state
+
     if cfg.route_split_backward and cfg.carry_state:
         # Split backward frees the prefix graph before the full pass is even
         # built. Truncated-BPTT windows need that graph to stay attached across
@@ -438,7 +468,8 @@ def train(cfg: Config) -> None:
             if route_neuron_mask is not None:
                 # Route-aware training: prefix-masked forward + full forward, mix losses.
                 # route_alpha = prefix fraction (higher = stronger route-aware signal).
-                _, prefix_loss, new_state = model(x, y, state, neuron_mask=route_neuron_mask)
+                _, prefix_loss, new_state = model(x, y, state, neuron_mask=route_neuron_mask,
+                                                  collect_state=collect)
                 if cfg.route_split_backward:
                     # Backward the prefix pass now, before the full pass is built,
                     # so the two activation graphs never coexist. Measured at
@@ -446,15 +477,15 @@ def train(cfg: Config) -> None:
                     # accumulate; the only difference to the combined backward
                     # is summation order (~2e-8 relative, below bf16 resolution).
                     scaler.scale(cfg.route_alpha * prefix_loss).backward()
-                    _, full_loss, _ = model(x, y, state)
+                    _, full_loss, _ = model(x, y, state, collect_state=False)
                     pending_full = (1 - cfg.route_alpha) * full_loss
                     loss = (cfg.route_alpha * prefix_loss.detach()
                             + (1 - cfg.route_alpha) * full_loss)
                 else:
-                    _, full_loss, _ = model(x, y, state)
+                    _, full_loss, _ = model(x, y, state, collect_state=False)
                     loss = cfg.route_alpha * prefix_loss + (1 - cfg.route_alpha) * full_loss
             else:
-                _, loss, new_state = model(x, y, state)
+                _, loss, new_state = model(x, y, state, collect_state=collect)
 
         if cfg.carry_state and horizon > 1:
             # Truncated BPTT: accumulate the loss over `horizon` minibatches (the
