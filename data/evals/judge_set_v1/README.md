@@ -143,9 +143,18 @@ labels. Cohorts, committed in stages to keep the four-eyes quality loop honest:
 | C3 | 180 | draft authored as a separate DRAFT-for-review file `pool_instructions_c3.json` (IDs 81-140 per language); merge into this pool at the pool freeze — C1-C3 = 420 pre-discard, ~15 % discard expected in review |
 | C4 | reserve | optional top-up only if freeze-survivor count < 400 |
 
-At freeze the pool splits into cohort A (~60 %, the scored benchmark) and cohort B
-(~40 %, held out — same producers, same time; used for a re-test or a v2 judge without
-restale risk).
+At freeze the pool splits into cohort A (252 items, the scored benchmark) and cohort
+B (168, held out — same producers, same time; used for a re-test or a v2 judge without
+stale risk). The split is deterministic and registered BEFORE any cohort-A scoring
+(`scripts/pool_split.py` → `pool_split.json`): stratified by lang × difficulty
+(9 strata); within a stratum items rank by sha256 of
+`judge_set_v1_pool_split_v1|<item_id>` (first 16 hex chars, big-endian int), ascending;
+the smallest ranks fill B under a largest-remainder 40 % quota per language (56 of 140;
+B strata quota easy/medium/hard: de 10/26/20, zh 10/27/19, en 10/26/20). Result:
+252 A / 168 B, 84/56 per language — rule, counts and the per-item assignment live in
+`pool_split.json` (sha256 `e7bfa959…`, source pinned to the frozen pool `07740b03…`;
+re-runs are byte-identical). Any post-freeze item change is set v2 and draws with salt
+`judge_set_v1_pool_split_v2`.
 
 ## 7. Anti-contamination
 

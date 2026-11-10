@@ -336,6 +336,23 @@ hashes: C1 `6b24f69c…`, C2 `434fda85…`, C3 `993ebbb9…`. The A/B split (coh
 commit. The pool serves the chat model, which does not exist yet; the cert-set
 freeze of 2026-11-09 is independent of it.
 
+**Pool A/B split (2026-11-10, registered pre-scoring).** The split decision
+above is now taken and registered before any cohort-A scoring exists. Rule:
+stratified lang × difficulty (9 strata); within a stratum rank(item) =
+int(sha256("judge_set_v1_pool_split_v1|item_id").hexdigest()[:16], 16), ascending;
+the smallest ranks fill cohort B under a largest-remainder 40 % quota per
+language (56 of 140). Drawn from the FROZEN pool (sha256 07740b03…): A = 252 /
+B = 168 (60.0 / 40.0), 84/56 per language; strata B quotas easy/medium/hard:
+de 10/26/20, zh 10/27/19, en 10/26/20. Manifest `pool_split.json` (status
+REGISTERED, sha256 `e7bfa959bdd5e88ce0886be0cbbc293dead27afb0925fa86f802350c217a278c`)
+carries rule, counts and the per-item assignment; `scripts/pool_split.py`
+reproduces it byte-identically. The composition run scores A only; B is not
+touched until the re-test or a v2 judge. Audits (reported, not repaired):
+constrained items A 81 / B 56 (32.1 / 33.3 %), easy floor in B 30 items,
+domain shares within ~±2 pp of the pool (leg-en is a known tiny cell).
+Post-freeze item changes are set v2 and draw with salt
+`judge_set_v1_pool_split_v2`.
+
 ## 5. What this prereg does not establish
 
 - **No claim that three languages suffice.** The choice follows the stated target use
