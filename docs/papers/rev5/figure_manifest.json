@@ -36,14 +36,39 @@
     "real_ladder_free": 31.07,
     "real_ladder_masked": 2.31
   },
+  "ood_summary": {
+    "trained_ratio_min": 5.6816074188562595,
+    "trained_ratio_max": 15.576271186440678,
+    "trained_ppl_min": 2.36,
+    "trained_ppl_max": 6.47
+  },
+  "decay_summary": {
+    "g_closed_form": 0.892752,
+    "ra2_closed_form": 0.579775,
+    "g_fits": {
+      "sl:GR": "0.892636",
+      "sv:G2": "0.634888",
+      "en:G": "0.129460",
+      "en:G2": "0.115561"
+    }
+  },
+  "cross_script_summary": {
+    "zh": 37,
+    "ja": 40,
+    "hi": 40,
+    "iu_clean": 40
+  },
   "inputs": {
     "docs/papers/rev5/data/a4_routed_cost.csv": "9e8210437ae3a43939833829ebabcf7bcb72916d74c20cd79e2b71190d4000d8",
     "docs/papers/rev5/data/a4_summary.json": "b3ab806327746e8b107edabb3ab8b89d2df9903e3b71dc85455382ae8e6b4f3a",
+    "docs/papers/rev5/data/decay_cfits.csv": "f9db4b67f3ad18de6b44f367a753dd17246ae2cb10f60173e5071c7f1f0c450d",
+    "docs/papers/rev5/data/ladRA2b_routdiag_p19.txt": "380f7fd6d076d30bff22c92bd341e1e0a68a50d828fcea7e65fda4a08520d599",
+    "docs/papers/rev5/data/ladRA2b_routdiag_p20.txt": "1f1126006bcce1182e2308eab7f60cf743af7e7b57e7e4d51a61e282cc5d49ec",
+    "docs/papers/rev5/data/ood_axes.csv": "90473a7fd22d4a9f26a38db8fdf485da67280d08ae1a2ffdf75b81f40ee2b8a3",
+    "docs/papers/rev5/data/ood_probe.csv": "fbc1974653eef750759d15e618f63fa7787da2e8b24fafbe538fdf7c22288cee",
     "docs/papers/rev5/data/ra2b_acquisition.csv": "6d640b43e638545b8867939e1f350fca87ae72dfe08cb0f4fa34259d1b8d1005",
     "docs/papers/rev5/data/ra2b_matrix.csv": "112424344884412c894c93aa5ef7a084a4413ca081cb1854c309db872a7bd8c1",
     "docs/papers/rev5/data/readout_operators.csv": "6962ad67419e3c4004bbf10a447c88f6b28a22dcf71006455b49588a2328b25a",
-    "docs/papers/rev5/data/ood_probe.csv": "fbc1974653eef750759d15e618f63fa7787da2e8b24fafbe538fdf7c22288cee",
-    "docs/papers/rev5/data/ladRA2b_routdiag_p20.txt": "1f1126006bcce1182e2308eab7f60cf743af7e7b57e7e4d51a61e282cc5d49ec",
-    "docs/papers/rev5/data/ladRA2b_routdiag_p19.txt": "380f7fd6d076d30bff22c92bd341e1e0a68a50d828fcea7e65fda4a08520d599"
+    "docs/papers/rev5/data/xscript_confusion.csv": "2b5bc22cfd674c4c96865c116848ffc357e0ba8c69fadff5ca11fd65e9470420"
   }
 }

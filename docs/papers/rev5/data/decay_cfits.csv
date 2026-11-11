@@ -1,0 +1,6 @@
+segment,family,k,amplitude,sd,source
+sl,GR,1,0.892636,,per-segment c-fit; 2026-09-04_decay-family-two-regimes-and-boundary-repair.md section 1 (GR sl = 0.8927^1)
+sv,G2,4,0.634888,,per-segment c-fit; same report section 1 (G2 sv = 0.8927^4)
+en,G,18,0.129460,,per-segment c-fit; same report section 1 (G en = 0.8927^18)
+en,G2,19,0.115561,,per-segment c-fit; same report section 1 (G2 en = 0.8927^19)
+es,RA2,1,0.579775,2.2e-07,schedule-exact transition es->en_best; same report appendix B.1/B.2 (pi-50 #123[2])

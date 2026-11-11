@@ -127,6 +127,169 @@ def make_expansion_figure(output: Path) -> dict[str, float]:
             "inert_zeros": 2.33, "real_ladder_free": 31.07, "real_ladder_masked": 2.31}
 
 
+# Pooled joint perplexity on the same 20-domain evaluation crops, measured in the
+# closed-set probe (2026-09-11_a3-closed-set-probe.md, section V4). The trained
+# routing-advantage convention in the manuscript (5.7x-15.6x) is reference / routed.
+OOD_JOINT_REFERENCE = 36.76
+OOD_UNSEEN_ORDER = ["lv", "ga", "zh", "ja", "hi", "iu_clean"]
+
+
+def make_ood_scatter_figure(data_dir: Path, output: Path) -> dict[str, float]:
+    """Two-axis OOD separation (regenerated: the rev4 PDF plotted the ra2b_matrix
+    lt-row joint values on the y axis; trained languages must sit at their routed
+    ppl 2.36-6.47 with advantage = pooled joint reference / routed)."""
+    retention = load_retention_data(data_dir)
+    unseen = {row["language"]: row for row in read_csv(data_dir / "ood_axes.csv")}
+    missing = [lang for lang in OOD_UNSEEN_ORDER if lang not in unseen]
+    if missing:
+        raise ValueError(f"missing unseen languages in ood_axes.csv: {missing}")
+
+    trained_x = {d: OOD_JOINT_REFERENCE / retention[d]["routed"] for d in DOMAIN_ORDER}
+    trained_y = {d: retention[d]["routed"] for d in DOMAIN_ORDER}
+    unseen_x = [float(unseen[lang]["ratio"]) for lang in OOD_UNSEEN_ORDER]
+    unseen_y = [float(unseen[lang]["best_route_ppl"]) for lang in OOD_UNSEEN_ORDER]
+    summary = {
+        "trained_ratio_min": min(trained_x.values()),
+        "trained_ratio_max": max(trained_x.values()),
+        "trained_ppl_min": min(trained_y.values()),
+        "trained_ppl_max": max(trained_y.values()),
+    }
+
+    fig, ax = plt.subplots(figsize=(8.6, 6.0), constrained_layout=True)
+    ax.set_xscale("log")
+    ax.set_yscale("log")
+    ax.set_xlim(0.7, 30)
+    ax.set_ylim(1.8, 1600)
+
+    # Reject regions and threshold guides: relative axis < 5x, absolute axis > ~10x
+    # the trained acquisition ceiling (6.5 * 10).
+    ax.axvspan(0.7, 5.0, color="#f5cccc", alpha=0.30, zorder=0)
+    ax.axhspan(65.0, 1600, color="#f5cccc", alpha=0.30, zorder=0)
+    ax.axvline(5.0, color="#b04a4a", linestyle="--", linewidth=1.3, zorder=1)
+    ax.axhline(65.0, color="#b04a4a", linestyle=":", linewidth=1.3, zorder=1)
+    ax.text(5.15, 2.1, "trained floor (5x)", fontsize=8, color="#b04a4a", rotation=90,
+            va="bottom")
+    ax.text(0.75, 72.0, "~10x acquisition ceiling", fontsize=8, color="#b04a4a", va="bottom")
+
+    ax.scatter(list(trained_x.values()), list(trained_y.values()), s=55, marker="o",
+               color="#2b6cb0", label="trained (20)", zorder=3)
+    # The 20 trained points form one tight blob (routed ppl 2.36-6.47): label
+    # only the extremes and annotate the cluster (review: 20 labels unreadable).
+    for d, dx, dy in (("en", 6, -9), ("el", 5, 4), ("bg", 5, -11), ("lt", 2, -12)):
+        ax.annotate(d, (trained_x[d], trained_y[d]), textcoords="offset points",
+                    xytext=(dx, dy), fontsize=7, color="#2b6cb0")
+    ax.text(7.0, 10.0, "20 trained languages\n(routed ppl 2.36–6.47)",
+            fontsize=8.5, color="#2b6cb0", va="center")
+    ax.scatter(unseen_x, unseen_y, s=65, marker="D", color="#2f8f4e",
+               label="unseen (6)", zorder=4)
+    for i, lang in enumerate(OOD_UNSEEN_ORDER):
+        dx, dy = (6, 3) if i % 2 == 0 else (6, -10)
+        ax.annotate(lang, (unseen_x[i], unseen_y[i]), textcoords="offset points",
+                    xytext=(dx, dy), fontsize=7.5, color="#1e6b34")
+
+    ax.set_xlabel("Routing advantage (joint / best-route ppl)")
+    ax.set_ylabel("Best-route ppl (absolute)")
+    ax.set_title("Two-axis OOD separation: 20 trained (blue) vs 6 unseen (diamonds)",
+                 fontsize=11)
+    ax.grid(which="both", alpha=0.2)
+    ax.legend(loc="upper left", frameon=True, fontsize=9)
+    # Convention note in the empty lower-left quadrant (the lower-right corner
+    # collides with the trained blob). lv shares the pooled reference (a3 V4);
+    # ga and the cross-script probes use own-corpus joints (a3 V5, X3).
+    ax.text(
+        0.02, 0.02,
+        "trained + lv: pooled joint ref 36.76 / routed (a3 V4)\n"
+        "ga + cross-script: own-corpus joint / routed (a3 V5, X3)\n"
+        "lt: own prefix = full width (per-domain 1x; 9.1x pooled)",
+        transform=ax.transAxes, ha="left", va="bottom", fontsize=7, color="#444444",
+    )
+    fig.savefig(output, bbox_inches="tight")
+    plt.close(fig)
+    return summary
+
+
+# Closed-form f64 schedule products (2026-09-04_decay-family report, appendix B.1):
+# G/GR/G2 defaults schedule 0.892752 (f32 realization 0.892636); RA2 cosine 0.579775.
+DECAY_CLOSED_FORM = {"G": 0.892752, "RA2": 0.579775}
+
+
+def make_decay_figure(data_dir: Path, output: Path) -> dict[str, float]:
+    """Decay regimes with measured per-segment c-fits (labels corrected: legend
+    quotes the manuscript's c values and the es -> en_best target)."""
+    rows = read_csv(data_dir / "decay_cfits.csv")
+    k = np.arange(0, 21)
+    g_curve = DECAY_CLOSED_FORM["G"] ** k
+    ra_curve = DECAY_CLOSED_FORM["RA2"] ** k
+
+    fig, axes = plt.subplots(1, 2, figsize=(10.6, 4.4), sharey=True,
+                             constrained_layout=True)
+    for ax in axes:
+        ax.set_yscale("log")
+        ax.set_ylim(1e-6, 200)
+        ax.set_xlim(-0.5, 20.5)
+        ax.set_xlabel("Phases after segment creation (k)")
+        ax.grid(which="both", alpha=0.25)
+    axes[0].set_ylabel("Segment amplitude (relative)")
+    axes[0].set_title("Closed-form decay: $c^k$", fontsize=11)
+    axes[1].set_title("Prediction vs measurement", fontsize=11)
+
+    axes[0].plot(k, g_curve, color="#2b6cb0", label="G-family (defaults 30/300)")
+    axes[0].plot(k, ra_curve, color="#d95f5f", label="RA2 (cosine 1000/10000)")
+    axes[0].legend(fontsize=8, loc="lower left")
+
+    for ax in axes:
+        ax.plot(k, g_curve, color="#2b6cb0",
+                label="G schedule product c=0.8927 (exact 0.892752)")
+        ax.plot(k, ra_curve, color="#d95f5f",
+                label="RA2 schedule product c=0.5798 (exact 0.579775)")
+    g_fits = [(int(r["k"]), float(r["amplitude"])) for r in rows if r["family"] != "RA2"]
+    ra_fits = [(int(r["k"]), float(r["amplitude"])) for r in rows if r["family"] == "RA2"]
+    axes[1].scatter([p[0] for p in g_fits], [p[1] for p in g_fits], s=45, marker="o",
+                    color="#333333", zorder=5, label="Measured (c-fits, resid 1e-5)")
+    axes[1].scatter([p[0] for p in ra_fits], [p[1] for p in ra_fits], s=55, marker="s",
+                    color="#c0392b", zorder=6,
+                    label="Measured (es $\\to$ en_best, sd 2.2e-7)")
+    axes[1].legend(fontsize=7.5, loc="lower left")
+
+    fig.savefig(output, bbox_inches="tight")
+    plt.close(fig)
+    return {"g_closed_form": DECAY_CLOSED_FORM["G"], "ra2_closed_form": DECAY_CLOSED_FORM["RA2"],
+            "g_fits": {r["segment"] + ":" + r["family"]: r["amplitude"] for r in rows if r["family"] != "RA2"}}
+
+
+def make_cross_script_figure(data_dir: Path, output: Path) -> dict[str, int]:
+    """Cross-script routing confusion (iu-clean split from the pi-50 likelihood
+    router census: el 28 / bg 12 -- replaces the unreported 20/20 placeholder)."""
+    rows = read_csv(data_dir / "xscript_confusion.csv")
+    langs = [r["lang"] for r in rows]
+    to_el = np.array([int(r["to_el"]) for r in rows])
+    to_bg = np.array([int(r["to_bg"]) for r in rows])
+    to_other = np.array([int(r["to_other"]) for r in rows])
+    totals = to_el + to_bg + to_other
+    if not (totals == 40).all():
+        raise ValueError("cross-script rows must sum to 40 crops")
+
+    x = np.arange(len(langs))
+    width = 0.55
+    fig, ax = plt.subplots(figsize=(7.6, 4.4), constrained_layout=True)
+    ax.bar(x, to_el, width, label="to el (Greek)", color="#e69f00")
+    ax.bar(x, to_bg, width, bottom=to_el, label="to bg (Cyrillic)", color="#9467bd")
+    ax.bar(x, to_other, width, bottom=to_el + to_bg, label="other routes", color="#aaaaaa")
+    for i, lang in enumerate(langs):
+        high_byte = int(to_el[i] + to_bg[i])
+        ax.text(x[i], int(totals[i]) + 0.9, f"{high_byte}/40 bg+el",
+                ha="center", va="bottom", fontsize=9)
+    ax.set_xticks(x, langs)
+    ax.set_ylim(0, 47)
+    ax.set_ylabel("Crops (of 40)")
+    ax.set_title("Cross-script routing concentrates on high-byte territories", fontsize=11)
+    ax.legend(frameon=True, fontsize=8, loc="center left", bbox_to_anchor=(1.02, 0.5))
+    ax.grid(axis="y", alpha=0.25)
+    fig.savefig(output, bbox_inches="tight")
+    plt.close(fig)
+    return {lang: int(to_el[i] + to_bg[i]) for i, lang in enumerate(langs)}
+
+
 def make_legacy_pareto_figure(output: Path) -> None:
     """Recreate the historical consolidation comparison from its source table."""
     systems = ["Sequential\nendpoint", "Merged\n×3", "Merged +\nprune 1/3", "+ replay\nfinetune", "Joint\nreference"]
@@ -146,8 +309,7 @@ def make_legacy_pareto_figure(output: Path) -> None:
     ax.set_title("Legacy consolidation readout (not a K20 gate)")
     ax.grid(axis="y", which="both", alpha=0.25)
     ax.legend(frameon=True, ncol=3, loc="upper right")
-    ax.text(0.01, 0.02, "Source: 2026-08-25 three-phase consolidation report; single-seed except replay row.",
-            transform=ax.transAxes, fontsize=7, color="#444444")
+    # Source note moved into the LaTeX caption (review: it overlapped the bars).
     fig.savefig(output, bbox_inches="tight")
     plt.close(fig)
 
@@ -177,18 +339,27 @@ def make_architecture_figure(output: Path) -> None:
     for x0, x1 in ((0.17, 0.21), (0.31, 0.35), (0.46, 0.50)):
         ax.annotate("", xy=(x1, 0.55), xytext=(x0, 0.55),
                     arrowprops={"arrowstyle": "->", "lw": 1.4, "color": "#333333"})
+    ax.text(0.33, 0.585, "ReLU", ha="center", va="bottom", fontsize=6, color="#555555")
+    ax.text(0.48, 0.585, "LN", ha="center", va="bottom", fontsize=6, color="#555555")
     ax.add_patch(plt.Rectangle((0.21, 0.28), 0.19, 0.11, facecolor="#f5f0e6", edgecolor="#9b6b00"))
     ax.text(0.305, 0.335, "$u\\odot v$", ha="center", va="center", fontsize=10)
     ax.add_patch(plt.Rectangle((0.44, 0.28), 0.14, 0.11, facecolor="#fce4d6", edgecolor="#c65911"))
     ax.text(0.51, 0.335, "$D_c$\ndecoder", ha="center", va="center", fontsize=8)
-    ax.annotate("", xy=(0.51, 0.40), xytext=(0.55, 0.48), arrowprops={"arrowstyle": "->", "lw": 1.2})
+    ax.annotate("", xy=(0.385, 0.39), xytext=(0.545, 0.48),
+                arrowprops={"arrowstyle": "->", "lw": 1.2})
+    ax.text(0.47, 0.452, "ReLU", ha="center", va="center", fontsize=6, color="#555555")
     ax.annotate("", xy=(0.44, 0.335), xytext=(0.40, 0.39), arrowprops={"arrowstyle": "->", "lw": 1.2})
-    ax.add_patch(plt.Rectangle((0.07, 0.25), 0.10, 0.11, facecolor="#e6f2e6", edgecolor="#38761d"))
-    ax.text(0.12, 0.305, "$x +$ LN", ha="center", va="center", fontsize=8)
-    ax.annotate("", xy=(0.17, 0.305), xytext=(0.21, 0.335), arrowprops={"arrowstyle": "->", "lw": 1.2})
-    ax.annotate("", xy=(0.12, 0.48), xytext=(0.12, 0.36), arrowprops={"arrowstyle": "->", "lw": 1.2})
-    ax.annotate("", xy=(0.17, 0.305), xytext=(0.28, 0.20), arrowprops={"arrowstyle": "->", "lw": 1.2})
-    ax.text(0.34, 0.235, "all levels reuse the same $(E,E_v,D_c)$", ha="center", va="center", fontsize=8, color="#444444")
+    ax.annotate("", xy=(0.27, 0.39), xytext=(0.26, 0.48), arrowprops={"arrowstyle": "->", "lw": 1.2})
+    ax.text(0.245, 0.437, "ReLU", ha="right", va="center", fontsize=6, color="#555555")
+    ax.add_patch(plt.Rectangle((0.05, 0.25), 0.13, 0.11, facecolor="#e6f2e6", edgecolor="#38761d"))
+    ax.text(0.115, 0.305, "$x \\leftarrow$ LN\n$(x{+}$LN$(\\cdot))$", ha="center", va="center", fontsize=6.5)
+    # Write-back from the decoder, routed below the boxes (the old u(x)v -> box
+    # arrow bypassed D_c; the old E_v -> D_c arrow pointed at the wrong target).
+    ax.plot([0.51, 0.51, 0.115], [0.28, 0.235, 0.235], color="#333333", lw=1.2)
+    ax.annotate("", xy=(0.115, 0.25), xytext=(0.115, 0.235),
+                arrowprops={"arrowstyle": "->", "lw": 1.2, "color": "#333333"})
+    ax.annotate("", xy=(0.115, 0.48), xytext=(0.115, 0.36), arrowprops={"arrowstyle": "->", "lw": 1.2})
+    ax.text(0.34, 0.71, "all levels reuse the same $(E,E_v,D_c)$", ha="center", va="center", fontsize=8, color="#444444")
 
     # Growth and routing panel.
     ax.add_patch(plt.Rectangle((0.70, 0.20), 0.27, 0.62, fill=False, linewidth=1.8, edgecolor="#333333"))
@@ -197,12 +368,14 @@ def make_architecture_figure(output: Path) -> None:
         y = 0.54 - i * 0.15
         ax.add_patch(plt.Rectangle((0.75, y), 0.16, 0.10, facecolor=color, edgecolor="#555555"))
         ax.text(0.83, y + 0.05, label, ha="center", va="center", fontsize=8)
-    ax.annotate("append + zero-init\nweights", xy=(0.83, 0.49), xytext=(0.835, 0.68),
-                ha="center", arrowprops={"arrowstyle": "->", "lw": 1.2})
+    ax.text(0.72, 0.70, "append + zero-init\nweights", ha="left", va="center", fontsize=6.5)
+    ax.plot([0.72, 0.72], [0.655, 0.44], color="#333333", lw=1.2)
+    ax.annotate("", xy=(0.75, 0.44), xytext=(0.72, 0.44),
+                arrowprops={"arrowstyle": "->", "lw": 1.2, "color": "#333333"})
     ax.add_patch(plt.Rectangle((0.75, 0.26), 0.16, 0.08, facecolor="#eee6f5", edgecolor="#674ea7"))
     ax.text(0.83, 0.30, "route mask\nold prefix / full", ha="center", va="center", fontsize=7)
-    ax.annotate("", xy=(0.75, 0.30), xytext=(0.83, 0.24), arrowprops={"arrowstyle": "->", "lw": 1.2})
-    ax.text(0.835, 0.235, "old path frozen", ha="center", va="center", fontsize=8, color="#38761d")
+    ax.annotate("", xy=(0.91, 0.59), xytext=(0.923, 0.59), arrowprops={"arrowstyle": "->", "lw": 1.0})
+    ax.text(0.928, 0.59, "old path\nfrozen", ha="left", va="center", fontsize=6.5, color="#38761d")
     fig.savefig(output, bbox_inches="tight")
     plt.close(fig)
 
@@ -221,10 +394,16 @@ def main() -> None:
     expansion_summary = make_expansion_figure(figures_dir / "f6_expansion_control.pdf")
     make_architecture_figure(figures_dir / "f_architecture.pdf")
     make_legacy_pareto_figure(figures_dir / "pareto_legacy_rev5.pdf")
+    ood_summary = make_ood_scatter_figure(data_dir, figures_dir / "f4_ood_scatter.pdf")
+    decay_summary = make_decay_figure(data_dir, figures_dir / "decay_regimes.pdf")
+    xscript_summary = make_cross_script_figure(data_dir, figures_dir / "f5_cross_script.pdf")
     manifest = {
         "domain_order": DOMAIN_ORDER,
         "retention_summary": retention_summary,
         "expansion_summary": expansion_summary,
+        "ood_summary": ood_summary,
+        "decay_summary": decay_summary,
+        "cross_script_summary": xscript_summary,
         "inputs": {
             str(path.relative_to(root)): sha256(path)
             for path in sorted(data_dir.iterdir())

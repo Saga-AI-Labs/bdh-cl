@@ -1,0 +1,7 @@
+language,type,best_route_ppl,ratio,joint_ppl,ratio_convention,source
+lv,byte_adjacent,37.61,0.98,36.76,pooled Europarl joint reference / routed (a3 V4),docs/reports/2026-09-11_a3-closed-set-probe.md section V4
+ga,byte_adjacent,50.54,1.39,70.17,own-corpus (DGT) joint / routed (a3 V5),docs/reports/2026-09-11_a3-closed-set-probe.md section V5
+zh,cross_script,417.28,3.87,1613.85,own-corpus joint / routed (X3),docs/reports/2026-09-11_cross-script-rejection-suite.md section X3
+ja,cross_script,570.94,3.21,1829.97,own-corpus joint / routed (X3),docs/reports/2026-09-11_cross-script-rejection-suite.md section X3
+hi,cross_script,732.27,5.74,4203.66,own-corpus joint / routed (X3),docs/reports/2026-09-11_cross-script-rejection-suite.md section X3
+iu_clean,cross_script,303.61,1.90,576.78,own-corpus joint / routed (V6 clean rerun),docs/reports/2026-09-11_cross-script-rejection-suite.md section V6
