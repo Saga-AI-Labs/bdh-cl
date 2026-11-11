@@ -19,3 +19,8 @@ hf_phase1b_upload/
 
 # local probe run directories (raw artifacts stay on bdh-4090; curated copies live in docs/data/)
 out_c/
+
+# LaTeX build artifacts (PDFs are committed, aux/log/out are not)
+*.aux
+*.log
+*.out
