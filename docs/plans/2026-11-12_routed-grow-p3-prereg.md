@@ -41,19 +41,20 @@ working two-domain serving story.
 
 | id | decision | rationale |
 |---|---|---|
-| D1 | Init from the grown checkpoint `out_c/routed_probe/bdh_textmix_grow896to1024_last.pt` (mult 1024, step 0), **no `--grow-mult`** | One mixed run does both jobs: the new block learns legal from scratch while zh batches flow through. The base_mult trap (train.py:185) does not apply because there is no growth. The F-V9 path must be verified first (gate G0). |
+| D1' | **Amended 2026-11-13 (pre-run).** Init = the 896 parent `out_a/bdh_textmix_k25w1024-zh_last.pt` (mult 896) + **`--grow-mult 128`** - P1's proven re-grow recipe (896 -> 1024 in-run, ~2 min) | Original D1 (init from `bdh_textmix_grow896to1024_last.pt`, no `--grow-mult`) is withdrawn: the frozen-path machinery (gate masks zeroing old-grads, step-end restore, frozen embed/lm_head) exists ONLY in the grow path (train.py:364-443). Without growth, the 0.1-weighted full-width loss term would train the old block and S1 would be violated by design. The re-grow state is bit-equivalent to the grown checkpoint (A=C cells identical, report section 13; freq invariant ddf62e4 asserted in-code at train.py:325-340). The base_mult trap does not apply: the parent's ckpt-cfg carries mult 896, grow-mult 128 reaches 1024 exactly. **Design choice, declared (review 2026-11-13):** initializing from P1 instead would make P3 a router-only test - the new block would already be legal-competent, and S2 could not distinguish "mixed training works" from "P1 already did it". P3 is registered as the JOINT growth + mixed-training test; the P1-init router-only variant is a legitimate follow-up, out of scope here. |
 | D2 | Mixed stream = **strict alternation of homogeneous batches** (legal step, zh step, legal step, ...), starting with legal | Each batch draws its 512-byte crops from ONE domain, so the existing (N,) neuron mask broadcasts unchanged - **no bdh.py change**. Strict alternation gives exact 50/50 exposure and a seed-reproducible schedule. Labels come from the schedule, not from a classifier. |
 | D3 | Per-step route side: legal step -> `side=new` (prefix = new-only, alpha 0.9, full term 0.1 - P1-identical); zh step -> `side=old` (prefix = old-only, frozen -> dead grads; the 0.1 full term is the new block's only zh signal) | "The mask is the only change from P1" (sketch section 3.2), generalized to two sides. Consequence registered as descriptive: the trained block sees weak zh exposure, so the D-cell penalty (+0.79 nats, report section 13) may shrink. |
-| D4 | Optimizer/loop: batch 1, lr 1e-4, warmup 500, lr-decay 10000, wd 0, no-compile, route-split-backward, `BDH_MEM_FRACTION=0.8`, **10000 iters**, `eval_interval 200` | P1's proven envelope (~10.4 s/step, ~34 h wall, peak under the 97.35 GiB cap). eval_interval 200 avoids the best-save storm (38.65 GB per save added hours in P1, report section 12). |
-| D5 | In-loop eval: legal val under the side=new mask (P1-comparable curve); zh has no learning to monitor (frozen block) | Comparability with the P1 trajectory (2.50 -> 1.03). |
+| D4 | Optimizer/loop: batch 1, lr 1e-4, warmup 500, lr-decay 10000, **wd 0 + snapshot/restore active** - the bit-exactness guarantee is the step-end restore mechanism (train.py:408-416), not the flag: AdamW applies decoupled decay before the zero-gradient update inside the same step, so `wd 0` alone would NOT suffice. Changing wd or dropping the restore path fires S1 and voids the run; the restore path is certified as a pre-run gate (G3 smoke: old-block fullcov bit-exact through 8 mixed steps). Post-run S1/S2 cells: **`--eval-deterministic --eval-batch-size 4` - the identical instrument as the baseline cells** (1.7603/1.6980 were measured at b4 fullcov; any instrument change breaks comparability - the P2-anchor lesson, report section 5). no-compile, route-split-backward, `BDH_MEM_FRACTION=0.8`, **10000 iters**, `eval_interval 200` | P1's proven envelope (~10.4 s/step, ~34 h wall, peak under the 97.35 GiB cap). eval_interval 200 avoids the best-save storm (38.65 GB per save added hours in P1, report section 12). Disk is NOT a risk: best/last write to FIXED paths (checkpoint_path, train.py:130-135) that are overwritten in place - the run is bounded at ~77 GB (best + last), no per-eval accumulation; the cost of a best-save is time, not space. |
+| D5 | In-loop eval: legal val, **full width, no mask** (the `estimate_loss` default path - P1's actual in-loop instrument); zh has no learning to monitor (frozen block) | Comparability with the P1 trajectory (2.50 -> 1.03), which was measured full-width in-loop. The side=new-masked and side=old-masked cells are post-run measurements, not in-loop curves. |
 
 ## 4. Gates (run before the long run)
 
 | gate | what | cost |
 |---|---|---|
-| G0 | Dry run on the real grow ckpt: load without `--grow-mult` (F-V9 / `allow_unfrozen_grown_init` semantics with wd 0), 4 steps alternating legal/zh; verify the route-aware prints BOTH sides ("prefix 57344..65536" on legal steps, "prefix 0..57344" on zh steps), memory under the cap, clean checkpoint write | ~10 min |
+| G0 | Dry run on the real ckpts (D1'): 896-Parent + `--grow-mult 128` + `--mixed-alternate`, `--max-iters 4`; verify: dataset2 print (zh secondary), growth print (896 -> 1024, +128 neurons/head), mixed-alternate print (legal dom A / zh dom B), per-step dom markers (A on even steps, B on odd steps), memory under the cap, clean checkpoint write | ~10 min |
 | G1 | Legal full-coverage anchors, 3 cells (all --eval-deterministic b4): P0 on legal (mask 0), grow on legal (mask 0), P1 on legal (mask 0) | ~30 min |
-| G2 | Router smoke: the new 2-mask argmin router (section 7) on the mixed val stream with the GROW ckpt; expect ~100 % accuracy - at step 0 the margins are huge (zh block: old-only ~1.76 vs full ~3.3+; legal block: old-only ~1.7 vs full ~2.6) | ~10 min |
+| G2 | Router smoke: the new 2-mask argmin router (section 7) on the mixed val AND test streams with the GROW ckpt; expect ~100 % accuracy - at step 0 the margins are huge (zh block: old-only ~1.76 vs full ~3.3+; legal block: old-only ~1.7 vs full ~2.6) | ~10 min |
+| G3 | Tiny smoke (section 7), already executed 2026-11-13, PASSED: 8-step mixed-alternate on the mult-32 tiny ckpt. MUST include the S1-mechanism check - parent zh fullcov == child zh fullcov under mask-old after 8 mixed training steps, bit-exact on all printed digits (certifies gate masks + step-end restore + frozen embed/lm_head through training; 5.5378/5.5381 == 5.5378/5.5381 at tiny scale) | ~5 min |
 
 G1 anchors are registered into S2 before the training run starts; the matrix
 they produce also completes the full-coverage 2x2 for the probe.
@@ -72,6 +73,19 @@ they produce also completes the full-coverage 2x2 for the probe.
 S1 is the point of the whole probe design: because the old block is frozen and
 the ReLU-path mask is exact, the old-domain number is a **bit-exact regression
 test** on the training run, not a statistical estimate.
+
+**The four criteria are independent** (declared reading rule, 2026-11-13):
+S1 = isolation (did the freeze hold), S2 = new-domain competence (can the
+grown model serve legal at full width), S3/S4 = router quality (does
+per-sequence argmin routing recover the oracle serving map). A mixed outcome
+is informative, not ambiguous: S2 holds + S4 misses means the new block CAN
+serve legal but the router misroutes - a router finding, not a competence
+failure. S1 fails means the freeze broke and every other number is
+uninterpretable (fix the mechanism before reading S2-S4). **S3 is a
+diagnostic criterion, not a gate**: a val-vs-test gap (e.g. val 100 %,
+test 94 %) is itself the answer - the margin distribution and the registered
+window fallback decide; deployment advice rests on S1 (zero tolerance) and
+S2's hard floor.
 
 ## 6. Registered fallbacks (decided now, not improvised)
 
@@ -122,6 +136,33 @@ write, and the S1-style exactness property at tiny scale.
 
 ## 9. Timeline
 
-Gates G0-G2: ~50 min (G1 first - it is pure measurement and anchors S2).
-Implementation + smoke: the rest of the day. Run: ~34 h. Post-run fullcov matrix
-(6 cells) + router eval: ~50 min. Then the verdict update to the probe report.
+Gates G0-G2: ~50 min (G1 first - it is pure measurement and anchors S2; G3 is
+already done, passed 2026-11-13). Implementation + smoke: the rest of the day.
+Run: ~34 h. Post-run fullcov matrix (6 cells, b4 deterministic) + router eval:
+~50 min. Then the verdict update to the probe report.
+
+## 10. Amendment log (post-prereg, pre-run)
+
+All amendments dated 2026-11-13, before the long run started, in response to
+the pre-run review (Q. Five-point review):
+
+1. **D1 -> D1'** (section 3): init = 896-Parent + `--grow-mult 128`; original
+   D1 withdrawn - the frozen-path machinery exists only in the grow path, so
+   no-growth init would violate S1 by design. P1-init alternative declared
+   out of scope (router-only test).
+2. **D4** (section 3): wd 0 is necessary but not sufficient - the guarantee is
+   the snapshot/restore mechanism, now explicit and certified by gate G3.
+   Post-run S1/S2 cells pinned to the baseline instrument (`--eval-deterministic
+   --eval-batch-size 4`). Disk note added: best/last overwrite fixed paths,
+   bounded ~77 GB, no accumulation.
+3. **D5** (section 3): aligned with the code - in-loop eval is full-width legal
+   val (P1's actual instrument), not side=new-masked.
+4. **Section 5**: independence reading rule for S1/S2/S3/S4; S3 declared a
+   diagnostic criterion, not a gate; G2 extended to the test stream.
+5. **Gate G3 added** (section 4) and PASSED: tiny smoke - all mechanism prints
+   present (dataset2, mixed-alternate, growth 32 -> 48, dom A/B markers,
+   eval mask 512 of 768); S1-mechanism bit-exact at tiny scale (parent zh
+   fullcov 5.5378/5.5381 == child zh fullcov under mask-old after 8 mixed
+   steps); router script end-to-end validated on val+test (routing accuracy on
+   the near-uniform tiny model is uninformative by design; the instrument -
+   argmin, confusion, routed/oracle NLL, margins - is what was certified).

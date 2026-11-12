@@ -193,6 +193,30 @@ def train(cfg: Config) -> None:
     print(f"dataset: {cfg.dataset} | train bytes {len(data.train)} | val bytes {len(data.val)}"
           + (f" | test bytes {len(data.test)}" if data.test is not None else ""))
 
+    # P3 mixed training (prereg 5daf30c, D2/D3): a second corpus whose batches
+    # alternate with the primary one. The primary corpus keeps providing val/test
+    # for the in-loop eval; the secondary corpus is used for odd-step train
+    # batches only.
+    data2 = None
+    if cfg.mixed_alternate:
+        if not cfg.text_mix2:
+            raise ValueError("--mixed-alternate requires --text-mix2 (the second domain)")
+        if not cfg.route_aware:
+            raise ValueError("--mixed-alternate requires --route-aware (per-step side masks)")
+        if cfg.carry_state or cfg.sequential_batches or cfg.stateful_eval:
+            raise ValueError("--mixed-alternate with carry/sequential streams is not "
+                             "supported (random-crop homogeneous batches only)")
+        if not (cfg.init_from and cfg.grow_mult > 0):
+            raise ValueError("--mixed-alternate requires the grow path (--init-from "
+                             "parent + --grow-mult): the frozen-path machinery "
+                             "(gate masks, step-end restore) exists only there, and "
+                             "without it the full-width loss term would train the old "
+                             "block (prereg D1' amendment)")
+        cfg2 = dataclasses.replace(cfg, text_mix=cfg.text_mix2)
+        data2 = load_dataset(cfg2)
+        print(f"dataset2: {cfg.dataset} | {cfg.text_mix2} | train bytes {len(data2.train)} "
+              f"| val bytes {len(data2.val)} (secondary; odd-step train batches only)")
+
     # Mechanism C write-gating / Mechanism B grow share the gradient-mask path:
     # gate_param_masks entries are (param, multiplier) applied before optimizer step.
     # BDH shares one (encoder, encoder_v, decoder) triple across depth levels, so
@@ -366,7 +390,21 @@ def train(cfg: Config) -> None:
         if cfg.route_aware:
             active = "new" if side == "new" else ("old" if side == "old" else "none")
             print(f"route-aware: mask side={active} | prefix {n_old}..{n_new} | "
-                  f"loss = {cfg.route_alpha}*prefix + {1 - cfg.route_alpha}*full")
+                  f"loss = {cfg.route_alpha:g}*prefix + {1 - cfg.route_alpha:.4g}*full")
+        if cfg.mixed_alternate:
+            # P3 (prereg D2/D3): both sides prebuilt; step parity picks the side.
+            # Even steps: primary corpus (legal), side=new - the P1 loss shape
+            # (new-only prefix + full-width reference). Odd steps: secondary
+            # corpus (zh), side=old - the old-only prefix is frozen, so the
+            # 0.1-weighted full term is the new block's only secondary signal.
+            # keep/n_old/n_new come from the grow path above (required by the
+            # data2 guard).
+            route_mask_new_side = keep.clone()
+            route_mask_old_side = (1.0 - keep).clone()
+            print(f"mixed-alternate: even steps -> {cfg.text_mix.split(':', 1)[0]} "
+                  f"(side=new, dom A) | odd steps -> {cfg.text_mix2.split(':', 1)[0]} "
+                  f"(side=old, dom B) | both: "
+                  f"loss = {cfg.route_alpha:g}*prefix + {1 - cfg.route_alpha:.4g}*full")
         # Bit-exact frozen path (F-decay-leak fix): the zero-grad mask stops
         # learning but not AdamW's decoupled weight decay, which multiplies
         # every param with grad != None by (1 - lr_t * wd) each step. Snapshot
@@ -496,14 +534,24 @@ def train(cfg: Config) -> None:
         if stream is not None:
             x, y = stream.next_batch(device)
         else:
-            x, y = data.get_batch("train", cfg.block_size, cfg.batch_size, device)
+            if data2 is not None:
+                # P3 mixed alternation (D2): even steps draw the primary corpus
+                # with side=new, odd steps the secondary with side=old.
+                if step % 2 == 0:
+                    step_data, step_mask = data, route_mask_new_side
+                else:
+                    step_data, step_mask = data2, route_mask_old_side
+                x, y = step_data.get_batch("train", cfg.block_size, cfg.batch_size, device)
+            else:
+                step_mask = route_neuron_mask
+                x, y = data.get_batch("train", cfg.block_size, cfg.batch_size, device)
 
         pending_full = None
         with ctx:
-            if route_neuron_mask is not None:
+            if step_mask is not None:
                 # Route-aware training: prefix-masked forward + full forward, mix losses.
                 # route_alpha = prefix fraction (higher = stronger route-aware signal).
-                _, prefix_loss, new_state = model(x, y, state, neuron_mask=route_neuron_mask,
+                _, prefix_loss, new_state = model(x, y, state, neuron_mask=step_mask,
                                                   collect_state=collect)
                 if cfg.route_split_backward:
                     # Backward the prefix pass now, before the full pass is built,
@@ -554,8 +602,9 @@ def train(cfg: Config) -> None:
         if (step + 1) % cfg.log_interval == 0:
             ms = (time.time() - t0) * 1000 / cfg.log_interval
             t0 = time.time()
+            dom = f" | dom {'A' if step % 2 == 0 else 'B'}" if data2 is not None else ""
             print(f"step {step + 1:5d}/{cfg.max_iters} | loss {running_loss / cfg.log_interval:.4f} "
-                  f"| lr {lr:.5f} | {ms:.0f} ms/step")
+                  f"| lr {lr:.5f} | {ms:.0f} ms/step{dom}")
             running_loss = 0.0
 
         if (step + 1) % cfg.eval_interval == 0 or step == cfg.max_iters - 1:
