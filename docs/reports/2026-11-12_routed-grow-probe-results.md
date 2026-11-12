@@ -5,8 +5,11 @@
 domain, and does the new block learn?
 **Answer:** yes on both. After the 10,000-iter training run on the new block (33.7 h
 wall clock per the train log), the old domain
-is unchanged to within measurement noise (-0.0046 nats), the new domain reaches a
-best val_loss of 0.9909, and removing the mask degrades the old domain by 1.12 nats.
+is unchanged - within measurement noise at the random-crop instrument (-0.0046
+nats), and the same-day full-coverage re-measure makes it bit-exact (section 13).
+The new domain reaches a
+best val_loss of 0.9909, and removing the mask degrades the old domain by 1.12
+nats (+0.79 nats re-anchored at full coverage, same tag).
 The pooled merge was the wrong composition operator; routing is the working one.
 
 **Integration (2026-11-12, GLM):** sections 9-13 added (batch-2 completion matrix,
@@ -15,7 +18,11 @@ graft-#2 wall, full-coverage eval). Corrections: section 8's P1 reproduce init
 (base_mult is read from the init checkpoint's cfg, so the grown output would
 re-grow 1024 -> 1152); section 2's legal baseline attribution (1.1274 is the P1
 number, not the base model's); the run duration (train log: ~10.4 s/step x 10000
-plus eval/save overhead = 33.7 h, not 17 h).
+plus eval/save overhead = 33.7 h, not 17 h). Evening update: the full-coverage
+re-measure landed (section 13) - the zh verdict is bit-exact (A=B=C), the
+section-11 topk-competition claim was withdrawn (k_sparse_ratio = 0 in all
+cfgs: no topk runs), and the P3 isolation requirement flips to "a sequence-level
+router suffices" on the ReLU path.
 
 ## 1. What was run
 
@@ -114,6 +121,9 @@ it through checkpoint page cache and pinned buffers).
 3. **The RoPE scaling question is open.** The grown frequency table is normalized by
   `n_new`, not `n_old`, so the old neurons' phases are reinterpreted against the new
   total width. Whether this explains the small P2 loss (+0.044) is not measured.
+  (Full-coverage addendum: empirically void for these models - the grown masked
+  forward is bit-identical to the base model's, A = C in section 13, so no
+  RoPE-phase penalty is measurable and the +0.044 was instrument noise.)
 4. **No router was tested.** P1 used a fixed mask per run. Sequence-level routing
   (P3) is sketched in `docs/plans/2026-11-10_routed-grow-p3-sketch.md`; the router
   itself is not implemented.
@@ -231,28 +241,32 @@ Notes:
 - Instrument labels unchanged: these are pipeline streaming-eval numbers; the
   serving_eval crop references stay the separate instrument and are not mixed in.
 
-## 11. Mechanism: the mask does not pre-empt the topk competition (GLM)
+## 11. Mechanism, corrected: the mask fully isolates in these runs (GLM, same-day correction)
 
-`_k_sparse_relu` selects the top-k_sparse neurons over the FULL N axis (all
-65,536 candidates, bdh.py:22) and the neuron_mask is applied AFTER selection
-(bdh.py:262 for x, :278 for y). The mask-896 eval is therefore not equivalent to
-the mult-896 model: the foreign block competes for the k_sparse budget even
-though its contributions are zeroed afterwards.
+Earlier today this section claimed the k_sparse topk runs over the full N axis
+with the mask applied after selection (bdh.py:22/:262/:278), so a foreign block
+would compete for topk slots and a sequence-level router would not give clean
+isolation. The full-coverage re-measure (section 13) falsified the premise:
+cells A, B and C came back identical to all printed digits across three
+different checkpoints. The cfg check shows why: **every checkpoint in this probe
+carries k_sparse_ratio = 0.0** (verified in grow, P1 and zh_last), so
+`_k_sparse_relu` is never invoked - the models run the plain-ReLU path and the
+neuron mask is a plain elementwise zeroing after a pointwise operation. With the
+old parameters bit-copied by the grow and frozen through training, the masked
+forward IS the base model's forward. There is no selection, hence no
+competition, hence exact isolation by construction.
 
-- At step 0 the random block steals slots (this is the +0.0441 P2 delta, ~0.5 SE
-  - noise-limited but directionally consistent with the mechanism).
-- At step 10000 the legal-trained block's scores on zh are content-dependent:
-  the b2-paired val moved +0.0893 (grow -> P1) while test moved -0.0306. Both
-  are within ~1 SE of zero (section 10), so the magnitudes are unresolved - the
-  mechanism is code-verified, the sizes are not yet measured.
+The general rule for k-sparse models stands in the code (bdh.py:12-18,
+retraction 6754e83, derivation section 8): while k_sparse_ratio > 0, neither
+masking order nor zero-init of new neurons restores forward exactness across a
+growth step; sparse growth requires holding k ABSOLUTE (freeze pre-growth k, or
+rescale the post-growth ratio to rho*N/N').
 
-Design implication for P3: a sequence-level router that only selects the mask per
-sequence (sketch option A) does NOT remove the competition - the foreign block
-still enters the global topk. Clean isolation requires zeroing the other side's
-scores BEFORE the topk, or scoping the selection per side. This is a prereg
-decision, not an implementation detail. The section-6.3 RoPE phase hypothesis is
-the second candidate explanation for the small P2 delta; the two are not mutually
-exclusive.
+P3 implication (flipped from this morning): on the current ReLU-path models, a
+sequence-level router that selects the mask per sequence (sketch option A) IS
+sufficient for clean isolation - the pre-topk side-scoping requirement is
+withdrawn. If k_sparse is ever enabled, the retraction's k-absolute growth rule
+governs and the competition question returns.
 
 ## 12. Memory envelope and the graft #2 wall (GLM)
 
@@ -275,7 +289,7 @@ exclusive.
   on every improvement) added hours to the 33.7 h run. Worth tuning before the
   next long run.
 
-## 13. Full-coverage eval: implemented (e42e8c5)
+## 13. Full-coverage eval: implemented (e42e8c5); the zh verdict is bit-exact
 
 `--eval-deterministic` sweeps every non-overlapping 512-byte block of a split
 exactly once, sequentially, with token-weighted pooling (partial final batch
@@ -291,8 +305,39 @@ bit-reproducibility, batch invariance including the partial final batch,
 ValueError guard for block-less splits, random-path sanity, CLI end-to-end with
 the cap print - all passed.
 
-Running as of 2026-11-12 evening (`p1_fullcov.log`): the four zh cells at batch
-4 full coverage - grow (mask 896), P1 (mask 896), P0 (no mask), P1-full (no
-mask). The P1-vs-grow pairing decides the survival verdict at ~0.01 resolution;
-P0 anchors the graft cost itself; P1-full re-anchors the +1.12 mask-necessity
-signal. Verdict to be appended when the run completes.
+Results (2026-11-12 17:35-23:07, `p1_fullcov.log`, batch 4, 1953 blocks per
+split, 999,936 of 1,000,000 bytes covered, 64-byte tail uncovered):
+
+| cell | checkpoint | mask | val | test |
+|---|---|---|---|---|
+| A | grow (step 0) | 896 | 1.7603 | 1.6980 |
+| B | P1 (step 10000) | 896 | 1.7603 | 1.6980 |
+| C | P0 base (mult 896) | none | 1.7603 | 1.6980 |
+| D | P1 (step 10000) | none | 2.5488 | 2.4933 |
+
+**A, B and C are identical to all printed digits** (all six val/test numbers).
+With k_sparse_ratio = 0 in every cfg (section 11) the masked forward of the
+grown and the trained checkpoint is the base model's forward, up to
+matmul-association effects (~1e-8; the smoke measured 2.2e-9 for a batch-shape
+change alone). The survival verdict is therefore not "within noise" but exact:
+
+- **Zero forgetting, bit-exact.** 10,000 iters of legal training changed nothing
+  measurable in the old-prefix forward: B = A to all printed digits, and A = C
+  means the grow itself (under the mask) also reproduces P0's forward exactly.
+  The registered P1 zh margins (0.0075/0.0338) and the P2 +0.0441 were
+  instrument noise around a true delta of 0 (section 10).
+- **The pair-quantized freq invariant (ddf62e4) is verified at full scale:**
+  A = C shows the grown frequency handling preserves the old neurons'
+  computation bit-faithfully at the 3.2 B scale; the section-6.3 RoPE concern
+  is empirically void for these ReLU-path models.
+- **The mask is load-bearing, cleanly measured:** D - B = +0.7885 val /
+  +0.7953 test. Without the mask, the trained block's contributions cost
+  ~0.79 nats on zh (section 2's +1.12 compared tag-best against the b1
+  instrument; same conclusion, now anchored at same-tag full coverage).
+- Generation runs unmasked in every cell, so the samples show full-width
+  behavior: A/C produce zh word-salad, B/D produce fluent legal-flavored
+  English on the zh prompt - the trained block dominates generation whenever
+  it is active, which is exactly what the router in P3 must gate per sequence.
+
+zh verdict: **PASS, exact.** The survival criterion (val <= 1.7928) is met with
+the true margin being 0.0000 +/- ~1e-4 rather than a noise-band coin flip.
