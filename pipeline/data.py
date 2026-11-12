@@ -148,9 +148,12 @@ class ByteDataset:
     def splits(self):
         return ["train", "val"] + (["test"] if self.test is not None else [])
 
-    def get_batch(self, split, block_size, batch_size, device):
+    def get_batch(self, split, block_size, batch_size, device, offsets=None):
         data = getattr(self, split)
-        ix = torch.randint(len(data) - block_size, (batch_size,))
+        if offsets is None:
+            ix = torch.randint(len(data) - block_size, (batch_size,)).tolist()
+        else:
+            ix = offsets
         x = torch.stack(
             [torch.from_numpy(data[i : i + block_size].astype(np.int64)) for i in ix]
         )

@@ -82,6 +82,41 @@ def estimate_loss(model, data, cfg: Config, device, ctx, split: str,
         # collected state or the stream carry silently breaks (new_state
         # would come back None on every iteration).
         batch = cfg.eval_batch_size or cfg.batch_size
+        if cfg.eval_deterministic:
+            # Full-coverage sweep instead of random crops: every non-overlapping
+            # block of the split is evaluated exactly once, with token-weighted
+            # pooling (handles a partial final batch). The default instrument
+            # (20 random crops) samples ~2 % of the split and, because crops are
+            # 512-byte contiguous spans, has single-run SEs of ~0.05-0.10 nats -
+            # wide enough to leave the P1 zh verdict undecidable (2026-11-12
+            # report, section 5). The sweep has no sampling noise and is
+            # bit-reproducible across runs; the final < block_size tail bytes of
+            # the split stay uncovered (64 of 1,000,000 for textmix). Takes
+            # effect on this stateless branch only; stateful_eval keeps
+            # precedence (carry semantics need sequential batches, not a block
+            # sweep).
+            data_np = getattr(data, split)
+            T = cfg.block_size
+            n_blocks = len(data_np) // T
+            total_loss, total_tokens = 0.0, 0
+            for start in range(0, n_blocks, batch):
+                offsets = [i * T
+                           for i in range(start, min(start + batch, n_blocks))]
+                x, y = data.get_batch(split, T, len(offsets), device,
+                                      offsets=offsets)
+                with ctx:
+                    _, loss, _ = model(x, y, None, neuron_mask=neuron_mask,
+                                       collect_state=False)
+                n_tok = len(offsets) * T
+                total_loss += loss.item() * n_tok
+                total_tokens += n_tok
+            if total_tokens == 0:
+                raise ValueError(f"deterministic eval: split {split!r} has no "
+                                 f"full block of {T} bytes")
+            print(f"deterministic eval ({split}): {n_blocks} blocks, "
+                  f"{total_tokens} of {len(data_np)} bytes covered, batch {batch}")
+            model.train()
+            return total_loss / total_tokens
         for _ in range(cfg.eval_iters):
             x, y = data.get_batch(split, cfg.block_size, batch, device)
             with ctx:

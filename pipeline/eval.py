@@ -9,7 +9,8 @@ import torch
 
 from pipeline.config import Config, build_model, param_count, resolve_device, resolve_dtype
 from pipeline.data import load_dataset
-from pipeline.train import build_route_mask, checkpoint_path, estimate_loss
+from pipeline.train import (apply_memory_cap, build_route_mask, checkpoint_path,
+                            estimate_loss)
 
 
 def load_checkpoint(cfg: Config, tag: str):
@@ -47,6 +48,7 @@ def evaluate(cfg: Config, tag: str = "best", num_samples: int = 3, max_new_token
     print(f"model: {cfg.model} | params {param_count(model):,}")
 
     device = resolve_device(cfg)
+    apply_memory_cap(device)  # same sweep-the-box guard as training
     dtype = resolve_dtype(cfg, device)
     ctx = (
         torch.amp.autocast(device_type=device.type, dtype=dtype)
@@ -56,6 +58,11 @@ def evaluate(cfg: Config, tag: str = "best", num_samples: int = 3, max_new_token
     model.to(device)
     model.eval()
 
+    if cfg.stateful_eval and cfg.eval_deterministic:
+        # stateful_eval wins in estimate_loss (the stream branch comes first);
+        # say so instead of silently ignoring the flag.
+        print("warning: stateful_eval takes precedence; eval_deterministic is "
+              "ignored (the block sweep needs the stateless branch)")
     data = load_dataset(cfg)
     # Routed-grow probe P2: --mask-old-mult 896 evaluates a grown checkpoint with
     # only the pre-existing neuron prefix active. The grown checkpoint's own config
