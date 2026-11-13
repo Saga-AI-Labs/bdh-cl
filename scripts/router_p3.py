@@ -79,6 +79,9 @@ def main():
     ap.add_argument("--window", type=int, default=128)
     ap.add_argument("--batch", type=int, default=8)
     ap.add_argument("--block-size", type=int, default=T_DEFAULT)
+    ap.add_argument("--limit", type=int, default=0,
+                    help="smoke mode: only the first N blocks PER DOMAIN per split "
+                         "(0 = all; the post-run S3 certification runs with 0)")
     ap.add_argument("--splits", nargs="+", default=["val", "test"])
     args = ap.parse_args()
 
@@ -124,6 +127,10 @@ def main():
             if i < n_blocks[1]:
                 entries.append((1, i))
         labels = np.array([0 if d == 0 else 1 for d, _ in entries])  # 0=A, 1=B
+        if args.limit and len(entries) > 2 * args.limit:
+            entries = entries[:2 * args.limit]  # interleaved A,B,... -> balanced
+            labels = labels[:len(entries)]
+            print(f"  smoke limit: {args.limit} blocks per domain")
         preds = np.zeros(len(entries), dtype=np.int64)
         routed = np.zeros(len(entries))
         oracle = np.zeros(len(entries))
@@ -138,17 +145,22 @@ def main():
                     torch.from_numpy(ys).to(device))
 
         def run_grouped(eidx, mask_of):
-            """Forwards per mask group; returns per-entry NLL aligned to eidx."""
+            """Forwards per mask group, chunked at 4: the full-T no-grad
+            forward at b4 is the proven eval envelope (~62.6 GiB); at b8 the
+            transient k-cache doubles and would cross the memory cap."""
             out = np.zeros(len(eidx))
             for mask_val in (None, "old"):
                 sub = [k for k, e in enumerate(eidx) if (mask_of(e) == "old") == (mask_val == "old")]
                 if not sub:
                     continue
-                x, y = grab([eidx[k] for k in sub])
-                nlls = per_block_nll(model, x, y, mask_old if mask_val == "old" else None,
-                                     device, ctx)
-                for k, v in zip(sub, nlls.tolist()):
-                    out[k] = v
+                for cs in range(0, len(sub), 4):
+                    csub = sub[cs:cs + 4]
+                    x, y = grab([eidx[k] for k in csub])
+                    nlls = per_block_nll(model, x, y,
+                                         mask_old if mask_val == "old" else None,
+                                         device, ctx)
+                    for k, v in zip(csub, nlls.tolist()):
+                        out[k] = v
             return out
 
         for s in range(0, len(entries), B):

@@ -51,9 +51,9 @@ working two-domain serving story.
 
 | gate | what | cost |
 |---|---|---|
-| G0 | Dry run on the real ckpts (D1'): 896-Parent + `--grow-mult 128` + `--mixed-alternate`, `--max-iters 4`; verify: dataset2 print (zh secondary), growth print (896 -> 1024, +128 neurons/head), mixed-alternate print (legal dom A / zh dom B), per-step dom markers (A on even steps, B on odd steps), memory under the cap, clean checkpoint write | ~10 min |
+| G0 | Dry run on the real ckpts (D1'): 896-Parent + `--grow-mult 128` + `--mixed-alternate`, `--max-iters 4`; verify: dataset2 print (zh secondary), growth print (896 -> 1024, +8192 neurons/head), mixed-alternate print (legal dom A / zh dom B), per-step dom markers (A on even steps, B on odd steps), memory under the cap, clean checkpoint write | ~10 min |
 | G1 | Legal full-coverage anchors, 3 cells (all --eval-deterministic b4): P0 on legal (mask 0), grow on legal (mask 0), P1 on legal (mask 0) | ~30 min |
-| G2 | Router smoke: the new 2-mask argmin router (section 7) on the mixed val AND test streams with the GROW ckpt; expect ~100 % accuracy - at step 0 the margins are huge (zh block: old-only ~1.76 vs full ~3.3+; legal block: old-only ~1.7 vs full ~2.6) | ~10 min |
+| G2 | Router smoke: the new 2-mask argmin router (section 7) on the mixed val AND test streams with the GROW ckpt. **Executed 2026-11-13, mechanism PASS, expectation corrected:** the registered "~100 %" rested on a sign error (legal: old-only ~1.7 vs full ~2.6 - the SMALLER number wins, so old wins there too). Observed: on the grow ckpt the argmin router routes EVERYTHING to old (median margins -0.48..-0.64 nats, both domains, val and test) - geometrically correct, because the random new block degrades full-width everywhere (G1: legal@full 2.57 vs base@legal-prefix 1.71). The routed NLLs match the anchors (A-routed 1.749/1.662 ~ base-on-legal 1.709/1.709; B-routed 1.798/1.710 ~ zh@896 1.760/1.698) - the instrument is calibrated. The discriminative flip on legal blocks (full beats old once the new block is trained, S2) is an OUTCOME of P3 training, not a pre-condition; S3 is judged post-run on the P3 checkpoint. | ~15 min |
 | G3 | Tiny smoke (section 7), already executed 2026-11-13, PASSED: 8-step mixed-alternate on the mult-32 tiny ckpt. MUST include the S1-mechanism check - parent zh fullcov == child zh fullcov under mask-old after 8 mixed training steps, bit-exact on all printed digits (certifies gate masks + step-end restore + frozen embed/lm_head through training; 5.5378/5.5381 == 5.5378/5.5381 at tiny scale) | ~5 min |
 
 G1 anchors are registered into S2 before the training run starts; the matrix
@@ -86,6 +86,14 @@ diagnostic criterion, not a gate**: a val-vs-test gap (e.g. val 100 %,
 test 94 %) is itself the answer - the margin distribution and the registered
 window fallback decide; deployment advice rests on S1 (zero tolerance) and
 S2's hard floor.
+
+**Router-state note (G2, 2026-11-13):** on the untrained grow ckpt the argmin
+router routes everything to old (the random new block degrades full-width
+everywhere; margins all negative). The A-side flip (full beats old on legal)
+emerges from P3 training itself and is gated by S2: if legal@full ends ABOVE
+legal@old-prefix (~1.71, the desc cell), the router keeps routing legal to old
+- which the routed-vs-oracle comparison in S4 shows explicitly. Router quality
+and competence are coupled in that direction only.
 
 ## 6. Registered fallbacks (decided now, not improvised)
 
@@ -166,3 +174,14 @@ the pre-run review (Q. Five-point review):
    steps); router script end-to-end validated on val+test (routing accuracy on
    the near-uniform tiny model is uninformative by design; the instrument -
    argmin, confusion, routed/oracle NLL, margins - is what was certified).
+6. **Gate G0 executed and PASSED** (2026-11-13 04:41): real-ckpt dry run -
+   all prints present (dataset2, growth 896 -> 1024 (+8192 neurons/head),
+   mixed-alternate, per-step dom A/B markers), 10.4 s/step (P1's envelope),
+   completion without OOM under the 97.35 GiB cap, best+last written cleanly
+   (38.66 GB each). In-loop val 2.5970 consistent with the grow-on-legal
+   anchor (new block still raw after 4 steps).
+7. **Gate G2 executed - mechanism PASS, registered expectation corrected**
+   (2026-11-13): see the G2 row in section 4. The prereg's "~100 % accuracy"
+   on the grow ckpt contained a sign error; the observed everything-to-old
+   routing is the geometrically correct pre-training state, and the anchor
+   match of the routed NLLs validates the instrument. S3 is judged post-run.
