@@ -341,3 +341,96 @@ change alone). The survival verdict is therefore not "within noise" but exact:
 
 zh verdict: **PASS, exact.** The survival criterion (val <= 1.7928) is met with
 the true margin being 0.0000 +/- ~1e-4 rather than a noise-band coin flip.
+
+## 14. P3 executed: mixed training with per-step routing (GLM, 2026-11-15)
+
+Run per the amended prereg (5daf30c + amendments of 2026-11-13, commits
+1013ea1/00018ad): init = 896 parent + `--grow-mult 128` (D1'), strict
+alternation legal (dom A, side=new, even steps) / zh (dom B, side=old, odd
+steps) (D2/D3), P1 envelope with wd 0 + step-end restore (D4), 10,000 iters,
+b1 route-aware split-backward. Wall clock: Nov 13 05:26 -> Nov 15 01:20
+(~44 h: 31.0 h train at 10.4 s/step, four fullcov cells ~1.4 h each, full
+router certification ~7.1 h). All gates passed pre-run (G0/G1/G2/G3, prereg
+section 4/10); G2's registered expectation was corrected pre-run: on the
+untrained grow ckpt the argmin router routes everything to old (the random
+new block degrades full-width everywhere), which is the geometrically correct
+pre-training state - the A-side flip is an outcome of training, not a
+pre-condition.
+
+Post-run full-coverage matrix (all `--eval-deterministic --eval-batch-size 4`,
+the identical instrument as the baseline cells; last checkpoint, step 10000,
+like-for-like with the P1 anchor which is also a last-tag ckpt):
+
+| cell | mask | val | test | registered comparator |
+|---|---|---|---|---|
+| S1: zh @ old prefix | 896 | **1.7603** | **1.6980** | == A=B=C (1.7603/1.6980) bit-exact |
+| desc: zh @ full | none | 1.7470 | 1.6858 | P1: 2.5488/2.4933 (D-cell +0.7885/+0.7953) |
+| S2: legal @ full | none | **1.1178** | 1.1250 | <= 1.1994 (P1 anchor 1.0994 + 0.10); hard floor 1.7087 |
+| desc: legal @ old prefix | 896 | 1.7087 | 1.7091 | == base-on-legal (G1) bit-exact |
+
+**Verdicts:**
+
+- **S1 PASS, bit-exact (zero tolerance).** 10,000 mixed steps with per-step
+  side routing left the old-prefix forward identical to all printed digits -
+  the same regression as section 13, now under the routing regime. The
+  snapshot/restore guarantee (not `wd 0` alone) carried it, as G3 certified
+  at tiny scale.
+- **Second bit-exact regression, free of charge:** legal @ old prefix =
+  1.7087/1.7091 == base-on-legal (G1 cell 1) to all printed digits. The
+  frozen prefix is a perfect base-model replica for BOTH domains after the
+  run; combined with S1 this is the full isolation identity, measured.
+- **S2 PASS.** 1.1178 <= 1.1994 with 50 % of the steps spent on the other
+  domain; +0.018 nats over pure P1 (1.0994) is the measured price of mixed
+  training on the fullcov instrument. The hard floor (<= base-on-legal
+  1.7087) holds by 0.59 nats.
+- **S4 PASS, routed below oracle.** Routed mixed-stream NLL 1.4329 val /
+  1.4063 test vs oracle 1.4390/1.4115 (delta -0.0061/-0.0052, threshold
+  +0.05). The router instrument cross-validates the post cells: its oracle
+  means equal the S1/S2 cell numbers to ~0.002.
+- **S3 MISS as registered (diagnostic, per the section-5 reading rule), and
+  the miss is the finding:** accuracy 60.60 % val / 62.39 % test against the
+  registered label map (A->full, B->old). Decomposition: the A-side flip
+  emerged exactly as predicted - 99.69 %/99.49 % accuracy, margin median
+  +0.54 nats (full beats old on legal once the new block is trained). The
+  B-side "misses" route zh to FULL (78 % of zh val blocks, 75 % of test): full-width zh
+  (1.7470/1.6858) now deterministically beats the frozen old prefix
+  (1.7603/1.6980) by 0.0133/0.0122 nats. The registered oracle map (zh->old)
+  went stale mid-probe - in the good direction.
+
+**The D-cell penalty collapsed.** Section 13 measured full-width zh at
++0.79 nats over the old prefix for P1 (the trained block's zh ignorance).
+After P3's 10 %-weighted zh exposure on odd steps, full-width zh is
+1.7470/1.6858 - 0.013 nats BELOW the old prefix. The new block learned the
+host domain through exposure alone, well enough to edge out the frozen
+specialist on the fullcov instrument. "Host + attach" extends to "attach
+learned the host too".
+
+**Deployment reading (registered as a policy choice, not an NLL fact):**
+per-block argmin over the two masks is NLL-safe by construction (it can only
+pick the better mask per block; hence routed <= oracle in S4). NLL-wise the
+serving map is now A->full, B->full = "always full" - the router's B-side
+preference. But if the deployment requirement is the bit-exact guarantee
+(zh served by the frozen old block, identical to base by S1), the zh->old
+route remains available at a measured cost of +0.013 nats. Which one to ship
+is a policy decision the probe was designed to inform, not to make.
+
+Notes for reproduction: (1) with `--log-interval 10` the dom markers sample
+only odd steps (9, 19, 29, ...), so the long-run log shows only `dom B` -
+alternation is verified by G0/tiny at `--log-interval 1` (A,B,A,B observed)
+and by the outcomes (S1 bit-exact requires the zh side; S2 landing requires
+the legal side). (2) best checkpoint landed at step 7600 (best_val 1.0333 on
+the in-loop b1 random-crop instrument, 1.70 -> 1.03 trajectory); post cells
+measure the last checkpoint, matching the P1 anchor's tag. (3) Disk stayed
+bounded as registered (best + last, 38.65 GB each, fixed paths).
+
+Artifacts: `out_c/routed_probe/p3_run.log` (train + post + inline S1 QA),
+`p3_post_{s1_zh896,zh0,legal0,legal896,router}.txt`, `p3_g1.log` (anchors),
+`p3_g2_router.log` (grow-ckpt router state), ckpts `bdh_textmix_p3_mixed_{best,last}.pt`.
+Implementation: 1013ea1 (mixed-alternate + router + prereg amendments),
+00018ad (router b4-chunking, G0/G2 records).
+
+P3 verdict: **S1 exact, S2 pass, S4 pass, S3 diagnostic miss = stale oracle.**
+The probe's central question - does per-step routed mixed training preserve
+the host bit-exactly while the attach domain lands - is answered yes, and the
+router story is better than registered: the full model became the best server
+for both domains.
