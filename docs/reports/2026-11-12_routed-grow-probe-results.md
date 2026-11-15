@@ -418,18 +418,28 @@ After P3's 10 %-weighted zh exposure on odd steps, full-width zh is
 1.7470/1.6858 - 0.013 nats BELOW the old prefix. The new block learned the
 host domain through exposure alone, well enough to edge out the frozen
 specialist on the fullcov instrument. "Host + attach" extends to "attach
-learned the host too".
+learned the host too". Note: this is a teacher-forcing result; it does NOT
+transfer to generation (see the deployment reading below).
 
-**Deployment reading (registered as a policy choice, not an NLL fact):**
-per-block argmin over the two masks is NLL-safe by construction (it can only
-pick the better mask per block; hence routed <= oracle in S4 under BOTH the
-registered and the true map). NLL-wise the post-run optimum policy is
-"always full" (1.4324/1.4054), which the router matches to +0.0005/+0.0009
-while keeping the ability to flip an individual block to the old prefix when
-its window favors it. But if the deployment requirement is the bit-exact
-guarantee (zh served by the frozen old block, identical to base by S1), the
-zh->old route remains available at a measured cost of +0.013 nats. Which one
-to ship is a policy decision the probe was designed to inform, not to make.
+**Deployment reading (revised 2026-11-15, review: NLL-optimality is not
+deployment-optimality).** Every NLL in this report is teacher-forced. In the
+generation regime the run's own samples refute the TF ordering: section 13's
+observation ("B/D produce fluent legal-flavored English on the zh prompt")
+persists on P3. The zh@0 post cell's unmasked samples are fluent English
+legal text ("The present of the case of the part of the service a respect of
+the constituted ..."), on the same zh-prompt seed regime where the base model
+produced zh word-salad (A/C in section 13). The trained block's English prior
+dominates the sampling dynamics regardless of the 0.013-nat TF zh edge. For
+a chat application this is a functional failure, not a policy tradeoff: a
+Chinese user would receive English legal text. **zh->old is therefore
+functionally mandatory for chat serving, and the +0.013 nats are the price
+of correctness, not a weighing.** Consequences registered: (a) the chat
+serving map is domain-aware (zh->old), enforced by request labels or a
+language gate - the NLL-argmin router is the teacher-forcing story, not the
+deployment mechanism; (b) generation must become mask-aware (`generate()`
+samples unmasked in every cell today) - that primitive is the actual
+serving-integration work item; (c) the 60 % S3 accuracy is a TF-instrument
+fact, irrelevant to chat routing.
 
 Notes for reproduction: (1) with `--log-interval 10` the dom markers sample
 only odd steps (9, 19, 29, ...), so the long-run log shows only `dom B` -
@@ -446,8 +456,13 @@ Artifacts: `out_c/routed_probe/p3_run.log` (train + post + inline S1 QA),
 Implementation: 1013ea1 (mixed-alternate + router + prereg amendments),
 00018ad (router b4-chunking, G0/G2 records).
 
-P3 verdict: **S1 exact, S2 pass, S4 pass, S3 diagnostic miss = stale oracle.**
+P3 verdict: **S1 exact, S2 pass, S4 pass, S3 diagnostic miss = stale oracle
+(teacher forcing); deployment verdict = zh->old is functionally mandatory.**
 The probe's central question - does per-step routed mixed training preserve
-the host bit-exactly while the attach domain lands - is answered yes, and the
-router story is better than registered: the full model became the best server
-for both domains.
+the host bit-exactly while the attach domain lands - is answered yes. The
+router story is better than registered on the TF instrument (at the true NLL
+optimum, +0.0005/+0.0009 vs always-full) and sharper than registered on
+deployment: full-width generation on zh prompts stays functionally broken
+(fluent English legal output, section 13's B/D behavior on P3), so the chat
+serving map is zh->old and the +0.013-nat TF edge is the price of
+correctness.
