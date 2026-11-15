@@ -2,10 +2,79 @@
 
 **Source:** Abriss by Ash Hart (X/Twitter), TensorFold v1.0.7, 2026-10-11
 **Committed:** 2026-10-12 · Quinn
+**Renamed:** 2026-11-15 · file moved from `living-weights-tensorfold-reference.md` to the dated form
 **Updated:** 2026-11-05 · asb — refreshed against `docs/living-weights.md` (post-1.0.6
 pocket learner) and full-engine context; additions appended below, the v1.0.7 text
 above is left as written.
+**Updated:** 2026-11-15 · Quinn — added the exactness contract (section "Serving
+integration requirements") from the upstream CONTRIBUTING.md, mapped to our
+serving story.
 **Status:** Reference only — no installation, no training, no infrastructure change without explicit operator authorization
+
+---
+
+## Serving integration requirements (Quinn, 2026-11-15)
+
+Read from the upstream `CONTRIBUTING.md`, section **"Exactness and precision"**.
+This is the part that makes TensorFold relevant to our serving story, and it is
+registered here rather than in a chat.
+
+### The exactness contract
+
+> A draft is accepted only when it equals the same engine's plain token.
+> Keep shared lane verification, caches and per-stream state in the core; add model
+> operators and weight handling in the family.
+> A new family does not add another scheduler beside the engine.
+
+Verify at the same checkpoint, backend, runtime and settings:
+
+| contract | what it demands |
+|---|---|
+| Drafted output equals `"draft": false` output | token for token |
+| A supported resumed path equals a fresh full-prompt execution | restart parity |
+| Each concurrent reply equals its solo run | queue-independence, including engines that queue |
+| Prompt chunks and decode use the required row arithmetic | recurrent state, KV and final logits checked at seams |
+| Cancellation, reset and partial acceptance leave the next request valid | failure-state hygiene |
+
+And the precision rules that follow from them:
+
+- Keep the checkpoint's activation precision and the required accumulation precision.
+- A changed reduction order needs an independent FP64 reference per affected projection class, with native error no worse than the current reference.
+- Compare prompt and decode references separately on identical input rows.
+- Report worst per-column differences as well as aggregate error; an average must not hide a worse column.
+- For model fidelity, use teacher-forced histories and record all top-token differences and margins.
+- A documented one-step tie policy applies only to the same two contenders with both margins inside that policy.
+
+### Why this maps onto BDH-CL
+
+Our routed-grow probe rests on exactly this kind of contract. The P3 verdict is a
+**bit-exact regression**: the masked forward of the grown-and-trained checkpoint
+equals the base model's value to all printed digits, and the deployment requirement
+for chat is that a Chinese prompt stays on the frozen old block (report section 14,
+deployment verdict). That is a "drafted output equals the plain token" requirement
+under a different name.
+
+Concretely, the contracts we would test against:
+
+1. **Token-for-token identity under the mask.** Same checkpoint, same corpus, mask
+on vs. the unmasked equivalent path: every token must match. This is S1 restated
+   as a serving contract.
+2. **Resumed-path parity.** A served conversation resumed from state must equal a
+   fresh full-prompt execution — directly comparable to our stateful eval path.
+3. **Seam checks.** Chunked prefill and decode must agree at the seam on recurrent
+   state, KV and final logits. Our router already evaluates a 128-byte window
+   against a full-sequence loss; the seam question is the same class.
+4. **Worst-column reporting.** The contribution requires per-column error maxima,
+   not aggregates. Our fullcov instrument reports token-weighted means; a per-block
+   worst-case column would be the analogue.
+
+### Open question
+
+The contract says **reduction order changes need an FP64 reference**. TP=2 changes
+reduction order (see `docs/plans/2026-11-15_tp2-bridge-study.md`). If TensorFold's
+serving layer is used for the TP=2 path, its exactness contract becomes the natural
+instrument for that bridge study — which is why this note is registered now rather
+than when the product exists.
 
 ---
 

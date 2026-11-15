@@ -370,5 +370,23 @@ Post-freeze item changes are set v2 and draw with salt
 3. Selection of training corpora from the running preliminary studies.
 4. A response-quality metric (section 4.4) - the largest gap.
 5. The TP=2 port itself, which is a development task, not an experiment.
+   Registered 2026-11-15 as a **development item with a defined trigger**, not an
+   "eventually" commitment:
+
+   - **Kernel packages only when the Python path becomes the bottleneck** in a real
+     chat product. Not before; single-device stays the measurement baseline.
+   - **The port is gated on a bridge experiment**: quantify the TP=2 non-equivalence
+     on an existing checkpoint (single-device vs TP=2, identical config, fullcov
+     instrument), then re-baseline the isolation numbers under TP=2. Until that study
+     exists, no TP=2 number is comparable to the single-device series (P0/P1/P3,
+     serving +0.0000).
+   - **Prefer sharding heads or the residual dimension over the neuron axis N.** N is
+     the dimension the masks live on (the P3 mask boundary sits at 57344 of 65536);
+     sharding N turns the mask into a distributed object and weakens the bit-exact
+     freeze argument.
+   - **Step-end restore must be verified per rank.** The frozen-prefix guarantee (S1,
+     bit-exact) rests on the restore committing on every rank; a missed rank drifts
+     silently. This is the failure class the P1 campaign hit three times
+     (`collect_state`, `eval_batch_size`, freq invariant).
 
 Until items 1 and 4 are settled, this document is a frame, not a plan.
