@@ -421,6 +421,27 @@ specialist on the fullcov instrument. "Host + attach" extends to "attach
 learned the host too". Note: this is a teacher-forcing result; it does NOT
 transfer to generation (see the deployment reading below).
 
+**Efficiency accounting (review, 2026-11-15):** the zh exposure was 5,000 odd
+steps at 0.1 loss weight - a gradient-weight equivalent of ~500 full-weight
+steps. That is the budget that moved full-width zh from +0.79 (P1
+interference) to -0.013 (marginal complementarity): a 0.80-nat swing in
+~500 effective steps. Two precisions registered with it. (1) What the new
+block learned is **complementarity to an expert host**: the odd-step full
+term trains the new neurons against an already-expert old block that carries
+the zh representations, so the new block did not re-learn zh from scratch -
+it had to stop interfering and add marginal value. Attach learning is
+complement learning, and complement learning is cheap; that is the mechanism
+behind "attach learned the host too", and it is the reason to expect the
+same economy for further domains. (2) The equivalence is a gradient-weight
+accounting, not an Adam dynamics proof: with the even (legal) steps running
+at ~1.0 effective weight, the second-moment accumulator and the momentum
+carry-over are dominated by the 10x larger legal gradients, so the exact
+per-step zh update size is fuzzy - the 500-step figure is the honest order
+of magnitude, not an exact step count. (3) Scope: the measured claim is the
+joint full-width zh forward (old + new); the new block's standalone zh
+competence was not measured (a zh @ new-only cell would require a
+mask keeping only neurons [57344, 65536) - trivially available if wanted).
+
 **Deployment reading (revised 2026-11-15, review: NLL-optimality is not
 deployment-optimality).** Every NLL in this report is teacher-forced. In the
 generation regime the run's own samples refute the TF ordering: section 13's
