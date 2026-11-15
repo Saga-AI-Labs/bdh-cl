@@ -241,6 +241,11 @@ def train(cfg: Config) -> None:
         # pages are file-backed: only the weights actually touched are
         # faulted in, and the rest stays reclaimable under pressure.
         grow_src = torch.load(cfg.init_from, map_location="cpu", weights_only=False, mmap=True)
+        # base_mult comes from the CHECKPOINT cfg, not from the CLI's
+        # --mlp-internal-dim-multiplier: growing from an already-grown ckpt
+        # (its cfg already carries the wider mult) silently stacks on top of
+        # it - 1024 -> 1152 instead of the intended 1024 (three lost P1
+        # attempts, report section 2.1). The CLI flag is ignored on this path.
         base_mult = int(grow_src["cfg"]["mlp_internal_dim_multiplier"])
         cfg.mlp_internal_dim_multiplier = base_mult + cfg.grow_mult
 
