@@ -21,9 +21,11 @@ some small amount, and our decisive claims live at exactly that scale:
 | serving isolation | +0.0000 on 6 cells | single device |
 | co-activation penalty | ~1.47 nats (merge) / 0.79 (P3 D-cell) | single device |
 
-A TP=2 shift of 1e-4-1e-3 (the order Grok names) would sit inside our noise band,
-which means the instruments **can see it** - and also that a larger shift would be
-visible. What we lack is the measured size on our own models.
+A TP=2 shift of 1e-4-1e-3 (the order Grok names) would be INVISIBLE on the
+random-crop instrument (its single-run noise is ~0.05-0.10 nats) but well
+ABOVE the fullcov noise floor (batch invariance 2.2e-9), so the fullcov
+instrument **can see it** - and any larger shift too. What we lack is the
+measured size on our own models.
 
 **This study is the precondition for treating TP=2 numbers as comparable among
 themselves, and for deciding whether they can ever be compared to the single-
@@ -83,8 +85,13 @@ not after.
 
 Execution: ~1 day of port work (the TP=2 implementation itself is the dominant
 cost; the measurement is hours). Trigger: when the width forces it - i.e. when
-single-device cannot hold the next growth step, which is the current graft-2
-wall (report section 12).
+a future growth step exceeds the single-device envelope even with the frozen
+backup off. (Anchor correction 2026-11-15: the ORIGINAL graft-2 wall
+(report section 12, 95.40 GiB) was removed by the wd-0 backup redundancy -
+G-A2 measured 91.99 alloc / 96.40 reserved GiB at 1152 WITH backup off, and
+graft #2 itself is running single-device right now. The next +128 steps
+project ~+4 GiB of state and cross the 97.35 GiB cap; THAT is the forward
+wall this study is gated on.)
 
 **Preferred sharding axis, registered now:** heads or residual dimension, not N.
 N is where the masks live.

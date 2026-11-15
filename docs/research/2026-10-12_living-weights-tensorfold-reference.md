@@ -49,10 +49,15 @@ And the precision rules that follow from them:
 
 Our routed-grow probe rests on exactly this kind of contract. The P3 verdict is a
 **bit-exact regression**: the masked forward of the grown-and-trained checkpoint
-equals the base model's value to all printed digits, and the deployment requirement
-for chat is that a Chinese prompt stays on the frozen old block (report section 14,
-deployment verdict). That is a "drafted output equals the plain token" requirement
-under a different name.
+equals the base model's value to all printed digits, and mask-on serving is a
+"drafted output equals the plain token" requirement under a different name.
+(Correction 2026-11-15, same day: the registered deployment reading "a Chinese
+prompt stays on the frozen old block" was superseded by the mask-aware
+generation validation - the zh failure was prompt-regime-bound, the chat map
+simplifies to "always full", and zh->old is retained as the bit-exact-base
+OPTION. See report section 14, second deployment-reading revision, 8a0433a.
+The contract mapping itself is unchanged; S1 is the mask-on serving contract
+regardless of which serving map is chosen.)
 
 Concretely, the contracts we would test against:
 
