@@ -1,0 +1,113 @@
+"""Mask-aware generation check (graft-2 plan section 5; P3 deployment verdict
+9505ab3): does generate() honor the neuron mask, and does the domain-aware
+serving map produce the right language?
+
+Cells on the P3 last checkpoint (mult 1024; old prefix = mult 896):
+
+  1. zh prompt    x old-mask  : the chat serving path for zh. The old-only
+                                mask IS the base model (S1 bit-exact), which
+                                produced zh text on zh prompts -> expect a
+                                high share of bytes >= 0x80 (zh UTF-8).
+  2. zh prompt    x full width: the documented failure (P3 zh@0 samples are
+                                fluent English legal despite the 0.013-nat TF
+                                zh edge) -> expect ~0 high bytes.
+  3. legal prompt x full width: normal serving -> English legal (~0 high bytes).
+  4. legal prompt x old-mask  : base-on-legal control -> English legal.
+
+Prompts: a real zh prompt cut from the zh HELD-OUT split (the same 30 MB carve
+the evals use - no train bytes in the prompt), plus the fixed "\\n = The "
+prompt regime for like-for-like reading against the registered post cells.
+
+Metric per cell: share of generated (non-prompt) bytes >= 0x80 - zh UTF-8 text
+is high, ASCII English ~0 - plus the decoded sample. Sampling is multinomial
+(unseeded, like the registered sample regime); the check is about LANGUAGE,
+not exact tokens.
+
+Usage:
+    python scripts/gen_serve_check.py <ckpt> [--mask-old-mult 896] \
+        [--tokens 120] [--temperature 0.8] [--topk 3]
+"""
+import sys
+
+import torch
+
+sys.path.insert(0, ".")
+
+from pipeline.data import _prepare_textmix
+from pipeline.merge import load_model_mmap
+
+
+def hi_byte_share(b: bytes) -> float:
+    return sum(x >= 0x80 for x in b) / len(b) if b else 0.0
+
+
+@torch.no_grad()
+def sample(model, prompt: bytes, mask, device, tokens, temperature, top_k) -> bytes:
+    idx = torch.tensor(list(prompt), dtype=torch.long, device=device).unsqueeze(0)
+    out = model.generate(idx, max_new_tokens=tokens, temperature=temperature,
+                         top_k=top_k, neuron_mask=mask)
+    return bytes(out.to(torch.uint8).cpu().squeeze(0).tolist())
+
+
+def main():
+    a = sys.argv[1:]
+    def arg(flag, default):
+        return a[a.index(flag) + 1] if flag in a else default
+    ckpt_path = a[0]
+    mask_mult = int(arg("--mask-old-mult", "896"))
+    tokens = int(arg("--tokens", "120"))
+    temperature = float(arg("--temperature", "0.8"))
+    top_k = int(arg("--topk", "3"))
+
+    device = torch.device("cuda")
+    model, cfg_d = load_model_mmap(ckpt_path)
+    model = model.to(device).eval()
+    C = model.config
+    nh, D = C.n_head, C.n_embd
+    N = C.mlp_internal_dim_multiplier * D // nh
+    n_keep = mask_mult * D // nh
+
+    masks = {"full": None}
+    if 0 < n_keep < N:
+        dtype = next(model.parameters()).dtype
+        old = torch.zeros(N, device=device, dtype=dtype)
+        old[:n_keep] = 1.0
+        masks["old"] = old
+        print(f"mask: keep {n_keep} of {N} neurons per head "
+              f"(mult {mask_mult} prefix, activation dtype {dtype})")
+
+    blocks, _, _, _ = _prepare_textmix("zh:data/europarl/xscript_zh.txt", 30)
+    zh_prompt = bytes(blocks["zh"]["val"][:80])
+    legal_prompt = b"\n = The "
+
+    cells = [
+        ("zh-prompt x old-mask  (chat serving path)", zh_prompt, "old"),
+        ("zh-prompt x full      (documented failure)", zh_prompt, "full"),
+        ("legal-prompt x full   (normal serving)", legal_prompt, "full"),
+        ("legal-prompt x old-mask (base control)", legal_prompt, "old"),
+    ]
+
+    print(f"gen-serve check | {ckpt_path} | {tokens} tokens/cell | "
+          f"temperature {temperature} | top_k {top_k}")
+    verdicts = []
+    for name, prompt, mk in cells:
+        if mk not in masks:
+            print(f"\n[{name}] SKIPPED (mask not applicable)")
+            continue
+        out_b = sample(model, prompt, masks[mk], device, tokens, temperature, top_k)
+        cont = out_b[len(prompt):]
+        share = hi_byte_share(cont)
+        print(f"\n[{name}]\n    prompt: {prompt[:24]!r}...")
+        print(f"    hi-byte share {share:.2%}  (zh ~high, ASCII English ~0)")
+        print(f"    {cont.decode('utf-8', errors='backslashreplace')!r}")
+        verdicts.append((name, share))
+
+    print("\n--- reading guide (registered expectations) ---")
+    print("cell 1 high + cell 2 low  : serving map works; failure persists full-width")
+    print("cell 1 low                : old-mask does NOT restore zh behavior -> STOP")
+    print("cell 3 low                : normal serving intact (positive control)")
+    print("cell 4 low                : base control sane (English legal)")
+
+
+if __name__ == "__main__":
+    main()

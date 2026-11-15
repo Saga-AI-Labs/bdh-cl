@@ -8,6 +8,10 @@ rows in memory (exact removal under BDH's per-neuron independence).
 Usage:
     python scripts/prune_eval.py <ckpt> [--langs en,de,es] [--mb 10] \
         [--batches 40] [--iters 30] [--keeps 1.0,0.5,0.25,0.125] [--random] [--batch 4]
+    textmix domains (P3-style) instead of europarl:
+    python scripts/prune_eval.py <ckpt> \
+        --spec legal:data/textmix2/legal.txt,zh:data/europarl/xscript_zh.txt \
+        --text-mix-mb 30 [--langs legal,zh]
 """
 import math
 import sys
@@ -74,7 +78,6 @@ def main():
     def arg(flag, default):
         return a[a.index(flag) + 1] if flag in a else default
     ckpt_path = a[0]
-    langs = arg("--langs", "en,de,es").split(",")
     mb = int(arg("--mb", "10"))
     nb = int(arg("--batches", "40"))
     iters = int(arg("--iters", "30"))
@@ -83,9 +86,12 @@ def main():
     random_prune = "--random" in a
     block_size_n = int(arg("--block", "0"))  # if >0: prune in contiguous neuron blocks
     save_at = arg("--save-at", "")           # e.g. "0.333:/path/out.pt" saves pruned ckpt
+    spec = arg("--spec", "")                 # textmix spec "name:path,..." instead of europarl
+    tmb = int(arg("--text-mix-mb", "30"))    # per-domain MB for --spec (must match training)
+    langs_arg = a[a.index("--langs") + 1] if "--langs" in a else None
 
-    from pipeline.analyze import _load_model
-    model, cfg_d = _load_model(ckpt_path)
+    from pipeline.merge import load_model_mmap
+    model, cfg_d = load_model_mmap(ckpt_path)
     device = torch.device("cuda")
     model = model.to(device).eval()
     C = model.config
@@ -93,8 +99,18 @@ def main():
     nh, D = C.n_head, C.n_embd
     N = C.mlp_internal_dim_multiplier * D // nh
 
-    blocks = _europarl_blocks("data", mb * 1_000_000)
-    blocks = {k: v for k, v in blocks.items() if k in langs}
+    if spec:
+        # Textmix domains (P3-style): same carve as load_dataset -- the per-domain
+        # val/test depend on the MB cap, so --text-mix-mb MUST match the training
+        # run or the eval bytes differ from the registered cells.
+        from pipeline.data import _prepare_textmix
+        all_blocks, _, _, _ = _prepare_textmix(spec, tmb)
+        langs = (langs_arg.split(",") if langs_arg else sorted(all_blocks))
+        blocks = {k: v for k, v in all_blocks.items() if k in langs}
+    else:
+        langs = (langs_arg or "en,de,es").split(",")
+        blocks = _europarl_blocks("data", mb * 1_000_000)
+        blocks = {k: v for k, v in blocks.items() if k in langs}
 
     imp = None
     if not random_prune:

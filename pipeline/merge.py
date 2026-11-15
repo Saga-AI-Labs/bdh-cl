@@ -91,6 +91,31 @@ def load_ckpt(path: str) -> dict:
         return torch.load(path, map_location="cpu", weights_only=False)
 
 
+def load_model_mmap(ckpt_path: str):
+    """Build the model from a checkpoint WITHOUT materializing its optimizer
+    state. Grow checkpoints carry a full Adam state (~38 GB at mult 1024) that
+    eval-only consumers never touch; mmap keeps those pages file-backed and
+    reclaimable instead of pulling the whole file into the unified pool
+    (train.py's grow path does the same for the same reason)."""
+    import dataclasses
+
+    from bdh import BDH, BDHConfig
+
+    ckpt = torch.load(ckpt_path, map_location="cpu", weights_only=False, mmap=True)
+    cfg_d = dict(ckpt["cfg"])
+    fields = {f.name for f in dataclasses.fields(BDHConfig)}
+    bdh_cfg = BDHConfig(**{k: v for k, v in cfg_d.items() if k in fields})
+    if cfg_d.get("model") == "bdh-linear":
+        from bdh_linear import BDHLinear
+        model = BDHLinear(bdh_cfg)
+    else:
+        model = BDH(bdh_cfg)
+    model.load_state_dict(ckpt["model_state"])
+    model.eval()
+    del ckpt
+    return model, cfg_d
+
+
 def run_merge(path_a: str, path_b: str, out_path: str) -> None:
     ckpt_a, ckpt_b = load_ckpt(path_a), load_ckpt(path_b)
     ckpt_a["source"] = path_a
