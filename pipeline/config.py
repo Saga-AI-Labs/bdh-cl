@@ -60,6 +60,11 @@ class Config:
     gate_alpha: float = 0.0                # write-gating strength; grad *= (1 - alpha * max-normed importance)
     grow_mult: int = 0                     # with init_from: add this many mlp multiplier units as trainable fresh neurons; old neurons + embed/lm_head frozen
     allow_unfrozen_grown_init: bool = False  # F-V9 guard override: accept weight decay on a grown checkpoint loaded without --grow-mult (no masks, no restore; documented-overwrite designs like FCS set this)
+    frozen_backup: str = "auto"            # grow path; per-element frozen backup mode (graft-2 plan G-A0):
+                                           # "auto" = on at weight_decay>0, off at wd=0 (redundant there:
+                                           # old grads are exactly 0 from step 0 -> m=v=0 -> AdamW update 0);
+                                           # "off" skips the ~12.9 GiB snapshot at old=65536 and errors at
+                                           # wd>0 (F-V9 needs the step-end restore); "on" always builds it.
     freeze_attn: bool = True               # growth only: freeze attention weights alongside embed/lm_head (False = unfrozen per PoC protocol)
     freeze_embed: bool = False             # with init_from (any path): freeze embed.weight and lm_head so the
                                            # checkpoint keeps its token-embedding identity through a

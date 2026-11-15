@@ -410,28 +410,57 @@ def train(cfg: Config) -> None:
                   f"(side=new, dom A) | odd steps -> {cfg.text_mix2.split(':', 1)[0]} "
                   f"(side=old, dom B) | both: "
                   f"loss = {cfg.route_alpha:g}*prefix + {1 - cfg.route_alpha:.4g}*full")
-        # Bit-exact frozen path (F-decay-leak fix): the zero-grad mask stops
-        # learning but not AdamW's decoupled weight decay, which multiplies
-        # every param with grad != None by (1 - lr_t * wd) each step. Snapshot
-        # the frozen regions here and restore them after every optimizer step
-        # (see optimizer_step). embed/lm_head need no restore: requires_grad
-        # False removes them from the optimizer entirely; attn.freqs is a
-        # buffer. Note: restoring at step end is exact by construction; a
-        # wd=0 param group alone would NOT be, because AdamW applies decay
-        # before the (zero) gradient update inside the same step.
-        enc_d, encv_d = raw_model.encoder.data, raw_model.encoder_v.data
-        dec_d = raw_model.decoder.data.view(nh, n_new, -1)
-        elem_frozen_backup = [
-            (enc_d[:, :, :n_old], enc_d[:, :, :n_old].detach().clone()),
-            (encv_d[:, :, :n_old], encv_d[:, :, :n_old].detach().clone()),
-            (dec_d[:, :n_old, :], dec_d[:, :n_old, :].detach().clone()),
-        ]
+        # G-A0: resolve the per-element frozen backup. The backup exists for the
+        # wd>0 regime (F-V9): old and new elements share ONE tensor in ONE AdamW
+        # param group, so per-element decay is impossible at group level - hence
+        # snapshot/restore after every step. At global wd=0 the backup is
+        # mathematically redundant: the gate masks zero the old grads before
+        # every optimizer step -> m=v=0 from step 0 -> the AdamW update is
+        # exactly 0; the decoupled decay branch is guarded at wd==0; zeros stay
+        # zeros in bf16; grad-clip over zeros is a no-op; GradScaler is disabled
+        # for bf16 (plain optimizer.step). G-A1/A2 (graft-2 plan 2026-11-15)
+        # certify the off path bit-exact at tiny and real scale.
+        backup_mode = cfg.frozen_backup
+        if backup_mode == "auto":
+            backup_mode = "on" if cfg.weight_decay > 0 else "off"
+            print(f"frozen-backup: auto -> {backup_mode} (weight_decay={cfg.weight_decay:g})")
+        elif backup_mode == "off" and cfg.weight_decay > 0:
+            raise ValueError(
+                "--frozen-backup off is invalid with weight_decay > 0 "
+                f"(weight_decay={cfg.weight_decay:g}): old and new elements share "
+                "one tensor in one AdamW param group, so per-element decay needs "
+                "the snapshot/restore backup (F-V9). Use --frozen-backup auto/on, "
+                "or set weight_decay=0.")
+        if backup_mode == "on":
+            # Bit-exact frozen path (F-decay-leak fix): the zero-grad mask stops
+            # learning but not AdamW's decoupled weight decay, which multiplies
+            # every param with grad != None by (1 - lr_t * wd) each step. Snapshot
+            # the frozen regions here and restore them after every optimizer step
+            # (see optimizer_step). embed/lm_head need no restore: requires_grad
+            # False removes them from the optimizer entirely; attn.freqs is a
+            # buffer. Restoring at step end is exact by construction; a wd=0
+            # param group alone would NOT be, because AdamW applies decay before
+            # the (zero) gradient update inside the same step - and per-element
+            # decay cannot be expressed at group level (one tensor, one group).
+            enc_d, encv_d = raw_model.encoder.data, raw_model.encoder_v.data
+            dec_d = raw_model.decoder.data.view(nh, n_new, -1)
+            elem_frozen_backup = [
+                (enc_d[:, :, :n_old], enc_d[:, :, :n_old].detach().clone()),
+                (encv_d[:, :, :n_old], encv_d[:, :, :n_old].detach().clone()),
+                (dec_d[:, :n_old, :], dec_d[:, :n_old, :].detach().clone()),
+            ]
+            backup_bytes = sum(t.numel() * t.element_size() for _, t in elem_frozen_backup)
+            print(f"frozen-backup: on | {backup_bytes / 2**30:.2f} GiB "
+                  f"(3 snapshots of ({nh}, {n_old}, {D}) elements)")
+        else:
+            print("frozen-backup: off | wd=0 restore is a mathematical no-op "
+                  "(old grads exactly 0 from step 0 -> m=v=0 -> AdamW update exactly 0)")
         attn_note = ("parameter-free (bdh; freeze flags inert)"
                      if cfg.model == "bdh"
                      else ("frozen" if cfg.freeze_attn else "UNFROZEN"))
         print(f"growth: {base_mult} -> {cfg.mlp_internal_dim_multiplier} mult "
               f"(+{n_new - n_old} neurons/head trainable) | old neurons + embed + lm_head frozen"
-              f" (bit-exact via step-end restore) | attn {attn_note}")
+              f" | attn {attn_note}")
 
     if cfg.gate_from:
         gate_imp = None
@@ -631,3 +660,10 @@ def train(cfg: Config) -> None:
                     state=state_to_cpu(detach_state(state)) if cfg.carry_state else None)
     print(f"done. best val_loss {best_val:.4f} (ppl {math.exp(best_val):.2f}) -> "
           f"{checkpoint_path(cfg, 'best')}")
+    if device.type == "cuda":
+        # Graft-2 plan addendum: every grow run logs its process peak explicitly
+        # so the envelope accounting (weights + grads + Adam + backup + activations)
+        # stays checkable against the 121.69 GiB unified wall.
+        print(f"memory: peak allocated {torch.cuda.max_memory_allocated() / 2**30:.2f} GiB "
+              f"| peak reserved {torch.cuda.max_memory_reserved() / 2**30:.2f} GiB "
+              f"(process max: model + optimizer state + activations)")

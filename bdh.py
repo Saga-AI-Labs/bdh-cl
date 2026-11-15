@@ -302,7 +302,12 @@ class BDH(nn.Module):
         max_new_tokens: int,
         temperature: float = 1.0,
         top_k: int | None = None,
+        neuron_mask: torch.Tensor | None = None,
     ) -> torch.Tensor:
+        """Autoregressive sampling. neuron_mask: optional (N,) float tensor with
+        the same semantics as forward's - e.g. the old-prefix mask keeps neurons
+        [0, n_old) active, which serves the frozen host bit-exactly (the chat
+        serving primitive from the P3 deployment verdict)."""
         was_training = self.training
         self.eval()
         try:
@@ -310,7 +315,7 @@ class BDH(nn.Module):
                 idx_cond = idx
                 if self.config.block_size is not None:
                     idx_cond = idx_cond[:, -self.config.block_size :]
-                logits, _, _ = self(idx_cond)
+                logits, _, _ = self(idx_cond, neuron_mask=neuron_mask)
                 logits = logits[:, -1, :] / temperature
                 if top_k is not None:
                     values, _ = torch.topk(logits, min(top_k, logits.size(-1)))
