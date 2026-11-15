@@ -56,6 +56,7 @@ def main():
     ckpt_path = a[0]
     mask_mult = int(arg("--mask-old-mult", "896"))
     tokens = int(arg("--tokens", "120"))
+    n_samples = int(arg("--samples", "3"))
     temperature = float(arg("--temperature", "0.8"))
     top_k = int(arg("--topk", "3"))
 
@@ -87,20 +88,24 @@ def main():
         ("legal-prompt x old-mask (base control)", legal_prompt, "old"),
     ]
 
-    print(f"gen-serve check | {ckpt_path} | {tokens} tokens/cell | "
+    print(f"gen-serve check | {ckpt_path} | {n_samples} x {tokens} tokens/cell | "
           f"temperature {temperature} | top_k {top_k}")
     verdicts = []
     for name, prompt, mk in cells:
         if mk not in masks:
             print(f"\n[{name}] SKIPPED (mask not applicable)")
             continue
-        out_b = sample(model, prompt, masks[mk], device, tokens, temperature, top_k)
-        cont = out_b[len(prompt):]
-        share = hi_byte_share(cont)
         print(f"\n[{name}]\n    prompt: {prompt[:24]!r}...")
-        print(f"    hi-byte share {share:.2%}  (zh ~high, ASCII English ~0)")
-        print(f"    {cont.decode('utf-8', errors='backslashreplace')!r}")
-        verdicts.append((name, share))
+        shares = []
+        for s in range(n_samples):
+            out_b = sample(model, prompt, masks[mk], device, tokens, temperature, top_k)
+            cont = out_b[len(prompt):]
+            share = hi_byte_share(cont)
+            shares.append(share)
+            print(f"    #{s} hi-byte {share:.2%}  {cont.decode('utf-8', errors='backslashreplace')!r}")
+        mean_share = sum(shares) / len(shares)
+        print(f"    -> mean hi-byte {mean_share:.2%}  (zh ~high, ASCII English ~0)")
+        verdicts.append((name, mean_share))
 
     print("\n--- reading guide (registered expectations) ---")
     print("cell 1 high + cell 2 low  : serving map works; failure persists full-width")
