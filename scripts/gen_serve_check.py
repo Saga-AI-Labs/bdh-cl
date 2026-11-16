@@ -27,6 +27,7 @@ Usage:
     python scripts/gen_serve_check.py <ckpt> [--mask-old-mult 896] \
         [--tokens 120] [--temperature 0.8] [--topk 3]
 """
+import os
 import sys
 
 import torch
@@ -80,12 +81,19 @@ def main():
     blocks, _, _, _ = _prepare_textmix("zh:data/europarl/xscript_zh.txt", 30)
     zh_prompt = bytes(blocks["zh"]["val"][:80])
     legal_prompt = b"\n = The "
+    code_prompt = None
+    if os.path.exists("data/textmix2/code.txt"):
+        with open("data/textmix2/code.txt", "rb") as f:
+            f.seek(28_000_000)  # val carve region of the 30-MB read
+            code_prompt = f.read(80)
 
     cells = [
         ("zh-prompt x old-mask  (chat serving path)", zh_prompt, "old"),
         ("zh-prompt x full      (documented failure)", zh_prompt, "full"),
         ("legal-prompt x full   (normal serving)", legal_prompt, "full"),
         ("legal-prompt x old-mask (base control)", legal_prompt, "old"),
+        ("code-prompt x full    (third-domain serving)", code_prompt, "full"),
+        ("code-prompt x old-mask (base control)", code_prompt, "old"),
     ]
 
     print(f"gen-serve check | {ckpt_path} | {n_samples} x {tokens} tokens/cell | "
