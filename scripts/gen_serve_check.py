@@ -70,13 +70,19 @@ def main():
     n_keep = mask_mult * D // nh
 
     masks = {"full": None}
+    dtype = next(model.parameters()).dtype
     if 0 < n_keep < N:
-        dtype = next(model.parameters()).dtype
         old = torch.zeros(N, device=device, dtype=dtype)
         old[:n_keep] = 1.0
         masks["old"] = old
         print(f"mask: keep {n_keep} of {N} neurons per head "
               f"(mult {mask_mult} prefix, activation dtype {dtype})")
+    keep_1024 = 1024 * D // nh
+    if 0 < keep_1024 < N:
+        m1024 = torch.zeros(N, device=device, dtype=dtype)
+        m1024[:keep_1024] = 1.0
+        masks["1024"] = m1024
+        print(f"mask: keep {keep_1024} of {N} neurons per head (mult 1024 prefix)")
 
     blocks, _, _, _ = _prepare_textmix("zh:data/europarl/xscript_zh.txt", 30)
     zh_prompt = bytes(blocks["zh"]["val"][:80])
@@ -95,6 +101,21 @@ def main():
         ("code-prompt x full    (third-domain serving)", code_prompt, "full"),
         ("code-prompt x old-mask (base control)", code_prompt, "old"),
     ]
+
+    # Mixed-content cells (the registered open regime): English system
+    # prompt + the SAME zh content, three en:zh byte ratios with zh fixed
+    # at 80 B (1:1 -> 80 B en, 2:1 -> 160 B en, 1:2 -> 40 B en). The
+    # English part is a realistic chat system prompt, repeat-and-truncated
+    # to the target length - the register question is the experiment.
+    SYS = (b"You are a helpful assistant. Answer in the same language as "
+           b"the user's message.\n\nUser: ")
+    zh_len = len(zh_prompt)
+    for label, en_len in (("1:1", zh_len), ("2:1", 2 * zh_len),
+                          ("1:2", zh_len // 2)):
+        p = (SYS * 4)[:en_len] + zh_prompt
+        cells.append((f"mixed {label} (en{en_len}+zh{zh_len}) x full", p, "full"))
+        cells.append((f"mixed {label} (en{en_len}+zh{zh_len}) x old-mask", p, "old"))
+        cells.append((f"mixed {label} (en{en_len}+zh{zh_len}) x mask-1024", p, "1024"))
 
     print(f"gen-serve check | {ckpt_path} | {n_samples} x {tokens} tokens/cell | "
           f"temperature {temperature} | top_k {top_k}")
@@ -120,6 +141,9 @@ def main():
     print("cell 1 low                : old-mask does NOT restore zh behavior -> STOP")
     print("cell 3 low                : normal serving intact (positive control)")
     print("cell 4 low                : base control sane (English legal)")
+    print("mixed x full high         : static map survives the English system prompt")
+    print("mixed x full low + mask hi: static map leaks English -> mask or window routing needed")
+    print("mixed x old high          : base keeps Chinese; a full-leak comes from the trained block")
 
 
 if __name__ == "__main__":
