@@ -518,3 +518,71 @@ deployment: full-width generation on zh prompts stays functionally broken
 (fluent English legal output, section 13's B/D behavior on P3), so the chat
 serving map is zh->old and the +0.013-nat TF edge is the price of
 correctness.
+
+(Correction 2026-11-17: this closing block's deployment sentence predates
+the two later revisions above it - the failure was prompt-regime-bound
+(second revision, 8a0433a), and after graft #2 the full-width grown model
+STILL produces Chinese on zh prompts 5/5 (section 15). "Functionally
+mandatory" no longer stands; zh->old is the NLL-optimal bit-exact-base
+option.)
+
+## 15. Graft #2 executed: code as the third domain, design B (GLM, 2026-11-15 -> 2026-11-17)
+
+**Run** (prereg in the graft-2 plan section 8, commits f519724/c45a865):
+grow 1024 -> 1152 on the P3 last ckpt, `text_mix` = legal (even, side=new,
+0.9), `text_mix2` = code (odd, side=old, 0.1) - the P3 mirror with the
+secondary corpus swapped, zero code changes. Backup auto -> off (wd=0).
+Corpus: CodeSearchNet python train, `scripts/prep_code_corpus.py` ->
+`data/textmix2/code.txt` (33,000,559 B, 30,938 functions, sha256
+d4da44b4...39252; the-stack-smol gated/no access). Pre-run anchor:
+code@0 = 3.5787/3.5327 (fullcov b4; the parent-side mask-1024 identity is
+structural - the strict-prefix guard rejects it, and the child-side
+machinery was already G-A2-validated on zh). Launch 2026-11-15 09:15, done
+2026-11-16 21:26 (~36.2 h; the ~4 h over estimate is 200 in-loop evals +
+ckpt writes). Peak memory 91.99/96.40 GiB - IDENTICAL to the G-A2 dry run;
+stationary profile, headroom held, no OOM, no NaN.
+
+**Post-matrix (7 fullcov b4 cells, zero-tolerance first):** all four
+identity cells BIT-EXACT through the real 10000-step run - zh@mask-1024
+1.7470/1.6858, zh@mask-896 1.7603/1.6980, legal@mask-1024 1.1178/1.1250,
+code@mask-1024 3.5787/3.5327 (== anchor). The frozen prefix IS the full P3
+model after 36 h without backup: the S1 mechanism is production-scale
+verified. S2 legal@0 = 1.1111/1.1187 - legal IMPROVED (-0.0067/-0.0063 vs
+the P3 anchor). Registered log: `out_c/routed_probe/g2_code_run.log`-
+equivalent at `/tmp/opencode/ga3_run/ga3.log`, matrix at
+`/tmp/opencode/ga3_matrix/matrix.log`.
+
+**The probe question - does the complement economy generalize to a
+meaningfully different domain? - answered YES, with both registered
+magnitudes exceeded in the mechanism's favor:**
+
+- **D-cell code@0: 1.6638/1.6738, swing -1.9149/-1.8589 nats** vs the
+  pre-anchor. Registered expectation ~-0.8 (P1-D-cell/P3-zh analogy):
+  direction supported, magnitude 2.4x deeper. Code absorbed at 0.1-weight
+  odd steps into the +8192 fresh neurons.
+- **zh@0: 1.8320/1.7760, erosion +0.0850/+0.0902** vs the anchor
+  1.7470/1.6858. Registered expectation +0.5-0.8: ~7x smaller. The fresh
+  neurons took the new domain WITHOUT disturbing full-width zh - the
+  graft thesis (complement, not overwrite) at its strongest measured
+  setting.
+
+**Serving checks on the grown model** (`gen_serve_check`, 5 x 200
+tokens/cell): zh x full = Chinese 5/5 (100 % hi-byte) - the
+prompt-regime-bound reading HOLDS post-graft; zh x old = Chinese 5/5;
+legal x full = fluent legal; legal/code x old = base salad. **code x full
+= code-shaped output** (self./method-def/underscore forms, deep
+indentation whitespace; register-level salad at its 1.66 NLL - the
+europarl-salad analog): the code register lives in the new neurons, and
+real-domain prompts map to their registers correctly. Auxiliary: 1 of 3
+unmasked samples on the synthetic ASCII legal prompt drifts into code
+forms (register bleed on the synthetic prompt; NLL is the verdict
+instrument).
+
+**Post-map: legal -> full, code -> full, zh -> mask-1024** (the registered
+fallback: zh@mask-1024 is NLL-optimal 1.7470 vs 1.8320 and keeps base-zh
+bit-exact). "Always full" stays available for zh - the +0.085 erosion is
+negligible vs the registered +0.5-0.8 band and invisible in generation -
+but the mask is free at inference and remains the drift instrument. Graft
+#2 is the first deployment-scale use of the validated mask primitive, and
+its serving map needs no request labels: full for two domains, one cheap
+mask for the third.
