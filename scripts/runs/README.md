@@ -38,4 +38,7 @@ Post-campaign diagnostics (2026-11-18, report section 18):
 `out_c/routed_probe/diag_ngram.npz`, `diag_positions_{896,1024}.npz`;
 log `out_c/routed_probe/diag_positions.log`. `scripts/bench_100m.py` ->
 100M throughput on the Spark: 2,192 ms/step (6 layers, 1,868 B/s),
-1,482 ms/step (4 layers, 2,764 B/s), 23.1 GiB peak.
+1,482 ms/step (4 layers, 2,764 B/s), 23.1 GiB peak; compiled 1,025
+ms/step (6 layers). `--two-pass` measures the route-aware compute shape
+(two forwards at 0.9/0.1, one backward): 4,429 ms/step uncompiled,
+2,091 compiled = 2.0x one-pass, 48.5/33.2 GiB peak.

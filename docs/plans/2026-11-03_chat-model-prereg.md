@@ -378,7 +378,9 @@ Post-freeze item changes are set v2 and draw with salt
    *(2026-11-18: before any judge-based metric, the three no-training controls
    of report section 18 are the pre-metric; they separate "too little language
    seen" from "cannot use context" without a training run. Sample-reading alone
-   remains non-registering.)*
+   remains non-registering. The host gate in item 9 now depends on this item:
+   NLL cannot pass that gate, so the coherence instrument must be frozen before
+   the first host run - see item 9, key 2.)*
 5. The TP=2 port itself, which is a development task, not an experiment.
    Registered 2026-11-15 as a **development item with a defined trigger**, not an
    "eventually" commitment:
@@ -430,6 +432,16 @@ Post-freeze item changes are set v2 and draw with salt
    1,008 GB/s): memory-bound, not model-bound. A 50M/1-GB leg extrapolates to
    ~3 days; an 8-layer 100M leg (item 10) to ~16.7 days versus 8.4 at 4
    layers.
+
+   **Route-aware overhead (review round 2).** The probe is one-pass. The
+   graft/SFT loop is route-aware: two forward passes (prefix 0.9 + full 0.1,
+   the P1/graft-2 shape). Measured with that compute shape (`--two-pass`: two
+   forwards, weighted sum, one backward): 4,429 ms/step uncompiled and
+   2,091 compiled - **2.0x the one-pass step**, 48.5/33.2 GiB peak. The real
+   loop's frozen-prefix split backward may be cheaper; 2.0x is the
+   compute-shape bound, to be replaced by a measured pilot step. Consequence:
+   the 5.8-12.4-day figures above are **one-pass host pretraining**; a
+   route-aware 2-GB phase costs ~12-25 days uncompiled (~6-12 compiled).
 
    **Correction to the review's 450x line:** 17,808 / 44.8 = **397x**, not 450x
    (the review used 22,000 B/s). The direction stands, but the 4090 anchor is
@@ -489,17 +501,55 @@ Post-freeze item changes are set v2 and draw with salt
    - Scope: tests instruction binding, not answer quality; the repo contains no
      dialogue corpus.
 
-9. **Host competence bridge (Claude's consequence).** "The base is replaceable;
-   it only has to be a good host" is a hypothesis - no graft has yet been made
-   onto a host that produces coherent text. Registered next step: a 50-100M host
-   on a GB-scale corpus (item 3's inventory), **gated on coherent free
-   generation first**, then graft. The 3.62B direct route is excluded by item 6,
-   so this pilot is the route between mechanism and product. It carries items 7
-   and 10 as arms on shared compute. Measured cost: a 100M/2-GB leg is 8.4 days
-   at 4 layers or 12.4 days at 6 uncompiled (5.8 compiled); a 50M/1-GB leg ~3
-   days. The coherence gate
-   itself is cheap: free-generation samples plus NLL against the 6-gram baseline
-   of report section 18 on the same corpus.
+9. **Host competence bridge (Claude's consequence; rewritten after review
+   round 2).** "The base is replaceable; it only has to be a good host" is a
+   hypothesis - no graft has yet been made onto a host that produces coherent
+   text. Registered next step: a 50-100M host on a GB-scale corpus (item 3's
+   inventory), **gated on coherent free generation first**, then graft. The
+   3.62B direct route is excluded by item 6, so this pilot is the route between
+   mechanism and product. It carries items 7 and 10 as arms on shared compute.
+
+   **The gate has two keys, and both are necessary.**
+   (1) *Statistical floor:* NLL against the section 18 6-gram baseline on the
+   same carve, from the same freeze. It is necessary and **not sufficient**:
+   section 18 measured a model that sits 0.2635 nats above a 6-gram and still
+   produces word salad, so clearing the floor is not evidence of coherence - a
+   model that beats the 6-gram is not thereby coherent.
+   (2) *Coherence instrument:* sample-based, with a frozen rubric, frozen
+   held-out prompts (document openings in neither carve), deterministic
+   decoding, and a pass threshold set before the first host run. It does not
+   exist yet. Section 16 already records that sample-reading alone does not
+   register; item 4 (response-quality metric, section 4.4) and the judge
+   topology in 4.4a are its candidates. **Until key 2 is frozen, no host run
+   is scored as passing** - including one that clears the NLL floor.
+
+   **The 100M route is a hypothesis, not a consequence of the diagnosis.**
+   Section 18 diagnoses the 3.62B model at 5.12 MB of token-views. It does not
+   say that a 100M host on the same corpus becomes coherent: that is an
+   extrapolation across parameters, data and context, unmeasured until a 100M
+   run exists. The first 100M run is itself the instrument that transfers the
+   diagnosis to the new size. Registered outcomes:
+   - **A** - 100M clears floor and coherence key: the bridge premise holds and
+     the graft program continues on that host.
+   - **B** - 100M clears the statistical floor but fails the coherence key:
+     starvation was necessary but not sufficient; the diagnosis is incomplete
+     and the next lever is depth/context (item 10), not more data of the same
+     kind.
+   - **C** - 100M fails the statistical floor: the diagnosis does not transfer
+     to 100M at 20 B/param on 2 GB; the token-views requirement scales
+     differently than assumed and item 6's budget is re-opened.
+   All three are registrations; none is a rescue clause.
+
+   **Cost is route-aware.** Measured 2026-11-18 (`scripts/bench_100m.py
+   --two-pass`): the graft loop's compute shape - two forward passes (prefix
+   0.9 + full 0.1) and one backward - costs 4,429 ms/step uncompiled and 2,091
+   compiled at b8/t512, **2.0x the one-pass step** (48.5/33.2 GiB peak). The
+   5.8-12.4-day figures in report section 18.3 are one-pass host pretraining;
+   a route-aware 2-GB phase is **~12-25 days uncompiled (~6-12 compiled)**.
+   The real loop's frozen-prefix split backward may be cheaper than the
+   two-forward shape; 2.0x is the upper bound, to be replaced by a measured
+   pilot step. A 50M/1-GB leg extrapolates to ~3 days one-pass, ~6 days
+   route-aware uncompiled.
 
 10. **Depth hypothesis (wide and shallow, Claude).** Every campaign run uses
     n_layer 4 at n_embd 1024, mult 128. Width gives capacity for register
@@ -511,7 +561,8 @@ Post-freeze item changes are set v2 and draw with salt
     starvation from context non-use before any training run. If the controls
     show context unused, a matched-parameter n_layer 4 vs 8 arm at 50-100M is
     the direct test. Measured cost of that pair: at 100M/2 GB, 8.4 days at 4
-    layers vs ~16.7 days at 8; at 50M/1 GB, ~3 vs ~6 days. Note also that BDH
+    layers vs ~16.7 days at 8; at 50M/1 GB, ~3 vs ~6 days (one-pass; the
+    route-aware overhead of item 9 roughly doubles these). Note also that BDH
     shares all weight matrices across layers - depth adds compute, not
     parameters, so the comparison is matched by construction.
 

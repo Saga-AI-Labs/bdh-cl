@@ -14,7 +14,7 @@ because BDH weights are shared across layers: depth changes compute, not
 parameter count.
 
 Usage:
-  python scripts/bench_100m.py [--layers 6,4] [--batch 8] [--steps 50] [--compile]
+  python scripts/bench_100m.py [--layers 6,4] [--batch 8] [--steps 50] [--compile] [--two-pass]
 """
 
 import sys
@@ -28,7 +28,7 @@ from pipeline.config import Config, build_model, param_count, resolve_dtype
 
 
 def bench(n_layer: int, batch: int, steps: int, device, dtype,
-          compiled: bool = False) -> None:
+          compiled: bool = False, two_pass: bool = False) -> None:
     cfg = Config(
         model="bdh", n_layer=n_layer, n_embd=512, n_head=8,
         mlp_internal_dim_multiplier=128, block_size=512, batch_size=batch,
@@ -42,13 +42,26 @@ def bench(n_layer: int, batch: int, steps: int, device, dtype,
     x = torch.randint(0, 256, (batch, 512), device=device)
     y = torch.randint(0, 256, (batch, 512), device=device)
     ctx = torch.amp.autocast(device_type="cuda", dtype=dtype)
+    mask = None
+    if two_pass:
+        # route-aware shape: prefix pass (masked, 0.9) + full pass (0.1),
+        # as in the P1 / graft training loop. Timing-only mask: 7/8 prefix.
+        N = cfg.mlp_internal_dim_multiplier * cfg.n_embd // cfg.n_head
+        mask = torch.zeros(N, device=device, dtype=dtype)
+        mask[: 7 * N // 8] = 1.0
 
     for it in range(steps + 5):
         if it == 5:
             torch.cuda.synchronize()
             t0 = time.time()
         with ctx:
-            _, loss, _ = model(x, y, None, collect_state=False)
+            if two_pass:
+                _, prefix_loss, _ = model(x, y, None, neuron_mask=mask,
+                                          collect_state=False)
+                _, full_loss, _ = model(x, y, None, collect_state=False)
+                loss = 0.9 * prefix_loss + 0.1 * full_loss
+            else:
+                _, loss, _ = model(x, y, None, collect_state=False)
         opt.zero_grad(set_to_none=True)
         loss.backward()
         opt.step()
@@ -56,8 +69,9 @@ def bench(n_layer: int, batch: int, steps: int, device, dtype,
     elapsed = time.time() - t0
     ms = 1000 * elapsed / steps
     bps = batch * 512 * steps / elapsed
+    mode = "two-pass" if two_pass else "one-pass"
     print(f"n_layer {n_layer} | {n_params:,} params | b{batch}/t512 | "
-          f"compile {'on' if compiled else 'off'} | {ms:.0f} ms/step | "
+          f"{mode} | compile {'on' if compiled else 'off'} | {ms:.0f} ms/step | "
           f"{bps:,.0f} B/s | peak "
           f"{torch.cuda.max_memory_allocated() / 2**30:.1f} GiB")
 
@@ -72,11 +86,12 @@ def main() -> None:
     batch = int(arg("--batch", "8"))
     steps = int(arg("--steps", "50"))
     compiled = "--compile" in a
+    two_pass = "--two-pass" in a
     device = torch.device("cuda")
     dtype = resolve_dtype(Config(), device)
     print(f"bench 100M | device {torch.cuda.get_device_name(0)} | dtype {dtype}")
     for n_layer in layers:
-        bench(n_layer, batch, steps, device, dtype, compiled)
+        bench(n_layer, batch, steps, device, dtype, compiled, two_pass)
 
 
 if __name__ == "__main__":

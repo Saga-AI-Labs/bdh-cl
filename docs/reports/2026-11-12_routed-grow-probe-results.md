@@ -29,7 +29,9 @@ diagnosis (16: the observation and the coherence question; 17: the cause
 ranking, plus a correction to 16's pass-count arithmetic - starvation,
 not memorization; 18: three no-training controls and the cost envelope -
 the network scores below a 6-gram on its own register, and the direct
-data-scale route is excluded on this hardware). The base-control salad cells (legal x old-mask) measure
+data-scale route is excluded on this hardware; 18.6: review round 2 -
+NLL is not a coherence gate, the 100M route is a hypothesis, and the
+route-aware step cost is a measured 2.0x). The base-control salad cells (legal x old-mask) measure
 the model's zero-exposure baseline in a register it never saw - inherent,
 not graft-induced. Cause ranking: token-view starvation is DOMINANT (5.12
 MB token-views per 10k-iter phase vs 3.62 B params; ~0.18 sightings per
@@ -985,7 +987,9 @@ result for that control; the first two controls carry the separation.
 Quinn's review: "data 10^3-10^4x in token-views (GB+ regime) is the right
 direction, but not a number. How many GB of tokens, how many parameters,
 how much time on a Spark?" Answer, from measured logs where a measurement
-exists (full derivation and sources: chat prereg section 6, item 6):
+exists (full derivation and sources: chat prereg section 6, item 6). All
+rates are **one-pass**; the route-aware loop costs 2.0x (correction
+below the table):
 
 | route | params | token-views | rate | wall clock, one Spark |
 |---|---|---|---|---|
@@ -1019,11 +1023,23 @@ plan: the Spark's own 100M rate is 9.5x below the 4090 uncompiled
 (1,868 vs 17,808 B/s, 6 layers) and 4.5x below it compiled (3,997 B/s).
 The inverse-route wall clocks above use measured Spark numbers.
 
+**Route-aware correction (review round 2).** Every row above is one-pass.
+The graft/SFT loop is route-aware: two forward passes (prefix 0.9 + full
+0.1, the P1/graft-2 shape) and one backward. Measured with that compute
+shape (`scripts/bench_100m.py --two-pass`, 2026-11-18): 4,429 ms/step
+uncompiled (925 B/s) and 2,091 ms/step compiled (1,958 B/s) at b8/t512 -
+**2.0x the one-pass step**, 48.5/33.2 GiB peak. The table's 5.8-12.4 days
+are host pretraining, not the route-aware phase; a 2-GB route-aware phase
+is **~12-25 days uncompiled (~6-12 compiled)**. The real loop's
+frozen-prefix split backward may be cheaper than the two-forward shape;
+2.0x is the compute-shape bound, to be replaced by a measured pilot step.
+
 **Verdict.** The direct route's GB+ regime is on disk (Europarl zh 1.3 GB,
 wikitext-103 516 MB, textmix/files 215 MB, textmix2 109 MB, expert 23 MB -
 ~2.1 GB usable) but not reachable in training time at 3.62B. The inverse
-route is the only campaign this box can run, and it is also the bridge to
-a competent host (prereg item 9); at the measured Spark rate a
+route is the only campaign this box can run; it is a candidate bridge to a
+competent host (prereg item 9), not a demonstrated one (18.6). At the
+measured Spark rate a
 compute-optimal 100M leg is **5.8 days compiled / 8.4-12.4 days
 uncompiled** (6/4 layers), a 10M run ~3 h, a 50M/1-GB run ~3 days. The
 direct route would still be decades even with the 2.1x compile gain. The
@@ -1072,3 +1088,26 @@ The third reviewer control (word-start vs interior) is registered as a
 **negative result**: it does not separate the model from a 6-byte
 baseline, because the profile is register-driven. The planning
 consequences are registered in the chat prereg section 6, items 6-10.
+
+### 18.6 Review round 2: three corrections registered (Quinn, 2026-11-18)
+
+1. **NLL is not a coherence gate.** Section 18's own finding forbids it:
+   the 3.62B model sits 0.2635 nats above a 6-gram and still yields word
+   salad. The host gate therefore has two keys - a statistical floor
+   (necessary, not sufficient) and a registered, sample-based coherence
+   instrument (not yet existing; candidates are prereg item 4 and the
+   4.4a judge topology). Until that instrument is frozen, a host that
+   clears the NLL floor is **not** scored as passing. Prereg item 9 is
+   rewritten accordingly.
+2. **The 100M route is a hypothesis, not a consequence of the diagnosis.**
+   The diagnosis is specific to a 3.62B model at 0.18 sightings per block;
+   transfer to 100M is an extrapolation across parameters, data and
+   context, unmeasured until a 100M run exists. Registered in item 9 as
+   outcomes A/B/C; the first 100M run is itself the instrument that tests
+   the transfer.
+3. **Route-aware overhead is real and measured: 2.0x.** The 100M bench is
+   one-pass; the graft/SFT loop is two-pass at 0.9/0.1. Measured 4,429
+   ms/step uncompiled and 2,091 compiled at b8/t512 - 2.0x the one-pass
+   step, 48.5/33.2 GiB peak. The 5.8-12.4-day figures in 18.3 are one-pass
+   pretraining; a route-aware 2-GB phase is ~12-25 days uncompiled
+   (~6-12 compiled).
