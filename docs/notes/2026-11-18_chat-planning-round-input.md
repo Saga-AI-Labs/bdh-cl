@@ -77,3 +77,51 @@ A decision record that (a) freezes key 2 with a hash, (b) selects the pilot
 shape and its budget, (c) states the A/B/C thresholds numerically, and (d)
 names the first run as the transfer instrument for the diagnosis. Until (a)
 exists, the host program is blocked by design, not by caution.
+
+---
+
+## 6. Addenda 2026-11-18 (review, with operator correction)
+
+### 6.1 The judge topology for key 2 is settled, not open
+
+Section 3.1 listed "local GLM endpoint vs cloud" as a decision. **The operator
+corrected the reading:** the two-local-seat topology is **Qwen 3.8 Flash Next
+(DGX Spark, TP=1) + Gemma 4 31B (RTX 4090)** - GLM was never a seat. The
+GLM-host model is retired (quantization > 1/2 bit needs TP=2-TP=4, i.e. two
+to four Sparks for one judge, plus a bias relation to a team seat). **Deepseek
+v4.1 Flash takes over as the second team seat beside LongCat**; it is no more
+related to Qwen or Gemma than GLM was, so the bias exclusion is unchanged.
+
+What is still open is **not** the topology but the **key-2 instrument**: rubric,
+prompt source, count, decoding, threshold, hash (section 3.1). The two local
+seats are available; the cloud option is excluded by the bias rule.
+
+### 6.2 TP=2 is registered as out of scope, with a trigger
+
+**Not on the table now.** The diagnosis is a ratio: 3.62B parameters on 5.12 MB
+of token-views. TP=2 adds capacity and memory; it does not add data, so it
+moves the ratio the wrong way. The direct route is excluded by arithmetic
+(72.4 GB / 44.8 B/s = ~51 years), and a 1.5-2x step-rate gain leaves it in the
+decades. The inverse route fits one box at 23 GiB peak and needs no TP.
+
+**Trigger, registered:** when a host that is coherent on the available data
+does not fit one box. Not reached - the 100M/50M hosts fit. See
+`docs/plans/2026-11-15_tp2-bridge-study.md` for the port's precondition
+(bridge experiment + re-baseline), and chat prereg section 6 item 5.
+
+### 6.3 Item 8 (SFT ordering) is a missing decision in section 3
+
+"SFT presupposes fluency" is a registered, testable claim (prereg item 8:
+~2-5k synthetic pairs, a fresh block, ~2k steps, ~6-7 h on the 3.62B model,
+~1 h on a 100M host). **Section 3 lists six decisions and item 8 is not among
+them.** The round must either schedule it or explicitly defer it; as written it
+floats.
+
+### 6.4 Section 3.2 and 3.4 interact - the pilot cost depends on the order
+
+Section 3.2 quotes 50M/1 GB ~3 d and 100M/2 GB ~8.4/12.4 d; section 3.4
+registers route-aware training at **2.0x** the one-pass step. **The quoted
+numbers are one-pass.** If the round picks route-aware from step 0, the same
+leg costs ~17 d (100M/2 GB, 4 layers, uncompiled) instead of 8.4. The two
+decisions must be taken together; otherwise the round reads the cheaper number
+and buys the expensive option.
