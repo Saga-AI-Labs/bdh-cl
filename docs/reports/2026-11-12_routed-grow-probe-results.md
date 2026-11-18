@@ -24,6 +24,19 @@ section-11 topk-competition claim was withdrawn (k_sparse_ratio = 0 in all
 cfgs: no topk runs), and the P3 isolation requirement flips to "a sequence-level
 router suffices" on the ReLU path.
 
+**Late addition (2026-11-18):** sections 16-17 register the word-salad
+diagnosis (16: the observation and the coherence question; 17: the cause
+ranking, plus a correction to 16's pass-count arithmetic - starvation,
+not memorization). The base-control salad cells (legal x old-mask) measure
+the model's zero-exposure baseline in a register it never saw - inherent,
+not graft-induced. Cause ranking: token-view starvation is DOMINANT (5.12
+MB token-views per 10k-iter phase vs 3.62 B params; ~0.18 sightings per
+512-B block per phase, ~0.37 cumulative on legal), the 512-B byte context
+is secondary, zero dialogue data is categorical but moot until fluency -
+and it is NOT overfitting (val/test gaps 0.007-0.061 nats). Chat
+capability is out of reach for this training regime; the graft mechanism
+is not the blocker.
+
 ## 1. What was run
 
 | step | what | result |
@@ -684,11 +697,34 @@ domain is small enough that the arithmetic explains them:
 10,000 steps x 512 B = 5,120,000 samples drawn from 28,000,000 B
 ```
 
-**The model saw the legal corpus roughly 200 times.** A val_loss of 1.05-1.12
+**The model saw the legal corpus roughly 200 times** *(unit error -
+corrected below, GLM 2026-11-18; the corrected count is ~0.18 sightings
+per block per phase)*. A val_loss of 1.05-1.12
 on a 1 MB split carved from a corpus it trained on at that rate is a
 memorization number, not a generalization number. The word salad is the
 other face of the same thing: the model reproduces the corpus in fragments
 because the corpus is too small to learn structure from.
+
+**Correction (GLM, 2026-11-18, review at rebase):** the table's carve
+column is right - the loader carves 28/1/1 MB for every domain (graft-2
+log: "textmix legal: train 28,000,000 B", "textmix code: train
+28,000,000 B") - but the pass-count arithmetic below it has a unit error,
+and the corrected arithmetic REVERSES the memorization reading while
+keeping the data-scale conclusion. "5,120,000 samples" are BYTES of
+token-views: one step draws one 512-B block, so a 10,000-iter phase draws
+10,000 blocks from the 54,688-block carve, 5.12 MB total (mixed phases:
+5,000 draws per domain, 2.56 MB). Drawn with replacement, that is ~0.18
+expected sightings per block and ~17 % of blocks ever touched - the legal
+corpus was not seen 200 times; it was seen a FIFTH of once. Cumulative
+over every phase that sampled legal (P1 10,000 + P3 5,000 even + graft-2
+5,000 even = 20,000 draws): ~0.37 sightings per block, ~31 % of blocks
+ever - about a third of ONE pass. And the memorization sign flips on the
+instrument evidence: the same-instrument val/test gaps are 0.007-0.061
+nats (section 17), and no serving sample recites a corpus passage
+verbatim, which a 200-pass corpus would leave everywhere. So the corpus
+arithmetic DOES explain the word salad - through STARVATION (too little
+coverage to learn structure from), not memorization. Everything else in
+this section stands.
 
 ### What this does and does not contradict
 
@@ -721,3 +757,121 @@ no.**
 - **Not registered as a quality metric.** This section is an observation with
   an explanation; it does not introduce a coherence instrument. Any future
   quality gate needs a registered metric, not a sample-reading.
+---
+
+## 17. Word-salad diagnosis: the cause ranking, and the answer to the operator's hypothesis list (GLM, 2026-11-18)
+
+Section 16 (Quinn) registers the observation - every serving sample is
+fluent in its register and none is coherent - and proposes the corpus
+arithmetic as the explanation. This section registers (a) the cause
+ranking behind that observation, (b) the correction to section 16's
+arithmetic step (unit error; the corrected arithmetic gives STARVATION
+and keeps the data-scale conclusion), and (c) the evidence-per-item
+answer to the operator's hypothesis list: overfitting, too-small data,
+byte-level @ 512, missing SFT, or something else.
+
+**The quoted salad is the BASE path, not a trained one.** legal x old-mask
+keeps only the original zh-base neurons [0, 57344) (896 x 64): the P1-legal
+and graft-2 blocks are masked out, so the cell measures the P0 zh-only
+model under an English legal prompt. The parent produces the same class of
+output on the same cell ("Served Addifiltion of the Serving Act
+(ENFC/2003/L.4/CN.1/201/L.2005/L.25/213)") - inherent to the model family,
+not graft-induced; it is the model's zero-exposure baseline in a register
+it never saw. The same prompt on the trained path (1.11 nats) yields
+register-correct legal scaffolding with word-level slips ("the provision
+on a parameters, in the financial any paragraph (1)...").
+
+**Token accounting - the dominant factor.** Each campaign training phase
+(P1, P3, graft #2: 10,000 iters x 512 B x batch 1) = 5.12 MB token-views;
+mixed phases split per domain, 5,000 steps x 512 B = 2.56 MB each (legal
+even / zh-or-code odd). The 28 MB train carve is 54,688 blocks of 512 B,
+so 10k uniform draws ever touch ~17 % of blocks, ~0.18 sightings per
+block - the corpus is not traversed once per phase, and cumulative
+coverage over the phases that sampled a domain stays at ~0.09-0.37
+sightings per block (legal, section 16 correction). Against 3.62 B params (grown): token-views/param ~ 0.0014
+per phase (cumulative over all campaign phases: < 0.01), vs the
+~20-tokens/param compute-optimal rule (Chinchilla-era scaling; literature
+figure, not a registered number) - ~3-4 orders of magnitude short. Inverse
+form: the whole corpus set (~100-140 MB across domains) would support
+~5-7 M params at that rule, so the model is ~3 orders of magnitude larger
+than its data base. The zh base model's own pre-campaign training history
+(out_a/bdh_textmix_k25w1024-zh_last.pt) is not re-derived here; its
+measured register (1.7487 val on the 28 MB carve) has the same structure.
+
+**Overfitting is measured out.** Same-instrument val/test gaps (fullcov
+b4): legal 1.1178/1.1250 (gap 0.007), zh 1.7470/1.6858 (gap 0.061),
+code@1024 3.5787/3.5327 (gap 0.046); base-legal 1.6596/1.7074 (gap 0.048,
+section-9 batch-2 protocol). No memorization signature - structurally
+impossible at ~0.17 sightings per block. What the model learned is global
+register statistics without coverage: boilerplate exact ("the Secretary of
+State", "paragraph (1)", "决议草案", "self.add(self):"), rare content
+salads. UNDERTRAINING / coverage failure, not overfitting.
+
+**The register ladder (registered NLLs vs the serving-check sample
+picture):**
+
+| path | register NLL (val/test) | samples (gen_serve_check) |
+|---|---|---|
+| zh-base @896 on legal | 1.66/1.71 (batch-2 protocol) | hard word salad |
+| frozen-P3 @1024 on code (P3 never saw code) | 3.58/3.53 | (no serving cell at this mask) |
+| graft block @0 on code (5,000 odd steps x 512 B = 2.56 MB views, 0.1 weight) | 1.66/1.67 | code-shaped, semantically empty |
+| frozen-P3 @1024 on legal | 1.12/1.13 | register correct, incoherent |
+| zh itself (frozen prefix, the model's home register) | 1.75/1.69 | UN flavor, fluent-looking, incoherent |
+
+Calibration (literature-anchored, not registered here): strong published
+byte-level LMs reach ~0.6-0.9 nats/byte on natural-text corpora (enwik8-scale
+compression SOTA ~0.9-1.0 bits/byte ~ 0.63-0.69 nats). The trained
+registers sit ~0.2-0.6 nats/byte above that - a real but not order-of-
+magnitude gap, which makes the sample picture the sharper diagnostic:
+equal NLL means different things in different data regimes. A model
+reaching 1.11 nats/byte from a 10^3-10^4x larger corpus has seen real
+sentences at scale; ours reaching it from 5 MB of views interpolates the
+register's prior - statistics of statistics. Sample quality is bounded by
+the data regime, not by the NLL level alone. At the base paths
+(e^1.71 ~ 5.5 effective choices per byte) text cannot even hold register
+texture; at the trained paths (e^1.11 ~ 3.0) it holds texture and loses
+composition.
+
+**Verdicts on the candidate causes:**
+
+1. **Data volume: YES - dominant.** Not "cannot generalize" (val ~= test on
+   the unseen carve: it generalizes on the carve's statistics) but
+   "token-views are orders of magnitude too small to get past register
+   texture". Semantics/fluency live on coverage, not on parameters.
+2. **Byte-level @ 512: real, secondary.** 512 B ~ 85 English words / ~170
+   zh characters; the model has never conditioned on more than ~2
+   paragraphs, and token-free models commonly pay a ~2-4x sequence premium
+   per unit of content (literature). But not the salad cause: the byte
+   pipeline demonstrably learns register texture, and the salad level
+   tracks data allocation, not tokenization. For CHAT it is architectural
+   bottleneck #1 (dialogue needs longer windows; byte-level amplifies data
+   hunger).
+3. **Missing SFT: categorically right, currently moot.** The repo contains
+   zero dialogue data - data/ is LM corpora only (UN zh: 1.29 GB source,
+   28/1/1 MB carve; UK legal 40 MB; python 33 MB; latex 40 MB present but
+   unused in campaign runs; europarl parallel; wikitext; tinyshakespeare).
+   The model knows exactly one English register (statute prose); dialogic
+   English is pure OOD, which is why the system prompt is OOD in the mixed
+   cells. SFT presupposes fluency and comes after a data scale-up.
+4. **Named extras:** (a) the sampling regime t=0.8 / top-k 3 amplifies
+   salad on an undertrained model (NLL remains the verdict instrument;
+   samples are auxiliary - a greedy comparison would quantify the sampling
+   share); (b) the LR schedule forced the end at 10k iters while the curve
+   was still falling (in-loop 1.0333 -> best 1.0140): register texture
+   would have kept improving; the coverage ceiling would not have moved.
+
+**What chat capability would cost - a different campaign, not this
+mechanism.** (i) data 10^3-10^4x in token-views (GB+ regime) including
+dialogue data, then an SFT phase - or, inversely, parameters down to
+~10-50 M, which would put fluent register prose within reach of the
+current corpus (still no chat without dialogue data); (ii) context
+512 -> 2048+ B, or a BPE layer; (iii) SFT on top. The register/graft
+mechanism is unaffected and reusable: this campaign proved domains are
+composable (S1 bit-exact over 36 h; +1.9 nats code competence in one
+phase). The ceiling is base competence, not the mechanism.
+
+Cheap diagnostics if the salad needs sharper separation: greedy instead of
+t=0.8 on 3-4 cells (~1 h, 1 sample x 50 tokens - separates the sampling
+share from the model limit); train-carve vs val-carve continuations
+(separates statistics from memorization; the NLL gaps above already
+indicate little memorization).
