@@ -24,10 +24,12 @@ section-11 topk-competition claim was withdrawn (k_sparse_ratio = 0 in all
 cfgs: no topk runs), and the P3 isolation requirement flips to "a sequence-level
 router suffices" on the ReLU path.
 
-**Late addition (2026-11-18):** sections 16-17 register the word-salad
+**Late addition (2026-11-18):** sections 16-18 register the word-salad
 diagnosis (16: the observation and the coherence question; 17: the cause
 ranking, plus a correction to 16's pass-count arithmetic - starvation,
-not memorization). The base-control salad cells (legal x old-mask) measure
+not memorization; 18: three no-training controls and the cost envelope -
+the network scores below a 6-gram on its own register, and the direct
+data-scale route is excluded on this hardware). The base-control salad cells (legal x old-mask) measure
 the model's zero-exposure baseline in a register it never saw - inherent,
 not graft-induced. Cause ranking: token-view starvation is DOMINANT (5.12
 MB token-views per 10k-iter phase vs 3.62 B params; ~0.18 sightings per
@@ -812,7 +814,7 @@ picture):**
 
 | path | register NLL (val/test) | samples (gen_serve_check) |
 |---|---|---|
-| zh-base @896 on legal | 1.66/1.71 (batch-2 protocol) | hard word salad |
+| zh-base @896 on legal | 1.66/1.71 (batch-2 protocol; fullcov 1.7087/1.7091) | hard word salad |
 | frozen-P3 @1024 on code (P3 never saw code) | 3.58/3.53 | (no serving cell at this mask) |
 | graft block @0 on code (5,000 odd steps x 512 B = 2.56 MB views, 0.1 weight) | 1.66/1.67 | code-shaped, semantically empty |
 | frozen-P3 @1024 on legal | 1.12/1.13 | register correct, incoherent |
@@ -820,7 +822,9 @@ picture):**
 
 Calibration (literature-anchored, not registered here): strong published
 byte-level LMs reach ~0.6-0.9 nats/byte on natural-text corpora (enwik8-scale
-compression SOTA ~0.9-1.0 bits/byte ~ 0.63-0.69 nats). The trained
+compression SOTA ~0.9-1.0 bits/byte ~ 0.63-0.69 nats). *(Directional only;
+section 18 replaces this anchor for the legal register with the
+corpus-internal 6-gram on the same carve - see 18.4.)* The trained
 registers sit ~0.2-0.6 nats/byte above that - a real but not order-of-
 magnitude gap, which makes the sample picture the sharper diagnostic:
 equal NLL means different things in different data regimes. A model
@@ -835,9 +839,11 @@ composition.
 **Verdicts on the candidate causes:**
 
 1. **Data volume: YES - dominant.** Not "cannot generalize" (val ~= test on
-   the unseen carve: it generalizes on the carve's statistics) but
+   the unseen carve: it fits the carve's statistics) but
    "token-views are orders of magnitude too small to get past register
-   texture". Semantics/fluency live on coverage, not on parameters.
+   texture". *(Qualified in section 18.4: both splits share boilerplate, so
+   this is anti-memorization evidence, not generalization to new
+   documents.)* Semantics/fluency live on coverage, not on parameters.
 2. **Byte-level @ 512: real, secondary.** 512 B ~ 85 English words / ~170
    zh characters; the model has never conditioned on more than ~2
    paragraphs, and token-free models commonly pay a ~2-4x sequence premium
@@ -875,3 +881,194 @@ t=0.8 on 3-4 cells (~1 h, 1 sample x 50 tokens - separates the sampling
 share from the model limit); train-carve vs val-carve continuations
 (separates statistics from memorization; the NLL gaps above already
 indicate little memorization).
+
+---
+
+## 18. Three no-training controls: the network is below a 6-gram on its own register (GLM, 2026-11-18)
+
+Review round after section 17: Quinn asked for a quantitative cost basis
+(GB, parameters, Spark wall clock) and flagged BPE as an architecture
+decision that must be registered before planning, not introduced as an
+alternative afterwards; Claude supplied three no-training controls
+(per-position NLL, byte n-gram baseline, word-start vs interior) plus the
+throughput gap, the wide-and-shallow hypothesis, and the host-competence
+consequence. This section registers the controls and the cost envelope.
+The forward-looking registrations live in the chat prereg, section 6,
+items 6-10.
+
+**Instrument (diagnostic series, NOT the fullcov b4 verdict series).**
+Legal carve of `_prepare_textmix("legal:data/textmix2/legal.txt", 30)` =
+28/1/1 MB; 128 evenly spaced 512-B offsets on the 1-MB val split; batch 1,
+no_grad, `collect_state=False`; masks built as in `gen_serve_check`
+(mult 896 keeps the zh-base prefix [0, 57344), mult 1024 is the full grown
+width, S1-identical to the parent full model). The n-gram is counted on
+the 28-MB train carve, order 4 and 6, seen-context backoff to order 0
+(uniform 1/256), no discounting; evaluation context comes from the val
+stream and may cross a block start by <= 7 bytes (registered). Order 6 is
+the safe maximum: order 8 needs 72 bits per context id.
+
+### 18.1 The byte n-gram baseline
+
+| instrument (same val targets) | mean NLL | head (0-63) | context (64-511) | tail (256-511) | word-start | word-interior |
+|---|---|---|---|---|---|---|
+| 6-gram (train carve, backoff) | **0.8519** | 0.8722 | 0.8490 | 0.8392 | 2.2440 | 0.5324 |
+| network @1024 (grown, full width) | 1.1155 | 1.2750 | 1.0927 | 1.0932 | 2.5638 | 0.8306 |
+| network @896 (zh base) | 1.7116 | 1.8426 | 1.6929 | 1.7508 | 3.2979 | 1.4167 |
+
+Resolution: 96.0 % of val targets resolve at order 6 (0.7511 nats on that
+share), 2.6 % at order 4 (1.9539), 1.5 % at the uniform fallback (5.5452).
+The backoff is therefore not what drives the 0.8519 mean: the val carve is
+almost fully covered by the train carve's 6-gram statistics - the corpus
+shares its boilerplate, exactly Claude's caveat about same-corpus splits.
+
+**Reading.** The grown model (1.1155) sits **0.2635 nats/byte above the
+6-gram on the same positions** and beats it on 0.4 % of positions (2 of
+512; each curve point is the mean over 128 blocks); the zh-base path is
+0.8597 above. The instrument cross-checks
+against the registered fullcov series: 1.1155 vs 1.1178 at @1024, and
+1.7116 vs 1.7087/1.7091 at @896 (section 14's S2/desc cells) - the
+diagnostic is the same measurement within 0.003 nats, so the n-gram
+comparison is not an instrument artifact.
+
+**Context curve.** The model's context gain is front-loaded: 2.948 at
+position 0, 0.999 at position 64 (head mean 1.2750), then flat through the
+tail (1.0932 at 256-511; +0.18 nats over 447 further positions). All of its
+context value sits in the first ~64 bytes; bytes 64-511 add nothing. A
+6-byte counter is flat by construction (0.8822 at position 0, 0.828 at
+511) and still 0.25 nats below the model's tail - so the model's extra
+58-505 bytes of context are worth less than 6 bytes of exact counting.
+The point-to-point wiggles are +-0.05 (128 blocks per point); the
+head/context/tail means are over 32k targets each and stable. This is not
+"the model ignores context" (without the first 64 B it would
+sit at ~2.9 nats); it is "the model stops learning from context after
+~64 B". More data, more depth or a longer block would only pay if
+exploiting long context is learnable at this scale; the curve cannot say
+which lever, but it rules out "the model already uses its 512 B".
+
+**Word classes.** Model and 6-gram show the same profile: word starts are
+3-4x harder than word interiors (model 2.5638/0.8306, 6-gram
+2.2440/0.5324). The model's deficit is broad rather than class-specific
+(+0.3198 starts, +0.2982 interiors, +0.1295 other): it is a weaker
+statistical learner across all byte classes, not specifically "vocabulary
+without syntax". As stated in the review, the third control does not
+separate the model from a 6-byte baseline - the start/interior asymmetry
+is a property of the register, not of the model. Registered as a negative
+result for that control; the first two controls carry the separation.
+
+### 18.2 What the three controls separate
+
+1. **Coverage.** The n-gram's counting pass reads all 28 MB; the network's
+   cumulative legal exposure over P1 + P3 + graft #2 is 10.24 MB of
+   token-views (20,000 steps x 512 B, half of them legal in the mixed
+   phases) - about a third of one counting pass. Part of the n-gram's
+   advantage is therefore raw data volume, the section-17 starvation
+   point.
+2. **Estimator match.** The 6-gram is the estimator that matches order-6
+   structure exactly. If a 3.62B network scores worse than it on the same
+   carve, "the model learned the register statistics" is too generous: the
+   network did not absorb what a count table extracts from the same bytes.
+   "Statistics of statistics" becomes literal, not rhetorical.
+3. **Context and syntax.** The per-position curve answers whether the
+   network uses the 512-B window. The 6-gram has no position dependence by
+   construction (its context is the last 6 B), so the network's curve
+   relative to it is a clean context test: at position 64 the deficit is
+   0.22 and it stays 0.15-0.35 for the remaining 447 positions - the
+   model's 64 B of context are worth no more than the counter's 6 B.
+   Local context up to ~64 B is used; the long window is not. The
+   word-class split was meant to separate word lookup from composition,
+   but both instruments show the same start/interior profile with a broad
+   model deficit - that control does not separate the model from a local
+   baseline (18.1).
+
+### 18.3 Cost envelope: the direct route is excluded on this hardware
+
+Quinn's review: "data 10^3-10^4x in token-views (GB+ regime) is the right
+direction, but not a number. How many GB of tokens, how many parameters,
+how much time on a Spark?" Answer, from measured logs where a measurement
+exists (full derivation and sources: chat prereg section 6, item 6):
+
+| route | params | token-views | rate | wall clock, one Spark |
+|---|---|---|---|---|
+| direct, compute-optimal | 3.62 B | 72.4 GB (20 B/param) | 44.8 B/s measured | **~51 years** |
+| direct, minimum scale-up | 3.62 B | 5.12 GB (10^3x one campaign phase) | 44.8 B/s | **~3.6 years** |
+| inverse, 100M host, 6 layers | 101 M | 2.0 GB (20 B/param, byte-level) | **1,868 B/s measured** (2,192 ms/step, b8/t512) | **12.4 days** |
+| inverse, 100M host, 6 layers, compiled | 101 M | 2.0 GB | **3,997 B/s measured** (1,025 ms/step) | **5.8 days** |
+| inverse, 100M host, 4 layers | 101 M | 2.0 GB | 2,764 B/s measured (1,482 ms/step) | 8.4 days |
+| inverse, 10M | 10 M | 200 MB | ~18,700 B/s (10x scaling) | ~3 h |
+
+The 3.62B rate is the p50 of 1,000 logged training steps (11,420 ms/step,
+b1/t512); one 28-MB pass is 7.2 days. Peak memory is 91.99 GiB of the
+97.35-GiB cap, so batch >1 does not exist at this size: the usual
+throughput lever is absent. The 100M/4090 anchor is 230 ms/step at b8/t512
+(report 2026-08-24, section 10.2).
+
+**The Spark 100M probe (measured here, `scripts/bench_100m.py`).** 6
+layers uncompiled (the campaign's `--no-compile` mode): 2,192 ms/step at
+b8/t512 = 1,868 B/s, 23.1 GiB peak; 4 layers: 1,482 ms/step = 2,764 B/s.
+Compiled (`torch.compile`, the 4090 reference's mode): 1,025 ms/step =
+3,997 B/s, 16.6 GiB peak - 2.1x the uncompiled rate. Even compiled, the
+Spark does ~2.4 TFLOP/s effective (6*N*T/time) vs ~10.8 on the 4090; the
+4.5x gap is close to the 3.7x memory-bandwidth ratio (273 vs 1,008 GB/s),
+so the implementation is memory-bound on both machines. Kernel work could
+move the constant, but the direct route needs a ~400x move.
+
+**Throughput correction (review).** The review's 450x ratio used 22,000
+B/s; measured against the 3.62B p50 it is 17,808 / 44.8 = **397x**. The
+direction stands. But the 4090 anchor is the wrong machine for a Spark
+plan: the Spark's own 100M rate is 9.5x below the 4090 uncompiled
+(1,868 vs 17,808 B/s, 6 layers) and 4.5x below it compiled (3,997 B/s).
+The inverse-route wall clocks above use measured Spark numbers.
+
+**Verdict.** The direct route's GB+ regime is on disk (Europarl zh 1.3 GB,
+wikitext-103 516 MB, textmix/files 215 MB, textmix2 109 MB, expert 23 MB -
+~2.1 GB usable) but not reachable in training time at 3.62B. The inverse
+route is the only campaign this box can run, and it is also the bridge to
+a competent host (prereg item 9); at the measured Spark rate a
+compute-optimal 100M leg is **5.8 days compiled / 8.4-12.4 days
+uncompiled** (6/4 layers), a 10M run ~3 h, a 50M/1-GB run ~3 days. The
+direct route would still be decades even with the 2.1x compile gain. The
+existing existence proof points the same way: a 101M model
+reached 0.8219 nats/byte on 90 MB Europarl with 41 MB of views (report
+2026-08-24) - below both our 3.62B grown model and our 6-gram on legal,
+different corpus, so a direction only. BPE does not change this budget in
+the favorable direction: 20 tokens/param counts tokens, so BPE at ~4
+B/token needs ~8 GB of text for a 100M model, or four epochs over 2 GB.
+
+### 18.4 Caveats registered with the controls (Claude)
+
+- **The val/test gap is anti-memorization evidence, not generalization
+  evidence.** Both splits are carves of the same corpus, and legal statutes
+  and Python functions are boilerplate-heavy; 1.12 measures how well the
+  register statistics sit, not transfer to new documents. That is enough
+  to exclude memorization at 0.2-0.4 sightings per block; it is not enough
+  for "the model generalizes".
+- **The enwik8 calibration is directional only.** Nats/byte depend on
+  corpus and script (zh UTF-8 is 3 B per character; legal boilerplate
+  compresses). Section 17's 0.63-0.69 anchor is replaced, for this
+  register, by the corpus-internal 6-gram on the same carve - a reference
+  the network can be measured against directly.
+- **The n-gram is an optimistic reference for boilerplate**, because 96 %
+  of val contexts are seen in the train carve. The same optimism applies
+  to the network, trained on the same carve; the comparison is fair, but
+  it does not license "a 6-gram beats the model on new legal text".
+
+### 18.5 What changes in section 17
+
+The cause ranking stands: starvation dominant, 512-B context secondary,
+zero dialogue categorical, overfitting excluded. Three things sharpen:
+
+1. "The model learned global register statistics" becomes "the model
+   learned **less than a 6-gram count table** on its own register"
+   (0.2635 nats above it @1024; broad across byte classes).
+2. "It fits the carve's statistics, which is not generalization to new
+   documents" (18.4) replaces the generalization phrasing.
+3. The context question is now quantitative and open: all of the model's
+   context gain is in the first ~64 bytes, and bytes 64-511 add nothing.
+   That is the home of the depth hypothesis (plan item 10), not a
+   refutation of the starvation verdict - a 6-byte counter still beats
+   the model's 64+-byte curve.
+
+The third reviewer control (word-start vs interior) is registered as a
+**negative result**: it does not separate the model from a 6-byte
+baseline, because the profile is register-driven. The planning
+consequences are registered in the chat prereg section 6, items 6-10.

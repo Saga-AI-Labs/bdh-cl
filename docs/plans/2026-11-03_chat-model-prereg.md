@@ -368,7 +368,17 @@ Post-freeze item changes are set v2 and draw with salt
 1. ~~H2 control result~~ - done 2026-11-04; see section 4.2.
 2. A live memory measurement at block 768 on the target hardware.
 3. Selection of training corpora from the running preliminary studies.
+   *(2026-11-18: bounded by the cost envelope in item 6 and the starvation
+   arithmetic in report section 17. On-disk inventory: ~2.1 GB of usable text -
+   Europarl zh 1.3 GB, wikitext-103 516 MB, textmix/files ~215 MB, textmix2
+   109 MB, expert 23 MB - so the inverse route's 0.2-2 GB budget is already
+   covered; the direct route's ~72 GB is not, and would not fit the box in
+   time either.)*
 4. A response-quality metric (section 4.4) - the largest gap.
+   *(2026-11-18: before any judge-based metric, the three no-training controls
+   of report section 18 are the pre-metric; they separate "too little language
+   seen" from "cannot use context" without a training run. Sample-reading alone
+   remains non-registering.)*
 5. The TP=2 port itself, which is a development task, not an experiment.
    Registered 2026-11-15 as a **development item with a defined trigger**, not an
    "eventually" commitment:
@@ -389,4 +399,122 @@ Post-freeze item changes are set v2 and draw with salt
      silently. This is the failure class the P1 campaign hit three times
      (`collect_state`, `eval_batch_size`, freq invariant).
 
-Until items 1 and 4 are settled, this document is a frame, not a plan.
+6. **The cost envelope: direct vs inverse route (registered 2026-11-18, review).**
+   Quinn's review asked for GB, parameters and Spark wall clock instead of
+   "10^3-10^4x". Derivation, all from measured logs where a measurement exists:
+
+   | route | params | token-views | rate | wall clock, one Spark |
+   |---|---|---|---|---|
+   | direct, compute-optimal | 3.62 B | 72.4 GB (20 B/param) | 44.8 B/s measured | **~51 years** |
+   | direct, minimum scale-up | 3.62 B | 5.12 GB (10^3x one 5.12-MB phase) | 44.8 B/s | **~3.6 years** |
+   | inverse, 100M host, 6 layers | 101 M | 2.0 GB (20 B/param, byte-level) | **1,868 B/s measured** (2,192 ms/step b8/t512) | **12.4 days** |
+   | inverse, 100M host, 6 layers, compiled | 101 M | 2.0 GB | **3,997 B/s measured** (1,025 ms/step) | **5.8 days** |
+   | inverse, 100M host, 4 layers | 101 M | 2.0 GB | 2,764 B/s measured (1,482 ms/step) | 8.4 days |
+   | inverse, 10M | 10 M | 200 MB | ~18,700 B/s (10x scaling) | ~3 h |
+
+   Sources and limits: the 3.62B rate is the p50 of 1,000 logged steps in
+   `graft2/ga3_run/ga3.log` (11,420 ms/step, b1/t512); peak memory 91.99 GiB of
+   the 97.35-GiB cap, so **batch >1 does not exist at this size** - the usual
+   throughput lever is absent. One 28-MB pass at that rate is 7.2 days. The
+   100M/4090 anchor is 230 ms/step at b8/t512 (report 2026-08-24, section 10.2).
+   20 tokens/param is a literature heuristic, not a registered law; it is the
+   planning anchor only.
+
+   **The Spark 100M probe is measured** (`scripts/bench_100m.py`, 2026-11-18):
+   2,192 ms/step at 6 layers uncompiled (the campaign's `--no-compile` mode),
+   1,482 at 4 layers, 23.1 GiB peak; compiled, 1,025 ms/step (3,997 B/s,
+   16.6 GiB). The compile gain is 2.1x. The 3.62B campaign is uncompiled, so
+   its 44.8 B/s and the uncompiled rows are the like-for-like basis; compiled
+   inverse legs halve. The 4090 anchor (compiled) is 4.5x faster per byte than
+   the compiled Spark, close to the 3.7x memory-bandwidth ratio (273 vs
+   1,008 GB/s): memory-bound, not model-bound. A 50M/1-GB leg extrapolates to
+   ~3 days; an 8-layer 100M leg (item 10) to ~16.7 days versus 8.4 at 4
+   layers.
+
+   **Correction to the review's 450x line:** 17,808 / 44.8 = **397x**, not 450x
+   (the review used 22,000 B/s). The direction stands, but the 4090 anchor is
+   the wrong machine for a Spark plan: on the same Spark, the 100M model is
+   1,868 / 44.8 = **41.7x** the 3.62B model's byte rate, so the review's 397x
+   overstates the Spark-relative gain by 9.5x.
+
+   **Verdict: the direct route is excluded on this hardware.** "GB+ regime" is
+   reachable in bytes on disk (item 3) but not in training time at 3.62B. The
+   inverse route is the only campaign this box can run, and it is the bridge to
+   a competent host (item 9).
+
+   BPE note for the budget: 20 tokens/param counts *tokens*. Byte-level, 1
+   token = 1 B, so 100M needs 2 GB of text. BPE at ~4 B/token needs ~8 GB for
+   the same token budget; 2 GB can be read four times instead, but that is a
+   decision input for item 7, not a free saving.
+
+7. **BPE is a pre-registered architecture decision, not an option (Quinn).**
+   A BPE layer changes the vocabulary (256 -> 32k/64k), the token statistics and
+   the meaning of block size (512 tokens ~ 2 KB of text vs 512 B), and with them
+   every comparability anchor: all registered NLLs in this repo are **byte**-NLL,
+   while a BPE model reports nats/token and must be converted to nats/byte for
+   any comparison. No existing checkpoint survives the vocabulary change, so BPE
+   means training from scratch - it cannot be grafted onto P0/P3. The mask/grow
+   machinery is tokenizer-agnostic in principle (embedding rows = vocabulary
+   size), but that only applies to models trained under the new vocabulary.
+
+   Options to decide between **before** the chat-training prereg is written:
+   (a) byte @ 512 (status quo, fully comparable, least text per step);
+   (b) BPE @ 512 tokens (~4x text per step, new comparison series, ~4x raw-text
+   requirement at a fixed token budget); (c) byte @ a longer block (2048 B;
+   4.1's memory table puts 3.62B at 137 GiB, so not on one node - at 100M it is
+   affordable).
+
+   Decision instrument: the small-host pilot (item 9) runs byte vs BPE at
+   50-100M on the same corpus and compute budget, compared in nats/byte. The
+   answer becomes a registered number, not a preference. Until then no
+   chat-training prereg: a later BPE switch would invalidate the series.
+
+8. **"SFT presupposes fluency" is an unproven ordering assumption (Quinn).**
+   Registered as testable, not as a premise:
+   - Claim under test: the frozen host cannot learn instruction binding before
+     it produces fluent free generation. The alternative: it can bind a prompt
+     format to in-register output even while free generation is salad - register
+     knowledge and instruction binding are different capabilities.
+   - Cheap probe on existing data: ~2-5k synthetic (instruction, response)
+     pairs from the three registers (copy / continue / classify templates, split
+     by source document), a fresh block added to the grown model via the graft
+     machinery, only that block trained at the registered 0.1-full weighting for
+     ~2k steps (~6-7 h at the measured step time; ~1 h on a 100M host).
+   - Instruments: response-segment NLL given prompt vs a no-prompt control;
+     exact-match on the classify template; held-out documents only.
+   - Falsification: if response NLL does not fall below the no-prompt control,
+     SFT-first is dead and the data-first ordering is measured rather than
+     assumed. If it falls, the ordering assumption is false as stated and the
+     chat plan needs an SFT-first arm.
+   - Scope: tests instruction binding, not answer quality; the repo contains no
+     dialogue corpus.
+
+9. **Host competence bridge (Claude's consequence).** "The base is replaceable;
+   it only has to be a good host" is a hypothesis - no graft has yet been made
+   onto a host that produces coherent text. Registered next step: a 50-100M host
+   on a GB-scale corpus (item 3's inventory), **gated on coherent free
+   generation first**, then graft. The 3.62B direct route is excluded by item 6,
+   so this pilot is the route between mechanism and product. It carries items 7
+   and 10 as arms on shared compute. Measured cost: a 100M/2-GB leg is 8.4 days
+   at 4 layers or 12.4 days at 6 uncompiled (5.8 compiled); a 50M/1-GB leg ~3
+   days. The coherence gate
+   itself is cheap: free-generation samples plus NLL against the 6-gram baseline
+   of report section 18 on the same corpus.
+
+10. **Depth hypothesis (wide and shallow, Claude).** Every campaign run uses
+    n_layer 4 at n_embd 1024, mult 128. Width gives capacity for register
+    statistics; syntax and coreference plausibly need depth. Hypothesis, not
+    measurement. Two facts make the test tractable: BDH shares
+    encoder/encoder_v/decoder/embed/lm_head across layers, so depth changes
+    compute, not parameter count (`estimate_bdh_params` has no n_layer term);
+    and the three no-training controls of report section 18 separate data
+    starvation from context non-use before any training run. If the controls
+    show context unused, a matched-parameter n_layer 4 vs 8 arm at 50-100M is
+    the direct test. Measured cost of that pair: at 100M/2 GB, 8.4 days at 4
+    layers vs ~16.7 days at 8; at 50M/1 GB, ~3 vs ~6 days. Note also that BDH
+    shares all weight matrices across layers - depth adds compute, not
+    parameters, so the comparison is matched by construction.
+
+Until the cost envelope (6), the tokenizer decision (7), the SFT ordering test
+(8) and the response-quality metric (4) are settled, this document is a frame,
+not a plan.
