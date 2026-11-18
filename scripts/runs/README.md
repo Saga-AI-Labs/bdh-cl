@@ -31,3 +31,11 @@ Not committed: the G-A2 dry-run checkpoints (82 GB in /tmp - reproducible
 by rerunning `ga2_run.sh` in ~10 min; the identity numbers live in the
 log) and the raw CodeSearchNet parquet (522 MB - public, one `hf download`
 command; lineage registered in the graft-2 plan section 8).
+
+Post-campaign diagnostics (2026-11-18, report section 18):
+`scripts/diag_context.py ngram` -> 6-gram 0.8519 nats/byte; `positions`
+-> 1.1155/@1024, 1.7116/@896; `compare` joins them. Full curves:
+`out_c/routed_probe/diag_ngram.npz`, `diag_positions_{896,1024}.npz`;
+log `out_c/routed_probe/diag_positions.log`. `scripts/bench_100m.py` ->
+100M throughput on the Spark: 2,192 ms/step (6 layers, 1,868 B/s),
+1,482 ms/step (4 layers, 2,764 B/s), 23.1 GiB peak.
