@@ -507,21 +507,34 @@ repeat-and-truncated to en:zh byte ratios 1:1 (80 B en), 2:1 (160 B en),
   every sample. An English system prompt up to EQUAL size with the zh
   content leaves the model answering in Chinese, on both models and all
   three paths.
-- **The leak exists only in the ENGLISH-DOMINANT regime (2:1), it is
-  INHERENT, and it is register-competitive.** Pooled hard English-register
-  leaks at 2:1: grown full 2/5 (66.2 % mean), grown mask-1024 3/5
-  (51.0 %), parent full 1/5 (82.6 %) - ~40 % per-sample leak probability.
-  The grown old-mask leaks ~0/5 (93.0 %, one sample carries English
-  document-number bits at 77.5 %). Not graft-induced: the parent leaks
-  too, and by the S1 identity grown mask-1024 == parent full is the SAME
-  computation - the 1/5 vs 3/5 spread is small-sample noise around one
-  leak probability, not a path effect. Leak ordering tracks the path's
-  English-register competence (P3 legal NLL 1.11 vs base 1.71): the
-  stronger the English prior a path carries, the more the long English
-  prefix wins. And post-graft the leak is register-competitive: leaked
-  samples go to English LEGAL and, new, to CODE forms ("import a person",
-  "(self.compensation") - the trained block's registers both respond to
-  register pressure.
+- **The leak exists only in the ENGLISH-DOMINANT regime (2:1); it is
+  INHERENT; and the per-path rates differ (Quinn review corrections,
+  2026-11-18).** Readout discipline, named: the registered quantity is
+  the mean hi-byte share; any sample below 95 % is READ and classified -
+  either an ENGLISH-REGISTER FLIP (the continuation leaves zh for English
+  legal/code text) or DEGRADED-ZH (zh-led with ASCII digits/punctuation
+  artifacts); a sample below 50 % is always a flip. At 2:1 (5 samples per
+  path, mean hi-byte in parens): flips - grown full 2/5 (66.2 %), grown
+  mask-1024 3/5 (51.0 %), parent full 1/5 (82.6 %), old paths 0/10;
+  degraded-zh - old-mask 2/10 (77.5 % and 73 %, zh with English
+  document-number bits - the class the raw < 95 % count mislabels as
+  leaks). At 1:1 the same degraded-zh class appears once (grown old
+  92.5 %); flips: NONE anywhere at 1:1 and 1:2. Per-path flip rates at
+  2:1 therefore: full-family 3/10, old 0/10 - and, the decision-relevant
+  fact the earlier pooled "~40 %" HID: **mask-1024, the post-map zh
+  DEFAULT path, showed the highest observed flip rate (3/5, 60 %; hard
+  flips 3/5)**, old the lowest. By the S1 identity grown mask-1024 ==
+  parent full is the SAME computation (observed 3/5 vs 1/5 on identical
+  distributions - n=5 cannot separate a path effect from binomial
+  spread, but the observed ordering is what the map decision has to live
+  with). Not graft-induced: the parent flips under the same pressure,
+  and the flip ordering tracks the path's English-register competence
+  (P3 legal NLL 1.11 vs base 1.71). Register classification of the 6
+  flips: **5 legal-led - one of them carrying code bits** (grown full #1:
+  "...in force on 12 July 1989. # The file the format a contained import
+  a person") - **and 1 CODE-LED** (grown full #2: "(self.compensation of
+  account..."). The code register responds to register pressure but is a
+  minority (1 of 6); the dominant leak register is English legal.
 - **Deployment consequence:** the chat serving map "always full" is
   correct for realistic mixed prompts (system prompt <= user content);
   the failing regime is an English-dominant context, where every path
