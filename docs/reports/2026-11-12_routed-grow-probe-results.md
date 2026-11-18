@@ -493,6 +493,49 @@ system prompt plus Chinese user content is exactly the regime where a
 static map can be wrong again - window-level routing territory (the
 router's reserved role).
 
+**Deployment reading, third revision 2026-11-18 (the mixed-content case
+quantified; `gen_serve_check` mixed cells, 59c880e, 5 x 200 tokens per
+cell, both checkpoints, `/tmp/opencode/mixed_serve_check.log`).** Design:
+the SAME 80-B zh content with an English chat system prompt prepended,
+repeat-and-truncated to en:zh byte ratios 1:1 (80 B en), 2:1 (160 B en),
+1:2 (40 B en); each ratio under full, old-mask 896, and mask-1024
+(parent: 1024 == full, skipped). Results:
+
+- **Realistic mixed content does NOT break the static map.** At 1:1 and
+  1:2, ZERO English-register leaks in 25 samples per ratio (grown full /
+  old / mask-1024 and parent full / old, 5 each): 98.5-100 % hi-byte on
+  every sample. An English system prompt up to EQUAL size with the zh
+  content leaves the model answering in Chinese, on both models and all
+  three paths.
+- **The leak exists only in the ENGLISH-DOMINANT regime (2:1), it is
+  INHERENT, and it is register-competitive.** Pooled hard English-register
+  leaks at 2:1: grown full 2/5 (66.2 % mean), grown mask-1024 3/5
+  (51.0 %), parent full 1/5 (82.6 %) - ~40 % per-sample leak probability.
+  The grown old-mask leaks ~0/5 (93.0 %, one sample carries English
+  document-number bits at 77.5 %). Not graft-induced: the parent leaks
+  too, and by the S1 identity grown mask-1024 == parent full is the SAME
+  computation - the 1/5 vs 3/5 spread is small-sample noise around one
+  leak probability, not a path effect. Leak ordering tracks the path's
+  English-register competence (P3 legal NLL 1.11 vs base 1.71): the
+  stronger the English prior a path carries, the more the long English
+  prefix wins. And post-graft the leak is register-competitive: leaked
+  samples go to English LEGAL and, new, to CODE forms ("import a person",
+  "(self.compensation") - the trained block's registers both respond to
+  register pressure.
+- **Deployment consequence:** the chat serving map "always full" is
+  correct for realistic mixed prompts (system prompt <= user content);
+  the failing regime is an English-dominant context, where every path
+  including the zh NLL-optimal mask can flip register per sample. That is
+  the measured case for WINDOW-LEVEL register awareness (the router's
+  reserved role) rather than a static map or a full-context mask choice;
+  under register-dominant prompts the base path (old mask) is the most
+  leak-robust but still not immune.
+- Auxiliaries: parent zh x full 98.3 % (5/5 Chinese, replicates); parent
+  legal x old shows one 41 %-zh sample out of 5 (8.2 % mean) - sampling
+  noise at t=0.8, the base zh register sits close to the surface; grown
+  zh x old 99.9 %, zh x full 99.9 %, code x full code-shaped 5/5 - all
+  section-15 readings replicate.
+
 Notes for reproduction: (1) with `--log-interval 10` the dom markers sample
 only odd steps (9, 19, 29, ...), so the long-run log shows only `dom B` -
 alternation is verified by G0/tiny at `--log-interval 1` (A,B,A,B observed)
