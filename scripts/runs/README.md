@@ -41,4 +41,7 @@ log `out_c/routed_probe/diag_positions.log`. `scripts/bench_100m.py` ->
 1,482 ms/step (4 layers, 2,764 B/s), 23.1 GiB peak; compiled 1,025
 ms/step (6 layers). `--two-pass` measures the route-aware compute shape
 (two forwards at 0.9/0.1, one backward): 4,429 ms/step uncompiled,
-2,091 compiled = 2.0x one-pass, 48.5/33.2 GiB peak.
+2,091 compiled = 2.0x one-pass, 48.5/33.2 GiB peak. Log:
+`out_c/routed_probe/bench_100m.log`; a 2026-11-18 re-run at `94c91f2`
+reproduced every row within 0.6 % (2,182 / 1,475 / 1,031 / 4,440 /
+2,100 ms/step), so the registered numbers stand.
