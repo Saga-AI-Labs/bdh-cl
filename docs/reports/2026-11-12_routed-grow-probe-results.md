@@ -642,3 +642,82 @@ but the mask is free at inference and remains the drift instrument. Graft
 #2 is the first deployment-scale use of the validated mask primitive, and
 its serving map needs no request labels: full for two domains, one cheap
 mask for the third.
+
+---
+
+## 16. Coherence: the serving checks answer the language question, not the quality question
+
+**Added 2026-11-18 after the mixed-content evaluation. This is a side finding of
+the serving checks, and it is the one with the largest consequence.**
+
+### The observation
+
+Every generated sample in `mixed_serve_check.log` is fluent in its register
+and language - and none of it is coherent. Representative samples:
+
+```
+definisterings dulta ord an the constralis a charges a determinate,
+the person of determing the desistion to the detainer ...
+
+\xaf一切同时，但一个国家和关于有效的各国家庭发展方案方案的机会议的方案
+和有效和有效其实施的各项目其不可能方面期发展的国家的国家的一步在执 ...
+```
+
+The first is the base model on a legal prompt: recognizable legal vocabulary,
+no grammatical structure. The second is the grown model on a zh prompt:
+recognizable Europarl-Chinese fragments, no discourse. **Both are the
+"word salad" the earlier readings named - and the earlier readings treated
+it as a caveat, not as a finding.**
+
+### The corpus arithmetic
+
+The serving checks are not a small-sample anomaly. The training volume per
+domain is small enough that the arithmetic explains them:
+
+| domain | corpus | train bytes used | ratio |
+|---|---|---|---|
+| legal | 39 MB (`data/textmix2/legal.txt`) | 28,000,000 B = 28 MB | **~72 % of the corpus in one pass** |
+| code | 32 MB (`data/textmix2/code.txt`) | 28 MB | **~88 %** |
+| zh | 1,231 MB (`data/europarl/xscript_zh.txt`) | 28 MB | ~2.3 % |
+
+```
+10,000 steps x 512 B = 5,120,000 samples drawn from 28,000,000 B
+```
+
+**The model saw the legal corpus roughly 200 times.** A val_loss of 1.05-1.12
+on a 1 MB split carved from a corpus it trained on at that rate is a
+memorization number, not a generalization number. The word salad is the
+other face of the same thing: the model reproduces the corpus in fragments
+because the corpus is too small to learn structure from.
+
+### What this does and does not contradict
+
+**It contradicts nothing measured so far.** Every claim in this report is a
+relative, masked, or bit-exact comparison. None of them requires coherent
+generation, and the routing results are unaffected: the mask identity is
+exact regardless of what the forward computes.
+
+**It does reframe the deployment readings.** The three revisions of the
+deployment question asked *which language does the model answer in*. That
+question is answered: the language follows the register, and the register
+follows the prompt. **The question a chat product actually depends on - can
+you hold a conversation with it - is unanswered, and the serving checks say
+no.**
+
+### Registered interpretation
+
+- **The word salad is a data-scale consequence, not a routing defect.** The
+  routing errors are excluded by the bit-exact identity cells; the salad
+  appears under every mask and on the base model, and it scales with corpus
+  size in the expected direction (zh at 1.2 GB is Europarl-flavored rather
+  than Europarl-fragmented).
+- **The corpus is a probe corpus, not a product corpus.** It was selected for
+  measurability and routing separation (legal/code/zh, small and disjoint),
+  which is the right choice for the experiments in this report and the wrong
+  choice for a chat model.
+- **Consequence for the plan:** the chat-model training prereg's open item 3
+  (corpus selection) is not a formality. The Graft #2 serving checks are the
+  first direct evidence for it.
+- **Not registered as a quality metric.** This section is an observation with
+  an explanation; it does not introduce a coherence instrument. Any future
+  quality gate needs a registered metric, not a sample-reading.
