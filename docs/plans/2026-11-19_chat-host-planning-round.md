@@ -22,7 +22,7 @@ after the round produces the decision record (section 6).
 | Overfitting | measured out | report 17 |
 | Word-salad cause | token-view starvation (0.18 sightings/block) | report 17 |
 | Judge topology | Qwen (Spark) + Gemma (4090); Deepseek = 2nd team seat | planning input addenda 6.1 |
-| TP=2 | out of scope, trigger registered | planning input addenda 6.2 |
+| TP=2 | out of scope, trigger registered | D8; planning input addenda 6.2 |
 
 ## 2. The cascade - one item blocks the rest
 
@@ -39,7 +39,7 @@ against the 6-gram) is the one section 18 disproved.
 **Key 1 (statistical floor)** is necessary but not sufficient. It is a cheap
 pre-filter, not the verdict.
 
-## 3. The six decisions, with cost and dependency
+## 3. The decisions, with cost and dependency
 
 ### D1 - Key 2 specification (blocking)
 
@@ -159,6 +159,62 @@ A registered testable claim, not scheduled by the round: ~2-5k synthetic
 pairs, a fresh block, ~2k steps, ~6-7 h at 3.62B / ~1 h at 100M. The round
 must schedule it or defer it explicitly.
 
+### D8 - Hardware topology: one Spark; TP=2 not triggered
+
+**Decision (2026-11-19, operator): the host program runs on one Spark.** TP=2
+stays out of scope; the registered trigger is unchanged - a coherent host that
+does not fit one box. One box is also the lower-power option, and it keeps the
+first host run on the single-device baseline the whole series is measured
+against.
+
+Headroom, measured on the Spark (cap 97.35 GiB):
+
+| case | peak, one box | share of cap |
+|---|---|---|
+| 100M one-pass, uncompiled | 23.1 GiB | 24 % |
+| 100M route-aware (two-pass), uncompiled | 48.5 GiB | 50 % |
+| 100M route-aware, compiled | 33.2 GiB | 34 % |
+| 100M, 8 layers, route-aware | ~64 GiB (estimated) | ~66 % |
+| 3.62B, b1/t512 | 91.99 GiB | 94 % |
+
+Sources: `out_c/routed_probe/bench_100m.log` (2026-11-18 re-run at `94c91f2`),
+`graft2/ga3_run/ga3.log`; the 8-layer row scales the 6-layer activation peak by
+8/6 and is estimated, not measured.
+
+**TP=2 is the wrong hedge for this diagnosis.** It adds memory and capacity;
+the diagnosis is a data/coverage ratio - 5.12 MB of views on 3.62B parameters,
+0.18 sightings per block per phase. The 3.62B model had 36x the planned host's
+parameters and still produced salad. TP=2 moves parameters-per-seen-byte the
+wrong way. The only near-cap case, 3.62B at 91.99 GiB, is excluded by time
+(~51 years), not memory; a 1.5-2x TP=2 step rate leaves it in the decades.
+
+**The first host run must stay identifiable.** A TP=2 run is not comparable to
+the single-device series until the bridge study exists. The port adds per-rank
+restore and mask-sharding risks; the P1 campaign hit three silent failures of
+the restore class (`collect_state`, `eval_batch_size`, freq invariant). The
+first 100M run is the transfer instrument (A/B/C); an uncalibrated topology
+variable makes the outcome unattributable.
+
+**Cheaper speed lever first.** `torch.compile` is measured at 2.1x: 2,182 ->
+1,031 ms/step one-pass, 4,440 -> 2,100 two-pass, 16.6/33.2 GiB peak. If wall
+clock binds, the order is compile -> 50M vs 100M -> TP=2 last.
+
+**Second Spark role.** The second box is the Qwen judge seat for key 2. TP=2
+would occupy both boxes for training and force the judge onto shared hardware;
+one box per role is the simpler allocation.
+
+**When to reopen (trigger, not date):**
+1. the round selects a host >~300M, or a route-aware peak >80 GiB on one box;
+2. the 50M/100M leg is wall-clock-infeasible even compiled (>30-60 d) and a
+   measured TP=2 speedup >1.5x exists;
+3. the product requires the 3.62B model (currently excluded by time);
+4. the TP=2 bridge study shows non-equivalence within the accepted budget.
+
+**Operator position (2026-11-19).** One Spark is preferred (lower power than
+two). The eventual TP=2 transition is accepted as necessary at some later
+point; it is crossed when the trigger fires, as a registered decision with a
+re-baselined series - not as drift before the first host run.
+
 ## 4. Sequence (the only order that respects the cascade)
 
 ```
@@ -204,7 +260,7 @@ the version it started with.
 ## 7. Explicitly not in this plan
 
 - Direct 3.62B scaling (arithmetic).
-- TP=2 (trigger: a coherent host that does not fit one box).
+- TP=2 (not triggered; rationale, headroom and reopen conditions in D8).
 - BPE (registered architecture decision, item 7; needs its own round).
 - QAT (gated on the FP32 plateau, QAT v2 section 8).
 - NLL as a coherence instrument.
