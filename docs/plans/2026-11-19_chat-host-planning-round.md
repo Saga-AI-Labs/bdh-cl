@@ -23,6 +23,7 @@ after the round produces the decision record (section 6).
 | Word-salad cause | token-view starvation (0.18 sightings/block) | report 17 |
 | Judge topology | Qwen (Spark) + Gemma (4090); Deepseek = 2nd team seat | planning input addenda 6.1 |
 | TP=2 | out of scope, trigger registered | D8; planning input addenda 6.2 |
+| Host language | **English-first**; de/zh/math/code attach as routed specialists later | D5 review 2026-11-19 |
 
 ## 2. The cascade - one item blocks the rest
 
@@ -131,6 +132,43 @@ filtered educational web text, clean Wikipedia, public-domain literature. The
 German graft is the plausible first attachment (shared Latin script; E6's
 zero-shot DE ppl 21.8 shows weak but real transfer); zh is the larger jump and
 comes after Chinese data exists.
+
+### D5.1 Format and acquisition constraints of the two candidates
+
+**FineWeb-Edu** (`HuggingFaceFW/fineweb-edu`, 5.84 TB). Educational-quality
+filtered English web. The full set is not usable: at the measured Spark rates
+(1,868-3,973 B/s at 100M, one-pass) even 1 GB is a multi-day leg, and 5.84 TB is
+~2000x that. **The viable route is a subset, not the whole set.** Hugging Face
+publishes randomly-sampled subsets; the open question is whether a sample
+preserves the quality filter's distribution or skews it - that must be checked
+with the purity census before use, not assumed.
+
+**enwiki** (Wikimedia content exports, XML/bzip2). The format question is real:
+
+| export | what it is | usable as training text? |
+|---|---|---|
+| `pages-articles.xml.bz2` | full article wikitext | yes, after wikitext extraction |
+| `pages-meta-current.xml.bz2` | all namespaces incl. talk | noisy, needs filtering |
+| `mediawiki_content_current` (the linked one) | content-history export | **not directly** - not article text |
+
+The linked export is therefore not a training corpus in its raw form. If enwiki
+is used, it is the `pages-articles` export plus a wikitext-to-plain-text step - a
+parse-and-clean effort, not a download-and-use one.
+
+**Recommended split by role:**
+
+- **FineWeb-Edu subset as the primary host corpus** - already quality-filtered,
+  already text-ready, no markup to strip. Start with a bounded sample (1-2 GB),
+  run the purity census, expand only if clean.
+- **enwiki as a clean secondary** - only the `pages-articles` export, with a
+  wikitext extractor.
+- **Gutenberg** as the license-clean control: small, but the one source with no
+  licensing question and the builder already exists.
+
+**Not on the list:** Europarl (excluded above), heavy legal/code/math (later
+specialists), and any crawl whose quality filter is unknown - section 18 showed
+that register statistics are not enough; the corpus has to be clean at the
+source, not filtered afterwards.
 
 **Key 1 must be rebuilt for this corpus.** The 0.8519 6-gram of report 18 is
 measured on the 28-MB legal train carve / 1-MB legal val split; it is not a
