@@ -1,6 +1,6 @@
 # Usable BDH-CL Chat Model - Preregistration v0.2 (DRAFT)
 
-**Status:** DRAFT v0.2 · v0.1 drafted 2026-11-03 · v0.2 2026-11-07 after the masked-serving measurements · **§4.4b FROZEN 2026-11-09** (judge set certified, hashes registered)
+**Status:** DRAFT v0.2 · v0.1 drafted 2026-11-03 · v0.2 2026-11-07 after the masked-serving measurements · **§4.4b FROZEN 2026-11-09** (judge set certified, hashes registered) · **§3 host-mix flag 2026-11-19** (host pilot = monolingual en; Europarl excluded)
 
 **Changelog v0.1 -> v0.2:** (1) §3 gains the scope decision - the first chat model is a
 routable specialist library, not a generalist, with composition at prompt level;
@@ -70,6 +70,20 @@ First stage: **chat, without tool calling.**
 | training data | high-quality corpora, not Europarl | to be selected from the running preliminary studies |
 | hardware | 2x DGX Spark, TP=2, ~256 GB unified minus OS/overhead | available locally, no purchase lead time |
 | routing | few routes (see section 4.3) | fewer boundaries, larger margins |
+
+> **Flag 2026-11-19 (operator decision, plan D5).** The language row above is
+> the **target/library scope** (en/de/zh via routes), not the host's training
+> mix. The first host is trained **monolingual on high-quality English**; de
+> and zh become routed specialists after clean corpora exist. Europarl is
+> excluded from host and specialist training: parliamentary/political
+> formulaic prose is not the expository register the host is for, and it is the
+> boilerplate case where n-gram/NLL instruments read optimistically (report
+> 18.4); it remains a historical diagnostic corpus. This makes the data row's
+> "not Europarl" concrete: de (Europarl 314 MB) and zh (Europarl 1.30 GB) currently have no
+> admissible corpus on disk, and English host-eligible data is ~0.56 GB
+> (wikitext-103 516 MB + Gutenberg 40 MB, overlap not yet audited), so the
+> 2-GB budget requires acquisition. See plan D5 review block for the data
+> strategy, the key-1 rebuild and the cost interaction.
 
 **Scope decision (operator sign-off 2026-11-07).** The first chat model is a
 **routable specialist library**: one merged parameter set plus per-route masks, with

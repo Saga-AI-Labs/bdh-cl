@@ -84,11 +84,69 @@ not a default.**
 Matched-parameter 4 vs 8 layers at 50-100M. **Run only if key 2 fails while
 key 1 passes (outcome B).** Cost: 8.4 vs ~16.7 d one-pass at 100M/2 GB.
 
-### D5 - Data mix
+### D5 - Data mix *(superseded for the host 2026-11-19 - see review block)*
 
 ~2.1 GB usable on disk. zh dominates by volume. A register mix is a decision,
 not a default. Candidates: Europarl zh 1.3 GB, wikitext-103 516 MB,
 textmix/files 215 MB, textmix2 109 MB, expert 23 MB.
+
+**Review 2026-11-19 (operator decision, with Grok's review): the host is
+monolingual English; de and zh are routed specialists added later.**
+
+Reasons, in order of weight:
+
+- **Measured on the same architecture:** at 100M/90 MB, EN-only reaches EN
+  held-out ppl 2.15 vs 2.33 for mixed EN/DE/ES at matched bytes; the report's
+  own reading is "multilingual buys breadth, not depth" (report 2026-08-24,
+  section 5b). The host needs depth in one register; breadth is what the
+  routing machinery exists for.
+- **Register, not just volume:** Europarl is parliamentary/political
+  formulaic prose, the opposite of the expository/instructional text the
+  host is for. It is also the boilerplate case where n-gram/NLL instruments
+  read optimistically (report 18.4): a Europarl host would flatter the
+  metric while learning the wrong register. **Europarl is excluded from host
+  and specialist training**; it remains a historical diagnostic corpus only.
+- **Attribution:** the first 100M run is the transfer instrument (prereg item
+  9, A/B/C). Three languages make a failure unattributable (starvation
+  transfer vs interference vs one bad corpus), and the worst-case gate (4.4)
+  would be decided by the weakest language.
+
+Caveat: E3/E6 measured Europarl ppl. The 2.15-vs-2.33 gap establishes the
+breadth/depth direction at matched bytes, not its size on the new corpus, and
+a DE-only arm was not run - the DE-specialist advantage is inferred from the
+EN result by the same mechanism. The host decision rests on that direction
+plus the register and attribution arguments, not on a predicted ppl.
+
+Data consequence, with Europarl excluded:
+
+| bucket | on disk | status |
+|---|---|---|
+| English host-eligible | wikitext-103 516 MB + Gutenberg 40 MB (~0.56 GB before overlap audit) | 3.6 epochs at 100M/2 GB; acquire ~1.4 GB more for a 2-GB one-epoch budget |
+| German | Europarl 314 MB only | **no admissible corpus**; de specialist data-blocked |
+| Chinese | Europarl 1.30 GB only | **no admissible corpus**; zh specialist data-blocked |
+| code / legal / math | textmix2 109 MB, expert 23 MB | later specialists, kept out of the host |
+
+The host acquisition target is high-quality English: FineWeb-Edu or equivalent
+filtered educational web text, clean Wikipedia, public-domain literature. The
+German graft is the plausible first attachment (shared Latin script; E6's
+zero-shot DE ppl 21.8 shows weak but real transfer); zh is the larger jump and
+comes after Chinese data exists.
+
+**Key 1 must be rebuilt for this corpus.** The 0.8519 6-gram of report 18 is
+measured on the 28-MB legal train carve / 1-MB legal val split; it is not a
+statistical floor for an English host. The ngram mode of
+`scripts/diag_context.py` is currently hard-coded to that legal carve (`LEGAL`
+constant) and must take a corpus argument before it can produce the host
+floor. That number - not 0.8519 - is key 1.
+
+**Cost interaction.** 2 GB of views at 100M is 12.4 d (6 layers) / 8.4 d
+(4 layers) one-pass, 2.0x route-aware. Grok's "2-8+ GB, several epochs" is
+not in the D2 table: 8 GB of views at 100M is ~50 d uncompiled one-pass, and
+several epochs over 8 GB unique is 100+ d. If multi-epoch exposure is
+required, 50M at 4 GB of views (~2 epochs over 2 GB unique) extrapolates to
+~12 d and is the affordable shape. The round must choose between one clean
+epoch at 100M/2 GB and more epochs at 50M; it cannot have both within the
+Spark budget.
 
 ### D6 - Stop rules
 
