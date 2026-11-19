@@ -25,10 +25,14 @@ prereg item 9 - not a consequence of the diagnosis.
 
 Registered in prereg item 9:
 
-- **Key 1, statistical floor.** NLL against the section 18 6-gram on the same
-  carve and freeze. Necessary, **not sufficient**: the measured 3.62B model
-  clears no floor yet still produces salad. A model that beats a 6-gram is not
-  thereby coherent.
+- **Key 1, statistical floor.** NLL against a byte 6-gram built with the
+  section 18 method (order 4/6, seen-context backoff, no discounting) on the
+  **host's own train carve**, evaluated on the host's val carve, with a margin
+  frozen before the run. The 0.8519 of report 18 is the legal-carve value; it
+  is a corpus-specific reference, not a transportable constant. Necessary,
+  **not sufficient**: the floor tests statistical adequacy against a count
+  table, not discourse coherence; a model that beats a 6-gram is not thereby
+  coherent (key 2).
 - **Key 2, coherence.** Sample-based, frozen rubric, held-out prompts
   (document openings in neither carve), deterministic decoding, threshold set
   before the first host run.

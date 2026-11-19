@@ -1093,10 +1093,11 @@ consequences are registered in the chat prereg section 6, items 6-10.
 
 1. **NLL is not a coherence gate.** Section 18's own finding forbids it:
    the 3.62B model sits 0.2635 nats above a 6-gram and still yields word
-   salad. The host gate therefore has two keys - a statistical floor
-   (necessary, not sufficient) and a registered, sample-based coherence
-   instrument (not yet existing; candidates are prereg item 4 and the
-   4.4a judge topology). Until that instrument is frozen, a host that
+   salad. The host gate therefore has two keys - a statistical floor on the
+   host's own carve (necessary, not sufficient; the 0.8519 of 18.1 is the
+   legal-carve value and does not transport) and a registered, sample-based
+   coherence instrument (not yet existing; candidates are prereg item 4 and
+   the 4.4a judge topology). Until that instrument is frozen, a host that
    clears the NLL floor is **not** scored as passing. Prereg item 9 is
    rewritten accordingly.
 2. **The 100M route is a hypothesis, not a consequence of the diagnosis.**

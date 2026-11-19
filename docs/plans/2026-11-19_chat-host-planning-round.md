@@ -164,28 +164,42 @@ must schedule it or defer it explicitly.
 ```
 1. D1  freeze key 2 (rubric, prompts, decoding, threshold, hash)
 2. D2+D3  select pilot shape and order, with the cost interaction
-3. run host pilot  ->  score with key 2
-4. D4  depth arm only on outcome B
-5. D7  item 8 scheduled or deferred
-6. graft phase on the competent host
+3. G0  freeze the protocol record (data, key 1, key 2, shape, A/B/C)
+4. run host pilot  ->  score with key 1 + key 2
+5. D4  depth arm only on outcome B
+6. D7  item 8 scheduled or deferred
+7. graft phase on the competent host
 ```
 
 ## 5. Gates
 
 | gate | what | pass |
 |---|---|---|
+| G0 | protocol frozen before step 1 | data manifest + hashes, carve rule, host-corpus 6-gram NLL + margin + order-resolution shares, key-2 instrument, pilot shape, A/B/C thresholds all committed |
 | G1 | key 2 frozen and hashed | rubric + prompt hash committed |
 | G2 | pilot result scoreable | key 1 and key 2 both applied |
 | G3 | host coherent | key 2 threshold met |
 | G4 | graft worth it | host clears key 1 and key 2 |
+
+**The freeze point is G0, not G1.** Key 1 is a rule, not a constant: the
+section 18 6-gram was computed on the legal carve, and 0.8519 does not
+transport to an English host. Recomputing it on the host's own carve and
+freezing the number plus margin before step 1 is the rule working as intended.
+Reusing 0.8519, choosing the margin after seeing the host NLL, or changing the
+carve after the run is the protocol breach. After step 1, every G0 field is
+versioned: a change is a new decision record (v2), and the run is scored under
+the version it started with.
 
 ## 6. What the round must produce
 
 1. A decision record that freezes key 2 with a hash.
 2. The pilot shape and its budget (D2 x D3, costs taken together).
 3. The A/B/C thresholds numerically.
-4. The name of the first run as the transfer instrument for the diagnosis.
-5. An explicit schedule-or-defer for item 8.
+4. The G0 freeze record: host data manifest and hashes, carve rule, host-corpus
+   6-gram NLL + margin + order-resolution shares, and the key-2/shape/threshold
+   hashes in one commit.
+5. The name of the first run as the transfer instrument for the diagnosis.
+6. An explicit schedule-or-defer for item 8.
 
 ## 7. Explicitly not in this plan
 

@@ -524,11 +524,13 @@ Post-freeze item changes are set v2 and draw with salt
    mechanism and product. It carries items 7 and 10 as arms on shared compute.
 
    **The gate has two keys, and both are necessary.**
-   (1) *Statistical floor:* NLL against the section 18 6-gram baseline on the
-   same carve, from the same freeze. It is necessary and **not sufficient**:
-   section 18 measured a model that sits 0.2635 nats above a 6-gram and still
-   produces word salad, so clearing the floor is not evidence of coherence - a
-   model that beats the 6-gram is not thereby coherent.
+   (1) *Statistical floor:* NLL against a byte 6-gram built with the section
+   18 method (order 4/6, seen-context backoff, no discounting) on the host's
+   own train carve, evaluated on the host's val carve, with a margin frozen
+   before the first run. The 0.8519 of section 18 is the legal-carve value and
+   is not transportable to another corpus. Necessary and **not sufficient**:
+   the floor tests statistical adequacy against a count table, not discourse
+   coherence - a model that beats the 6-gram is not thereby coherent (key 2).
    (2) *Coherence instrument:* sample-based, with a frozen rubric, frozen
    held-out prompts (document openings in neither carve), deterministic
    decoding, and a pass threshold set before the first host run. It does not
