@@ -54,10 +54,23 @@ on 29 prompts and incoherent on one fails. This is the same unit choice as
 
 ## 3. Prompt set
 
-**30 prompts, English, open-ended, requiring ~100-300 bytes of generation.**
-Constructed so no gold answer exists and no single fact decides the score.
+**Decision D-count (2026-11-20, operator): 100 prompts.** The alternatives were
+50 and 200. The reasoning recorded: a higher count is presumably better, a
+lower count presumably faster, and neither the right value nor the smallest
+sufficiently stable one is known - so take the middle.
 
-**Families (10 each, registered):**
+**One correction to that reasoning, registered with the decision:** the gate
+unit is the minimum over items (section 2), so a larger count is not strictly
+better. More items widen the chance of drawing a bad prompt, and the worst case
+sharpens with n. **n=100 is a compromise between measurement accuracy and
+worst-case sharpness, not a monotone improvement.** The real lever is prompt
+quality: 100 weak prompts lose to 50 good ones.
+
+**Decision D-source (2026-11-20): authored, not corpus-sampled.** This is
+registered as an exclusion rule rather than a preference - a prompt drawn from
+the training data would measure memorization, not coherence.
+
+**Families (34 each, registered):**
 
 1. **Explain** - "Explain how a bill becomes a law." / "Explain why the sky
    is blue." / "Explain what a router does."
@@ -68,6 +81,23 @@ Constructed so no gold answer exists and no single fact decides the score.
 **Contamination control:** prompts must be authored, not sampled from a corpus.
 A prompt that appears in the training data would measure memorization, not
 coherence. The prompt set gets a sha256 at freeze time; the hash is part of G1.
+
+**Registered decisions, all six (2026-11-20, operator):**
+
+| # | decision | value | alternatives considered |
+|---|---|---|---|
+| D-count | prompt count | **100** | 50 / 200 |
+| D-source | prompt origin | **authored** | held-out document openings |
+| D-decoding | generation | **greedy, temperature 0** | seeded fixed-seed sampling |
+| D-length | output cap | **256 bytes** | 128 / 256 |
+| D-threshold | set from | **base-host and certified-baseline quartiles, then frozen** | a fixed number up front |
+| D-stability | stability slice | **5 items x 3 repeats, >=95% within +/-1** | 3 x 3 |
+
+**On the absence of certainty:** these are decisions under ignorance, not
+measurements. The honest state is: no prior run exists for this object, so no
+value here is known to be right. What is registered is therefore the value and
+the alternatives - the falsification routes in section 6 remain the way any of
+them gets corrected.
 
 ## 4. Decoding
 
