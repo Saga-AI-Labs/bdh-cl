@@ -115,9 +115,13 @@ incoherence.
 
 ## 5. Judge protocol
 
-- **Two local seats:** Qwen 3.8 Flash Next (DGX Spark, TP=1) primary, Gemma 4
-  31B (RTX 4090) cross-check. Deepseek is the second team seat.
+- **Two local seats, exactly:** Qwen 3.8 Flash Next (DGX Spark, TP=1) primary,
+  Gemma 4 31B (RTX 4090) cross-check. **No third seat.**
 - **Bias rule unchanged:** no Meituan (LongCat) and no GLM as judges.
+- **Harness models are not judges (operator 2026-11-20).** A model running inside
+  an agent harness - Deepseek in Opencode, GLM formerly - is an agent with its own
+  agenda, not a neutral API call. **Deepseek is struck from the topology.** The
+  "second team seat" registration is withdrawn, not replaced.
 - **Prompt format:** the rubric as system message, then `Prompt:` + prompt +
   `Text:` + sample. JSON out: `{"coherence": n, "relevance": n, "language": n,
   "reason": "..."}`.
@@ -217,7 +221,7 @@ count and total count are now distinct and both are frozen at G0.
 
 | role | material | expected |
 |---|---|---|
-| positive | 20 human 256-B answers to 20 of the 100 gate prompts, stratified 10 explain / 10 describe | all dimensions >= 4, mean >= 4.5 |
+| positive | human 256-B answers to gate prompts, stratified explain / describe. **Target 40 (20 explain / 20 describe), minimum 20** (operator 2026-11-20) | all dimensions >= 4, mean >= 4.5 |
 | negative | section 16 samples + 133 generations from the 3.62B checkpoint on the full 133-prompt set; the gate uses the 100 gate items | coherence and language <= 2, max <= 3 |
 | mid (optional) | 100M/90MB pilot samples | between human and 3.62B; register-confounded |
 | dissociation A | section 16 "fluent but incoherent" samples | language >= 4, coherence <= 2 |
@@ -236,7 +240,10 @@ samples alone are not a distribution.
    the human mean with a margin.
 3. If the human and salad distributions overlap on a dimension, the rubric is
    not separating that dimension. Revise the anchors before freezing; do not
-   split the overlap with a threshold.
+   split the overlap with a threshold. **If the overlap appears with the
+   minimum 20 human answers, the reference is extended toward the 40 target
+   before the anchors are revised** - the overlap may be a small-sample effect,
+   and a threshold must not be set on 20 points.
 4. Freeze `M_d`, `F_d`, the rubric text, the prompt set, the judge system
    message, the decoding parameters, the aggregation code, the judge versions
    and quantisation, and the reference scores, all with sha256.
@@ -289,17 +296,22 @@ The draft names two seats but no aggregation. Registered here:
 - **Dissent.** A difference > 1 on any dimension between the two seats sends the
   item to the third seat. The third seat is a tie-breaker, not a second team.
 - **NULL / JSON.** Retry once at the 4096 budget. If still NULL or unparseable,
-  the item is a fail (conservative) or the run is "not scoreable" if the rate
-  exceeds the registered cap. It is never silently dropped from the min.
+  the item is a fail (conservative). **Registered cap (operator 2026-11-20): <= 5 %
+  NULL over the gate items = the items are "not evaluable" and are excluded from
+  the statistics; > 5 % = the whole run is "not scoreable" and is repeated.** The
+  5 % is taken from the 4.4b certification, where 14 NULL cells (2.9 %) were
+  registered as not evaluable. An item is never silently dropped from the min.
 - **Out-of-range / missing dimension.** Same rule as NULL: retry, then fail.
 - **Agreement.** Report exact and +/-1 agreement per dimension over the gate
   items. Instrument gate: >= 70 % exact and >= 95 % +/-1, the same form as the
   4.4b stability criterion. Below that, the instrument is not stable enough for
   a floor gate.
-- **Deepseek.** "Second team seat" is undefined. Either register it as the
-  tie-breaker (local, model version, quantisation, when it fires) or remove it
-  from the topology. The 4.4b registration says the cloud path is closed by
-  provider policy.
+- **No third seat (resolved 2026-11-20, operator).** The review asked whether a
+  harness model could serve as the tie-breaker. The answer is no: a model running
+  inside an agent harness - Deepseek in Opencode - is an agent with its own
+  agenda, not a neutral API call. **Deepseek is struck from the topology.**
+  Dissent between the two seats is handled by the blind re-score of the item
+  below the floor, not by a third judge.
 - **Boxes.** Qwen on the second Spark, Gemma on the RTX 4090; judging does not
   share the training box (D8).
 

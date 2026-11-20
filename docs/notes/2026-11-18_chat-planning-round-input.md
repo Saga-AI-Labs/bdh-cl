@@ -92,13 +92,18 @@ Section 3.1 listed "local GLM endpoint vs cloud" as a decision. **The operator
 corrected the reading:** the two-local-seat topology is **Qwen 3.8 Flash Next
 (DGX Spark, TP=1) + Gemma 4 31B (RTX 4090)** - GLM was never a seat. The
 GLM-host model is retired (quantization > 1/2 bit needs TP=2-TP=4, i.e. two
-to four Sparks for one judge, plus a bias relation to a team seat). **Deepseek
-v4.1 Flash takes over as the second team seat beside LongCat**; it is no more
-related to Qwen or Gemma than GLM was, so the bias exclusion is unchanged.
+to four Sparks for one judge, plus a bias relation to a team seat).
+
+**Correction 2026-11-20 (operator): there is no third seat.** The earlier line
+"Deepseek v4.1 Flash takes over as the second team seat" is **withdrawn**. A
+model running inside an agent harness - Deepseek in Opencode, GLM formerly - is
+an agent with its own agenda, not a neutral API call, and therefore cannot be a
+judge or a tie-breaker. The topology is exactly the two local seats; dissent is
+handled by blind re-scoring of the breaching item.
 
 What is still open is **not** the topology but the **key-2 instrument**: rubric,
 prompt source, count, decoding, threshold, hash (section 3.1). The two local
-seats are available; the cloud option is excluded by the bias rule.
+seats are available; the cloud path and the harness path are both closed.
 
 ### 6.2 TP=2 is registered as out of scope, with a trigger
 

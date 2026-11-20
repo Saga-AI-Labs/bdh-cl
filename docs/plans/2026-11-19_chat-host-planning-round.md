@@ -21,7 +21,7 @@ after the round produces the decision record (section 6).
 | NLL as coherence proxy | excluded; section 18 is the counterexample | report 18 |
 | Overfitting | measured out | report 17 |
 | Word-salad cause | token-view starvation (0.18 sightings/block) | report 17 |
-| Judge topology | Qwen (Spark) + Gemma (4090); Deepseek = 2nd team seat | planning input addenda 6.1 |
+| Judge topology | **Exactly two local seats**: Qwen (Spark) + Gemma (4090). No third seat; harness models are not judges (operator 2026-11-20) | planning input addenda 6.1 + correction 2026-11-20 |
 | TP=2 | out of scope, trigger registered | D8; planning input addenda 6.2 |
 | Host language | **English-first**; de/zh/math/code attach as routed specialists later | D5 review 2026-11-19 |
 
@@ -51,7 +51,7 @@ pre-filter, not the verdict.
 | count | e.g. 50-200 samples | trades cost vs stability |
 | decoding | deterministic (greedy or fixed seed) | t=0.8/top-k 3 amplifies salad |
 | threshold | numeric, set before the run | not tunable after |
-| judge topology | Qwen + Gemma local seats; Deepseek as 2nd team seat | bias rule excludes LongCat/GLM |
+| judge topology | exactly two local seats (Qwen + Gemma); no third seat, harness models excluded | operator 2026-11-20 |
 | hash | frozen rubric + prompt set hash | provenance |
 
 **Cost:** rubric authoring + one certification pass, ~1 day. **This is the only
