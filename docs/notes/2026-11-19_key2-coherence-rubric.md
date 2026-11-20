@@ -158,12 +158,12 @@ host.**
 
 **Status of this block.** Non-destructive review outcome. The draft in sections
 1-7 stays as the record of what was decided before the review; this block is
-what G0 freezes. Three design decisions were confirmed by the operator on
+what G0 freezes. Four design decisions were confirmed by the operator on
 2026-11-20: per-dimension mean + floor, threshold from human answers plus the
-3.62B salad, and the argue family as diagnostic only. The six operator
-decisions of section 3 stand as decisions; the procedures that implement the
-threshold and stability decisions are replaced below, and the prompt split
-follows from the argue-diagnostic decision.
+3.62B salad, the argue family as diagnostic only, and the 100-item gate variant
+(50 explain + 50 describe gate, 33 argue diagnostic, 133 total). The D-count of
+section 3 is re-registered at 133; the other five operator decisions stand, with
+the procedures for length, threshold and stability replaced below.
 
 ### 8.1 Confirmed changes
 
@@ -172,7 +172,7 @@ follows from the argue-diagnostic decision.
 | gate unit | min over items of the mean of the three dimensions | per dimension: `mean_d >= M_d` and `min_d >= F_d`; no cross-dimension mean |
 | threshold source | quartiles of the pilot host + certified baseline | human answers (positive) + 3.62B salad (negative), frozen before any host sample |
 | prompt families | three families, all in the gate | explain + describe in the gate; argue diagnostic only |
-| prompt count | 100 decided, 30/102 in the text | exactly 100 total: 67 gate (34 explain + 33 describe), 33 argue diagnostic |
+| prompt count | 100 decided, 30/102 in the text | 133 total: 100 gate (50 explain + 50 describe), 33 argue diagnostic; D-count re-registered |
 | stability | 5 items x 3 repeats, >= 95 % | 10 items x 3 = 30, >= 29/30 within +/-1, stratified |
 | length | 256 B | unchanged; local-coherence scope, prompt <= 128 B, word-boundary truncation |
 
@@ -206,27 +206,27 @@ third seat; if the breach is confirmed, the run fails.
 The threshold is calibrated on references that exist before the host run. No
 host sample is scored before the freeze.
 
-**Prompt split consequence.** With argue diagnostic, the gate is 67 prompts, not
-100. The gate statistics (`mean_d` and the `min_d` floor) are computed over the
-67 explain/describe items; the 33 argue items are scored and reported
-separately. If a 100-item gate is required, the
-family split must be re-registered (e.g. 50 explain + 50 describe) and the 33
-diagnostic argue prompts added as a separate set; that is a new decision, not a
-silent change to the count.
+**Prompt split.** The operator chose the 100-item gate variant (2026-11-20):
+100 gate prompts (50 explain + 50 describe) plus 33 argue diagnostic, 133
+total. The gate statistics (`mean_d` and the `min_d` floor) are computed over
+the 100 gate items; the 33 argue items are scored and reported separately. The
+D-count of section 3 is re-registered from 100 to 133 by this decision; gate
+count and total count are now distinct and both are frozen at G0.
 
 **Reference set.**
 
 | role | material | expected |
 |---|---|---|
-| positive | 20 human 256-B answers to 20 of the 67 gate prompts, stratified across explain/describe | all dimensions >= 4, mean >= 4.5 |
-| negative | section 16 samples + 100 generations from the 3.62B checkpoint on the full 100-prompt set; the gate uses the 67 gate items | coherence and language <= 2, max <= 3 |
+| positive | 20 human 256-B answers to 20 of the 100 gate prompts, stratified 10 explain / 10 describe | all dimensions >= 4, mean >= 4.5 |
+| negative | section 16 samples + 133 generations from the 3.62B checkpoint on the full 133-prompt set; the gate uses the 100 gate items | coherence and language <= 2, max <= 3 |
 | mid (optional) | 100M/90MB pilot samples | between human and 3.62B; register-confounded |
 | dissociation A | section 16 "fluent but incoherent" samples | language >= 4, coherence <= 2 |
 | dissociation B | clean off-topic passages | language >= 4, relevance <= 2, coherence >= 4 |
 
 The 3.62B checkpoint is on disk as `bdh_textmix_p3_mixed_best.pt` and
-`bdh_textmix_p1_legal_new_best.pt` (38.7 GB). The 100 generations are the
-negative distribution; the two section 16 samples alone are not a distribution.
+`bdh_textmix_p1_legal_new_best.pt` (38.7 GB). The 133 generations are the
+negative distribution; the gate uses the 100 gate items, and the two section 16
+samples alone are not a distribution.
 
 **Procedure.**
 
@@ -305,18 +305,22 @@ The draft names two seats but no aggregation. Registered here:
 
 ### 8.6 Count, stability, cost
 
-- **Count.** Exactly 100 prompts: 34 explain + 33 describe in the gate, 33 argue
+- **Count.** Exactly 133 prompts: 50 explain + 50 describe in the gate, 33 argue
   diagnostic. The draft's "30 new items", "34 each" and "60 calls" are
-  superseded.
-- **Calls.** 100 prompts x 2 judges = 200 calls per pass, not 60. Stability
-  10 items x 3 repeats x 2 judges = 60 calls. At 2-4k reasoning tokens per call
-  the pass is ~3-4 h, not 1 h.
+  superseded; the D-count is re-registered from 100 to 133.
+- **Calls.** 133 prompts x 2 judges = 266 calls per pass, not 60. Gemma is the
+  bottleneck: the 4.4b certification measured median 63 s, mean 76 s, p95 159 s
+  per call (n=480, 2048-token budget, single-score rubric). The key-2 rubric has
+  a larger system message and three dimensions, so budget 1.5-2.5x: ~4-8 h for
+  the 133-call Gemma pass, plus ~1-2.5 h for stability. Qwen measured median
+  7 s, mean 12 s, so it is not the bottleneck. Plan 6-10 h per full pass and
+  measure the first 10 calls to replace the estimate with the observed rate.
 - **Stability.** 10 items x 3 repeats = 30 observations per judge; >= 29/30
   within +/-1 (96.7 %), exact agreement reported. The slice is stratified:
   3 items near the threshold, 3 at the floor, 4 random. The draft's 5 x 3 at
   >= 95 % is arithmetically 15/15 = 100 % and has no resolution between 80 %
   and 95 %. Stability measures the judge, because the model is greedy at t=0.
-- **Authoring.** 100 prompts plus rubric plus the validation set is ~1.5-2 days,
+- **Authoring.** 133 prompts plus rubric plus the validation set is ~2-2.5 days,
   not 1 day.
 
 ### 8.7 Remaining corrections
@@ -342,7 +346,7 @@ The draft names two seats but no aggregation. Registered here:
 - **Repetition.** Greedy decoding on an undertrained byte model loops. Add an
   objective repetition metric (longest repeated substring, distinct-4) with a
   hard fail above 64 B; a loop is locally fluent and can read as coherence 3.
-- **Prompt-set sampling error.** The `min_d` floor over 67 is an extreme
+- **Prompt-set sampling error.** The `min_d` floor over 100 is an extreme
   statistic. Report the second-worst item, the count of items within 0.5 of the
   floor, and a leave-one-out range. If the floor verdict hinges on one item,
   flag it.
@@ -361,9 +365,11 @@ The draft names two seats but no aggregation. Registered here:
 
 ### 8.8 What this block does not do
 
-- It does not change the six operator decisions as decisions: 100 prompts,
-  authored, greedy/t=0, 256 B, threshold from a baseline, stability slice. It
-  changes the procedures that implement the last three.
+- It does not change the operator decisions as decisions except the D-count:
+  the D-count is re-registered at 133 (100 gate + 33 diagnostic), while
+  authored, greedy/t=0, 256 B, threshold from a baseline and the stability
+  slice stand. It changes the procedures that implement the length, threshold
+  and stability decisions.
 - It does not touch 4.4b. The certified set is read-only; the 20 English items
   are a judge-scale check under the 4.4b rubric, not a key-2 item pool. A drift
   check (> 0.4 against the frozen anchors Gemma EN 5.00 / Qwen EN 4.06) runs

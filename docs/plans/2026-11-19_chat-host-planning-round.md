@@ -62,8 +62,8 @@ decision that gates the host.**
 threshold from human answers + 3.62B salad, argue diagnostic. The options table
 above is the pre-review menu; it is kept as the record, not as the current
 specification. Its "held-out documents" prompt source and its 1-day cost are
-superseded by the note's authored 100-prompt set and the ~1.5-2-day
-rubric + validation budget.
+superseded by the note's authored 133-prompt set (100 gate + 33 diagnostic)
+and the ~2-2.5-day rubric + validation budget.
 
 ### D2 - Pilot shape
 
