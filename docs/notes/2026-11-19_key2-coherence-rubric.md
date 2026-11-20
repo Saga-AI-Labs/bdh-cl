@@ -8,6 +8,10 @@ still produces word salad. Key 2 must measure the thing section 18 could not.
 **Status.** Draft for the planning round. Not frozen. Nothing here authorizes a
 run; the round must freeze rubric + prompt set with a hash (gate G1).
 
+**Review 2026-11-20.** The draft above stands as the record. Section 8 is the
+correction block that governs G0; where it conflicts with sections 1-7, section
+8 applies.
+
 **Depends on:** chat planning round (`docs/plans/2026-11-19_chat-host-planning-round.md`,
 D1), report sections 16-18 (the diagnosis and the counterexample), planning input
 addenda 6.1 (judge topology).
@@ -147,3 +151,222 @@ fit is not possible, so the rubric is mis-scored.
 
 **Key 2 is the cheapest item in the cascade and the only one that blocks the
 host.**
+
+---
+
+## 8. Review 2026-11-20 - corrections before freeze
+
+**Status of this block.** Non-destructive review outcome. The draft in sections
+1-7 stays as the record of what was decided before the review; this block is
+what G0 freezes. Three design decisions were confirmed by the operator on
+2026-11-20: per-dimension mean + floor, threshold from human answers plus the
+3.62B salad, and the argue family as diagnostic only. The six operator
+decisions of section 3 stand as decisions; the procedures that implement the
+threshold and stability decisions are replaced below, and the prompt split
+follows from the argue-diagnostic decision.
+
+### 8.1 Confirmed changes
+
+| item | draft (sections 1-7) | corrected for G0 |
+|---|---|---|
+| gate unit | min over items of the mean of the three dimensions | per dimension: `mean_d >= M_d` and `min_d >= F_d`; no cross-dimension mean |
+| threshold source | quartiles of the pilot host + certified baseline | human answers (positive) + 3.62B salad (negative), frozen before any host sample |
+| prompt families | three families, all in the gate | explain + describe in the gate; argue diagnostic only |
+| prompt count | 100 decided, 30/102 in the text | exactly 100 total: 67 gate (34 explain + 33 describe), 33 argue diagnostic |
+| stability | 5 items x 3 repeats, >= 95 % | 10 items x 3 = 30, >= 29/30 within +/-1, stratified |
+| length | 256 B | unchanged; local-coherence scope, prompt <= 128 B, word-boundary truncation |
+
+### 8.2 Gate: per-dimension mean + floor
+
+For every dimension d in {coherence, relevance, language}:
+
+- **quality:** `mean_d` over the gate items >= `M_d`;
+- **floor:** `min_d` over the gate items >= `F_d`.
+
+There is no mean across the three dimensions. The mean of the three dimensions
+is reported as a diagnostic, not gated.
+
+**Why.** The draft gate is the minimum over items of the mean of the three
+dimensions. A section 16 sample that is fluent and on-topic but compositionally
+broken scores language 5, relevance 5, coherence 1 - mean 3.67 - and can pass a
+threshold <= 3.67. That is the exact failure key 2 exists to catch. The draft
+also justifies the min with "a model that is coherent on 29 prompts and
+incoherent on one fails"; under the draft rule that failure is not guaranteed,
+because the incoherent item can be compensated by the other two dimensions. The
+4.4b precedent is mean + worst-item floor; this block applies that form per
+dimension instead of inventing a third unit.
+
+`F_d` is set between the salad maximum and the human minimum. `M_d` is set below
+the human mean with a margin. Both are frozen from the reference calibration in
+8.3, not chosen against the host. Any item below `F_d` is re-scored blind by the
+third seat; if the breach is confirmed, the run fails.
+
+### 8.3 Threshold: human positive, 3.62B salad negative
+
+The threshold is calibrated on references that exist before the host run. No
+host sample is scored before the freeze.
+
+**Prompt split consequence.** With argue diagnostic, the gate is 67 prompts, not
+100. The gate statistics (`mean_d` and the `min_d` floor) are computed over the
+67 explain/describe items; the 33 argue items are scored and reported
+separately. If a 100-item gate is required, the
+family split must be re-registered (e.g. 50 explain + 50 describe) and the 33
+diagnostic argue prompts added as a separate set; that is a new decision, not a
+silent change to the count.
+
+**Reference set.**
+
+| role | material | expected |
+|---|---|---|
+| positive | 20 human 256-B answers to 20 of the 67 gate prompts, stratified across explain/describe | all dimensions >= 4, mean >= 4.5 |
+| negative | section 16 samples + 100 generations from the 3.62B checkpoint on the full 100-prompt set; the gate uses the 67 gate items | coherence and language <= 2, max <= 3 |
+| mid (optional) | 100M/90MB pilot samples | between human and 3.62B; register-confounded |
+| dissociation A | section 16 "fluent but incoherent" samples | language >= 4, coherence <= 2 |
+| dissociation B | clean off-topic passages | language >= 4, relevance <= 2, coherence >= 4 |
+
+The 3.62B checkpoint is on disk as `bdh_textmix_p3_mixed_best.pt` and
+`bdh_textmix_p1_legal_new_best.pt` (38.7 GB). The 100 generations are the
+negative distribution; the two section 16 samples alone are not a distribution.
+
+**Procedure.**
+
+1. Score every reference blind with both judges, on the same rubric and the same
+   protocol as the verdict run.
+2. Set `F_d` between the salad maximum and the human minimum, and `M_d` below
+   the human mean with a margin.
+3. If the human and salad distributions overlap on a dimension, the rubric is
+   not separating that dimension. Revise the anchors before freezing; do not
+   split the overlap with a threshold.
+4. Freeze `M_d`, `F_d`, the rubric text, the prompt set, the judge system
+   message, the decoding parameters, the aggregation code, the judge versions
+   and quantisation, and the reference scores, all with sha256.
+5. Only then score the host. The pilot is the verdict run, not the calibration
+   run; if the pilot itself is used for calibration, the verdict needs a second,
+   independent run.
+
+**Validation acceptance (instrument gate, before the host is scored).**
+
+- human answers: all dimensions >= 4 and mean >= 4.5; if not, the rubric is too
+  harsh or the anchors are wrong;
+- salad: coherence and language <= 2, maximum <= 3; if not, the rubric is too
+  lenient;
+- fluent-but-incoherent: language >= 4 and coherence <= 2; this is the
+  dissociation the instrument exists for;
+- off-topic clean text: language >= 4, relevance <= 2, coherence >= 4;
+- ordering: human > 100M/90MB > 3.62B on both the mean and the 10th percentile;
+- inter-judge agreement: >= 70 % exact and >= 95 % within +/-1 per dimension;
+- human read: the operator reads the 10 worst and 10 random samples blind and
+  the judge-vs-human agreement is reported.
+
+### 8.4 Falsification: the 2x2, not "the rubric is wrong"
+
+Key 1 is measured on the val carve against a corpus 6-gram; key 2 is measured on
+prompt generations. They are different data, and a disagreement between them is
+a finding, not proof that the rubric is broken. The draft sentence "coherence
+without statistical fit is not possible" is false as stated: a coherent model
+can sit above a corpus-specific 6-gram on novel prompts, and a model below the
+6-gram can still be incoherent (the section 18 salad). The 6-gram is a
+corpus-specific comparison, not a law.
+
+| key 1 | key 2 | verdict | action |
+|---|---|---|---|
+| pass | pass | pass | proceed to graft |
+| pass | fail | fail (salad) | key-2 verdict stands; diagnose coverage |
+| fail | pass | fail (gate) | register "coherent but off-anchor"; diagnose prompt OOD / carve representativeness |
+| fail | fail | fail | diagnose |
+
+The rubric is falsified by the validation set in 8.3, not by a cross-key
+disagreement. A judge failure (NULL, JSON error, out-of-range) is "not
+scoreable", not "failed"; re-run the judge pass.
+
+### 8.5 Judge protocol: aggregation, dissent, NULL
+
+The draft names two seats but no aggregation. Registered here:
+
+- **Item score.** Dimension score = confirmed minimum of the judges (or the
+  median of three when the third seat fires). Every item below the floor is
+  re-scored blind before it counts.
+- **Dissent.** A difference > 1 on any dimension between the two seats sends the
+  item to the third seat. The third seat is a tie-breaker, not a second team.
+- **NULL / JSON.** Retry once at the 4096 budget. If still NULL or unparseable,
+  the item is a fail (conservative) or the run is "not scoreable" if the rate
+  exceeds the registered cap. It is never silently dropped from the min.
+- **Out-of-range / missing dimension.** Same rule as NULL: retry, then fail.
+- **Agreement.** Report exact and +/-1 agreement per dimension over the gate
+  items. Instrument gate: >= 70 % exact and >= 95 % +/-1, the same form as the
+  4.4b stability criterion. Below that, the instrument is not stable enough for
+  a floor gate.
+- **Deepseek.** "Second team seat" is undefined. Either register it as the
+  tie-breaker (local, model version, quantisation, when it fires) or remove it
+  from the topology. The 4.4b registration says the cloud path is closed by
+  provider policy.
+- **Boxes.** Qwen on the second Spark, Gemma on the RTX 4090; judging does not
+  share the training box (D8).
+
+### 8.6 Count, stability, cost
+
+- **Count.** Exactly 100 prompts: 34 explain + 33 describe in the gate, 33 argue
+  diagnostic. The draft's "30 new items", "34 each" and "60 calls" are
+  superseded.
+- **Calls.** 100 prompts x 2 judges = 200 calls per pass, not 60. Stability
+  10 items x 3 repeats x 2 judges = 60 calls. At 2-4k reasoning tokens per call
+  the pass is ~3-4 h, not 1 h.
+- **Stability.** 10 items x 3 repeats = 30 observations per judge; >= 29/30
+  within +/-1 (96.7 %), exact agreement reported. The slice is stratified:
+  3 items near the threshold, 3 at the floor, 4 random. The draft's 5 x 3 at
+  >= 95 % is arithmetically 15/15 = 100 % and has no resolution between 80 %
+  and 95 %. Stability measures the judge, because the model is greedy at t=0.
+- **Authoring.** 100 prompts plus rubric plus the validation set is ~1.5-2 days,
+  not 1 day.
+
+### 8.7 Remaining corrections
+
+- **256 B is local coherence.** ~45 words, ~3 sentences. It catches section 16
+  salad but not "starts fine, derails at paragraph 2". Register the scope: key 2
+  measures local coherence; long-range coherence is a separate, unbuilt
+  instrument. Truncate at a word boundary and tell the judge the sample may end
+  mid-sentence.
+- **Anchors.** Define 2, 3 and 4 for every dimension, not only the endpoints.
+  Coherence 1 is "no recoverable proposition", not "topic jumps" (that is 2).
+  Language 1 is "broken morphosyntax", not "word salad": "Colorless green ideas
+  sleep furiously" is language 5, coherence 1. The dimensions must be able to
+  dissociate.
+- **Prompt length.** The model is byte-level at block 512. Register prompt
+  <= 128 B so prompt + 256 B generation fits with margin, or register the
+  windowing rule explicitly.
+- **Hash scope.** Hash the rubric text, the judge system message, the decoding
+  parameters, the aggregation code, the judge versions/quantisation and the
+  reference scores, not only the prompt list.
+- **G0, not G1.** The plan's freeze point is G0 (data, carve, key-1 6-gram and
+  margin, key-2 instrument, pilot shape, A/B/C). Key 2 is one field of G0.
+- **Repetition.** Greedy decoding on an undertrained byte model loops. Add an
+  objective repetition metric (longest repeated substring, distinct-4) with a
+  hard fail above 64 B; a loop is locally fluent and can read as coherence 3.
+- **Prompt-set sampling error.** The `min_d` floor over 67 is an extreme
+  statistic. Report the second-worst item, the count of items within 0.5 of the
+  floor, and a leave-one-out range. If the floor verdict hinges on one item,
+  flag it.
+- **Families.** Report per-family minima. Argue is a diagnostic, not a gate
+  family; it measures a discourse mode the base host has not been trained for.
+- **Relevance.** Define it as topical/mode consistency, not "does it answer the
+  prompt". Instruction following is 4.4b's object; key 2 must not become a
+  second 4.4b.
+- **Collinearity.** After validation, report the dimension correlation matrix.
+  If coherence and language correlate above 0.8, the third dimension is cost
+  without information; merge it or keep language as a hard floor.
+- **Contamination.** "Authored" is necessary but not sufficient. Check each
+  prompt for an 8-gram overlap with the host corpus and each output for a
+  50-byte verbatim overlap; flag the latter as memorisation, not coherence.
+  Record who authored the prompts and when.
+
+### 8.8 What this block does not do
+
+- It does not change the six operator decisions as decisions: 100 prompts,
+  authored, greedy/t=0, 256 B, threshold from a baseline, stability slice. It
+  changes the procedures that implement the last three.
+- It does not touch 4.4b. The certified set is read-only; the 20 English items
+  are a judge-scale check under the 4.4b rubric, not a key-2 item pool. A drift
+  check (> 0.4 against the frozen anchors Gemma EN 5.00 / Qwen EN 4.06) runs
+  before any reuse.
+- It does not freeze anything. G0 still requires the reference scores, the
+  hashes and the operator's sign-off.
