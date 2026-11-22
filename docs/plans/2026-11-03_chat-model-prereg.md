@@ -539,6 +539,15 @@ Post-freeze item changes are set v2 and draw with salt
    topology in 4.4a are its candidates. **Until key 2 is frozen, no host run
    is scored as passing** - including one that clears the NLL floor.
 
+   *Review 2026-11-20 (key 2, not 4.4b).* The binding specification is section
+   8 of `docs/notes/2026-11-19_key2-coherence-rubric.md`: 133 authored prompts
+   (100 gate + 33 diagnostic), per-dimension mean + floor, the certified
+   English `good` band as positive reference and the 3.62B salad as negative,
+   argue diagnostic. The "held-out document openings" source and the
+   20-human-answer procedure are superseded. The reference lives in
+   `data/evals/judge_set_v1/`; the cert set stays read-only and is not a key-2
+   prompt pool. The 4.4b registration above is untouched.
+
    **The 100M route is a hypothesis, not a consequence of the diagnosis.**
    Section 18 diagnoses the 3.62B model at 5.12 MB of token-views. It does not
    say that a 100M host on the same corpus becomes coherent: that is an

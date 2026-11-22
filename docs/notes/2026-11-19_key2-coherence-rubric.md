@@ -34,10 +34,12 @@ measure the wrong thing.
 | gold | yes (good/mediocre/bad) | no gold; the rubric scores the sample |
 | languages | 10/10/10 en/de/zh | English only (the host is English-first) |
 | judge | Qwen + Gemma (local) | same topology |
-| usable for an en host | 20 of 60 items | 30 new items |
+| usable for an en host | 18 of 60 items | 133 authored (100 gate + 33 diagnostic) |
 
-**Consequence:** the 20 English items of the certified set are a **calibration
-baseline** for the judges' English register competence, not part of key 2.
+**Consequence:** the 18 English items of the certified set (the draft said 20;
+the merged set is 18) are a **calibration baseline** for the judges' English
+register competence and the positive band for the key-2 threshold; they are not
+a key-2 prompt pool. See section 8.3.
 
 ## 2. The three dimensions
 
@@ -163,9 +165,11 @@ host.**
 **Status of this block.** Non-destructive review outcome. The draft in sections
 1-7 stays as the record of what was decided before the review; this block is
 what G0 freezes. Four design decisions were confirmed by the operator on
-2026-11-20: per-dimension mean + floor, threshold from human answers plus the
-3.62B salad, the argue family as diagnostic only, and the 100-item gate variant
-(50 explain + 50 describe gate, 33 argue diagnostic, 133 total). The D-count of
+2026-11-20: per-dimension mean + floor, threshold from the positive reference
+plus the 3.62B salad, the argue family as diagnostic only, and the 100-item gate
+variant (50 explain + 50 describe gate, 33 argue diagnostic, 133 total). On
+2026-11-20 the operator also registered that the reference lives in
+`data/evals/judge_set_v1/`; section 8.3 makes that concrete. The D-count of
 section 3 is re-registered at 133; the other five operator decisions stand, with
 the procedures for length, threshold and stability replaced below.
 
@@ -174,7 +178,7 @@ the procedures for length, threshold and stability replaced below.
 | item | draft (sections 1-7) | corrected for G0 |
 |---|---|---|
 | gate unit | min over items of the mean of the three dimensions | per dimension: `mean_d >= M_d` and `min_d >= F_d`; no cross-dimension mean |
-| threshold source | quartiles of the pilot host + certified baseline | human answers (positive) + 3.62B salad (negative), frozen before any host sample |
+| threshold source | quartiles of the pilot host + certified baseline | certified English `good` band (positive) + per-dimension negatives (coherence: 3.62B salad; language: language-broken subset; relevance: off-topic control), frozen before any host sample |
 | prompt families | three families, all in the gate | explain + describe in the gate; argue diagnostic only |
 | prompt count | 100 decided, 30/102 in the text | 133 total: 100 gate (50 explain + 50 describe), 33 argue diagnostic; D-count re-registered |
 | stability | 5 items x 3 repeats, >= 95 % | 10 items x 3 = 30, >= 29/30 within +/-1, stratified |
@@ -200,12 +204,12 @@ because the incoherent item can be compensated by the other two dimensions. The
 4.4b precedent is mean + worst-item floor; this block applies that form per
 dimension instead of inventing a third unit.
 
-`F_d` is set between the salad maximum and the human minimum. `M_d` is set below
-the human mean with a margin. Both are frozen from the reference calibration in
-8.3, not chosen against the host. Any item below `F_d` is re-scored blind by the
-third seat; if the breach is confirmed, the run fails.
+`F_d` is set between the negative-band maximum and the positive-band minimum.
+`M_d` is set below the positive-band mean with a margin. Both are frozen from
+the reference calibration in 8.3, not chosen against the host. Any item below
+`F_d` is re-scored blind; if the breach is confirmed, the run fails.
 
-### 8.3 Threshold: human positive, 3.62B salad negative
+### 8.3 Threshold: certified `good` positive, per-dimension negatives
 
 The threshold is calibrated on references that exist before the host run. No
 host sample is scored before the freeze.
@@ -217,33 +221,104 @@ the 100 gate items; the 33 argue items are scored and reported separately. The
 D-count of section 3 is re-registered from 100 to 133 by this decision; gate
 count and total count are now distinct and both are frozen at G0.
 
-**Reference set.**
+**Reference set (operator, 2026-11-20: the reference is in `data/evals/judge_set_v1/`).**
+
+The directory is the certified judge set, not a key-2 prompt pool. Its role is
+split: it calibrates the judge's scale and supplies the positive band; the
+3.62B run supplies the negative band on the key-2 prompts. The merged set has
+**18 English items** (10 stage 1 + 8 stage 2), not the 20 the draft assumed; the
+24 de and 18 zh items stay out of the English host's key-2 calibration.
 
 | role | material | expected |
 |---|---|---|
-| positive | human 256-B answers to gate prompts, stratified explain / describe. **Target 40 (20 explain / 20 describe), minimum 20** (operator 2026-11-20) | all dimensions >= 4, mean >= 4.5 |
-| negative | section 16 samples + 133 generations from the 3.62B checkpoint on the full 133-prompt set; the gate uses the 100 gate items | coherence and language <= 2, max <= 3 |
-| mid (optional) | 100M/90MB pilot samples | between human and 3.62B; register-confounded |
+| scale | 18 English cert items x 6 variants, full length (108 rows) from `cert_items_merged.json` | `good` >= 4 on all dimensions; `short_correct` high (incompleteness is not incoherence); fluent-wrong controls high on language/coherence - key 2 does not score facts |
+| positive (human, target) | human 256-B answers to gate prompts, stratified explain / describe. **Target 40 (20 explain / 20 describe), minimum 20** (operator 2026-11-20) | all dimensions >= 4, mean >= 4.5 |
+| positive (available at this freeze) | the 18 English `good` variants, truncated at a word boundary to <= 256 B; their cert instructions are the prompts | all dimensions >= 4, mean >= 4.5 |
+| negative (coherence) | section 16 samples + 133 generations from the 3.62B checkpoint on the full 133-prompt set; the gate uses the 100 gate items | coherence <= 2; language is reported separately |
+| negative (language) | the language-broken subset of the 3.62B generations (judge language <= 2); if none, the language floor is not negative-calibrated | language <= 2 |
+| negative (relevance) | clean off-topic passages (dissociation B), not the salad | relevance <= 2 |
+| mid (optional) | 100M/90MB pilot samples | between the positive band and 3.62B; register-confounded |
 | dissociation A | section 16 "fluent but incoherent" samples | language >= 4, coherence <= 2 |
 | dissociation B | clean off-topic passages | language >= 4, relevance <= 2, coherence >= 4 |
 
-The 3.62B checkpoint is on disk as `bdh_textmix_p3_mixed_best.pt` and
-`bdh_textmix_p1_legal_new_best.pt` (38.7 GB). The 133 generations are the
-negative distribution; the gate uses the 100 gate items, and the two section 16
-samples alone are not a distribution.
+**The three dimensions do not share one negative band.** Coherence is calibrated
+on the salad. Language is calibrated on the language-broken subset of the 3.62B
+generations; the section 16 samples are fluent by design, so they cannot set a
+language floor. Relevance is calibrated on clean off-topic passages, because
+the salad is often on-topic at the fragment level. If the 3.62B run produces no
+language-broken sample, the language floor is set from the positive band's lower
+bound and marked "not negative-calibrated"; it is not silently inherited from
+the coherence set.
+
+**What the cert set is, and is not.** The `good` texts are instruction-response
+reference answers with gold labels, authored by the excluded GLM agent and
+reviewed cell-by-cell by Quinn; they are not human free generations. The earlier
+"20 human 256-B answers" line described the target, not an available set; the
+registered target is 40 with a minimum of 20 (see the table). The cert set
+calibrates the judge's scale and supplies the positive band that exists at this
+freeze; it does not reproduce the key-2 prompt distribution and it is not a
+second 4.4b run. A factually wrong but fluent `long_wrong` can score high on all
+three key-2 dimensions by design, because key 2 measures coherence, topical
+consistency and language, not truth.
+
+**Length.** The 18 English `good` answers are 288-886 B (median 589 B); none
+fits the 256-B window. The positive band is the longest prefix <= 256 B ending
+on a word boundary (242-255 B across the 18). The judge is told the sample may
+end mid-sentence. The full-length `good` rows stay in the scale set, so the
+truncation effect is measurable. Four items carry a format constraint
+(`cert_en05`, `cert_en09`, `cert_en10`, `cert_en16`); they stay in the band, and
+`M_d` is reported with and without them as a sensitivity check. If the two
+values differ by more than 0.2, the operator decides which band freezes.
+
+**Derivation.** `scripts/quinn/key2_reference.py` reads the frozen cert set and
+writes `reference_scale.jsonl` (108 rows), `reference_positive.jsonl` (18 rows)
+and `reference_manifest.json` under `out_c/key2_calibration/`. The source hash
+is `8570d8cd...c6ce50`; the 133-prompt hash is `c1d9c62c...12e23c`. The
+normative anchors and judge system message are in
+`data/evals/key2_rubric_v1.json` (system-prompt hash `c996a247...d0b59c`,
+file hash `8788ac78...33d65f`). The cert set is read-only; the derived rows are
+not a new cert set.
+
+**Approval.** The operator approved the 133-prompt set and the rubric on
+2026-11-22 at the hashes above. That approves the reviewed bytes; it does not
+freeze the instrument. G0 still freezes the prompt set, rubric, `M_d`, `F_d`,
+reference scores and judge versions together, and any post-approval edit
+produces a new hash and needs a new sign-off.
+
+The negative run uses `bdh_textmix_p3_mixed_best.pt` (38.7 GB), the mixed model
+that produced the section 16 samples; `bdh_textmix_p1_legal_new_best.pt` is an
+optional second arm, not part of the primary threshold. The 133 generations are
+the negative distribution; the gate uses the 100 gate items, and the two
+section 16 samples alone are not a distribution.
+
+**Human reference precedence.** The human reference target stands at 40 answers
+(minimum 20), as registered by the operator on 2026-11-20. It is not available
+at this freeze. If it arrives before G0, it is the primary positive band and the
+cert `good`@256 band is the sensitivity check; if it does not, G0 freezes on the
+cert band and the human band becomes the v2 reference. A later human band must
+not silently replace a frozen threshold.
 
 **Procedure.**
 
 1. Score every reference blind with both judges, on the same rubric and the same
-   protocol as the verdict run.
-2. Set `F_d` between the salad maximum and the human minimum, and `M_d` below
-   the human mean with a margin.
-3. If the human and salad distributions overlap on a dimension, the rubric is
-   not separating that dimension. Revise the anchors before freezing; do not
-   split the overlap with a threshold. **If the overlap appears with the
-   minimum 20 human answers, the reference is extended toward the 40 target
-   before the anchors are revised** - the overlap may be a small-sample effect,
-   and a threshold must not be set on 20 points.
+   protocol as the verdict run. The scale rows use the full cert variants; the
+   positive band uses the 256-B prefixes (human if available, else cert); the
+   negative band uses the 3.62B generations and the off-topic control.
+2. Set `F_d` between the negative-band maximum and the positive-band minimum,
+   and `M_d` below the positive-band mean with a margin. The positive band is
+   the human reference when it exists (target 40, minimum 20), otherwise the
+   cert `good`@256 set. The negative band is per dimension (coherence: 3.62B
+   salad; language: language-broken subset; relevance: off-topic control).
+   The analysis reports `F_d_lo = negative max + 1` (the candidate) and `F_d_hi
+   = positive min` (the strict alternative); the operator signs off on one.
+   `M_d` is reported at margins 0.3 / 0.5 / 0.7; 0.5 is the candidate.
+3. If the positive and negative distributions overlap on a dimension, the rubric
+   is not separating that dimension. Do not split the overlap with a threshold.
+   **If the overlap appears with the minimum 20 human answers, the reference is
+   extended toward the 40 target before the anchors are revised** - the overlap
+   may be a small-sample effect. If it appears with the 18-row cert band, report
+   it as a proxy limitation and let the operator decide whether to wait for the
+   human band or revise the anchors.
 4. Freeze `M_d`, `F_d`, the rubric text, the prompt set, the judge system
    message, the decoding parameters, the aggregation code, the judge versions
    and quantisation, and the reference scores, all with sha256.
@@ -253,14 +328,23 @@ samples alone are not a distribution.
 
 **Validation acceptance (instrument gate, before the host is scored).**
 
-- human answers: all dimensions >= 4 and mean >= 4.5; if not, the rubric is too
-  harsh or the anchors are wrong;
-- salad: coherence and language <= 2, maximum <= 3; if not, the rubric is too
-  lenient;
+- positive band (human if available, else cert `good`@256): all dimensions >= 4
+  and mean >= 4.5; if not, the rubric is too harsh or the anchors are wrong;
+- scale set, `good`: all dimensions >= 4 and mean >= 4.5; if not, the anchors
+  are too harsh or the judge is not using the scale;
+- scale set, `short_correct`: language >= 4, relevance >= 4, coherence >= 4;
+  key 2 must not punish incompleteness;
+- scale set, fluent-wrong controls (`bad`, `long_wrong`, `planted_error`,
+  `audience_violation`): language >= 4 and coherence >= 3. A judge that scores
+  these 1-2 on language or coherence is importing 4.4b correctness into key 2;
+  that is the failure the cert scale is here to catch;
+- salad, coherence only: coherence <= 2, maximum <= 3; if not, the rubric is too
+  lenient. The salad must not be used for the language floor (next line);
 - fluent-but-incoherent: language >= 4 and coherence <= 2; this is the
   dissociation the instrument exists for;
 - off-topic clean text: language >= 4, relevance <= 2, coherence >= 4;
-- ordering: human > 100M/90MB > 3.62B on both the mean and the 10th percentile;
+- ordering: positive band > 100M/90MB > 3.62B on both the mean and the 10th
+  percentile;
 - inter-judge agreement: >= 70 % exact and >= 95 % within +/-1 per dimension;
 - human read: the operator reads the 10 worst and 10 random samples blind and
   the judge-vs-human agreement is reported.
@@ -290,11 +374,11 @@ scoreable", not "failed"; re-run the judge pass.
 
 The draft names two seats but no aggregation. Registered here:
 
-- **Item score.** Dimension score = confirmed minimum of the judges (or the
-  median of three when the third seat fires). Every item below the floor is
-  re-scored blind before it counts.
+- **Item score.** Dimension score = confirmed minimum of the two judges. Every
+  item below the floor is re-scored blind before it counts.
 - **Dissent.** A difference > 1 on any dimension between the two seats sends the
-  item to the third seat. The third seat is a tie-breaker, not a second team.
+  item to a blind re-score; if the difference persists, the lower score is
+  binding. There is no tie-breaker seat (operator 2026-11-20).
 - **NULL / JSON.** Retry once at the 4096 budget. If still NULL or unparseable,
   the item is a fail (conservative). **Registered cap (operator 2026-11-20): <= 5 %
   NULL over the gate items = the items are "not evaluable" and are excluded from
@@ -320,20 +404,31 @@ The draft names two seats but no aggregation. Registered here:
 - **Count.** Exactly 133 prompts: 50 explain + 50 describe in the gate, 33 argue
   diagnostic. The draft's "30 new items", "34 each" and "60 calls" are
   superseded; the D-count is re-registered from 100 to 133.
-- **Calls.** 133 prompts x 2 judges = 266 calls per pass, not 60. Gemma is the
-  bottleneck: the 4.4b certification measured median 63 s, mean 76 s, p95 159 s
-  per call (n=480, 2048-token budget, single-score rubric). The key-2 rubric has
-  a larger system message and three dimensions, so budget 1.5-2.5x: ~4-8 h for
-  the 133-call Gemma pass, plus ~1-2.5 h for stability. Qwen measured median
-  7 s, mean 12 s, so it is not the bottleneck. Plan 6-10 h per full pass and
-  measure the first 10 calls to replace the estimate with the observed rate.
+- **Calls.** The host verdict pass is 133 prompts x 2 judges = 266 calls, not
+  60. The one-time calibration is larger: 108 scale rows + 18 positive-band rows
+  + 133 negative rows = 259 scored samples per judge (518 calls), plus 30
+  stability observations per judge (60). The 133 generations themselves are a
+  3.62B run, not judge calls.
+- **Time.** Gemma is the bottleneck: the 4.4b certification measured median
+  63 s, mean 76 s, p95 159 s per call (n=480, 2048-token budget, single-score
+  rubric). The key-2 rubric has a larger system message and three dimensions, so
+  budget 1.5-2.5x. The host pass is ~4-8 h for Gemma plus ~1-2.5 h stability;
+  the one-time calibration is ~9-16 h for Gemma plus ~1-2 h stability. Plan
+  6-10 h per host pass, 12-20 h for calibration, and measure the first 10 calls
+  to replace the estimate with the observed rate. Qwen measured median 7 s, mean
+  12 s, so it is not the bottleneck.
+- **Generation.** A 2026-11-20 smoke test on the full-width 3.62B checkpoint
+  (float32, one Spark) produced 16 bytes in 11.5 s, 1.39 B/s. If that rate holds,
+  133 x 256 B is ~6.8 h; the first 10 prompts replace the estimate. The rate is
+  prompt-length dependent, so do not freeze the 6.8 h figure.
 - **Stability.** 10 items x 3 repeats = 30 observations per judge; >= 29/30
   within +/-1 (96.7 %), exact agreement reported. The slice is stratified:
   3 items near the threshold, 3 at the floor, 4 random. The draft's 5 x 3 at
   >= 95 % is arithmetically 15/15 = 100 % and has no resolution between 80 %
   and 95 %. Stability measures the judge, because the model is greedy at t=0.
-- **Authoring.** 133 prompts plus rubric plus the validation set is ~2-2.5 days,
-  not 1 day.
+- **Authoring.** 133 prompts plus rubric plus the operator's review of the
+  derived 18-row band is ~1.5-2 days, not 1 day. The band itself is derived, not
+  authored; the 12-20 h calibration is compute, not authoring.
 
 ### 8.7 Remaining corrections
 
@@ -346,7 +441,8 @@ The draft names two seats but no aggregation. Registered here:
   Coherence 1 is "no recoverable proposition", not "topic jumps" (that is 2).
   Language 1 is "broken morphosyntax", not "word salad": "Colorless green ideas
   sleep furiously" is language 5, coherence 1. The dimensions must be able to
-  dissociate.
+  dissociate. The normative 1-5 anchors and the judge system message are in
+  `data/evals/key2_rubric_v1.json`; the table in section 2 is the summary.
 - **Prompt length.** The model is byte-level at block 512. Register prompt
   <= 128 B so prompt + 256 B generation fits with margin, or register the
   windowing rule explicitly.
@@ -373,7 +469,10 @@ The draft names two seats but no aggregation. Registered here:
 - **Contamination.** "Authored" is necessary but not sufficient. Check each
   prompt for an 8-gram overlap with the host corpus and each output for a
   50-byte verbatim overlap; flag the latter as memorisation, not coherence.
-  Record who authored the prompts and when.
+  Record who authored the prompts and when. Preliminary check 2026-11-20: zero
+  word-8-gram hits against wikitext-103 train (86.8M words), legal (6.9M) and
+  code (4.0M). The host-corpus check is still pending; this is a proxy, not the
+  gate.
 
 ### 8.8 What this block does not do
 
@@ -382,9 +481,11 @@ The draft names two seats but no aggregation. Registered here:
   authored, greedy/t=0, 256 B, threshold from a baseline and the stability
   slice stand. It changes the procedures that implement the length, threshold
   and stability decisions.
-- It does not touch 4.4b. The certified set is read-only; the 20 English items
-  are a judge-scale check under the 4.4b rubric, not a key-2 item pool. A drift
-  check (> 0.4 against the frozen anchors Gemma EN 5.00 / Qwen EN 4.06) runs
-  before any reuse.
+- It does not touch 4.4b. The certified set is read-only. Its 18 English items
+  are used in two ways: as a judge-scale check under the key-2 rubric (not by
+  reusing the 4.4b scores), and as the `good`@256 positive band. They are not a
+  key-2 prompt pool; the 133 authored prompts are. The 4.4b scores are not
+  reused, so the drift check (> 0.4 against Gemma EN 5.00 / Qwen EN 4.06) only
+  applies if a later analysis reuses them.
 - It does not freeze anything. G0 still requires the reference scores, the
   hashes and the operator's sign-off.

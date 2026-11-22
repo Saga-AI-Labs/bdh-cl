@@ -1,0 +1,1094 @@
+{
+  "schema": "key2_prompts",
+  "version": "v1-draft",
+  "status": "DRAFT",
+  "date": "2026-11-20",
+  "source": "docs/notes/2026-11-19_key2-coherence-rubric.md section 8",
+  "provenance": {
+    "authored_by": "assistant (DeepSeek V4.1 Flash), for operator review",
+    "method": "authored, not corpus-sampled",
+    "contamination_check": "pending: 8-gram overlap against the host corpus; output 50-byte verbatim check at scoring time",
+    "review": "pending operator sign-off"
+  },
+  "counts": {
+    "total": 133,
+    "gate": 100,
+    "diagnostic": 33,
+    "families": {
+      "explain": 50,
+      "describe": 50,
+      "argue": 33
+    }
+  },
+  "limits": {
+    "prompt_max_bytes": 128,
+    "sample_bytes": 256,
+    "block_size": 512
+  },
+  "prompts": [
+    {
+      "id": "k2_explain_01",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain why the sky changes color at sunset.",
+      "prompt_bytes": 44,
+      "prompt_sha256": "d3e396641b61c82a7f5ec6f44f623615a9604412477f0c313f7e38b3552b2a25"
+    },
+    {
+      "id": "k2_explain_02",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a refrigerator keeps food cold.",
+      "prompt_bytes": 43,
+      "prompt_sha256": "da6790319b05e2347a05d80e32514c4e0c86b6393a37158d085659697af97ba4"
+    },
+    {
+      "id": "k2_explain_03",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a bill becomes a law in a democracy.",
+      "prompt_bytes": 48,
+      "prompt_sha256": "07a69ad6327c7e6a365ea025f2e5054ee777dc6f0711b361b8f10f7299214708"
+    },
+    {
+      "id": "k2_explain_04",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain why we have leap years.",
+      "prompt_bytes": 31,
+      "prompt_sha256": "c89f101edacb8c3d5a8e888c11a398d6a3f6b10f6d57325d30ce3b74b70c762a"
+    },
+    {
+      "id": "k2_explain_05",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a vaccine trains the immune system.",
+      "prompt_bytes": 47,
+      "prompt_sha256": "e782863871dd13efd9edb0204f4567fce33884a5d67f68cef1893ea4da6a0680"
+    },
+    {
+      "id": "k2_explain_06",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how GPS finds your position.",
+      "prompt_bytes": 36,
+      "prompt_sha256": "39e2c0dab78b98852ae087ddf7be7c52f174937ad882cc60cf2bd36726f6c5f5"
+    },
+    {
+      "id": "k2_explain_07",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain why some metals rust and others do not.",
+      "prompt_bytes": 47,
+      "prompt_sha256": "6e102e0457c5ac57de36df67b594c8d2d36dbe05ebb647594b6b4e4cac71ebd6"
+    },
+    {
+      "id": "k2_explain_08",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a bicycle stays upright when moving.",
+      "prompt_bytes": 48,
+      "prompt_sha256": "684883a204a166473c53c844e15b0eead1470ed0cf3fb5c096ab89480c221986"
+    },
+    {
+      "id": "k2_explain_09",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a guitar produces different notes.",
+      "prompt_bytes": 46,
+      "prompt_sha256": "f002c39d87c45b2d545ae450abecd19a609e5fd1c2b6f1a026f338bfc2831d36"
+    },
+    {
+      "id": "k2_explain_10",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain why the ocean is salty.",
+      "prompt_bytes": 31,
+      "prompt_sha256": "a110624f488cbc1278ef300ba1063e5e15c2fea0dd146f6e1c5be1a38851f74e"
+    },
+    {
+      "id": "k2_explain_11",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how plants turn sunlight into food.",
+      "prompt_bytes": 43,
+      "prompt_sha256": "1c29496ccacef884f420b6b7b0d9f31d5d3d337192a06a4c2b0c3055a1b33250"
+    },
+    {
+      "id": "k2_explain_12",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a computer stores a photograph.",
+      "prompt_bytes": 43,
+      "prompt_sha256": "c47a89cbd7331e74bd5a39c6c9c690760032af59e6578cf28aa3edd0e73c5859"
+    },
+    {
+      "id": "k2_explain_13",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain why earthquakes happen.",
+      "prompt_bytes": 31,
+      "prompt_sha256": "9aedbd130add699c23a7fdb98dfe6b4281bee1be2fa145d808d7cc340bc9bf90"
+    },
+    {
+      "id": "k2_explain_14",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a lock and key work.",
+      "prompt_bytes": 32,
+      "prompt_sha256": "feda402794cded0efc6f0adefc31d40aea97b8189fc9f199c9099f0f2767fb7b"
+    },
+    {
+      "id": "k2_explain_15",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how coffee gets its flavor.",
+      "prompt_bytes": 35,
+      "prompt_sha256": "95bb90eff06cd33b3f51f78ed7541fc5879f7dac1bea499241f867852cba4d28"
+    },
+    {
+      "id": "k2_explain_16",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain why ice floats on water.",
+      "prompt_bytes": 32,
+      "prompt_sha256": "555358929a042fc675bbf6742ea8eda589f15f336be09037fa9e03836b5c12fa"
+    },
+    {
+      "id": "k2_explain_17",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a microwave heats food.",
+      "prompt_bytes": 35,
+      "prompt_sha256": "0526140fd41f1cb43d9b1a355b0bb5821ef561d40b9b467a53320a148937e921"
+    },
+    {
+      "id": "k2_explain_18",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how the internet sends a message across the world.",
+      "prompt_bytes": 58,
+      "prompt_sha256": "48122892da68206aaaaad3864d0f0fc270051e40c9054af2a13a57226270f4ca"
+    },
+    {
+      "id": "k2_explain_19",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain why we dream.",
+      "prompt_bytes": 21,
+      "prompt_sha256": "493cc011eb6a081b02ff5c45321fa12d561ab5a768e16467a5e99a93a7dccc49"
+    },
+    {
+      "id": "k2_explain_20",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a caterpillar becomes a butterfly.",
+      "prompt_bytes": 46,
+      "prompt_sha256": "dc915950e45896f2529d002be7df2cb9e896955e11fb8b710dbb332d0c078022"
+    },
+    {
+      "id": "k2_explain_21",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain why the moon has phases.",
+      "prompt_bytes": 32,
+      "prompt_sha256": "89a137fa3ba976f52e00633aec5fba95bbdebf45b4232e8fc47ae4cd1b47debf"
+    },
+    {
+      "id": "k2_explain_22",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a battery stores energy.",
+      "prompt_bytes": 36,
+      "prompt_sha256": "4561c794d67cb05414e8850247c1ab980c56708c42b87dc2abaa215929fd0f33"
+    },
+    {
+      "id": "k2_explain_23",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a city supplies clean water.",
+      "prompt_bytes": 40,
+      "prompt_sha256": "2cec22528a3903e6dd7dc935ed9661ab7d47f40197984fd1ec2f8fc4328d7663"
+    },
+    {
+      "id": "k2_explain_24",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain why some sounds are loud and others soft.",
+      "prompt_bytes": 49,
+      "prompt_sha256": "1c2e0d074ccfb3f89a317c23b4144c77237764edf90dc84b082a5ed172853e08"
+    },
+    {
+      "id": "k2_explain_25",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a search engine ranks pages.",
+      "prompt_bytes": 40,
+      "prompt_sha256": "751088043d2c206f4af8e48a1bf56bfa44025dcaf9616e50cd5c991580157307"
+    },
+    {
+      "id": "k2_explain_26",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain why mountains form.",
+      "prompt_bytes": 27,
+      "prompt_sha256": "1518fb58c1ac8bb26c4ecba45890c4eb9c71b379effba9287179320a0be1696e"
+    },
+    {
+      "id": "k2_explain_27",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a wound heals.",
+      "prompt_bytes": 26,
+      "prompt_sha256": "4ce8a8c462007563450a6d7e07348ff4e86aa2fb667428729a0bdebaead5b96e"
+    },
+    {
+      "id": "k2_explain_28",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain why we get hiccups.",
+      "prompt_bytes": 27,
+      "prompt_sha256": "97baf692c29879395a633a9f956dacf4494130950c800247b3fd501107922c77"
+    },
+    {
+      "id": "k2_explain_29",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a jet engine produces thrust.",
+      "prompt_bytes": 41,
+      "prompt_sha256": "6cfe024c361cf663ccbce4c9a37477d5fa8b092892f02a191a0a055dc5ce48e2"
+    },
+    {
+      "id": "k2_explain_30",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a bank keeps your money safe.",
+      "prompt_bytes": 41,
+      "prompt_sha256": "b02785d04e7db29c586ac240b2c37ed27145a6e4856d446dc477c7e5d4bdcda8"
+    },
+    {
+      "id": "k2_explain_31",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain why leaves change color in autumn.",
+      "prompt_bytes": 42,
+      "prompt_sha256": "30a077b30bebaef87f03fdc19adb4ba97fa662ae64a34ef9015e2504afb591d0"
+    },
+    {
+      "id": "k2_explain_32",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a compass points north.",
+      "prompt_bytes": 35,
+      "prompt_sha256": "bf4ceb51a790d577180743630eaad2c6dd66bf676acaf5cf051906924a69f203"
+    },
+    {
+      "id": "k2_explain_33",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a speaker turns electricity into sound.",
+      "prompt_bytes": 51,
+      "prompt_sha256": "d57c1934adf1753634dfa5487daaed7448ffd441513ba9bad05a26bbafe6bf0f"
+    },
+    {
+      "id": "k2_explain_34",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain why rivers bend.",
+      "prompt_bytes": 24,
+      "prompt_sha256": "7d5dada74473bc77d6f56dc267ebedb25ef5905feea7a4c2fb2987f8f00e6926"
+    },
+    {
+      "id": "k2_explain_35",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a seed knows when to grow.",
+      "prompt_bytes": 38,
+      "prompt_sha256": "a91ad62bad176252bdb7d3d287d8b22490345024f52d84819ca8533a35dc8dde"
+    },
+    {
+      "id": "k2_explain_36",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a camera focuses on a subject.",
+      "prompt_bytes": 42,
+      "prompt_sha256": "f0cc85b8a78c75fa9e02ee6dcb578a5a6837b2c6990127d3d3e2a81d4671a3a8"
+    },
+    {
+      "id": "k2_explain_37",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain why the sea has tides.",
+      "prompt_bytes": 30,
+      "prompt_sha256": "a9470d6b0d3f9b513248afcc9b802f772b5afd01c0fa6058f7aea1eafa8ae525"
+    },
+    {
+      "id": "k2_explain_38",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a train stays on its tracks.",
+      "prompt_bytes": 40,
+      "prompt_sha256": "cab1a8dc92c2e30c975c18eafac6773dff8295ed751b40165e6076a31ed190a1"
+    },
+    {
+      "id": "k2_explain_39",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a hospital sterilizes equipment.",
+      "prompt_bytes": 44,
+      "prompt_sha256": "1091df76e60bdf801369442a43ff28edd0e3d2e894b3edad5e3817ebf33873aa"
+    },
+    {
+      "id": "k2_explain_40",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain why some people are allergic to pollen.",
+      "prompt_bytes": 47,
+      "prompt_sha256": "5acadb2dbac9740ceed864fab435ef2ed9153080b7fef0281aab23210392cb3d"
+    },
+    {
+      "id": "k2_explain_41",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a map represents a curved world.",
+      "prompt_bytes": 44,
+      "prompt_sha256": "5dac38a353e8708272299c9bd402d2cf3762af7e6d056f3939a061443ff36934"
+    },
+    {
+      "id": "k2_explain_42",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a wind turbine makes electricity.",
+      "prompt_bytes": 45,
+      "prompt_sha256": "d15cbb78c8a5157f7258d7e7c4d7428672733e57236ddea6e1adbfcf53b4d49d"
+    },
+    {
+      "id": "k2_explain_43",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain why bread rises.",
+      "prompt_bytes": 24,
+      "prompt_sha256": "173673745edff8e05920ca5966beca23494179f91679860252520487c3123d4f"
+    },
+    {
+      "id": "k2_explain_44",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a radio carries music through the air.",
+      "prompt_bytes": 50,
+      "prompt_sha256": "6cc8ba32eaad4beac54089dc3e2d1dc284e61845a900f9f79a94d86b8b7da1ad"
+    },
+    {
+      "id": "k2_explain_45",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain why the weather changes from day to day.",
+      "prompt_bytes": 48,
+      "prompt_sha256": "b7d796eef71e36a5cc2b71eb6d22c33492696b63a8c7d94c48d3d220fbe88de3"
+    },
+    {
+      "id": "k2_explain_46",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a barcode is read.",
+      "prompt_bytes": 30,
+      "prompt_sha256": "147edc535e08a9bac879b27f535c8452ad37f86ab40dcfb3c62f78e911d72212"
+    },
+    {
+      "id": "k2_explain_47",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain why honey does not spoil.",
+      "prompt_bytes": 33,
+      "prompt_sha256": "8ce472b1d825975980d2c66759af7c946c193532e52112776ce43cba6d59435f"
+    },
+    {
+      "id": "k2_explain_48",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a bridge carries heavy traffic.",
+      "prompt_bytes": 43,
+      "prompt_sha256": "c082e3512ce15ca4b027445502d3fafd84efc160bc2bb5ba870322969d7385b6"
+    },
+    {
+      "id": "k2_explain_49",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain why we see lightning before we hear thunder.",
+      "prompt_bytes": 52,
+      "prompt_sha256": "55f833655c20ea652ec33c2db22e860b9589cd84637c8dfa1219df60cb370dfb"
+    },
+    {
+      "id": "k2_explain_50",
+      "family": "explain",
+      "gate": true,
+      "prompt": "Explain how a language changes over time.",
+      "prompt_bytes": 41,
+      "prompt_sha256": "de4b6017371ef311b992e19030a7ddc77fe7b5e0db6db907e5509b0e12965089"
+    },
+    {
+      "id": "k2_describe_01",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how to bake a loaf of bread.",
+      "prompt_bytes": 37,
+      "prompt_sha256": "eb4a9839c395e49936f451b25232cb7d6eae5d44320e38d35983b448d571da82"
+    },
+    {
+      "id": "k2_describe_02",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a compiler turns code into a program.",
+      "prompt_bytes": 50,
+      "prompt_sha256": "bebe8ed4cb0abb0f09271017f0e72a0ab272db29a6d4be2d54145a9e6d332d12"
+    },
+    {
+      "id": "k2_describe_03",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a house is built from foundation to roof.",
+      "prompt_bytes": 54,
+      "prompt_sha256": "7576a00810c5ba6e3c0e8bef8a7c60244218c4063b468754ec9ef8ae1f595138"
+    },
+    {
+      "id": "k2_describe_04",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how to make a cup of tea.",
+      "prompt_bytes": 34,
+      "prompt_sha256": "ea9affe643bfe01c5d81a52763414015c6c31b871b78223e5a086a2aac8ecd02"
+    },
+    {
+      "id": "k2_describe_05",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a city prepares for a storm.",
+      "prompt_bytes": 41,
+      "prompt_sha256": "899b2815f73b81f328ea65d145ba09b5b1e8aa7ec626dd1d024225732ba000ee"
+    },
+    {
+      "id": "k2_describe_06",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a book is printed and bound.",
+      "prompt_bytes": 41,
+      "prompt_sha256": "cd8b468e4a3504a2d91fcdf47d0e26f763a78ad3b905dfaeb57d0863bb453c78"
+    },
+    {
+      "id": "k2_describe_07",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how to plant a small garden.",
+      "prompt_bytes": 37,
+      "prompt_sha256": "eb5f969769ba2c1a8814914be2160018953fd297c654a4f70d0be63147129bda"
+    },
+    {
+      "id": "k2_describe_08",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a car engine starts.",
+      "prompt_bytes": 33,
+      "prompt_sha256": "f7ea491669c8c0ade820c3ba71365edeee89ffbbbaf2be4d04dc9ee41ab77da9"
+    },
+    {
+      "id": "k2_describe_09",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a flight is prepared before takeoff.",
+      "prompt_bytes": 49,
+      "prompt_sha256": "02cd03a39ff6cbb308c64d1cfc330df1858b92adc6fced4e415d5bc73eb1d7af"
+    },
+    {
+      "id": "k2_describe_10",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a museum sets up an exhibition.",
+      "prompt_bytes": 44,
+      "prompt_sha256": "34a68ece4ae35862521705e5b41a220e30d1be6b7e2a61ad84d57e1abf23c1d1"
+    },
+    {
+      "id": "k2_describe_11",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how to change a bicycle tire.",
+      "prompt_bytes": 38,
+      "prompt_sha256": "603d467e2ac6e422b73432dcac840ae5e6597771aece5b3274faea31f328fd47"
+    },
+    {
+      "id": "k2_describe_12",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a restaurant prepares for dinner service.",
+      "prompt_bytes": 54,
+      "prompt_sha256": "1a24b4bfbd1965d63bec0467b8115fb524b9349c5521b0ed51e354e19d12cc7e"
+    },
+    {
+      "id": "k2_describe_13",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a solar panel is installed on a roof.",
+      "prompt_bytes": 50,
+      "prompt_sha256": "ffed87ea95533c3ec6bfacf07a93d09c31a43d691f75625a5ba77ef816e2c8c3"
+    },
+    {
+      "id": "k2_describe_14",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a newspaper is put together.",
+      "prompt_bytes": 41,
+      "prompt_sha256": "c0cbc4d063c4010cee1458a21512385cef208b97672e402e25c5f97cc2ad6520"
+    },
+    {
+      "id": "k2_describe_15",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how to organize a small conference.",
+      "prompt_bytes": 44,
+      "prompt_sha256": "2a6c905f1bfe825cdab88a810fbfb7b3f899f1b718980e6b39d3076d38572eec"
+    },
+    {
+      "id": "k2_describe_16",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a water treatment plant works.",
+      "prompt_bytes": 43,
+      "prompt_sha256": "c551997b21912881eb3de93c9fb803f95a80bdbbd2288fd7267731cd2c8c7df0"
+    },
+    {
+      "id": "k2_describe_17",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a film scene is shot on location.",
+      "prompt_bytes": 46,
+      "prompt_sha256": "5916576fa090610af18796d1fb7460a17f7f2c70f70d5b4dbb06500ba372f1cd"
+    },
+    {
+      "id": "k2_describe_18",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how to train for a long walk.",
+      "prompt_bytes": 38,
+      "prompt_sha256": "78735008169120c72244c77eb2d057e36b61410c162929c8f48a2cd8a8618cb1"
+    },
+    {
+      "id": "k2_describe_19",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a library sorts and lends books.",
+      "prompt_bytes": 45,
+      "prompt_sha256": "7d14fac8f132a86466c2db6a9b811d3184bad23767487bbdf425e370ab9f6bfa"
+    },
+    {
+      "id": "k2_describe_20",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a package travels from a warehouse to a home.",
+      "prompt_bytes": 58,
+      "prompt_sha256": "8dad67203a965f872b0e8f0941ed32663f5e8cdf21befad09f923ec9f4e1d648"
+    },
+    {
+      "id": "k2_describe_21",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a doctor examines a patient.",
+      "prompt_bytes": 41,
+      "prompt_sha256": "e605e1accd12a7de841c98f1d59fcf40633c49f3665816f45234067bc16703be"
+    },
+    {
+      "id": "k2_describe_22",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how to build a campfire safely.",
+      "prompt_bytes": 40,
+      "prompt_sha256": "1e520bec160c4ec6c8520716df2780b577151d7b64a025c880f15f890a794bcd"
+    },
+    {
+      "id": "k2_describe_23",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a brewery makes beer.",
+      "prompt_bytes": 34,
+      "prompt_sha256": "f5bd20951c70c0d38042b4df1ac2562d6bce81882f8bbbc9baeeb61320822022"
+    },
+    {
+      "id": "k2_describe_24",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a school plans a sports day.",
+      "prompt_bytes": 41,
+      "prompt_sha256": "29a2f8865831eef2be3ab266ad98b16e31a7482bcfb1ac7c529532140d5df7d0"
+    },
+    {
+      "id": "k2_describe_25",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a tailor makes a suit.",
+      "prompt_bytes": 35,
+      "prompt_sha256": "b1f4639cc756914c16f0559b51db9cf85771d97bb233faf8d442e2cbee50c12a"
+    },
+    {
+      "id": "k2_describe_26",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a wind farm is maintained.",
+      "prompt_bytes": 39,
+      "prompt_sha256": "2c9909a317b87a80994b397e87c8c34539f904f14167f9bd5dea8f5948d0cbff"
+    },
+    {
+      "id": "k2_describe_27",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a data center keeps servers cool.",
+      "prompt_bytes": 46,
+      "prompt_sha256": "81f703d96619d1160aaee99b61c43978a240935f2712be1e0c76979dc103e7aa"
+    },
+    {
+      "id": "k2_describe_28",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a farmer harvests wheat.",
+      "prompt_bytes": 37,
+      "prompt_sha256": "64878358e6a2deeb39a60a437865709b43c50aaa2d477a0f17237fde1a193848"
+    },
+    {
+      "id": "k2_describe_29",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how to write and send a letter.",
+      "prompt_bytes": 40,
+      "prompt_sha256": "5d0e1abedf388ac4c9303b3e62738ee1270a8540562903d56c5933a0885ddd25"
+    },
+    {
+      "id": "k2_describe_30",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a bridge is inspected.",
+      "prompt_bytes": 35,
+      "prompt_sha256": "65a0ccc024d2ed9a3c8a59007b7faa577d1b6ccabde7106940a07b4bd1401c49"
+    },
+    {
+      "id": "k2_describe_31",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a hotel prepares a room for guests.",
+      "prompt_bytes": 48,
+      "prompt_sha256": "387c1507039fc2e33d82c892b46e36dd89e04d9e0d77cad44ce088234b0275b7"
+    },
+    {
+      "id": "k2_describe_32",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a software team releases a new version.",
+      "prompt_bytes": 52,
+      "prompt_sha256": "8ee56bb031ed291ea16f54d0029365b21bb40497982d318493edc3f7bd680adf"
+    },
+    {
+      "id": "k2_describe_33",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a choir learns a new song.",
+      "prompt_bytes": 39,
+      "prompt_sha256": "4eb6d2106a07a1f25df8b2c46436d6e35aa91ebd5bbba2584c0ee7b3b14d73b8"
+    },
+    {
+      "id": "k2_describe_34",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a city recycles household waste.",
+      "prompt_bytes": 45,
+      "prompt_sha256": "22b57239b9eb85c5ed646425c7397ccf21a92c883977b53490863f68a26a142d"
+    },
+    {
+      "id": "k2_describe_35",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how to make a simple wooden shelf.",
+      "prompt_bytes": 43,
+      "prompt_sha256": "260816d6b6bf90a3729ee173e8e1b00b3ff91e44f33d15bb0a2a8ca09b5f65f1"
+    },
+    {
+      "id": "k2_describe_36",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a lighthouse guides ships.",
+      "prompt_bytes": 39,
+      "prompt_sha256": "23be29cb6260ee73103939535f06500e6edf4221ead6066ca9a91a626ce93a9a"
+    },
+    {
+      "id": "k2_describe_37",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a zoo cares for a large animal.",
+      "prompt_bytes": 44,
+      "prompt_sha256": "25225006136e01588ad107800dde6092f420a7c2c1843fd4ddc776d3d989b412"
+    },
+    {
+      "id": "k2_describe_38",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a photographer edits a digital image.",
+      "prompt_bytes": 50,
+      "prompt_sha256": "a50c26e1f3170c29946afb85b3001fff3778a9b816766f265baa3080aba97c96"
+    },
+    {
+      "id": "k2_describe_39",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a bakery plans its morning production.",
+      "prompt_bytes": 51,
+      "prompt_sha256": "307cd078ce3f9ee0e064915209deb53376c6fbede5156df2b484c78bdd87003b"
+    },
+    {
+      "id": "k2_describe_40",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a rescue team searches for a lost hiker.",
+      "prompt_bytes": 53,
+      "prompt_sha256": "bd2a6572f10a28d0f423499c0fd7bd643cbbeccd90d181fddf25bf919f67c16e"
+    },
+    {
+      "id": "k2_describe_41",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a bank opens a new account.",
+      "prompt_bytes": 40,
+      "prompt_sha256": "d9bfca9edd99e99b7b6a54e2b7b6d6b596f53954c1f40ff18dd19eba7ba7702f"
+    },
+    {
+      "id": "k2_describe_42",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a theater stages a play.",
+      "prompt_bytes": 37,
+      "prompt_sha256": "583ab1b48bf0fc6187f9996497477f7aedcca67441409e9d58f6ad3844777b0a"
+    },
+    {
+      "id": "k2_describe_43",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a mechanic diagnoses a strange noise.",
+      "prompt_bytes": 50,
+      "prompt_sha256": "0218f044a077ea0f6f1fad837d53beb9cb956c63c98f6e45b9348444f93179c1"
+    },
+    {
+      "id": "k2_describe_44",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a community builds a playground.",
+      "prompt_bytes": 45,
+      "prompt_sha256": "0808a2a7bd65966af4bb3a7a0dfc3400039189df697bd5ebda8db842e7bec500"
+    },
+    {
+      "id": "k2_describe_45",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a scientist prepares a simple experiment.",
+      "prompt_bytes": 54,
+      "prompt_sha256": "3605789a57431753784544ca746620b2489457e4e2329d9c628c5a133f900a96"
+    },
+    {
+      "id": "k2_describe_46",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a courier delivers medicine in a city.",
+      "prompt_bytes": 51,
+      "prompt_sha256": "12f9541ccd3794f36ace80e804bb3be75e8cf50d53ab89988cfdcdde19f4b656"
+    },
+    {
+      "id": "k2_describe_47",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a radio station produces a live show.",
+      "prompt_bytes": 50,
+      "prompt_sha256": "91800db640826b27ddd81c988fa14fe91c99d0b28cda98743380fb493fdbfaa8"
+    },
+    {
+      "id": "k2_describe_48",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a family moves to a new home.",
+      "prompt_bytes": 42,
+      "prompt_sha256": "bc81e6bb0d3314163f524552cebd62fb29004b3060a4c920b92587eaa69d5be7"
+    },
+    {
+      "id": "k2_describe_49",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a park ranger maintains a trail.",
+      "prompt_bytes": 45,
+      "prompt_sha256": "b1598727c5ddbbbca5192ab72d45e441068d59f49d86beaaea22aba03c98caed"
+    },
+    {
+      "id": "k2_describe_50",
+      "family": "describe",
+      "gate": true,
+      "prompt": "Describe how a small business closes its books at year end.",
+      "prompt_bytes": 59,
+      "prompt_sha256": "ad2a3f2a6de2e178fa5bb7579570330ff0357908bd6de788bcbc74f371410ace"
+    },
+    {
+      "id": "k2_argue_01",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Should cities ban cars from their centers? Argue your case.",
+      "prompt_bytes": 59,
+      "prompt_sha256": "1b803f107096f84ed92c933eb7c20501372acdeae43274994e88165e04358420"
+    },
+    {
+      "id": "k2_argue_02",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Is it better to rent a home or buy one? Argue your case.",
+      "prompt_bytes": 56,
+      "prompt_sha256": "3f392e1f1fa3c6037ac0b437da7b66d8f88e1be7d04f9ed07a15c1b27addd85e"
+    },
+    {
+      "id": "k2_argue_03",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Should schools teach children to code? Argue your case.",
+      "prompt_bytes": 55,
+      "prompt_sha256": "212c214b0c88ae2d7ee97a2368e918dce7b25042890e1083b9e103dcb0bb222b"
+    },
+    {
+      "id": "k2_argue_04",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Should remote work remain common? Argue your case.",
+      "prompt_bytes": 50,
+      "prompt_sha256": "f0c03b75af97656e570204e10e9712956bd9695bef29018f1837f40885b7d161"
+    },
+    {
+      "id": "k2_argue_05",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Is social media good for public debate? Argue your case.",
+      "prompt_bytes": 56,
+      "prompt_sha256": "f530cc8481c75a9ae6870192de573a56bf8244b31179d32869fa5aa130bd0c30"
+    },
+    {
+      "id": "k2_argue_06",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Should governments fund space exploration? Argue your case.",
+      "prompt_bytes": 59,
+      "prompt_sha256": "eef9ad49cf0207dc623426e0d745ce77a76ae4a6eb7f23d0192d50bf3fd36c74"
+    },
+    {
+      "id": "k2_argue_07",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Should voting be compulsory? Argue your case.",
+      "prompt_bytes": 45,
+      "prompt_sha256": "fb1274e6e833ff88460d392c6a0500639d6d29dcda335c228e7f45cc046c0c0a"
+    },
+    {
+      "id": "k2_argue_08",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Is a four-day work week a good idea? Argue your case.",
+      "prompt_bytes": 53,
+      "prompt_sha256": "a73799dd932347828b80fc9cdca5eb06f9d2161e3c8acf8d589d8e93d6fd139a"
+    },
+    {
+      "id": "k2_argue_09",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Should universities be free? Argue your case.",
+      "prompt_bytes": 45,
+      "prompt_sha256": "662ffe81d993ab54c243a50b75484dc4ce87b4e9992ccb82bf8875a6c7a119a1"
+    },
+    {
+      "id": "k2_argue_10",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Should we eat less meat? Argue your case.",
+      "prompt_bytes": 41,
+      "prompt_sha256": "91267fe9e203b904093cd176c7f9b64f635521fccae418a9e887c6f97fb01307"
+    },
+    {
+      "id": "k2_argue_11",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Is artificial intelligence a threat to jobs? Argue your case.",
+      "prompt_bytes": 61,
+      "prompt_sha256": "9fff607fb242915686e9b09265593f9c72fdc123b2b7d749d9c14a295c01d58d"
+    },
+    {
+      "id": "k2_argue_12",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Should public transport be free? Argue your case.",
+      "prompt_bytes": 49,
+      "prompt_sha256": "e1c83473ac95cd22d4fd0476bcb507969d0a7c10666c4421fa7423ef3b7771b8"
+    },
+    {
+      "id": "k2_argue_13",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Should parents limit children's screen time? Argue your case.",
+      "prompt_bytes": 61,
+      "prompt_sha256": "01439a8f10b642a0b10e6f31ba114d95db372fa9a74fb39b768593a93beeced7"
+    },
+    {
+      "id": "k2_argue_14",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Is it better to live in a city or a small town? Argue your case.",
+      "prompt_bytes": 64,
+      "prompt_sha256": "f76ebc3ff34c22c1b5ec31a2eb53b289af52910c0f118a88f4e2c6d5b1a79c0a"
+    },
+    {
+      "id": "k2_argue_15",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Should museums return disputed artifacts? Argue your case.",
+      "prompt_bytes": 58,
+      "prompt_sha256": "a32a3cabe4aa6b580e029cfe1274ccea24570735e225ce3698d75a25af2fabe6"
+    },
+    {
+      "id": "k2_argue_16",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Should companies be allowed to track employees? Argue your case.",
+      "prompt_bytes": 64,
+      "prompt_sha256": "34f7ba1bb31da6b030e99801bb51f50b37b1c8e5c08c5892a56ab29a4d5ffdbd"
+    },
+    {
+      "id": "k2_argue_17",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Is nuclear power part of a clean energy future? Argue your case.",
+      "prompt_bytes": 64,
+      "prompt_sha256": "4991d8e946b708424b423fc8b825f3623981d9b3bbdba99e8a0bfb37db1e4e25"
+    },
+    {
+      "id": "k2_argue_18",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Should schools require uniforms? Argue your case.",
+      "prompt_bytes": 49,
+      "prompt_sha256": "cb27399783ed4bca14477dbeef679245593da27e3548700c013d98861fe9cf13"
+    },
+    {
+      "id": "k2_argue_19",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Is censorship ever justified? Argue your case.",
+      "prompt_bytes": 46,
+      "prompt_sha256": "99e4906180465db038ed3dd2d32b690dd84435a98a345580ff81609d67d490a9"
+    },
+    {
+      "id": "k2_argue_20",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Should billionaires exist? Argue your case.",
+      "prompt_bytes": 43,
+      "prompt_sha256": "d22dfa66c5cb8f24696868b33ddd2730053a774429f151c037cbe522aca618ef"
+    },
+    {
+      "id": "k2_argue_21",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Should we ban single-use plastics? Argue your case.",
+      "prompt_bytes": 51,
+      "prompt_sha256": "ac67913cf44f9faa672a1aba008e8bf81eff0866bb38817ad57fc1d8338887dc"
+    },
+    {
+      "id": "k2_argue_22",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Is online learning as good as classroom learning? Argue your case.",
+      "prompt_bytes": 66,
+      "prompt_sha256": "a22152fb29952124f5a50f9b385b35b22cb922a77de89f82d1e9ed864a09774e"
+    },
+    {
+      "id": "k2_argue_23",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Should animals be kept in zoos? Argue your case.",
+      "prompt_bytes": 48,
+      "prompt_sha256": "b03dcd3d433e8d40d55cf0000953729fdba6b4137d0e6da24a13ff6592368515"
+    },
+    {
+      "id": "k2_argue_24",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Is privacy possible in the digital age? Argue your case.",
+      "prompt_bytes": 56,
+      "prompt_sha256": "c6765007b5d5a4f1394d5eeef077c2c7f6e470a3efe05abb3bde24d6cb6d452b"
+    },
+    {
+      "id": "k2_argue_25",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Should the retirement age rise? Argue your case.",
+      "prompt_bytes": 48,
+      "prompt_sha256": "de37dfa2e405978698c5d7cb4ba48c29af0d1a6ef3512bfbfaea194d392b3238"
+    },
+    {
+      "id": "k2_argue_26",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Should governments give everyone a basic income? Argue your case.",
+      "prompt_bytes": 65,
+      "prompt_sha256": "40e74f0ca2046666da0a90b943b3eec1a93005fd6dd18f55eac635d9e77a682a"
+    },
+    {
+      "id": "k2_argue_27",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Is competition good for students? Argue your case.",
+      "prompt_bytes": 50,
+      "prompt_sha256": "fc667e9b80c84021ff98fa2ea690ffb19ca2696984022a98094d392b4875b969"
+    },
+    {
+      "id": "k2_argue_28",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Should we colonize Mars? Argue your case.",
+      "prompt_bytes": 41,
+      "prompt_sha256": "fc7d2f17d0b20b6a94a6cfda1699997618d4e3517003492a749cf47185d68e1d"
+    },
+    {
+      "id": "k2_argue_29",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Is it ethical to edit human genes? Argue your case.",
+      "prompt_bytes": 51,
+      "prompt_sha256": "31689c59edba95853c19cf4a05d3db4dfbfd2a63ffb2eada195510458ca64c12"
+    },
+    {
+      "id": "k2_argue_30",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Should cities build more housing? Argue your case.",
+      "prompt_bytes": 50,
+      "prompt_sha256": "090413d91a9f2b0ba56137563044a98a32829aa3f61f901b0b7af3cb96a713e5"
+    },
+    {
+      "id": "k2_argue_31",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Is tourism good for local communities? Argue your case.",
+      "prompt_bytes": 55,
+      "prompt_sha256": "347bfb819145c933ca3e788afd06f9b759e9519b29e689bb752eb23b622f70d7"
+    },
+    {
+      "id": "k2_argue_32",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Should we trust expert opinion? Argue your case.",
+      "prompt_bytes": 48,
+      "prompt_sha256": "0bed21ed9ea40ab92f608e60bd3b9b6b2e61ed70d8e3f47761892f99c19917b9"
+    },
+    {
+      "id": "k2_argue_33",
+      "family": "argue",
+      "gate": false,
+      "prompt": "Is failure necessary for success? Argue your case.",
+      "prompt_bytes": 50,
+      "prompt_sha256": "bedff27704adcaf02bdf8d69236212e4edc2dfc6df48dcbceba2caa083b781d1"
+    }
+  ]
+}

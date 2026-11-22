@@ -59,11 +59,12 @@ decision that gates the host.**
 
 **Review 2026-11-20.** The binding specification is section 8 of
 `docs/notes/2026-11-19_key2-coherence-rubric.md`: per-dimension mean + floor,
-threshold from human answers + 3.62B salad, argue diagnostic. The options table
-above is the pre-review menu; it is kept as the record, not as the current
+threshold from the certified English `good` band + 3.62B salad (the reference
+lives in `data/evals/judge_set_v1/`), argue diagnostic. The options table above
+is the pre-review menu; it is kept as the record, not as the current
 specification. Its "held-out documents" prompt source and its 1-day cost are
-superseded by the note's authored 133-prompt set (100 gate + 33 diagnostic)
-and the ~2-2.5-day rubric + validation budget.
+superseded by the note's authored 133-prompt set (100 gate + 33 diagnostic),
+the ~1.5-2-day authoring budget and the 12-20 h one-time calibration.
 
 ### D2 - Pilot shape
 

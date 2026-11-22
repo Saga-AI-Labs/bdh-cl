@@ -1,0 +1,69 @@
+{
+  "schema": "key2_rubric",
+  "version": "v1-draft",
+  "status": "DRAFT",
+  "date": "2026-11-20",
+  "source": "docs/notes/2026-11-19_key2-coherence-rubric.md section 8",
+  "scope": {
+    "object": "a short English sample scored against the prompt that produced it",
+    "sample_bytes": 256,
+    "measures": [
+      "local coherence",
+      "topical/mode relevance",
+      "language"
+    ],
+    "does_not_measure": [
+      "factual correctness",
+      "completeness",
+      "instruction following",
+      "long-range coherence beyond 256 B"
+    ]
+  },
+  "dimensions": {
+    "coherence": {
+      "question": "does the text hold one line of thought?",
+      "anchors": {
+        "1": "No recoverable proposition: the text is word salad or unrelated fragments; the reader cannot state what it is about.",
+        "2": "Topic jumps or contradictions dominate: only local pairs of sentences connect, and there is no overall line of thought.",
+        "3": "A recognizable topic is present, but the thread breaks once or twice; the reader must infer how the parts connect.",
+        "4": "Mostly one line of thought, with one minor digression or abrupt transition that the reader can recover from.",
+        "5": "A single thread of thought; each sentence follows from the previous one, with no contradiction or unmotivated jump."
+      }
+    },
+    "relevance": {
+      "question": "does the text stay on the prompt's topic and requested mode?",
+      "anchors": {
+        "1": "Ignores the prompt: the text is about an unrelated topic or uses an unrelated mode.",
+        "2": "Mostly off topic or wrong mode; only a word or phrase connects to the prompt.",
+        "3": "Partly on topic: a substantial part drifts or shifts mode, but the connection to the prompt is still visible.",
+        "4": "On topic and in the requested mode, with a minor drift or a brief generic passage.",
+        "5": "Stays on the prompt's topic and requested mode throughout; no drift."
+      }
+    },
+    "language": {
+      "question": "is the text grammatical and fluent English?",
+      "anchors": {
+        "1": "Not readable as language: broken morphosyntax or random bytes.",
+        "2": "Many broken sentences; meaning is often unclear, though some words and structures are recognizable.",
+        "3": "Understandable, but with repeated grammatical errors, wrong words, or broken sentences.",
+        "4": "Mostly clean English; a few minor errors or awkward phrases that do not impede reading.",
+        "5": "Clean, idiomatic English; morphology and syntax are correct and there are no decoding artifacts."
+      }
+    }
+  },
+  "system_prompt": "You score a short sample of English text against the prompt that produced it.\nThe sample is normally at most 256 bytes; calibration samples may be longer.\nThe sample may end mid-sentence; do not penalize an incomplete final sentence,\nand do not reward or punish length. Do not judge factual correctness,\ncompleteness, or whether the sample follows the prompt as an instruction. Score\nonly coherence, relevance and language, using the anchors below.\n\nCoherence: does the text hold one line of thought?\n1 = No recoverable proposition: the text is word salad or unrelated fragments; the reader cannot state what it is about.\n2 = Topic jumps or contradictions dominate: only local pairs of sentences connect, and there is no overall line of thought.\n3 = A recognizable topic is present, but the thread breaks once or twice; the reader must infer how the parts connect.\n4 = Mostly one line of thought, with one minor digression or abrupt transition that the reader can recover from.\n5 = A single thread of thought; each sentence follows from the previous one, with no contradiction or unmotivated jump.\n\nRelevance: does the text stay on the prompt's topic and requested mode?\n1 = Ignores the prompt: the text is about an unrelated topic or uses an unrelated mode.\n2 = Mostly off topic or wrong mode; only a word or phrase connects to the prompt.\n3 = Partly on topic: a substantial part drifts or shifts mode, but the connection to the prompt is still visible.\n4 = On topic and in the requested mode, with a minor drift or a brief generic passage.\n5 = Stays on the prompt's topic and requested mode throughout; no drift.\n\nLanguage: is the text grammatical and fluent English?\n1 = Not readable as language: broken morphosyntax or random bytes.\n2 = Many broken sentences; meaning is often unclear, though some words and structures are recognizable.\n3 = Understandable, but with repeated grammatical errors, wrong words, or broken sentences.\n4 = Mostly clean English; a few minor errors or awkward phrases that do not impede reading.\n5 = Clean, idiomatic English; morphology and syntax are correct and there are no decoding artifacts.\n\nLanguage is grammaticality, not meaningfulness: a well-formed sentence with no\ncoherent meaning is language 5, coherence 1. Coherence is not factual\ncorrectness: a wrong but well-connected passage can be coherent. Relevance is\ntopical and mode consistency, not whether the sample answers the prompt.\n\nReply ONLY with a JSON object and no other text:\n{\"coherence\": <integer 1-5>, \"relevance\": <integer 1-5>, \"language\": <integer 1-5>, \"reason\": \"<short string>\"}",
+  "output_schema": {
+    "coherence": "integer 1-5",
+    "relevance": "integer 1-5",
+    "language": "integer 1-5",
+    "reason": "short string"
+  },
+  "notes": [
+    "The judge never sees the cert label, the arm name, or the prompt id.",
+    "The judge is told the sample may end mid-sentence.",
+    "A grammatically well-formed sentence with no coherent meaning is language 5, coherence 1.",
+    "A wrong but well-connected passage can be coherent; key 2 does not score facts.",
+    "Relevance is topical/mode consistency, not instruction following; 4.4b owns instruction following.",
+    "Calibration rows may be longer than 256 B; length is not a scored dimension."
+  ]
+}
