@@ -1,6 +1,8 @@
 /input.txt
 __pycache__/
-/data/
+/data/*
+!/data/archive/
+!/data/archive/**
 /out/
 /out_a/
 .jspace/
