@@ -32,7 +32,7 @@ Usage:
       [--blocks 128] [--block-size 512]
   python scripts/diag_context.py compare
 
-Artifacts (out_c/, gitignored): diag_ngram.npz and diag_positions_<mask>.npz
+Artifacts (out/, gitignored): diag_ngram.npz and diag_positions_<mask>.npz
 carry the full per-position curves, class NLLs and class counts; the compare
 mode joins them.
 """
@@ -159,7 +159,7 @@ def run_ngram(orders):
     print(f"  head (0-63) {curve[:64].mean():.4f} | "
           f"context (64-511) {curve[64:].mean():.4f} | "
           f"tail (256-511) {curve[256:].mean():.4f}")
-    out = "out_c/routed_probe/diag_ngram.npz"
+    out = "out/routed_probe/diag_ngram.npz"
     np.savez(out, curve=curve, nll=nll, order=order, pos=pos,
              offsets=offsets, classes=cls_names, cls_nll=cls_nll,
              cls_cnt=cls_cnt)
@@ -233,7 +233,7 @@ def run_positions(ckpt, mults, n_blocks, block_size):
                       f"  (n={cls_cnt[name]:,})")
         # full curve for the position-wise network-vs-n-gram comparison
         names = list(cls_sum)
-        out = f"out_c/routed_probe/diag_positions_{mult}.npz"
+        out = f"out/routed_probe/diag_positions_{mult}.npz"
         np.savez(out, curve=curve, offsets=offsets, classes=names,
                  cls_nll=np.array([cls_sum[n] / max(cls_cnt[n], 1) for n in names]),
                  cls_cnt=np.array([cls_cnt[n] for n in names]))
@@ -245,14 +245,14 @@ def run_positions(ckpt, mults, n_blocks, block_size):
 def run_compare():
     import os
 
-    ng = np.load("out_c/routed_probe/diag_ngram.npz")
+    ng = np.load("out/routed_probe/diag_ngram.npz")
     print("network vs 6-gram, same 128 x 512 legal-val targets "
           "(delta = network - ngram, negative = network better)")
     show = [0, 1, 2, 4, 8, 16, 32, 48, 64, 96, 128, 192, 256, 320, 384, 448, 511]
     print("  pos      : " + " ".join(f"{p:>6d}" for p in show))
     print("  ngram    : " + " ".join(f"{ng['curve'][p]:6.3f}" for p in show))
     for mult in (896, 1024):
-        path = f"out_c/routed_probe/diag_positions_{mult}.npz"
+        path = f"out/routed_probe/diag_positions_{mult}.npz"
         if not os.path.exists(path):
             print(f"  [mask {mult}] missing {path}")
             continue

@@ -3,9 +3,9 @@
 
 Two input modes, one output: a markdown verdict table.
 
-  --json out_c/judge_calibration/cert.json   completed-run schema written by
+  --json out/judge_calibration/cert.json   completed-run schema written by
                                              scripts/quinn/judge_calibration.py
-  --log  out_c/judge_calibration/cert.log    the log; REQUIRED for partial runs,
+  --log  out/judge_calibration/cert.log    the log; REQUIRED for partial runs,
                                              because cert.json is written only
                                              after the last row — an interrupted
                                              run leaves rows recoverable here.
@@ -29,7 +29,7 @@ stability.
 Read-only over the run artifacts; no endpoint calls.
 
 Usage:
-    python3 scripts/judge_cert_report.py --log out_c/judge_calibration/cert.log \
+    python3 scripts/judge_cert_report.py --log out/judge_calibration/cert.log \
         --set data/evals/judge_set_v1/cert_items.json
 """
 

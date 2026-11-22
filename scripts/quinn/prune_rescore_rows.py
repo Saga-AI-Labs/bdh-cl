@@ -21,7 +21,7 @@ REPAIRED = {'cert_zh05', 'cert_de13', 'cert_de16', 'cert_de24'}
 
 def main():
     for j in ('qwen', 'gemma'):
-        p = 'out_c/judge_calibration/%s_merged.json' % j
+        p = 'out/judge_calibration/%s_merged.json' % j
         d = json.load(open(p, encoding='utf-8'))
         rows = d['rows']
         before = len(rows)

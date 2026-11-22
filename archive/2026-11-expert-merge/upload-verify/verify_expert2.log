@@ -1,0 +1,27 @@
+repo sha: 85529ac2df58182f07d4a1bf3094ea5aef7b283d
+siblings: 15
+gesamt: 315.7 GB
+
+=== Dateien im Repo ===
+  .gitattributes                                                  0.00 GB  lfs=None
+  README.md                                                       0.00 GB  lfs=None
+  checkpoints/bdh_textmix_expert-b1_best.pt                      33.83 GB  lfs=d130f291e5b7
+  checkpoints/bdh_textmix_expert-b1_last.pt                      33.83 GB  lfs=414d8abc9b01
+  checkpoints/zh_b1_merged.pt                                    22.55 GB  lfs=9035ee14ffed
+  lr_probe/bdh_textmix_lr-A_best.pt                              33.83 GB  lfs=215d5b780452
+  lr_probe/bdh_textmix_lr-A_last.pt                              33.83 GB  lfs=9d4f04475159
+  lr_probe/bdh_textmix_lr-B_best.pt                              33.83 GB  lfs=c086b4e21983
+  lr_probe/bdh_textmix_lr-B_last.pt                              33.83 GB  lfs=f83617179239
+  lr_probe/bdh_textmix_lr-C_best.pt                              33.83 GB  lfs=d00adb0d7ab9
+  lr_probe/bdh_textmix_lr-C_last.pt                              33.83 GB  lfs=441085d05388
+  merge_probe/merged_pruned896.pt                                11.28 GB  lfs=06492347d7c5
+  merge_probe/zh_pruned448.pt                                     5.64 GB  lfs=bf5651d70a73
+  merge_probe/zh_pruned448_fixed.pt                               5.64 GB  lfs=1786baea2670
+  upload.log                                                      0.00 GB  lfs=None
+
+=== Verifikation checkpoints/ ===
+  OK       checkpoints/bdh_textmix_expert-b1_best.pt
+  OK       checkpoints/bdh_textmix_expert-b1_last.pt
+  OK       checkpoints/zh_b1_merged.pt
+
+{"ok": 3, "mismatch": 0}

@@ -45,3 +45,10 @@ The probe directory was under `out_c/expert_merge/lr_probe/`. `out_c/` was
 retired 2026-11-22 as a "phantom structure" and its contents were either
 archived or deleted after HF verification. This README exists so that the
 archive is self-describing in six months.
+
+## Local cleanup 2026-11-23
+
+The 190 GB of `lr_probe/*.pt` were deleted after the expert-merge 15/15
+verification, which covers the six `lr_probe/` files. The selection logs and
+driver are in `artifacts-20261123.tar.gz` (`lr_probe.sh`, `lr_probe.log`,
+`lr_probe_logs/arm-{A,B,C}.log`).

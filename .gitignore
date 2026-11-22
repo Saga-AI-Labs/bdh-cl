@@ -26,3 +26,6 @@ out_c/
 *.aux
 *.log
 *.out
+
+# Archive logs are provenance; keep them despite the LaTeX *.log rule
+!archive/**/*.log

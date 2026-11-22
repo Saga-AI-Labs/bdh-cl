@@ -2,9 +2,10 @@
 
 The scripts that produced the registered numbers of the routed-grow and
 graft-2 campaigns, committed verbatim as they ran (paths included: they
-reference `/tmp/opencode` scratch dirs for logs and `out_c/routed_probe`
-for checkpoints). Logs and the tiny-scale checkpoints live in
-`out_c/routed_probe/graft2/` and `out_c/routed_probe/scratch_p0_p3/`
+reference `/tmp/opencode` scratch dirs for logs and the historical
+`out_c/routed_probe` for checkpoints; the artifacts now live in
+`out/routed_probe/`). Logs and the tiny-scale checkpoints live in
+`out/routed_probe/graft2/` and `out/routed_probe/scratch_p0_p3/`
 (gitignored out-structure; mirrored to the project's HF runs dataset).
 A repo checkout plus these scripts reproduces every registered gate.
 
@@ -35,13 +36,13 @@ command; lineage registered in the graft-2 plan section 8).
 Post-campaign diagnostics (2026-11-18, report section 18):
 `scripts/diag_context.py ngram` -> 6-gram 0.8519 nats/byte; `positions`
 -> 1.1155/@1024, 1.7116/@896; `compare` joins them. Full curves:
-`out_c/routed_probe/diag_ngram.npz`, `diag_positions_{896,1024}.npz`;
-log `out_c/routed_probe/diag_positions.log`. `scripts/bench_100m.py` ->
+`out/routed_probe/diag_ngram.npz`, `diag_positions_{896,1024}.npz`;
+log `out/routed_probe/diag_positions.log`. `scripts/bench_100m.py` ->
 100M throughput on the Spark: 2,192 ms/step (6 layers, 1,868 B/s),
 1,482 ms/step (4 layers, 2,764 B/s), 23.1 GiB peak; compiled 1,025
 ms/step (6 layers). `--two-pass` measures the route-aware compute shape
 (two forwards at 0.9/0.1, one backward): 4,429 ms/step uncompiled,
 2,091 compiled = 2.0x one-pass, 48.5/33.2 GiB peak. Log:
-`out_c/routed_probe/bench_100m.log`; a 2026-11-18 re-run at `94c91f2`
+`out/routed_probe/bench_100m.log`; a 2026-11-18 re-run at `94c91f2`
 reproduced every row within 0.6 % (2,182 / 1,475 / 1,031 / 4,440 /
 2,100 ms/step), so the registered numbers stand.

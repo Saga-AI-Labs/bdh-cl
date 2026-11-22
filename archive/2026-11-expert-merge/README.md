@@ -55,3 +55,12 @@ made, these are the baselines it must beat.
 `out_c/expert_merge/` was retired 2026-11-22 as a "phantom structure". The
 checkpoints were uploaded to HF and SHA-verified (3/3 OK, 2026-11-22), then
 deleted locally.
+
+## Local cleanup 2026-11-23
+
+The 15/15 verification (`upload-verify/verify_expert.log`, repo commit
+`f1b5e0fb...`) was accepted as the gate for the local deletion. The remaining
+non-checkpoint files (drivers, logs, eval JSON, checksum tables) are in
+`artifacts-20261123.tar.gz` (90 KB). The tiny freeze test checkpoints moved to
+`out/legacy/expert_merge_freeze_tiny/` (49 MB, not uploaded; reproducible from
+`freeze_tiny_test.sh`). The 88 GB of merged/branch checkpoints are gone locally.

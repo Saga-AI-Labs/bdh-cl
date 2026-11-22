@@ -35,8 +35,8 @@ Usage:
         --base-url http://192.168.178.200:1234/v1 \\
         --model gemma-4-31b-it \\
         --set data/evals/judge_set_v1/cert_items.json \\
-        --out out_c/judge_calibration/cert.json \\
-        --log out_c/judge_calibration/cert.log
+        --out out/judge_calibration/cert.json \\
+        --log out/judge_calibration/cert.log
 """
 
 import argparse

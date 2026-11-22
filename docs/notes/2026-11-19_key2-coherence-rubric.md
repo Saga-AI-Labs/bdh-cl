@@ -272,7 +272,7 @@ values differ by more than 0.2, the operator decides which band freezes.
 
 **Derivation.** `scripts/quinn/key2_reference.py` reads the frozen cert set and
 writes `reference_scale.jsonl` (108 rows), `reference_positive.jsonl` (18 rows)
-and `reference_manifest.json` under `out_c/key2_calibration/`. The source hash
+and `reference_manifest.json` under `out/key2_calibration/`. The source hash
 is `8570d8cd...c6ce50`; the 133-prompt hash is `c1d9c62c...12e23c`. The
 normative anchors and judge system message are in
 `data/evals/key2_rubric_v1.json` (system-prompt hash `c996a247...d0b59c`,

@@ -51,3 +51,9 @@ baseline for any future attempt to recover a pooled model.
 checkpoints were uploaded to HF; the local copies are Hardlinks to the staging
 directory, so their verification is a self-comparison rather than an independent
 one - the first verification (15/15 OK) covers them.
+
+## Local cleanup 2026-11-23
+
+The three checkpoints (22.5 GB) were deleted together with the staging
+hardlinks. The eval and prune logs are in `artifacts-20261123.tar.gz`
+(`eval*.json`, `eval*.log`, `prune*.log`).

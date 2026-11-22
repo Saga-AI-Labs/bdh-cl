@@ -1,0 +1,21 @@
+repo sha: f1b5e0fb22c90a8af7767c20c6a4d14b3390f774
+siblings: 17
+gesamt: 405.9 GB
+
+  OK       bdh_textmix_expert-b1_best.pt                                  33.83 GB
+  OK       bdh_textmix_expert-b1_last.pt                                  33.83 GB
+  OK       checkpoints/bdh_textmix_expert-b1_best.pt                      33.83 GB
+  OK       checkpoints/bdh_textmix_expert-b1_last.pt                      33.83 GB
+  OK       checkpoints/zh_b1_merged.pt                                    22.55 GB
+  OK       lr_probe/bdh_textmix_lr-A_best.pt                              33.83 GB
+  OK       lr_probe/bdh_textmix_lr-A_last.pt                              33.83 GB
+  OK       lr_probe/bdh_textmix_lr-B_best.pt                              33.83 GB
+  OK       lr_probe/bdh_textmix_lr-B_last.pt                              33.83 GB
+  OK       lr_probe/bdh_textmix_lr-C_best.pt                              33.83 GB
+  OK       lr_probe/bdh_textmix_lr-C_last.pt                              33.83 GB
+  OK       merge_probe/merged_pruned896.pt                                11.28 GB
+  OK       merge_probe/zh_pruned448.pt                                     5.64 GB
+  OK       merge_probe/zh_pruned448_fixed.pt                               5.64 GB
+  OK       zh_b1_merged.pt                                                22.55 GB
+
+{"ok": 15, "mismatch": 0, "missing": 0}

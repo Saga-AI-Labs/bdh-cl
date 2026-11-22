@@ -1,0 +1,8 @@
+2026-11-18 22:09:29 [1/7] bdh_textmix_g2_code_best.pt rc=0 1.45 h
+2026-11-18 23:42:57 [2/7] bdh_textmix_g2_code_last.pt rc=0 1.56 h
+2026-11-19 00:40:17 [3/7] bdh_textmix_grow896to1024_last.pt rc=0 0.96 h
+2026-11-19 01:53:51 [4/7] bdh_textmix_p1_legal_new_best.pt rc=0 1.23 h
+2026-11-19 03:09:34 [5/7] bdh_textmix_p1_legal_new_last.pt rc=0 1.26 h
+2026-11-19 04:24:10 [6/7] bdh_textmix_p3_mixed_best.pt rc=0 1.24 h
+2026-11-19 05:34:15 [7/7] bdh_textmix_p3_mixed_last.pt rc=0 1.17 h
+  url: https://huggingface.co/datasets/Saga-AI-Labs/bdh-routed-probe/commit/f4da26136c1c03e3cc0a4a8386935b2dbf0dfb5a
