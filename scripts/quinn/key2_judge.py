@@ -4,9 +4,9 @@
 Scores rows from one of the key-2 reference or verdict files with the frozen
 rubric in `data/evals/key2_rubric_v1.json`:
 
-  scale      out_c/key2_calibration/reference_scale.jsonl
-  positive   out_c/key2_calibration/reference_positive.jsonl
-  generated  out_c/key2_calibration/gen_3.62b.jsonl (and later the host file)
+  scale      out/key2_calibration/reference_scale.jsonl
+  positive   out/key2_calibration/reference_positive.jsonl
+  generated  out/key2_calibration/gen_3.62b.jsonl (and later the host file)
 
 The input row must carry an id, a prompt (or instruction) and a sample (or
 answer). The judge sees only the prompt and the sample; ids, labels and arm
@@ -26,9 +26,9 @@ Usage:
     .venv/bin/python scripts/quinn/key2_judge.py \
         --base-url http://192.168.178.51:8888/v1 \
         --model Qwen3.8-Flash-Next \
-        --input out_c/key2_calibration/reference_positive.jsonl \
-        --out out_c/key2_calibration/qwen_reference_positive.json \
-        --log out_c/key2_calibration/qwen_reference_positive.log
+        --input out/key2_calibration/reference_positive.jsonl \
+        --out out/key2_calibration/qwen_reference_positive.json \
+        --log out/key2_calibration/qwen_reference_positive.log
 
 Dry run (prints the system-prompt hash and the first payload):
     .venv/bin/python scripts/quinn/key2_judge.py --input ... --dry-run

@@ -24,10 +24,10 @@ judge display only. Resume skips prompt ids already present in the JSONL.
 
 Usage:
     .venv/bin/python scripts/quinn/key2_generate.py \
-        --checkpoint out_c/routed_probe/bdh_textmix_p3_mixed_best.pt \
-        --out out_c/key2_calibration/gen_3.62b.jsonl \
-        --meta-out out_c/key2_calibration/gen_3.62b.meta.json \
-        --log out_c/key2_calibration/gen_3.62b.log
+        --checkpoint out/routed_probe/bdh_textmix_p3_mixed_best.pt \
+        --out out/key2_calibration/gen_3.62b.jsonl \
+        --meta-out out/key2_calibration/gen_3.62b.meta.json \
+        --log out/key2_calibration/gen_3.62b.log
 
 Smoke test (one prompt, then stop):
     .venv/bin/python scripts/quinn/key2_generate.py --limit 1 ...
@@ -134,9 +134,9 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--checkpoint", help="checkpoint path (required unless --dry-run)")
     ap.add_argument("--prompts", default=DEFAULT_PROMPTS)
-    ap.add_argument("--out", default="out_c/key2_calibration/gen_3.62b.jsonl")
-    ap.add_argument("--meta-out", default="out_c/key2_calibration/gen_3.62b.meta.json")
-    ap.add_argument("--log", default="out_c/key2_calibration/gen_3.62b.log")
+    ap.add_argument("--out", default="out/key2_calibration/gen_3.62b.jsonl")
+    ap.add_argument("--meta-out", default="out/key2_calibration/gen_3.62b.meta.json")
+    ap.add_argument("--log", default="out/key2_calibration/gen_3.62b.log")
     ap.add_argument("--max-new-bytes", type=int, default=DEFAULT_MAX_NEW_BYTES)
     ap.add_argument("--prompt-max-bytes", type=int, default=DEFAULT_PROMPT_MAX_BYTES)
     ap.add_argument("--limit", type=int, default=0, help="stop after N prompts")

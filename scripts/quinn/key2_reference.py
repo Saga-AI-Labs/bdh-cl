@@ -15,11 +15,11 @@ free generation. This script keeps the two uses separate:
              133-prompt set; section-16 salad is added at scoring time.
 
 The script is read-only on `data/evals/judge_set_v1/`. It writes derived rows
-and a manifest under `out_c/key2_calibration/` by default.
+and a manifest under `out/key2_calibration/` by default.
 
 Usage:
     .venv/bin/python scripts/quinn/key2_reference.py
-    .venv/bin/python scripts/quinn/key2_reference.py --out-dir out_c/key2_calibration
+    .venv/bin/python scripts/quinn/key2_reference.py --out-dir out/key2_calibration
 """
 
 import argparse
@@ -72,7 +72,7 @@ def load_items(path):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--out-dir", default="out_c/key2_calibration")
+    ap.add_argument("--out-dir", default="out/key2_calibration")
     args = ap.parse_args()
     os.makedirs(args.out_dir, exist_ok=True)
 

@@ -22,17 +22,17 @@ chooses the margin and signs off.
 
 Usage:
     .venv/bin/python scripts/quinn/key2_analyze.py \
-        --positive out_c/key2_calibration/qwen_positive.json \
-        --positive out_c/key2_calibration/gemma_positive.json \
-        --negative-coherence out_c/key2_calibration/qwen_negative.json \
-        --negative-coherence out_c/key2_calibration/gemma_negative.json \
-        --negative-language out_c/key2_calibration/qwen_langbroken.json \
-        --negative-language out_c/key2_calibration/gemma_langbroken.json \
-        --negative-relevance out_c/key2_calibration/qwen_offtopic.json \
-        --negative-relevance out_c/key2_calibration/gemma_offtopic.json \
-        --scale out_c/key2_calibration/qwen_scale.json \
-        --scale out_c/key2_calibration/gemma_scale.json \
-        --out out_c/key2_calibration/thresholds_candidate.json
+        --positive out/key2_calibration/qwen_positive.json \
+        --positive out/key2_calibration/gemma_positive.json \
+        --negative-coherence out/key2_calibration/qwen_negative.json \
+        --negative-coherence out/key2_calibration/gemma_negative.json \
+        --negative-language out/key2_calibration/qwen_langbroken.json \
+        --negative-language out/key2_calibration/gemma_langbroken.json \
+        --negative-relevance out/key2_calibration/qwen_offtopic.json \
+        --negative-relevance out/key2_calibration/gemma_offtopic.json \
+        --scale out/key2_calibration/qwen_scale.json \
+        --scale out/key2_calibration/gemma_scale.json \
+        --out out/key2_calibration/thresholds_candidate.json
 
 If a dimension-specific band is omitted, --negative is used for it.
 """
@@ -174,7 +174,7 @@ def main():
                     help="judge JSON for the relevance negative band")
     ap.add_argument("--scale", action="append", default=[],
                     help="judge JSON for the 108-row scale set (repeat per judge)")
-    ap.add_argument("--out", default="out_c/key2_calibration/thresholds_candidate.json")
+    ap.add_argument("--out", default="out/key2_calibration/thresholds_candidate.json")
     ap.add_argument("--margin", type=float, default=0.5)
     ap.add_argument("--format-ids", default=",".join(FORMAT_IDS))
     args = ap.parse_args()
