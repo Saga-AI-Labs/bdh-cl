@@ -1,4 +1,11 @@
-torch>=2.3
+# This host is aarch64 + NVIDIA GB10 (sm_121). The cu130 wheel is required:
+# the cu128 build runs but falls back off native kernels and measures 1.63x
+# slower (1,149 vs 1,802 B/s on scripts/bench_100m.py); see
+# docs/notes/2026-11-23_env-rebuild-53.md for the measurements.
+--extra-index-url https://download.pytorch.org/whl/cu130
+torch==2.14.1+cu130
 numpy
 requests
 pyarrow
+# Needed for the `hf download` step in the key-2 workflow.
+huggingface_hub
