@@ -173,25 +173,64 @@ read** that section 8.3 already requires: 20 samples, judge identity withheld,
 per judge, which is the check that can decide between options 2 and 3 on
 evidence rather than stipulation.
 
-## 9. Recommendation
+## 9. External calibration read (2026-11-23)
+
+The 20-sample blind sheet was scored by an external LLM (ChatGPT, OpenAI) as a
+calibration reference. **Caveats, stated because they bound what this can
+support:** it is not the operator's registered human read; the rubric anchors
+were not supplied, so it used a conventional 1-5 scale; it is a single pass with
+no stability check; and it is not a judge seat.
+
+Results against the two seats over all 20 samples:
+
+| dimension | external vs Qwen | external vs Gemma |
+|---|---|---|
+| coherence | 45 % exact / **95 % +/-1** | 30 % / **55 %** |
+| relevance | 45 % / 85 % | 50 % / 75 % |
+| language | 65 % / 90 % | **85 %** / 90 % |
+
+On the ten disputed cells the external read is closer to Qwen in 8/10, closer to
+Gemma in 0/10 (2 ties). Cells S09 (`cert_en17_audience_violation`) is the
+clearest: external 1, Qwen 1, Gemma 5.
+
+Two limits on interpretation:
+
+- **Relevance cannot be arbitrated by this read.** The external scores penalise
+  samples that stay on topic but do not adequately answer (S01: external 2,
+  both judges 5). Section 8.3 defines relevance as topicality and mode, "not
+  whether the sample answers the prompt", so this is a definitional difference,
+  not a judge error.
+- **It is harsher on facts than v2 permits.** S01 and S02 are penalised for
+  doctrinal confusion, which v2 classifies as a fact defect and does not score.
+  Its support for Qwen is therefore support for the *ordering* of the disputed
+  cells, not for its absolute values.
+
+What the read does establish: on coherence, the seat that tracks an independent
+reader within one point 95 % of the time is Qwen, and the seat that does so 55 %
+of the time is Gemma. It also shows Gemma is the stronger **language** seat
+(85 % exact against 65 %), so the two seats are complementary per dimension
+rather than one being uniformly worse.
+
+## 10. Recommendation (updated)
 
 Option 1 is unavailable: the only local candidates are lineage-linked (Ornith)
 or dated (Devstral 2), so 8.1 applies.
 
-The next step is the **human blind read**, not a seat change. It is already
-required by 8.3, costs ~20 minutes of operator time, and settles the question
-the gate cannot: which seat is closer to the rubric as a human reads it. If
-Qwen tracks the human read and Gemma does not, option 2 (Qwen owns coherence,
-Gemma keeps relevance and language, deviation registered) is the evidence-backed
-choice. If the human read disagrees with Qwen on the disputed cells, the v2
-anchors need work before any dimension is frozen.
+Option 2, per dimension, on the evidence above:
 
-Option 3 remains viable if and only if the frozen record states: coherence was
-scored by one effective seat, the inter-judge gate failed at 63.9 % / 90.7 %,
-and both seats were verified deterministic. A freeze that omits this would
-overstate the instrument.
+| dimension | aggregation | basis |
+|---|---|---|
+| coherence | Qwen is authoritative; Gemma's score recorded but not binding | Qwen 95 % +/-1 vs external, Gemma 55 %; 8/10 vs 0/10 on disputed cells |
+| language | two seats as registered | inter-judge 71.3 % exact / 100 % +/-1; Gemma 85 % exact vs external |
+| relevance | two seats as registered, re-measured under v2 | inter-judge 78.7 % exact / 94.4 % +/-1 (0.6 pp short); external read cannot arbitrate |
 
-## 10. Reproduce
+This must be registered as a **deviation, not a pass**: coherence has one
+effective seat. Option 3 (override) remains viable if and only if the frozen
+record states: coherence was scored by one effective seat, the inter-judge gate
+failed at 63.9 % / 90.7 %, and both seats were verified deterministic. A freeze
+that omits this would overstate the instrument.
+
+## 11. Reproduce
 
 ```bash
 .venv/bin/python scripts/quinn/key2_judge.py \
@@ -207,7 +246,7 @@ overstate the instrument.
 The agreement table is computed over the common ids of those two files, per
 dimension, as `max == min` (exact) and `max - min <= 1` (within one).
 
-## 11. Artifacts and provenance
+## 12. Artifacts and provenance
 
 | path | content |
 |---|---|
@@ -218,6 +257,7 @@ dimension, as `max == min` (exact) and `max - min <= 1` (within one).
 | `out/key2_calibration/disagreement_review.md` | 20-sample blind sheet, judge-free |
 | `out/key2_calibration/disagreement_review_key.json` | answer key; open only after scoring |
 | `out/key2_calibration/rubric_v2_system_prompt.diff` | v2 wording delta |
+| `out/key2_calibration/external_read_chatgpt.json` | external LLM read of the 20 blind samples (S01-S20, 3 scores each) |
 
 Positive band, for completeness: coherence 5.00, relevance 5.00, language 4.83
 (min 4) over the 18 truncated `good` rows, 0 NULLs - the positive end of the
