@@ -2,7 +2,7 @@
 """Key 2 judge runner - three dimensions, blind, JSON out.
 
 Scores rows from one of the key-2 reference or verdict files with the frozen
-rubric in `data/evals/key2_rubric_v1.json`:
+rubric in `data/evals/key2_rubric_v2.json`:
 
   scale      out/key2_calibration/reference_scale.jsonl
   positive   out/key2_calibration/reference_positive.jsonl
@@ -42,7 +42,7 @@ import re
 import time
 import urllib.request
 
-RUBRIC = "data/evals/key2_rubric_v1.json"
+RUBRIC = "data/evals/key2_rubric_v2.json"
 MAX_TOKENS = 2048
 RETRY_TOKENS = 4096
 

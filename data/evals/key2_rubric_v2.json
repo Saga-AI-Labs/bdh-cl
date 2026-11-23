@@ -1,0 +1,88 @@
+{
+ "schema": "key2_rubric",
+ "version": "v2",
+ "status": "DRAFT",
+ "date": "2026-11-23",
+ "source": "docs/notes/2026-11-19_key2-coherence-rubric.md section 8, amended per docs/notes/2026-11-23_key2-instrument-gate-failure.md",
+ "scope": {
+  "object": "a short English sample scored against the prompt that produced it",
+  "sample_bytes": 256,
+  "measures": [
+   "local coherence",
+   "topical/mode relevance",
+   "language"
+  ],
+  "does_not_measure": [
+   "factual correctness",
+   "completeness",
+   "instruction following",
+   "long-range coherence beyond 256 B"
+  ]
+ },
+ "dimensions": {
+  "coherence": {
+   "question": "does the text hold one line of thought?",
+   "anchors": {
+    "1": "No recoverable proposition: the text is word salad or unrelated fragments; the reader cannot state what it is about.",
+    "2": "2 = Topic jumps or contradictions dominate: only local pairs of sentences connect, and there is no overall line of thought; a self-contradiction that destroys the main proposition counts here.",
+    "3": "3 = A recognizable topic is present, but the thread breaks once or twice; the reader must infer how the parts connect. One unresolved self-contradiction that leaves the rest of the text standing also counts here.",
+    "4": "Mostly one line of thought, with one minor digression or abrupt transition that the reader can recover from.",
+    "5": "5 = A single thread of thought; each sentence follows from the previous one, with no contradiction inside the passage and no unmotivated jump."
+   }
+  },
+  "relevance": {
+   "question": "does the text stay on the prompt's topic and requested mode?",
+   "anchors": {
+    "1": "Ignores the prompt: the text is about an unrelated topic or uses an unrelated mode.",
+    "2": "Mostly off topic or wrong mode; only a word or phrase connects to the prompt.",
+    "3": "Partly on topic: a substantial part drifts or shifts mode, but the connection to the prompt is still visible.",
+    "4": "On topic and in the requested mode, with a minor drift or a brief generic passage.",
+    "5": "Stays on the prompt's topic and requested mode throughout; no drift."
+   }
+  },
+  "language": {
+   "question": "is the text grammatical and fluent English?",
+   "anchors": {
+    "1": "Not readable as language: broken morphosyntax or random bytes.",
+    "2": "Many broken sentences; meaning is often unclear, though some words and structures are recognizable.",
+    "3": "Understandable, but with repeated grammatical errors, wrong words, or broken sentences.",
+    "4": "Mostly clean English; a few minor errors or awkward phrases that do not impede reading.",
+    "5": "Clean, idiomatic English; morphology and syntax are correct and there are no decoding artifacts."
+   }
+  }
+ },
+ "system_prompt": "You score a short sample of English text against the prompt that produced it.\nThe sample is normally at most 256 bytes; calibration samples may be longer.\nThe sample may end mid-sentence; do not penalize an incomplete final sentence,\nand do not reward or punish length. Do not judge factual correctness,\ncompleteness, or whether the sample follows the prompt as an instruction. Score\nonly coherence, relevance and language, using the anchors below.\n\nCoherence: does the text hold one line of thought?\n1 = No recoverable proposition: the text is word salad or unrelated fragments; the reader cannot state what it is about.\n2 = Topic jumps or contradictions dominate: only local pairs of sentences connect, and there is no overall line of thought; a self-contradiction that destroys the main proposition counts here.\n3 = A recognizable topic is present, but the thread breaks once or twice; the reader must infer how the parts connect. One unresolved self-contradiction that leaves the rest of the text standing also counts here.\n4 = Mostly one line of thought, with one minor digression or abrupt transition that the reader can recover from.\n5 = A single thread of thought; each sentence follows from the previous one, with no contradiction inside the passage and no unmotivated jump.\n\nRelevance: does the text stay on the prompt's topic and requested mode?\n1 = Ignores the prompt: the text is about an unrelated topic or uses an unrelated mode.\n2 = Mostly off topic or wrong mode; only a word or phrase connects to the prompt.\n3 = Partly on topic: a substantial part drifts or shifts mode, but the connection to the prompt is still visible.\n4 = On topic and in the requested mode, with a minor drift or a brief generic passage.\n5 = Stays on the prompt's topic and requested mode throughout; no drift.\n\nLanguage: is the text grammatical and fluent English?\n1 = Not readable as language: broken morphosyntax or random bytes.\n2 = Many broken sentences; meaning is often unclear, though some words and structures are recognizable.\n3 = Understandable, but with repeated grammatical errors, wrong words, or broken sentences.\n4 = Mostly clean English; a few minor errors or awkward phrases that do not impede reading.\n5 = Clean, idiomatic English; morphology and syntax are correct and there are no decoding artifacts.\n\nLanguage is grammaticality, not meaningfulness: a well-formed sentence with no\ncoherent meaning is language 5, coherence 1. Relevance is topical and mode\nconsistency, not whether the sample answers the prompt.\n\nCoherence is not factual correctness, but it is consistency. Separate the two:\n- A claim that is false about the world is a fact defect and is not scored. A\n  passage can be entirely wrong about the law, the science or the history and\n  still earn coherence 5 if its own line of thought holds.\n- A contradiction inside the passage is a coherence defect: if it asserts X and\n  then asserts something that cannot both be true with X - including a\n  conclusion that negates its own stated premise - the thread is broken. Use\n  coherence 3 when that is the only defect, and 1-2 when contradictions\n  dominate. A conflict between the passage and the world is not a coherence\n  defect; a conflict inside the passage is.\n\nRegister is not scored. Dense, dated, over-formal or audience-inappropriate\nprose is not incoherent by itself: if a reader can state what it claims and\nthe claims do not collide, coherence stays high. Reserve coherence 1-2 for\ntext with no recoverable proposition, such as word salad, degenerate\nrepetition, or unrelated fragments.\n\nReply ONLY with a JSON object and no other text:\n{\"coherence\": <integer 1-5>, \"relevance\": <integer 1-5>, \"language\": <integer 1-5>, \"reason\": \"<short string>\"}",
+ "output_schema": {
+  "coherence": "integer 1-5",
+  "relevance": "integer 1-5",
+  "language": "integer 1-5",
+  "reason": "short string"
+ },
+ "notes": [
+  "The judge never sees the cert label, the arm name, or the prompt id.",
+  "The judge is told the sample may end mid-sentence.",
+  "A grammatically well-formed sentence with no coherent meaning is language 5, coherence 1.",
+  "A wrong but well-connected passage can be coherent; key 2 does not score facts.",
+  "Relevance is topical/mode consistency, not instruction following; 4.4b owns instruction following.",
+  "Calibration rows may be longer than 256 B; length is not a scored dimension.",
+  "An internal contradiction is a coherence defect even when the claims are plausible; a claim that is false about the world is not scored. Operator ruling 2026-11-23.",
+  "Register is not a scored dimension: dense or dated prose is incoherent only when no proposition can be recovered."
+ ],
+ "provenance": {
+  "supersedes": "data/evals/key2_rubric_v1.json",
+  "v1_file_sha256": "8788ac787c80e6d49142cec95b614aa09dc403a966e858a2ad38c1703133d65f",
+  "v1_system_prompt_sha256": "c996a247e3272c78417d3d9dae5d64414b517fee128e18f8221d0f2835d0b59c",
+  "v2_system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124",
+  "changes": [
+   "coherence anchor 2 now names a self-contradiction that destroys the main proposition",
+   "coherence anchor 3 now names one unresolved self-contradiction that leaves the rest standing",
+   "coherence anchor 5 now says 'no contradiction inside the passage'",
+   "closing block separates a fact defect (not scored) from an internal contradiction (scored) and states that register is not scored"
+  ],
+  "approval": {
+   "approved_by": "operator",
+   "date": "2026-11-23",
+   "scope": "approved for re-scoring; G0 instrument freeze still pending"
+  }
+ }
+}

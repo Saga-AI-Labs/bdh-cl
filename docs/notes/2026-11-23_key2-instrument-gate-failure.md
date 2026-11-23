@@ -166,22 +166,24 @@ capability before any probe was run:
   but is over a year old and not strong enough to be the cross-check.
 
 No candidate from the current pool is both independent and capable, so option 1
-is deprioritised. The discriminating evidence available now is the **human blind
-read** that section 8.3 already requires: 20 samples, judge identity withheld,
-`out/key2_calibration/disagreement_review.md`, key in
-`disagreement_review_key.json`. Filling it in yields judge-vs-human agreement
-per judge, which is the check that can decide between options 2 and 3 on
-evidence rather than stipulation.
+is deprioritised. The evidence used instead was a calibration read by an external
+LLM (section 9), not a human read; the registered human blind read of 8.3 -
+`out/key2_calibration/disagreement_review.md` with the key held separately -
+remains available and would supersede it if the operator fills it in.
 
-## 9. External calibration read (2026-11-23)
+## 9. Calibration read by an external LLM (2026-11-23)
 
-The 20-sample blind sheet was scored by an external LLM (ChatGPT, OpenAI) as a
-calibration reference. **Caveats, stated because they bound what this can
-support:** it is not the operator's registered human read; the rubric anchors
-were not supplied, so it used a conventional 1-5 scale; it is a single pass with
-no stability check; and it is not a judge seat.
+**Role: calibration input only. This is NOT a human read.** It is not a human
+opinion, not a human judgement, and not the registered human read of section
+8.3. It is an LLM's opinionated guess, used for one narrow purpose - ordering
+the disputed cells - and it must never be cited as human assessment, as an
+operator sign-off, or as ground truth.
 
-Results against the two seats over all 20 samples:
+The 20-sample blind sheet was scored by an external LLM (ChatGPT, OpenAI). The
+rubric anchors were not supplied to it, so it used a conventional 1-5 scale; it
+was a single pass with no stability check; and it is not a judge seat.
+
+Results against the two seats over all 20 samples (calibration read vs judge):
 
 | dimension | external vs Qwen | external vs Gemma |
 |---|---|---|
@@ -189,13 +191,13 @@ Results against the two seats over all 20 samples:
 | relevance | 45 % / 85 % | 50 % / 75 % |
 | language | 65 % / 90 % | **85 %** / 90 % |
 
-On the ten disputed cells the external read is closer to Qwen in 8/10, closer to
+On the ten disputed cells the calibration read is closer to Qwen in 8/10, closer to
 Gemma in 0/10 (2 ties). Cells S09 (`cert_en17_audience_violation`) is the
 clearest: external 1, Qwen 1, Gemma 5.
 
 Two limits on interpretation:
 
-- **Relevance cannot be arbitrated by this read.** The external scores penalise
+- **Relevance cannot be arbitrated by this read.** The calibration scores penalise
   samples that stay on topic but do not adequately answer (S01: external 2,
   both judges 5). Section 8.3 defines relevance as topicality and mode, "not
   whether the sample answers the prompt", so this is a definitional difference,
@@ -205,9 +207,9 @@ Two limits on interpretation:
   Its support for Qwen is therefore support for the *ordering* of the disputed
   cells, not for its absolute values.
 
-What the read does establish: on coherence, the seat that tracks an independent
-reader within one point 95 % of the time is Qwen, and the seat that does so 55 %
-of the time is Gemma. It also shows Gemma is the stronger **language** seat
+What the read can support: on coherence, the seat that tracks an independent
+LLM reader within one point 95 % of the time is Qwen, and the seat that does so 55 %
+of the time is Gemma. The same read shows Gemma is the stronger **language** seat
 (85 % exact against 65 %), so the two seats are complementary per dimension
 rather than one being uniformly worse.
 
@@ -222,13 +224,34 @@ Option 2, per dimension, on the evidence above:
 |---|---|---|
 | coherence | Qwen is authoritative; Gemma's score recorded but not binding | Qwen 95 % +/-1 vs external, Gemma 55 %; 8/10 vs 0/10 on disputed cells |
 | language | two seats as registered | inter-judge 71.3 % exact / 100 % +/-1; Gemma 85 % exact vs external |
-| relevance | two seats as registered, re-measured under v2 | inter-judge 78.7 % exact / 94.4 % +/-1 (0.6 pp short); external read cannot arbitrate |
+| relevance | two seats as registered, re-measured under v2 | inter-judge 78.7 % exact / 94.4 % +/-1 (0.6 pp short); the calibration read cannot arbitrate relevance |
 
 This must be registered as a **deviation, not a pass**: coherence has one
 effective seat. Option 3 (override) remains viable if and only if the frozen
 record states: coherence was scored by one effective seat, the inter-judge gate
 failed at 63.9 % / 90.7 %, and both seats were verified deterministic. A freeze
 that omits this would overstate the instrument.
+
+### 10.1 Approval and execution (2026-11-23)
+
+Operator decisions taken on this note:
+
+1. **Per dimension accepted** - Qwen authoritative on coherence, both seats on
+   language and relevance, registered as a deviation.
+2. **Rubric v2 registered** - `data/evals/key2_rubric_v2.json`, system prompt
+   `9edfd92d...42124`, file sha256 `2c1b7972...f6626`, status DRAFT with the
+   approval recorded in its `provenance` block. `key2_judge.py` now defaults to
+   it.
+3. **Re-score approved** - 283 samples per seat under v2 (108 scale, 18
+   positive, 133 coherence negative, 24 relevance control).
+4. **Analysis approved** - then `key2_analyze.py --coherence-seat-substr qwen_v2`
+   for the `M_d`/`F_d` candidate, with the seat policy written into the candidate
+   JSON.
+5. **Calibration read labelled** - the ChatGPT read is calibration input only,
+   explicitly not a human read, not a human opinion, not an operator sign-off.
+
+G0 has **not** been held. The freeze still needs the v2 bands, the language
+subset, and the operator's sign-off on the resulting `M_d`/`F_d`.
 
 ## 11. Reproduce
 
@@ -257,7 +280,7 @@ dimension, as `max == min` (exact) and `max - min <= 1` (within one).
 | `out/key2_calibration/disagreement_review.md` | 20-sample blind sheet, judge-free |
 | `out/key2_calibration/disagreement_review_key.json` | answer key; open only after scoring |
 | `out/key2_calibration/rubric_v2_system_prompt.diff` | v2 wording delta |
-| `out/key2_calibration/external_read_chatgpt.json` | external LLM read of the 20 blind samples (S01-S20, 3 scores each) |
+| `out/key2_calibration/calibration_read_chatgpt.json` | calibration-only LLM read of the 20 blind samples (S01-S20, 3 scores each); not a human read |
 
 Positive band, for completeness: coherence 5.00, relevance 5.00, language 4.83
 (min 4) over the 18 truncated `good` rows, 0 NULLs - the positive end of the

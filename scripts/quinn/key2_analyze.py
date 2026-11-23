@@ -174,6 +174,10 @@ def main():
                     help="judge JSON for the relevance negative band")
     ap.add_argument("--scale", action="append", default=[],
                     help="judge JSON for the 108-row scale set (repeat per judge)")
+    ap.add_argument("--coherence-seat-substr", default="",
+                    help="restrict the coherence band to band files whose path "
+                         "contains this substring, implementing per-dimension "
+                         "seat authority (default: min of every supplied judge)")
     ap.add_argument("--out", default="out/key2_calibration/thresholds_candidate.json")
     ap.add_argument("--margin", type=float, default=0.5)
     ap.add_argument("--format-ids", default=",".join(FORMAT_IDS))
@@ -189,14 +193,29 @@ def main():
     if missing:
         raise SystemExit("no negative band for %s; pass --negative or the "
                          "dimension-specific flag" % ", ".join(missing))
+    def seat_files(files):
+        """Per-dimension seat authority: keep only the authoritative seat."""
+        if not args.coherence_seat_substr:
+            return files
+        keep = [f for f in files if args.coherence_seat_substr in f]
+        if not keep:
+            raise SystemExit("no coherence-band file matches %r"
+                             % args.coherence_seat_substr)
+        return keep
+
     pos = consensus(args.positive)
+    pos_coh = consensus(seat_files(args.positive))
+    neg_files["coherence"] = seat_files(neg_files["coherence"])
     neg_by_dim = {dim: consensus(files) for dim, files in neg_files.items()}
+    pos_by_dim = {dim: pos for dim in DIMS}
+    pos_by_dim["coherence"] = pos_coh
 
     bands = {}
     sensitivity = {}
     for dim in DIMS:
         neg = neg_by_dim[dim]
-        pv = [r[dim] for r in pos.values() if isinstance(r.get(dim), int)]
+        pos_rows = pos_by_dim[dim]
+        pv = [r[dim] for r in pos_rows.values() if isinstance(r.get(dim), int)]
         nv = [r[dim] for r in neg.values() if isinstance(r.get(dim), int)]
         p, n = stats(pv), stats(nv)
         if p["n"] and n["n"]:
@@ -222,7 +241,7 @@ def main():
                           "overlap": True}
 
         # sensitivity: drop the format-constrained positive items
-        pv2 = [r[dim] for rid, r in pos.items()
+        pv2 = [r[dim] for rid, r in pos_by_dim[dim].items()
                if isinstance(r.get(dim), int)
                and not any(rid.endswith(x) or x in rid for x in format_ids)]
         p2 = stats(pv2)
@@ -276,6 +295,20 @@ def main():
         "bands": bands,
         "sensitivity_excluding_format": sensitivity,
         "scale": scale,
+        "seat_policy": {
+            "coherence": {
+                "mode": ("single-seat" if args.coherence_seat_substr
+                         else "min-of-two"),
+                "files": [{"path": p, "sha256": sha256_file(p)}
+                          for p in seat_files(args.positive)],
+                "deviation": (
+                    "coherence has one effective seat; registered deviation per "
+                    "docs/notes/2026-11-23_key2-instrument-gate-failure.md"
+                    if args.coherence_seat_substr else None),
+            },
+            "relevance": {"mode": "min-of-two"},
+            "language": {"mode": "min-of-two"},
+        },
         "agreement": {
             "positive": agreement(args.positive),
             "negative": {dim: agreement(files)
