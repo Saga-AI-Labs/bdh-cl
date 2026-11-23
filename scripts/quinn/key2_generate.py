@@ -124,7 +124,12 @@ def greedy_bytes(model, prompt, max_new_bytes, device):
     start = idx.shape[1]
     for _ in range(max_new_bytes):
         idx_cond = idx[:, -block:] if block is not None else idx
-        logits, _, _ = model(idx_cond)
+        # collect_state=False: greedy decoding discards the returned state, and
+        # the per-layer KV state (4 x (1,16,512,N) fp32 here) is the difference
+        # between fitting and a global OOM on the GB10 unified pool. Logits are
+        # bit-identical with and without it (2026-11-07 OOM note); every other
+        # eval script in the repo already passes it.
+        logits, _, _ = model(idx_cond, collect_state=False)
         nxt = torch.argmax(logits[:, -1, :], dim=-1, keepdim=True)
         idx = torch.cat((idx, nxt), dim=1)
     return bytes(idx[0, start:].to(torch.uint8).cpu().tolist())
