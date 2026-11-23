@@ -277,6 +277,10 @@ def main():
         log("JUDGE finish=%s attempts=%s tokens=%s usage=%s"
             % (detail.get("finish_reason"), detail.get("attempts"),
                detail.get("max_tokens_used"), detail.get("usage")))
+        if detail.get("error"):
+            # Without this the exception path is indistinguishable from a
+            # judge that answered nothing: both print the same Nones.
+            log("JUDGE error: %s" % detail["error"])
         log("JUDGE scores=%s | latency %.1fs" % (scores, latency))
         out["rows"].append({
             "id": rid,
@@ -296,6 +300,7 @@ def main():
             "latency_s": round(latency, 2),
             "judge_content": detail.get("content"),
             "judge_reasoning": detail.get("reasoning"),
+            "error": detail.get("error"),
             "system_prompt_sha256": system_sha,
         })
         if len(out["rows"]) % 10 == 0:
