@@ -77,13 +77,19 @@ endpoints are separate boxes; do not assume the old IPs
 
 ## Next moves, in order
 
-1. **Re-download the 3.62B checkpoint** (only HF has it):
+1. **Re-download the 3.62B checkpoint** (only HF has it). The repo is a
+   **dataset**, not a model — `--repo-type dataset` is required, otherwise the
+   API 404s:
    ```bash
    hf download Saga-AI-Labs/bdh-routed-probe bdh_textmix_p3_mixed_best.pt \
-     --local-dir out/routed_probe
+     --repo-type dataset --local-dir out/routed_probe
    ```
    The upload log (`archive/2026-11-routed-probe/upload-summary.txt`) records
-   `rc=0` for all 7 routed-probe files. Verify the local size (38.7 GB) before
+   `rc=0` for all 7 routed-probe files. Expected file: 38,657,073,228 B
+   (36.00 GiB = 38.65 GB), LFS sha256
+   `ce24e0fde0a6a83db20a336b208e3aeedab05859ef9366fcf04e28dddb0e1874`
+   (from the HF file metadata, so it verifies the re-download against the
+   upload rather than against a local copy). Verify size and hash before
    loading.
 
 2. **Key-2 generation** (operator said "later"; ask before starting):
