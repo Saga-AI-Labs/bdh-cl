@@ -1,0 +1,360 @@
+{
+  "schema": "key2_dissociation_b",
+  "version": "v1-draft",
+  "status": "DRAFT",
+  "date": "2026-11-23",
+  "source": "docs/notes/2026-11-19_key2-coherence-rubric.md section 8.3 (dissociation B)",
+  "counts": {
+    "items": 24,
+    "role": "negative_relevance"
+  },
+  "expected": {
+    "language": ">=4",
+    "coherence": ">=4",
+    "relevance": "<=2"
+  },
+  "provenance": {
+    "corpus": "data/expert/heldout.txt (Project Gutenberg)",
+    "corpus_sha256": "2d589e6a815c84b6667ad4348c30dd1472839a582e86c52bd0d593a80f84df54",
+    "method": "authored pairs: passage on topic X, prompt about topic Y; seed 20261123",
+    "overlap_check": "pending 8-gram against the host corpus"
+  },
+  "items": [
+    {
+      "id": "k2_dissocb_01",
+      "role": "negative_relevance",
+      "expected": {
+        "language": ">=4",
+        "coherence": ">=4",
+        "relevance": "<=2"
+      },
+      "passage": "Father Zossima raised his hand to bless him. Alyosha could make no protest, though he had a great longing to remain. He longed, moreover, to ask the significance of his bowing to Dmitri, the question was on the tip of his tongue, but he dared not ask it. He knew that the elder",
+      "prompt": "Explain how a router forwards a packet between two subnets.",
+      "source": "data/expert/heldout.txt (Project Gutenberg)",
+      "passage_bytes": 277,
+      "passage_sha256": "318ebeb00b75032de494e98b77f77bb1cb6e1cf019728f41c8edda4084dc097a"
+    },
+    {
+      "id": "k2_dissocb_02",
+      "role": "negative_relevance",
+      "expected": {
+        "language": ">=4",
+        "coherence": ">=4",
+        "relevance": "<=2"
+      },
+      "passage": "Alyosha sat down to the table and began to tell his story, but at the first words he lost his embarrassment and gained the whole of Lise’s attention as well. He spoke with deep feeling, under the influence of the strong impression he had just received, and he succeeded in",
+      "prompt": "Describe the steps to bake bread from scratch.",
+      "source": "data/expert/heldout.txt (Project Gutenberg)",
+      "passage_bytes": 274,
+      "passage_sha256": "7324f173e96572edba962ff24cc493c24ce394d6afbdbbd98d4ec126951ca790"
+    },
+    {
+      "id": "k2_dissocb_03",
+      "role": "negative_relevance",
+      "expected": {
+        "language": ">=4",
+        "coherence": ">=4",
+        "relevance": "<=2"
+      },
+      "passage": "Mitya at once began talking to him, too, of his plans, nervously and excitedly asking advice in regard to Lyagavy, and talking all the way. The priest listened attentively, but gave little advice. He turned off Mitya’s questions with: “I don’t know. Ah, I can’t say. How",
+      "prompt": "What causes the seasons to change through the year?",
+      "source": "data/expert/heldout.txt (Project Gutenberg)",
+      "passage_bytes": 278,
+      "passage_sha256": "59cedb409f62d6ee659244e82f7692527764e5e8b514c40ef0ca6efc5ee1cea3"
+    },
+    {
+      "id": "k2_dissocb_04",
+      "role": "negative_relevance",
+      "expected": {
+        "language": ">=4",
+        "coherence": ">=4",
+        "relevance": "<=2"
+      },
+      "passage": "He stepped forward, opened the door, and quickly went into the inner room. Perezvon flew after him. The doctor stood still for five seconds in amazement, looking at Alyosha; then, with a curse, he went out quickly to the carriage, repeating aloud, “This is ... this is ... I",
+      "prompt": "Explain how a compiler turns source code into a program.",
+      "source": "data/expert/heldout.txt (Project Gutenberg)",
+      "passage_bytes": 276,
+      "passage_sha256": "3fcbb683a4e93a7a79dbb0b7520fbf728a05f733206df383aa12b272b61cb4af"
+    },
+    {
+      "id": "k2_dissocb_05",
+      "role": "negative_relevance",
+      "expected": {
+        "language": ">=4",
+        "coherence": ">=4",
+        "relevance": "<=2"
+      },
+      "passage": "I must mention, by the way, that I was no longer living in my former quarters. As soon as I resigned my commission, I took rooms with an old lady, the widow of a government clerk. My landlady’s servant waited upon me, for I had moved into her rooms simply because on my return",
+      "prompt": "How does a bicycle stay upright while moving?",
+      "source": "data/expert/heldout.txt (Project Gutenberg)",
+      "passage_bytes": 278,
+      "passage_sha256": "9ec89b422a42cd10dcc17789ff1440dec7a0d5facce2d3136029c59c59a25ad2"
+    },
+    {
+      "id": "k2_dissocb_06",
+      "role": "negative_relevance",
+      "expected": {
+        "language": ">=4",
+        "coherence": ">=4",
+        "relevance": "<=2"
+      },
+      "passage": "He preferred to attribute it to the dead weight of instinct which he could not step over, again through weakness and meanness. He looked at his fellow prisoners and was amazed to see how they all loved life and prized it. It seemed to him that they loved and valued life more in",
+      "prompt": "Explain what photosynthesis does for a plant.",
+      "source": "data/expert/heldout.txt (Project Gutenberg)",
+      "passage_bytes": 278,
+      "passage_sha256": "7f2dd7f5d6de181fd02019a78fb7373f3baac2f9b4140bdefb46233190946434"
+    },
+    {
+      "id": "k2_dissocb_07",
+      "role": "negative_relevance",
+      "expected": {
+        "language": ">=4",
+        "coherence": ">=4",
+        "relevance": "<=2"
+      },
+      "passage": "This idea sometimes even tormented his dreams, but it had never presented itself so vividly to him as on his way to Svidrigaïlov. The very thought moved him to gloomy rage. To begin with, this would transform everything, even his own position; he would have at once to confess",
+      "prompt": "Describe how a bank clears a payment between two accounts.",
+      "source": "data/expert/heldout.txt (Project Gutenberg)",
+      "passage_bytes": 277,
+      "passage_sha256": "0486d873a25d85fe2bf303b7aca80fc720866d2c7a0b1972f5b8b00544125b59"
+    },
+    {
+      "id": "k2_dissocb_08",
+      "role": "negative_relevance",
+      "expected": {
+        "language": ">=4",
+        "coherence": ">=4",
+        "relevance": "<=2"
+      },
+      "passage": "It was not much more than three-quarters of a mile from the town to the monastery. Alyosha walked quickly along the road, at that hour deserted. It was almost night, and too dark to see anything clearly at thirty paces ahead. There were cross-roads half-way. A figure came into",
+      "prompt": "Why do metals conduct electricity better than wood?",
+      "source": "data/expert/heldout.txt (Project Gutenberg)",
+      "passage_bytes": 277,
+      "passage_sha256": "1d00ac5319a4717b5db948b3ba082ebe365d1482141e8a1d65fefb38a33e5e54"
+    },
+    {
+      "id": "k2_dissocb_09",
+      "role": "negative_relevance",
+      "expected": {
+        "language": ">=4",
+        "coherence": ">=4",
+        "relevance": "<=2"
+      },
+      "passage": "At last he realized that the room was full of charcoal fumes from the stove, and that he might die of suffocation. And the drunken peasant still lay snoring. The candle guttered and was about to go out. Mitya cried out, and ran staggering across the passage into the forester’s",
+      "prompt": "Explain how a thermostat keeps a room at a steady temperature.",
+      "source": "data/expert/heldout.txt (Project Gutenberg)",
+      "passage_bytes": 279,
+      "passage_sha256": "aeee91d642213b8d0dde4b097e84803565938515f7bee0327942afb873f80db6"
+    },
+    {
+      "id": "k2_dissocb_10",
+      "role": "negative_relevance",
+      "expected": {
+        "language": ">=4",
+        "coherence": ">=4",
+        "relevance": "<=2"
+      },
+      "passage": "Dounia at last became impatient and, leaving Sonia, went to her brother’s room to await him there; she kept thinking that he would come there first. When she had gone, Sonia began to be tortured by the dread of his committing suicide, and Dounia too feared it. But they had",
+      "prompt": "Describe how a ship stays afloat even though it is heavy.",
+      "source": "data/expert/heldout.txt (Project Gutenberg)",
+      "passage_bytes": 275,
+      "passage_sha256": "2bb648fcc75a9c7f98be45eda4d20bf70ecea5188228a100c7aa313e72386cb3"
+    },
+    {
+      "id": "k2_dissocb_11",
+      "role": "negative_relevance",
+      "expected": {
+        "language": ">=4",
+        "coherence": ">=4",
+        "relevance": "<=2"
+      },
+      "passage": "A week later he died. The whole town followed him to the grave. The chief priest made a speech full of feeling. All lamented the terrible illness that had cut short his days. But all the town was up in arms against me after the funeral, and people even refused to see me. Some,",
+      "prompt": "How does a vaccine prepare the immune system?",
+      "source": "data/expert/heldout.txt (Project Gutenberg)",
+      "passage_bytes": 277,
+      "passage_sha256": "9064d0f97d49193c8e7ad1b7eeb8fa18be47a12690a802acb50c7d625d9ff63d"
+    },
+    {
+      "id": "k2_dissocb_12",
+      "role": "negative_relevance",
+      "expected": {
+        "language": ">=4",
+        "coherence": ">=4",
+        "relevance": "<=2"
+      },
+      "passage": "And can it be a dream, that in the end man will find his joy only in deeds of light and mercy, and not in cruel pleasures as now, in gluttony, fornication, ostentation, boasting and envious rivalry of one with the other? I firmly believe that it is not and that the time is at",
+      "prompt": "Explain why ice floats on water.",
+      "source": "data/expert/heldout.txt (Project Gutenberg)",
+      "passage_bytes": 276,
+      "passage_sha256": "ede0b258683483eaef3f2484e05e062f5ca019fd3e621e33e5767776a7d37905"
+    },
+    {
+      "id": "k2_dissocb_13",
+      "role": "negative_relevance",
+      "expected": {
+        "language": ">=4",
+        "coherence": ">=4",
+        "relevance": "<=2"
+      },
+      "passage": "By that time Smerdyakov had been discharged from the hospital. Ivan knew his new lodging, the dilapidated little wooden house, divided in two by a passage on one side of which lived Marya Kondratyevna and her mother, and on the other, Smerdyakov. No one knew on what terms he",
+      "prompt": "Explain how a router forwards a packet between two subnets.",
+      "source": "data/expert/heldout.txt (Project Gutenberg)",
+      "passage_bytes": 275,
+      "passage_sha256": "c2b7dceefebc4aed4c0fdbd9754cdb4c85c2bd0ec25312983bfcda24d643ea0a"
+    },
+    {
+      "id": "k2_dissocb_14",
+      "role": "negative_relevance",
+      "expected": {
+        "language": ">=4",
+        "coherence": ">=4",
+        "relevance": "<=2"
+      },
+      "passage": "When Fyodor Pavlovitch, who first came into contact with Grushenka over a piece of speculation, ended to his own surprise by falling madly in love with her, old Samsonov, gravely ill as he was, was immensely amused. It is remarkable that throughout their whole acquaintance",
+      "prompt": "Describe the steps to bake bread from scratch.",
+      "source": "data/expert/heldout.txt (Project Gutenberg)",
+      "passage_bytes": 273,
+      "passage_sha256": "09aca6f99ed6d24eccf47273ec33207ade0156dba5d28f74cb27ada61a0baf9c"
+    },
+    {
+      "id": "k2_dissocb_15",
+      "role": "negative_relevance",
+      "expected": {
+        "language": ">=4",
+        "coherence": ">=4",
+        "relevance": "<=2"
+      },
+      "passage": "The story is told, for instance, that in the early days of Christianity one such novice, failing to fulfill some command laid upon him by his elder, left his monastery in Syria and went to Egypt. There, after great exploits, he was found worthy at last to suffer torture and a",
+      "prompt": "What causes the seasons to change through the year?",
+      "source": "data/expert/heldout.txt (Project Gutenberg)",
+      "passage_bytes": 276,
+      "passage_sha256": "36d9cf38d7ea4d45485f34229134bf9189b37439c676c1c3ac163ab9a041f616"
+    },
+    {
+      "id": "k2_dissocb_16",
+      "role": "negative_relevance",
+      "expected": {
+        "language": ">=4",
+        "coherence": ">=4",
+        "relevance": "<=2"
+      },
+      "passage": "After describing the result of this conversation and the moment when the prisoner learnt that Grushenka had not remained at Samsonov’s, the sudden frenzy of the luckless man worn out with jealousy and nervous exhaustion, at the thought that she had deceived him and was now",
+      "prompt": "Explain how a compiler turns source code into a program.",
+      "source": "data/expert/heldout.txt (Project Gutenberg)",
+      "passage_bytes": 275,
+      "passage_sha256": "497554e80ecd1b749132c7874398cf3eb1265d2e255d54c96b8d39ced720e70c"
+    },
+    {
+      "id": "k2_dissocb_17",
+      "role": "negative_relevance",
+      "expected": {
+        "language": ">=4",
+        "coherence": ">=4",
+        "relevance": "<=2"
+      },
+      "passage": "Then old Maximov was summoned. He came in timidly, approached with little steps, looking very disheveled and depressed. He had, all this time, taken refuge below with Grushenka, sitting dumbly beside her, and “now and then he’d begin blubbering over her and wiping his eyes",
+      "prompt": "How does a bicycle stay upright while moving?",
+      "source": "data/expert/heldout.txt (Project Gutenberg)",
+      "passage_bytes": 277,
+      "passage_sha256": "2c22b4281703350fd7fb9808ccfea96d837f132372a296493cb9be39e5c0b7f3"
+    },
+    {
+      "id": "k2_dissocb_18",
+      "role": "negative_relevance",
+      "expected": {
+        "language": ">=4",
+        "coherence": ">=4",
+        "relevance": "<=2"
+      },
+      "passage": "It was by now seven o’clock, and it was getting dark as Alyosha entered the very spacious and convenient house in the High Street occupied by Katerina Ivanovna. Alyosha knew that she lived with two aunts. One of them, a woman of little education, was that aunt of her",
+      "prompt": "Explain what photosynthesis does for a plant.",
+      "source": "data/expert/heldout.txt (Project Gutenberg)",
+      "passage_bytes": 269,
+      "passage_sha256": "3287cbef474de7e6e9d7794eabdcd9aa4ad030172fa07a32cfa61b8ea3fe9e2c"
+    },
+    {
+      "id": "k2_dissocb_19",
+      "role": "negative_relevance",
+      "expected": {
+        "language": ">=4",
+        "coherence": ">=4",
+        "relevance": "<=2"
+      },
+      "passage": "Immediately after he had left it that evening, Fenya had rushed to the chief porter, Nazar Ivanovitch, and besought him, for Christ’s sake, “not to let the captain in again to-day or to-morrow.” Nazar Ivanovitch promised, but went upstairs to his mistress who had suddenly",
+      "prompt": "Describe how a bank clears a payment between two accounts.",
+      "source": "data/expert/heldout.txt (Project Gutenberg)",
+      "passage_bytes": 278,
+      "passage_sha256": "8da55a70c2462e24f0a7e0a2b66a4b1d2678aff0e35bbf7714c7d3a041df9f5e"
+    },
+    {
+      "id": "k2_dissocb_20",
+      "role": "negative_relevance",
+      "expected": {
+        "language": ">=4",
+        "coherence": ">=4",
+        "relevance": "<=2"
+      },
+      "passage": "But Father Zossima, on entering the portico, went first straight to the peasants who were crowded at the foot of the three steps that led up into the portico. Father Zossima stood on the top step, put on his stole, and began blessing the women who thronged about him. One crazy",
+      "prompt": "Why do metals conduct electricity better than wood?",
+      "source": "data/expert/heldout.txt (Project Gutenberg)",
+      "passage_bytes": 277,
+      "passage_sha256": "4bb408fd5fa5bc2353ffe4e4fee2f8f8214bdd6d352a84dc7637fe0ff5009738"
+    },
+    {
+      "id": "k2_dissocb_21",
+      "role": "negative_relevance",
+      "expected": {
+        "language": ">=4",
+        "coherence": ">=4",
+        "relevance": "<=2"
+      },
+      "passage": "Alyosha found him sitting on his bed in a hospital dressing-gown, rather feverish, with a towel, soaked in vinegar and water, on his head. He looked at Alyosha as he came in with an undefined expression, but there was a shade of something like dread discernible in it. He had",
+      "prompt": "Explain how a thermostat keeps a room at a steady temperature.",
+      "source": "data/expert/heldout.txt (Project Gutenberg)",
+      "passage_bytes": 275,
+      "passage_sha256": "61963d084d75bf778b5c3585414f4af44a782bb21a7e9fee695b656ad8e295ca"
+    },
+    {
+      "id": "k2_dissocb_22",
+      "role": "negative_relevance",
+      "expected": {
+        "language": ">=4",
+        "coherence": ">=4",
+        "relevance": "<=2"
+      },
+      "passage": "They sat side by side, both mournful and dejected, as though they had been cast up by the tempest alone on some deserted shore. He looked at Sonia and felt how great was her love for him, and strange to say he felt it suddenly burdensome and painful to be so loved. Yes, it was a",
+      "prompt": "Describe how a ship stays afloat even though it is heavy.",
+      "source": "data/expert/heldout.txt (Project Gutenberg)",
+      "passage_bytes": 279,
+      "passage_sha256": "9301b1ad6b05888020a4744aca054d6b4411c5e0cfaa3fde9b00d49725a8638c"
+    },
+    {
+      "id": "k2_dissocb_23",
+      "role": "negative_relevance",
+      "expected": {
+        "language": ">=4",
+        "coherence": ">=4",
+        "relevance": "<=2"
+      },
+      "passage": "Alyosha raised his downcast eyes and again flushed, and again smiled without knowing why. But the elder was no longer watching him. He had begun talking to a monk who, as mentioned before, had been awaiting his entrance by Lise’s chair. He was evidently a monk of the humblest,",
+      "prompt": "How does a vaccine prepare the immune system?",
+      "source": "data/expert/heldout.txt (Project Gutenberg)",
+      "passage_bytes": 279,
+      "passage_sha256": "4f2cf50f3ed05e1bf2ce7e5b81dcfc3c56507cfde04c6a2b9b0e77be33af2494"
+    },
+    {
+      "id": "k2_dissocb_24",
+      "role": "negative_relevance",
+      "expected": {
+        "language": ">=4",
+        "coherence": ">=4",
+        "relevance": "<=2"
+      },
+      "passage": "He moved to one side to make way for the priest and server, who were coming up the stairs. They had come for the requiem service. By Svidrigaïlov’s orders it was sung twice a day punctually. Svidrigaïlov went his way. Raskolnikov stood still a moment, thought, and followed",
+      "prompt": "Explain why ice floats on water.",
+      "source": "data/expert/heldout.txt (Project Gutenberg)",
+      "passage_bytes": 277,
+      "passage_sha256": "f6699042ab2473bf3a9f529461cce445ee3d60f919b0deafda167ac129dabfac"
+    }
+  ]
+}
