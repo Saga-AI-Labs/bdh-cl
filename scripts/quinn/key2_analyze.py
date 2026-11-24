@@ -38,6 +38,7 @@ If a dimension-specific band is omitted, --negative is used for it.
 """
 
 import argparse
+import datetime
 import hashlib
 import json
 import os
@@ -180,6 +181,8 @@ def main():
                          "seat authority (default: min of every supplied judge)")
     ap.add_argument("--out", default="out/key2_calibration/thresholds_candidate.json")
     ap.add_argument("--margin", type=float, default=0.5)
+    ap.add_argument("--date", default=datetime.date.today().isoformat(),
+                    help="date recorded in the candidate JSON")
     ap.add_argument("--format-ids", default=",".join(FORMAT_IDS))
     args = ap.parse_args()
 
@@ -277,7 +280,7 @@ def main():
     out = {
         "schema": "key2_thresholds",
         "status": "CANDIDATE",
-        "date": "2026-11-20",
+        "date": args.date,
         "inputs": {
             "positive": [{"path": p, "sha256": sha256_file(p)} for p in args.positive],
             "negative": {dim: [{"path": p, "sha256": sha256_file(p)}
