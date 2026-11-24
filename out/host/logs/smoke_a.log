@@ -1,0 +1,18 @@
+files train: data/host/fineweb_train.txt | 1,999,999,882 B
+files val: data/host/fineweb_val.txt | 7,999,959 B
+files test: data/host/fineweb_test.txt | 7,999,852 B
+dataset: files | train bytes 1999999882 | val bytes 7999959 | test bytes 7999852
+model: bdh | params 100,925,440 | device cuda | dtype torch.bfloat16
+data order: shuffled single pass | 3,906,249 crops | seed 1337 | one pass = 488,281 steps
+resume: no checkpoint at out/host/smoke_a/bdh_files_smoke_a_last.pt; starting fresh
+step   100/600 | loss 2.7848 | lr 0.00099 | 816 ms/step
+step   200/600 | loss 2.1423 | lr 0.00086 | 799 ms/step
+step   300/600 | loss 1.7974 | lr 0.00063 | 799 ms/step
+step   400/600 | loss 1.6578 | lr 0.00037 | 799 ms/step
+step   500/600 | loss 1.5718 | lr 0.00018 | 799 ms/step
+step 500 | val_loss 1.5669 | ppl 4.79 | bpw 2.261| test_loss 1.5113 | test_ppl 4.53
+step   600/600 | loss 1.5220 | lr 0.00010 | 977 ms/step
+step 600 | val_loss 1.4993 | ppl 4.48 | bpw 2.163| test_loss 1.5271 | test_ppl 4.60
+done marker: out/host/smoke_a/bdh_files_smoke_a_done.json
+done. best val_loss 1.4993 (ppl 4.48) -> out/host/smoke_a/bdh_files_smoke_a_best.pt
+memory: peak allocated 13.31 GiB | peak reserved 13.65 GiB (process max: model + optimizer state + activations)

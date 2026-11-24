@@ -1,0 +1,86 @@
+{
+ "schema": "host_carve_v1",
+ "date": "2026-11-24",
+ "builder": "scripts/quinn/build_host_corpus.py",
+ "builder_sha256": "3126b3aa9db981148e39f5e2065518a4feb11ed81979aa5ca8656fc74f010e85",
+ "git_sha": "7e49792660c826c52dfd53986d667642a5201c2e",
+ "source": {
+  "dataset": "HuggingFaceFW/fineweb-edu",
+  "config": "sample-10BT",
+  "files": [
+   {
+    "path": "out/fineweb_edu_probe/sample/10BT/000_00000.parquet",
+    "bytes": 2152819114,
+    "sha256": "b1ba7b2ce4cb5ea6ef42dca40263eabb85f37700d01693a68e9b30a31d78e871"
+   },
+   {
+    "path": "out/fineweb_edu_probe/sample/10BT/001_00000.parquet",
+    "bytes": 2152222432,
+    "sha256": "3fcf2dc69cd52503986276d3d2d26a8c356d0f2ea28a0de4fdbda8cf87755693"
+   },
+   {
+    "path": "out/fineweb_edu_probe/sample/10BT/013_00000.parquet",
+    "bytes": 540632672,
+    "sha256": "b393f51fefab26cd6f4c8f65707c1924f6666c4961a0ebebe04bb57f7ec832de"
+   }
+  ]
+ },
+ "dedupe": {
+  "method": "sha256(text); first occurrence in ascending document hash wins",
+  "documents_total": 1637101,
+  "bytes_total": 7816161610,
+  "documents_distinct": 1627211,
+  "bytes_distinct": 7771371475,
+  "duplicate_documents": 9890,
+  "duplicate_bytes": 44790135,
+  "duplicate_share_docs": 0.006041,
+  "duplicate_share_bytes": 0.00573,
+  "largest_duplicate_group": 3,
+  "unique_bytes_gb": 7.771
+ },
+ "carve": {
+  "unit": "one distinct document, UTF-8 bytes, joined with \\n\\n",
+  "hash": "h = big-endian integer of sha256(id)[:8]",
+  "buckets": "h % 1000 in [0,5) val, [5,10) test, else train",
+  "order": "ascending h",
+  "cap_unit": "decimal MB (1 MB = 1,000,000 bytes)",
+  "caps_bytes": {
+   "train": 2000000000,
+   "val": 8000000,
+   "test": 8000000
+  },
+  "duplicate_policy": "drop later occurrences globally, before the split"
+ },
+ "splits": {
+  "train": {
+   "path": "data/host/fineweb_train.txt",
+   "documents": 417864,
+   "bytes": 1999999882,
+   "sha256": "4692331783fb84d54d17221e44d917ee18645aee0d3002e592f7c49adf63632f",
+   "first_h": "1342108514259",
+   "last_h": "4765927711537306943"
+  },
+  "val": {
+   "path": "data/host/fineweb_val.txt",
+   "documents": 1544,
+   "bytes": 7999959,
+   "sha256": "bf4600f0ab4c6b9cbdb7b2e0f0d4022e02f266debb1db8749dddae71b620e9d3",
+   "first_h": "350842643331003",
+   "last_h": "3431892823386003002"
+  },
+  "test": {
+   "path": "data/host/fineweb_test.txt",
+   "documents": 1653,
+   "bytes": 7999852,
+   "sha256": "43f67e138abc50ea5aa3d736e4648d637eb0b70d62e1f24faf03a578f847c8c1",
+   "first_h": "82621667357009",
+   "last_h": "3693520647914702008"
+  }
+ },
+ "totals": {
+  "documents_scanned": 1637101,
+  "bytes_scanned": 7816161610,
+  "documents_distinct": 1627211,
+  "bytes_distinct": 7771371475
+ }
+}

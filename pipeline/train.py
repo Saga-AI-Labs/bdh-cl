@@ -1,8 +1,11 @@
 """Training loop for BDH and the Transformer baseline (shared, model-agnostic)."""
 
 import dataclasses
+import hashlib
+import json
 import math
 import os
+import subprocess
 import time
 from contextlib import nullcontext
 
@@ -136,7 +139,7 @@ def checkpoint_path(cfg: Config, tag: str) -> str:
 
 
 def save_checkpoint(cfg: Config, model, optimizer, step: int, best_val: float, tag: str,
-                    state=None) -> None:
+                    state=None, extra=None) -> None:
     torch.save(
         {
             # plain dict (not a pickled dataclass) so the checkpoint can be loaded
@@ -147,9 +150,38 @@ def save_checkpoint(cfg: Config, model, optimizer, step: int, best_val: float, t
             "model_state": model.state_dict(),
             "optimizer_state": optimizer.state_dict(),
             "state": state,  # carried attention state (CPU tensors), or None
+            "extra": extra or {},
         },
         checkpoint_path(cfg, tag),
     )
+
+
+def _cfg_fingerprint(cfg: Config) -> str:
+    """Hash every training decision except the resume flag itself."""
+    d = dataclasses.asdict(cfg)
+    d.pop("resume", None)
+    return hashlib.sha256(json.dumps(d, sort_keys=True).encode()).hexdigest()
+
+
+def _data_sha256(data) -> str:
+    h = hashlib.sha256()
+    for split in ("train", "val", "test"):
+        arr = getattr(data, split)
+        if arr is None:
+            h.update(b"none")
+            continue
+        h.update(split.encode())
+        h.update(str(len(arr)).encode())
+        h.update(memoryview(arr))
+    return h.hexdigest()
+
+
+def _sha256_file(path: str) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 24), b""):
+            h.update(chunk)
+    return h.hexdigest()
 
 
 def apply_memory_cap(device) -> None:
@@ -175,6 +207,7 @@ def apply_memory_cap(device) -> None:
 
 
 def train(cfg: Config) -> None:
+    started = time.time()
     torch.manual_seed(cfg.seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(cfg.seed)
@@ -504,7 +537,59 @@ def train(cfg: Config) -> None:
         betas=(cfg.beta1, cfg.beta2),
     )
 
+    if cfg.data_order not in ("random", "shuffled-onepass"):
+        raise ValueError(f"unknown --data-order {cfg.data_order!r}")
+    if cfg.data_order == "shuffled-onepass" and (
+            cfg.sequential_batches or cfg.carry_state or cfg.stateful_eval):
+        raise ValueError(
+            "--data-order shuffled-onepass serves non-contiguous crops and "
+            "cannot be combined with carry/sequential/stateful eval")
+    crop_stream = (
+        data.make_crop_stream("train", cfg.block_size, cfg.batch_size, cfg.data_seed)
+        if cfg.data_order == "shuffled-onepass" else None
+    )
+    data_sha = _data_sha256(data)
+    cfg_sha = _cfg_fingerprint(cfg)
+    git_sha = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True,
+                             text=True).stdout.strip()
+    if crop_stream is not None:
+        print(f"data order: shuffled single pass | {crop_stream.n_crops:,} crops "
+              f"| seed {cfg.data_seed} | one pass = {len(crop_stream):,} steps")
+        if cfg.max_iters > len(crop_stream):
+            print(f"warning: max_iters {cfg.max_iters:,} exceeds one pass "
+                  f"({len(crop_stream):,}); the stream will wrap")
+
     best_val = float("inf")
+    start_step = 0
+    if cfg.resume:
+        last_path = checkpoint_path(cfg, "last")
+        if os.path.exists(last_path):
+            ckpt = torch.load(last_path, map_location="cpu", weights_only=False)
+            prev = ckpt.get("extra", {})
+            if prev.get("data_sha256") != data_sha:
+                raise SystemExit(
+                    f"resume refused: data hash {data_sha[:16]} != "
+                    f"{str(prev.get('data_sha256'))[:16]} (different carve)")
+            if prev.get("cfg_fingerprint") != cfg_sha:
+                raise SystemExit(
+                    "resume refused: config fingerprint differs from the checkpoint")
+            raw_model.load_state_dict(ckpt["model_state"])
+            optimizer.load_state_dict(ckpt["optimizer_state"])
+            best_val = float(ckpt.get("best_val", float("inf")))
+            start_step = int(ckpt.get("step", 0))
+            if crop_stream is not None and prev.get("crop_stream"):
+                crop_stream.load_state(prev["crop_stream"])
+            rng = prev.get("rng") or {}
+            if rng.get("torch") is not None:
+                torch.set_rng_state(rng["torch"])
+            if device.type == "cuda" and rng.get("cuda"):
+                torch.cuda.set_rng_state_all(rng["cuda"])
+            print(f"resume: step {start_step:,} | best_val {best_val:.4f} | "
+                  f"crop cursor {crop_stream.cursor if crop_stream else '-'}")
+            del ckpt
+        else:
+            print(f"resume: no checkpoint at {last_path}; starting fresh")
+
     t0 = time.time()
     running_loss = 0.0
     stream = (
@@ -560,13 +645,17 @@ def train(cfg: Config) -> None:
             for dst_t, snap in elem_frozen_backup:
                 dst_t.copy_(snap)
 
-    for step in range(cfg.max_iters):
+    for step in range(start_step, cfg.max_iters):
         lr = get_lr(step, cfg)
         for group in optimizer.param_groups:
             group["lr"] = lr
 
-        if stream is not None:
+        if crop_stream is not None:
+            x, y = crop_stream.next_batch(device)
+            step_mask = route_neuron_mask
+        elif stream is not None:
             x, y = stream.next_batch(device)
+            step_mask = route_neuron_mask
         else:
             if data2 is not None:
                 # P3 mixed alternation (D2): even steps draw the primary corpus
@@ -649,15 +738,68 @@ def train(cfg: Config) -> None:
                 test_loss = estimate_loss(model, data, cfg, device, ctx, "test")
                 parts.append(f"| test_loss {test_loss:.4f} | test_ppl {math.exp(test_loss):.2f}")
             print("".join(parts))
-            if val_loss < best_val:
+            improved = val_loss < best_val
+            if improved:
                 best_val = val_loss
-                save_checkpoint(
-                    cfg, raw_model, optimizer, step + 1, best_val, "best",
-                    state=state_to_cpu(detach_state(state)) if cfg.carry_state else None,
-                )
+            extra = {
+                "data_sha256": data_sha,
+                "cfg_fingerprint": cfg_sha,
+                "git_sha": git_sha,
+                "crop_stream": crop_stream.state() if crop_stream is not None else None,
+                "rng": {
+                    "torch": torch.get_rng_state(),
+                    "cuda": torch.cuda.get_rng_state_all() if device.type == "cuda" else [],
+                },
+            }
+            ckpt_state = state_to_cpu(detach_state(state)) if cfg.carry_state else None
+            # last: overwritten every eval, so a crash loses at most one interval.
+            # It carries the post-update best_val so a resume does not forget the
+            # best checkpoint it already saw (smoke B exposed the old ordering).
+            save_checkpoint(cfg, raw_model, optimizer, step + 1, best_val, "last",
+                            state=ckpt_state, extra=extra)
+            if improved:
+                save_checkpoint(cfg, raw_model, optimizer, step + 1, best_val, "best",
+                                state=ckpt_state, extra=extra)
+            if (step + 1) % 50000 == 0:
+                save_checkpoint(cfg, raw_model, optimizer, step + 1, best_val,
+                                f"step{step + 1:06d}", state=ckpt_state, extra=extra)
 
+    final_extra = {
+        "data_sha256": data_sha,
+        "cfg_fingerprint": cfg_sha,
+        "git_sha": git_sha,
+        "crop_stream": crop_stream.state() if crop_stream is not None else None,
+        "rng": {
+            "torch": torch.get_rng_state(),
+            "cuda": torch.cuda.get_rng_state_all() if device.type == "cuda" else [],
+        },
+    }
+    last_path = checkpoint_path(cfg, "last")
     save_checkpoint(cfg, raw_model, optimizer, cfg.max_iters, best_val, "last",
-                    state=state_to_cpu(detach_state(state)) if cfg.carry_state else None)
+                    state=state_to_cpu(detach_state(state)) if cfg.carry_state else None,
+                    extra=final_extra)
+    done = {
+        "schema": "host_run_done_v1",
+        "step": cfg.max_iters,
+        "start_step": start_step,
+        "best_val": best_val,
+        "wall_seconds": round(time.time() - started, 1),
+        "data_sha256": data_sha,
+        "cfg_fingerprint": cfg_sha,
+        "git_sha": git_sha,
+        "dataset": cfg.dataset,
+        "run_name": cfg.run_name,
+        "checkpoint": last_path,
+        "checkpoint_bytes": os.path.getsize(last_path),
+        "checkpoint_sha256": _sha256_file(last_path),
+        "peak_allocated_gib": round(torch.cuda.max_memory_allocated() / 2**30, 3)
+        if device.type == "cuda" else None,
+    }
+    done_path = checkpoint_path(cfg, "done")[:-3] + ".json"
+    with open(done_path, "w") as f:
+        json.dump(done, f, indent=1)
+        f.write("\n")
+    print(f"done marker: {done_path}")
     print(f"done. best val_loss {best_val:.4f} (ppl {math.exp(best_val):.2f}) -> "
           f"{checkpoint_path(cfg, 'best')}")
     if device.type == "cuda":

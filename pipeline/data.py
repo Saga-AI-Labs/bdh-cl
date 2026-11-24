@@ -139,6 +139,55 @@ class ByteStream:
         return torch.stack(xs).to(device), torch.stack(ys).to(device)
 
 
+class CropStream:
+    """Seeded single pass over non-overlapping crops.
+
+    One epoch, no repeats: the permutation is fixed by `seed`, and the caller
+    asks for exactly ``n_crops // batch_size`` batches. If a run asks for more,
+    the stream starts a new epoch with ``seed + epoch``. The cursor is exposed
+    so a checkpoint can resume mid-epoch.
+    """
+
+    def __init__(self, data: np.ndarray, block_size: int, batch_size: int, seed: int):
+        self.data = data
+        self.block_size = block_size
+        self.batch_size = batch_size
+        self.n_crops = max(0, (len(data) - 1) // block_size)
+        if self.n_crops < batch_size:
+            raise ValueError(
+                f"train split has {self.n_crops} crops; batch_size {batch_size} "
+                "needs at least that many")
+        self.seed = int(seed)
+        self.epoch = 0
+        self.cursor = 0
+        self.perm = np.random.default_rng(self.seed).permutation(self.n_crops)
+
+    def __len__(self) -> int:
+        return self.n_crops // self.batch_size
+
+    def state(self) -> dict:
+        return {"epoch": self.epoch, "cursor": self.cursor, "seed": self.seed}
+
+    def load_state(self, s: dict) -> None:
+        self.epoch = int(s["epoch"])
+        self.seed = int(s["seed"])
+        self.cursor = int(s["cursor"])
+        self.perm = np.random.default_rng(self.seed + self.epoch).permutation(self.n_crops)
+
+    def next_batch(self, device):
+        if self.cursor + self.batch_size > self.n_crops:
+            self.epoch += 1
+            self.cursor = 0
+            self.perm = np.random.default_rng(self.seed + self.epoch).permutation(self.n_crops)
+        idx = self.perm[self.cursor:self.cursor + self.batch_size]
+        self.cursor += self.batch_size
+        blk = self.block_size
+        offs = [int(i) * blk for i in idx]
+        x = torch.stack([torch.from_numpy(self.data[o:o + blk].astype(np.int64)) for o in offs])
+        y = torch.stack([torch.from_numpy(self.data[o + 1:o + 1 + blk].astype(np.int64)) for o in offs])
+        return x.to(device), y.to(device)
+
+
 class ByteDataset:
     def __init__(self, train: bytes, val: bytes, test: bytes | None = None):
         self.train = np.frombuffer(train, dtype=np.uint8)
@@ -164,6 +213,29 @@ class ByteDataset:
 
     def make_stream(self, split, block_size, batch_size) -> ByteStream:
         return ByteStream(getattr(self, split), block_size, batch_size)
+
+    def make_crop_stream(self, split, block_size, batch_size, seed) -> CropStream:
+        return CropStream(getattr(self, split), block_size, batch_size, seed)
+
+
+def _prepare_files(cfg):
+    """Explicit train/val/test byte files (dataset=files).
+
+    The carve is built outside the loader, so nothing here re-splits or
+    overlaps the three files.
+    """
+    paths = {"train": cfg.train_file, "val": cfg.val_file, "test": cfg.test_file}
+    missing = [k for k, v in paths.items() if not v]
+    if missing:
+        raise ValueError(
+            "--dataset files requires --train-file, --val-file and --test-file; "
+            f"missing: {', '.join(missing)}")
+    out = []
+    for split in ("train", "val", "test"):
+        with open(paths[split], "rb") as f:
+            out.append(f.read())
+        print(f"files {split}: {paths[split]} | {len(out[-1]):,} B")
+    return out[0], out[1], out[2]
 
 
 def _prepare_textmix(spec: str, mb: int):
@@ -202,6 +274,8 @@ def load_dataset(cfg) -> ByteDataset:
             cfg.data_dir, [m * 1_000_000 for m in caps], langs)
     elif cfg.dataset == "textmix":
         _, train, val, test = _prepare_textmix(cfg.text_mix, cfg.text_mix_mb)
+    elif cfg.dataset == "files":
+        train, val, test = _prepare_files(cfg)
     else:
         raise ValueError(f"unknown dataset: {cfg.dataset}")
     if getattr(cfg, "train_slice", ""):

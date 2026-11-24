@@ -1,0 +1,14 @@
+files train: data/host/fineweb_train.txt | 1,999,999,882 B
+files val: data/host/fineweb_val.txt | 7,999,959 B
+files test: data/host/fineweb_test.txt | 7,999,852 B
+dataset: files | train bytes 1999999882 | val bytes 7999959 | test bytes 7999852
+model: bdh | params 100,925,440 | device cuda | dtype torch.bfloat16
+data order: shuffled single pass | 3,906,249 crops | seed 1337 | one pass = 488,281 steps
+resume: no checkpoint at out/host/smoke_b/bdh_files_smoke_b_last.pt; starting fresh
+W1124 23:53:11.064000 145657 .venv/lib/python3.12/site-packages/torch/_inductor/utils.py:1806] [0/0] Not enough SMs to use max_autotune_gemm mode
+step   100/600 | loss 2.7847 | lr 0.00099 | 970 ms/step
+step   200/600 | loss 2.1418 | lr 0.00086 | 799 ms/step
+step   300/600 | loss 1.7981 | lr 0.00063 | 799 ms/step
+step   400/600 | loss 1.6573 | lr 0.00037 | 799 ms/step
+step   500/600 | loss 1.5720 | lr 0.00018 | 799 ms/step
+step 500 | val_loss 1.5680 | ppl 4.80 | bpw 2.262| test_loss 1.5103 | test_ppl 4.53

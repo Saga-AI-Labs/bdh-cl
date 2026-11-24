@@ -16,6 +16,8 @@ Two modes:
   --scan              No RNG: --crops crops at even strides over the readable
                       slice. Use for corpus selection, where protocol crops are
                       irrelevant but whole-corpus coverage matters.
+  --full              Use the whole --mb read instead of only its last 2 MB.
+                      With --mb 2000 this covers a 2 GB carve at even strides.
 
 Per crop (character level, letters only) it reports the dominant Unicode script
 and its share ("purity"), the foreign-letter share against the corpus-dominant
@@ -97,8 +99,10 @@ def crop_offsets(mode, arr_len, block, crops, seed):
 
 
 def census(path, args):
-    arr = np.frombuffer(open(path, "rb").read(args.mb * 1_000_000)[-2_000_000:],
-                        dtype=np.uint8)
+    raw = open(path, "rb").read(args.mb * 1_000_000)
+    if not args.full:
+        raw = raw[-2_000_000:]
+    arr = np.frombuffer(raw, dtype=np.uint8)
     offsets = crop_offsets("scan" if args.scan else "protocol", len(arr),
                            args.block, args.crops, args.seed)
     rows = []
@@ -163,6 +167,8 @@ def main():
     ap.add_argument("--block", type=int, default=512)
     ap.add_argument("--seed", type=int, default=1234)
     ap.add_argument("--scan", action="store_true")
+    ap.add_argument("--full", action="store_true",
+                    help="census the whole --mb read, not only its last 2 MB")
     ap.add_argument("--json", default=None)
     args = ap.parse_args()
 

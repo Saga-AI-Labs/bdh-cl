@@ -1,0 +1,13 @@
+{
+ "method": "sha256(text); first occurrence in ascending document hash wins",
+ "documents_total": 1637101,
+ "bytes_total": 7816161610,
+ "documents_distinct": 1627211,
+ "bytes_distinct": 7771371475,
+ "duplicate_documents": 9890,
+ "duplicate_bytes": 44790135,
+ "duplicate_share_docs": 0.006041,
+ "duplicate_share_bytes": 0.00573,
+ "largest_duplicate_group": 3,
+ "unique_bytes_gb": 7.771
+}

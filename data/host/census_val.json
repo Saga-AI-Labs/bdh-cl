@@ -1,0 +1,2025 @@
+[
+ {
+  "path": "data/host/fineweb_val.txt",
+  "mode": "scan",
+  "crops": 200,
+  "dominant_script": "Latin",
+  "script_mix_letters": {
+   "Latin": 80933,
+   "other": 13
+  },
+  "purity_p05": 1.0,
+  "purity_p50": 1.0,
+  "anomalous_crops": 0,
+  "anomaly_rate": 0.0,
+  "anomaly_wilson95": [
+   0.0,
+   0.0188
+  ],
+  "ascii_byte_share_mean": 0.9904,
+  "en_marker_per_1k": 197.73,
+  "de_marker_per_1k": 0.0,
+  "rows": [
+   {
+    "crop": 0,
+    "offset": 0,
+    "ascii_byte_share": 1.0,
+    "n_letters": 426,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 1,
+    "offset": 40198,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 415,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 2,
+    "offset": 80396,
+    "ascii_byte_share": 1.0,
+    "n_letters": 415,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 3,
+    "offset": 120594,
+    "ascii_byte_share": 1.0,
+    "n_letters": 394,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 4,
+    "offset": 160792,
+    "ascii_byte_share": 0.98828125,
+    "n_letters": 409,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 5,
+    "offset": 200991,
+    "ascii_byte_share": 0.9921875,
+    "n_letters": 399,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 6,
+    "offset": 241189,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 395,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 7,
+    "offset": 281387,
+    "ascii_byte_share": 0.982421875,
+    "n_letters": 391,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 8,
+    "offset": 321585,
+    "ascii_byte_share": 0.94921875,
+    "n_letters": 358,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 2
+   },
+   {
+    "crop": 9,
+    "offset": 361783,
+    "ascii_byte_share": 0.98828125,
+    "n_letters": 402,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 10,
+    "offset": 401982,
+    "ascii_byte_share": 0.982421875,
+    "n_letters": 419,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 11,
+    "offset": 442180,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 415,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 12,
+    "offset": 482378,
+    "ascii_byte_share": 1.0,
+    "n_letters": 416,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 13,
+    "offset": 522576,
+    "ascii_byte_share": 1.0,
+    "n_letters": 419,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 14,
+    "offset": 562775,
+    "ascii_byte_share": 1.0,
+    "n_letters": 413,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 15,
+    "offset": 602973,
+    "ascii_byte_share": 0.98828125,
+    "n_letters": 404,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 16,
+    "offset": 643171,
+    "ascii_byte_share": 0.970703125,
+    "n_letters": 400,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 17,
+    "offset": 683369,
+    "ascii_byte_share": 0.98828125,
+    "n_letters": 405,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 18,
+    "offset": 723567,
+    "ascii_byte_share": 0.9765625,
+    "n_letters": 403,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 19,
+    "offset": 763766,
+    "ascii_byte_share": 1.0,
+    "n_letters": 438,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 20,
+    "offset": 803964,
+    "ascii_byte_share": 1.0,
+    "n_letters": 412,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 21,
+    "offset": 844162,
+    "ascii_byte_share": 0.9765625,
+    "n_letters": 346,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 22,
+    "offset": 884360,
+    "ascii_byte_share": 0.982421875,
+    "n_letters": 395,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 23,
+    "offset": 924559,
+    "ascii_byte_share": 0.970703125,
+    "n_letters": 396,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 24,
+    "offset": 964757,
+    "ascii_byte_share": 1.0,
+    "n_letters": 409,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 25,
+    "offset": 1004955,
+    "ascii_byte_share": 1.0,
+    "n_letters": 429,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 26,
+    "offset": 1045153,
+    "ascii_byte_share": 0.982421875,
+    "n_letters": 403,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 27,
+    "offset": 1085351,
+    "ascii_byte_share": 1.0,
+    "n_letters": 399,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 28,
+    "offset": 1125550,
+    "ascii_byte_share": 1.0,
+    "n_letters": 387,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 29,
+    "offset": 1165748,
+    "ascii_byte_share": 1.0,
+    "n_letters": 402,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 30,
+    "offset": 1205946,
+    "ascii_byte_share": 1.0,
+    "n_letters": 398,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 31,
+    "offset": 1246144,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 345,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 32,
+    "offset": 1286343,
+    "ascii_byte_share": 0.98828125,
+    "n_letters": 386,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 33,
+    "offset": 1326541,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 419,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 34,
+    "offset": 1366739,
+    "ascii_byte_share": 0.970703125,
+    "n_letters": 406,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 35,
+    "offset": 1406937,
+    "ascii_byte_share": 0.98828125,
+    "n_letters": 421,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 36,
+    "offset": 1447135,
+    "ascii_byte_share": 1.0,
+    "n_letters": 412,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 37,
+    "offset": 1487334,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 393,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 38,
+    "offset": 1527532,
+    "ascii_byte_share": 1.0,
+    "n_letters": 392,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 39,
+    "offset": 1567730,
+    "ascii_byte_share": 0.9140625,
+    "n_letters": 348,
+    "dominant_script": "Latin",
+    "purity": 0.9655,
+    "foreign_letter_share": 0.0345,
+    "split_chars": 0
+   },
+   {
+    "crop": 40,
+    "offset": 1607928,
+    "ascii_byte_share": 1.0,
+    "n_letters": 412,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 41,
+    "offset": 1648127,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 419,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 42,
+    "offset": 1688325,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 404,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 43,
+    "offset": 1728523,
+    "ascii_byte_share": 1.0,
+    "n_letters": 383,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 44,
+    "offset": 1768721,
+    "ascii_byte_share": 1.0,
+    "n_letters": 410,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 45,
+    "offset": 1808919,
+    "ascii_byte_share": 1.0,
+    "n_letters": 422,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 46,
+    "offset": 1849118,
+    "ascii_byte_share": 0.9765625,
+    "n_letters": 415,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 47,
+    "offset": 1889316,
+    "ascii_byte_share": 0.982421875,
+    "n_letters": 422,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 48,
+    "offset": 1929514,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 409,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 49,
+    "offset": 1969712,
+    "ascii_byte_share": 0.98828125,
+    "n_letters": 400,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 50,
+    "offset": 2009911,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 361,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 51,
+    "offset": 2050109,
+    "ascii_byte_share": 1.0,
+    "n_letters": 405,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 52,
+    "offset": 2090307,
+    "ascii_byte_share": 0.953125,
+    "n_letters": 379,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 53,
+    "offset": 2130505,
+    "ascii_byte_share": 1.0,
+    "n_letters": 412,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 54,
+    "offset": 2170703,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 368,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 55,
+    "offset": 2210902,
+    "ascii_byte_share": 1.0,
+    "n_letters": 416,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 56,
+    "offset": 2251100,
+    "ascii_byte_share": 0.98828125,
+    "n_letters": 418,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 57,
+    "offset": 2291298,
+    "ascii_byte_share": 1.0,
+    "n_letters": 421,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 58,
+    "offset": 2331496,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 412,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 59,
+    "offset": 2371695,
+    "ascii_byte_share": 1.0,
+    "n_letters": 427,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 60,
+    "offset": 2411893,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 413,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 61,
+    "offset": 2452091,
+    "ascii_byte_share": 1.0,
+    "n_letters": 411,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 62,
+    "offset": 2492289,
+    "ascii_byte_share": 1.0,
+    "n_letters": 410,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 63,
+    "offset": 2532487,
+    "ascii_byte_share": 0.982421875,
+    "n_letters": 390,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 64,
+    "offset": 2572686,
+    "ascii_byte_share": 0.958984375,
+    "n_letters": 395,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 65,
+    "offset": 2612884,
+    "ascii_byte_share": 1.0,
+    "n_letters": 422,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 66,
+    "offset": 2653082,
+    "ascii_byte_share": 0.970703125,
+    "n_letters": 378,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 67,
+    "offset": 2693280,
+    "ascii_byte_share": 1.0,
+    "n_letters": 413,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 68,
+    "offset": 2733479,
+    "ascii_byte_share": 0.984375,
+    "n_letters": 407,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 69,
+    "offset": 2773677,
+    "ascii_byte_share": 1.0,
+    "n_letters": 412,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 70,
+    "offset": 2813875,
+    "ascii_byte_share": 1.0,
+    "n_letters": 389,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 71,
+    "offset": 2854073,
+    "ascii_byte_share": 1.0,
+    "n_letters": 423,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 72,
+    "offset": 2894271,
+    "ascii_byte_share": 1.0,
+    "n_letters": 422,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 73,
+    "offset": 2934470,
+    "ascii_byte_share": 0.98828125,
+    "n_letters": 413,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 74,
+    "offset": 2974668,
+    "ascii_byte_share": 1.0,
+    "n_letters": 424,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 75,
+    "offset": 3014866,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 421,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 76,
+    "offset": 3055064,
+    "ascii_byte_share": 0.96484375,
+    "n_letters": 386,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 77,
+    "offset": 3095263,
+    "ascii_byte_share": 0.982421875,
+    "n_letters": 386,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 78,
+    "offset": 3135461,
+    "ascii_byte_share": 1.0,
+    "n_letters": 410,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 79,
+    "offset": 3175659,
+    "ascii_byte_share": 1.0,
+    "n_letters": 418,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 80,
+    "offset": 3215857,
+    "ascii_byte_share": 1.0,
+    "n_letters": 409,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 81,
+    "offset": 3256055,
+    "ascii_byte_share": 1.0,
+    "n_letters": 394,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 82,
+    "offset": 3296254,
+    "ascii_byte_share": 1.0,
+    "n_letters": 415,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 83,
+    "offset": 3336452,
+    "ascii_byte_share": 1.0,
+    "n_letters": 412,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 84,
+    "offset": 3376650,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 414,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 85,
+    "offset": 3416848,
+    "ascii_byte_share": 1.0,
+    "n_letters": 425,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 86,
+    "offset": 3457047,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 407,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 87,
+    "offset": 3497245,
+    "ascii_byte_share": 0.970703125,
+    "n_letters": 403,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 88,
+    "offset": 3537443,
+    "ascii_byte_share": 0.9765625,
+    "n_letters": 391,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 89,
+    "offset": 3577641,
+    "ascii_byte_share": 0.98828125,
+    "n_letters": 414,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 90,
+    "offset": 3617839,
+    "ascii_byte_share": 0.982421875,
+    "n_letters": 409,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 91,
+    "offset": 3658038,
+    "ascii_byte_share": 0.9921875,
+    "n_letters": 411,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 1
+   },
+   {
+    "crop": 92,
+    "offset": 3698236,
+    "ascii_byte_share": 1.0,
+    "n_letters": 416,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 93,
+    "offset": 3738434,
+    "ascii_byte_share": 0.98828125,
+    "n_letters": 392,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 94,
+    "offset": 3778632,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 419,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 95,
+    "offset": 3818831,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 397,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 96,
+    "offset": 3859029,
+    "ascii_byte_share": 1.0,
+    "n_letters": 409,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 97,
+    "offset": 3899227,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 419,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 98,
+    "offset": 3939425,
+    "ascii_byte_share": 0.84765625,
+    "n_letters": 339,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 99,
+    "offset": 3979623,
+    "ascii_byte_share": 0.970703125,
+    "n_letters": 403,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 100,
+    "offset": 4019822,
+    "ascii_byte_share": 0.986328125,
+    "n_letters": 362,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 1
+   },
+   {
+    "crop": 101,
+    "offset": 4060020,
+    "ascii_byte_share": 1.0,
+    "n_letters": 415,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 102,
+    "offset": 4100218,
+    "ascii_byte_share": 0.958984375,
+    "n_letters": 388,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 103,
+    "offset": 4140416,
+    "ascii_byte_share": 0.982421875,
+    "n_letters": 414,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 104,
+    "offset": 4180614,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 414,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 105,
+    "offset": 4220813,
+    "ascii_byte_share": 0.98828125,
+    "n_letters": 405,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 106,
+    "offset": 4261011,
+    "ascii_byte_share": 1.0,
+    "n_letters": 392,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 107,
+    "offset": 4301209,
+    "ascii_byte_share": 1.0,
+    "n_letters": 410,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 108,
+    "offset": 4341407,
+    "ascii_byte_share": 1.0,
+    "n_letters": 404,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 109,
+    "offset": 4381606,
+    "ascii_byte_share": 0.982421875,
+    "n_letters": 400,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 110,
+    "offset": 4421804,
+    "ascii_byte_share": 1.0,
+    "n_letters": 410,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 111,
+    "offset": 4462002,
+    "ascii_byte_share": 1.0,
+    "n_letters": 373,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 112,
+    "offset": 4502200,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 413,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 113,
+    "offset": 4542398,
+    "ascii_byte_share": 0.958984375,
+    "n_letters": 392,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 114,
+    "offset": 4582597,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 408,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 115,
+    "offset": 4622795,
+    "ascii_byte_share": 1.0,
+    "n_letters": 415,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 116,
+    "offset": 4662993,
+    "ascii_byte_share": 0.970703125,
+    "n_letters": 408,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 117,
+    "offset": 4703191,
+    "ascii_byte_share": 1.0,
+    "n_letters": 415,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 118,
+    "offset": 4743390,
+    "ascii_byte_share": 1.0,
+    "n_letters": 402,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 119,
+    "offset": 4783588,
+    "ascii_byte_share": 0.99609375,
+    "n_letters": 421,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 120,
+    "offset": 4823786,
+    "ascii_byte_share": 1.0,
+    "n_letters": 436,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 121,
+    "offset": 4863984,
+    "ascii_byte_share": 1.0,
+    "n_letters": 420,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 122,
+    "offset": 4904182,
+    "ascii_byte_share": 0.98828125,
+    "n_letters": 411,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 123,
+    "offset": 4944381,
+    "ascii_byte_share": 1.0,
+    "n_letters": 413,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 124,
+    "offset": 4984579,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 409,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 125,
+    "offset": 5024777,
+    "ascii_byte_share": 1.0,
+    "n_letters": 422,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 126,
+    "offset": 5064975,
+    "ascii_byte_share": 1.0,
+    "n_letters": 421,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 127,
+    "offset": 5105174,
+    "ascii_byte_share": 1.0,
+    "n_letters": 419,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 128,
+    "offset": 5145372,
+    "ascii_byte_share": 0.970703125,
+    "n_letters": 332,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 129,
+    "offset": 5185570,
+    "ascii_byte_share": 0.982421875,
+    "n_letters": 402,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 130,
+    "offset": 5225768,
+    "ascii_byte_share": 1.0,
+    "n_letters": 420,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 131,
+    "offset": 5265966,
+    "ascii_byte_share": 0.98828125,
+    "n_letters": 407,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 132,
+    "offset": 5306165,
+    "ascii_byte_share": 1.0,
+    "n_letters": 424,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 133,
+    "offset": 5346363,
+    "ascii_byte_share": 1.0,
+    "n_letters": 419,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 134,
+    "offset": 5386561,
+    "ascii_byte_share": 0.98828125,
+    "n_letters": 384,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 135,
+    "offset": 5426759,
+    "ascii_byte_share": 1.0,
+    "n_letters": 415,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 136,
+    "offset": 5466958,
+    "ascii_byte_share": 0.982421875,
+    "n_letters": 404,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 137,
+    "offset": 5507156,
+    "ascii_byte_share": 1.0,
+    "n_letters": 420,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 138,
+    "offset": 5547354,
+    "ascii_byte_share": 1.0,
+    "n_letters": 400,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 139,
+    "offset": 5587552,
+    "ascii_byte_share": 1.0,
+    "n_letters": 377,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 140,
+    "offset": 5627750,
+    "ascii_byte_share": 0.900390625,
+    "n_letters": 366,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 141,
+    "offset": 5667949,
+    "ascii_byte_share": 1.0,
+    "n_letters": 401,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 142,
+    "offset": 5708147,
+    "ascii_byte_share": 0.970703125,
+    "n_letters": 400,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 143,
+    "offset": 5748345,
+    "ascii_byte_share": 0.970703125,
+    "n_letters": 322,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 144,
+    "offset": 5788543,
+    "ascii_byte_share": 0.982421875,
+    "n_letters": 413,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 145,
+    "offset": 5828742,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 410,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 146,
+    "offset": 5868940,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 414,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 147,
+    "offset": 5909138,
+    "ascii_byte_share": 1.0,
+    "n_letters": 393,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 148,
+    "offset": 5949336,
+    "ascii_byte_share": 1.0,
+    "n_letters": 410,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 149,
+    "offset": 5989534,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 419,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 150,
+    "offset": 6029733,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 408,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 151,
+    "offset": 6069931,
+    "ascii_byte_share": 1.0,
+    "n_letters": 428,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 152,
+    "offset": 6110129,
+    "ascii_byte_share": 1.0,
+    "n_letters": 418,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 153,
+    "offset": 6150327,
+    "ascii_byte_share": 0.970703125,
+    "n_letters": 400,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 154,
+    "offset": 6190526,
+    "ascii_byte_share": 1.0,
+    "n_letters": 416,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 155,
+    "offset": 6230724,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 421,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 156,
+    "offset": 6270922,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 402,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 157,
+    "offset": 6311120,
+    "ascii_byte_share": 1.0,
+    "n_letters": 379,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 158,
+    "offset": 6351318,
+    "ascii_byte_share": 0.982421875,
+    "n_letters": 408,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 159,
+    "offset": 6391517,
+    "ascii_byte_share": 1.0,
+    "n_letters": 401,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 160,
+    "offset": 6431715,
+    "ascii_byte_share": 1.0,
+    "n_letters": 406,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 161,
+    "offset": 6471913,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 424,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 162,
+    "offset": 6512111,
+    "ascii_byte_share": 1.0,
+    "n_letters": 413,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 163,
+    "offset": 6552310,
+    "ascii_byte_share": 1.0,
+    "n_letters": 430,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 164,
+    "offset": 6592508,
+    "ascii_byte_share": 0.990234375,
+    "n_letters": 417,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 165,
+    "offset": 6632706,
+    "ascii_byte_share": 1.0,
+    "n_letters": 419,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 166,
+    "offset": 6672904,
+    "ascii_byte_share": 1.0,
+    "n_letters": 410,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 167,
+    "offset": 6713102,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 407,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 168,
+    "offset": 6753301,
+    "ascii_byte_share": 0.982421875,
+    "n_letters": 402,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 169,
+    "offset": 6793499,
+    "ascii_byte_share": 0.98828125,
+    "n_letters": 322,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 170,
+    "offset": 6833697,
+    "ascii_byte_share": 1.0,
+    "n_letters": 394,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 171,
+    "offset": 6873895,
+    "ascii_byte_share": 1.0,
+    "n_letters": 419,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 172,
+    "offset": 6914094,
+    "ascii_byte_share": 1.0,
+    "n_letters": 405,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 173,
+    "offset": 6954292,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 416,
+    "dominant_script": "Latin",
+    "purity": 0.9976,
+    "foreign_letter_share": 0.0024,
+    "split_chars": 0
+   },
+   {
+    "crop": 174,
+    "offset": 6994490,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 408,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 175,
+    "offset": 7034688,
+    "ascii_byte_share": 1.0,
+    "n_letters": 412,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 176,
+    "offset": 7074886,
+    "ascii_byte_share": 1.0,
+    "n_letters": 419,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 177,
+    "offset": 7115085,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 407,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 178,
+    "offset": 7155283,
+    "ascii_byte_share": 1.0,
+    "n_letters": 420,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 179,
+    "offset": 7195481,
+    "ascii_byte_share": 1.0,
+    "n_letters": 422,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 180,
+    "offset": 7235679,
+    "ascii_byte_share": 1.0,
+    "n_letters": 400,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 181,
+    "offset": 7275878,
+    "ascii_byte_share": 1.0,
+    "n_letters": 385,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 182,
+    "offset": 7316076,
+    "ascii_byte_share": 1.0,
+    "n_letters": 425,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 183,
+    "offset": 7356274,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 399,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 184,
+    "offset": 7396472,
+    "ascii_byte_share": 1.0,
+    "n_letters": 408,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 185,
+    "offset": 7436670,
+    "ascii_byte_share": 0.974609375,
+    "n_letters": 395,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 186,
+    "offset": 7476869,
+    "ascii_byte_share": 0.970703125,
+    "n_letters": 407,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 187,
+    "offset": 7517067,
+    "ascii_byte_share": 0.94140625,
+    "n_letters": 386,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 188,
+    "offset": 7557265,
+    "ascii_byte_share": 1.0,
+    "n_letters": 428,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 189,
+    "offset": 7597463,
+    "ascii_byte_share": 1.0,
+    "n_letters": 400,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 190,
+    "offset": 7637662,
+    "ascii_byte_share": 1.0,
+    "n_letters": 410,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 191,
+    "offset": 7677860,
+    "ascii_byte_share": 1.0,
+    "n_letters": 431,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 192,
+    "offset": 7718058,
+    "ascii_byte_share": 1.0,
+    "n_letters": 415,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 193,
+    "offset": 7758256,
+    "ascii_byte_share": 0.9765625,
+    "n_letters": 400,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 194,
+    "offset": 7798454,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 416,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 195,
+    "offset": 7838653,
+    "ascii_byte_share": 0.98828125,
+    "n_letters": 399,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 196,
+    "offset": 7878851,
+    "ascii_byte_share": 0.970703125,
+    "n_letters": 394,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 197,
+    "offset": 7919049,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 399,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 198,
+    "offset": 7959247,
+    "ascii_byte_share": 0.994140625,
+    "n_letters": 417,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   },
+   {
+    "crop": 199,
+    "offset": 7999446,
+    "ascii_byte_share": 1.0,
+    "n_letters": 425,
+    "dominant_script": "Latin",
+    "purity": 1.0,
+    "foreign_letter_share": 0.0,
+    "split_chars": 0
+   }
+  ]
+ }
+]

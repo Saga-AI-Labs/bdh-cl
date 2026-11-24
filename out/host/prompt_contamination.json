@@ -1,0 +1,17 @@
+{
+ "schema": "key2_prompt_contamination_v1",
+ "date": "2026-11-24",
+ "prompts": 133,
+ "corpus": "data/host/fineweb_train.txt",
+ "corpus_bytes": 1999999882,
+ "corpus_sha256": "4692331783fb84d54d17221e44d917ee18645aee0d3002e592f7c49adf63632f",
+ "rule": "last 8 words of each prompt (whole prompt if shorter), exact byte phrase",
+ "hits": [
+  {
+   "id": "k2_explain_49",
+   "needle": "why we see lightning before we hear thunder.",
+   "offset": 1825488065
+  }
+ ],
+ "result": "hits"
+}

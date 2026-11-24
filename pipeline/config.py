@@ -52,6 +52,12 @@ class Config:
     stateful_eval: bool = False            # eval carries attention state across sequential batches of the split
     run_name: str = ""                     # optional tag in checkpoint filenames; isolates concurrent/sequential runs
     train_slice: str = ""                  # "start:end" fractions of the train split to train on ("" = all)
+    train_file: str = ""                   # dataset=files: explicit train byte file
+    val_file: str = ""                     # dataset=files: explicit val byte file
+    test_file: str = ""                    # dataset=files: explicit test byte file
+    data_order: str = "random"             # random | shuffled-onepass (seeded crop permutation)
+    data_seed: int = 1337                  # shuffled-onepass permutation seed
+    resume: bool = False                   # restore model/optimizer/step/data cursor from <run>_last.pt
     init_from: str = ""                    # checkpoint path to initialize model weights from (fresh optimizer)
     europarl_lang_mb: str = "30"           # europarl only; per-language train MB, comma-aligned with --europarl-langs (single value = uniform)
     europarl_langs: str = "en,de,es"       # europarl only; comma-separated language sides to include
