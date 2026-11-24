@@ -65,14 +65,14 @@ band. Each has a later owner in section 9 or 10.
 The steering rule for this leg: **a prerequisite is admitted only if it is
 needed to score the run or to keep it comparable.** Everything else waits.
 
-Admitted: the carve, the census, key 1, the loader, checkpoint resume, the
-shape, the A/B/C numbers, the frozen scoring path.
+Admitted: the exact-duplicate census, the carve, the census, key 1, the loader,
+checkpoint resume, the shape, the A/B/C numbers, the frozen scoring path.
 
 Cut, with reasons:
 
 | cut | reason |
 |---|---|
-| MinHash / near-duplicate removal | exact-duplicate share is measured; near-dup is a corpus-quality project, not a gate for this run |
+| MinHash / near-duplicate removal | near-dup is a corpus-quality project, not a gate for this run; exact duplicates are different and are counted before the carve (5.2) |
 | BPE | a tokenizer is an architecture decision, not a fix for a byte-level host; item 7 stays open |
 | multi-epoch | repeats views; the starvation diagnosis is about unique bytes, and key 1 compares against a one-pass counter |
 | 8 layers as the baseline | depth is D4, conditional on outcome B; 4 layers is the registered baseline |
@@ -89,15 +89,16 @@ One commit, before the run. Each row is a file or a number with a hash.
 
 | # | field | artifact | cost |
 |---|---|---|---|
-| 1 | data manifest and carve rule | `data/host/carve_manifest.json` + three byte files | ~1 h |
-| 2 | purity census on the carve | `data/host/census.json` | ~1 h |
-| 3 | key-1 counter: 6-gram NLL, 4-gram, resolution shares | `out/host/key1_ngram.json` | ~1 h after the counter exists |
-| 4 | key-1 margin | in the G0 note | free |
-| 5 | key-1 model scorer | `scripts/quinn/key1_score.py` + a dry run on the 3.22B | ~half day |
-| 6 | shape and sampling convention | in the G0 note | free |
-| 7 | A/B/C numbers and budget cap | in the G0 note | free |
-| 8 | resume and checkpoint policy | `pipeline/train.py` change + test | ~half day |
-| 9 | item 8 schedule-or-defer | one line in the G0 note | free |
+| 1 | exact-duplicate census on the full corpus | `data/host/duplicates.json` | ~30 min |
+| 2 | data manifest and carve rule | `data/host/carve_manifest.json` + three byte files | ~1 h |
+| 3 | purity census on the carve | `data/host/census.json` | ~1 h |
+| 4 | key-1 counter: 6-gram NLL, 4-gram, resolution shares | `out/host/key1_ngram.json` | ~1 h after the counter exists |
+| 5 | key-1 margin, derived on the host carve | in the G0 note | free |
+| 6 | key-1 model scorer | `scripts/quinn/key1_score.py` + a dry run on the 3.22B | ~half day |
+| 7 | shape and sampling convention | in the G0 note | free |
+| 8 | A/B/C numbers and budget ceiling | in the G0 note | free |
+| 9 | resume and checkpoint policy | `pipeline/train.py` change + test | ~half day |
+| 10 | item 8 schedule-or-defer | one line in the G0 note | free |
 
 The G0 note is `docs/notes/2026-11-24_host-g0-completion.md`, separate from the
 key-2 freeze so the key-2 record is not edited after signing.
@@ -131,16 +132,47 @@ No extra quality filter. The sample is already the top-scored educational
 subset; a `language_score` cut would be a new filter chosen without an
 instrument. Record the score distribution instead.
 
-### 5.2 Carve rule
+### 5.2 Exact duplicates, before the carve
 
-Document-level, hash-based, built once:
+The 8.14 GB are parquet bytes, not necessarily 8.14 GB of distinct text. Measure
+the exact-duplicate share on the full corpus **before** any split:
 
-- unit: one parquet row = one document; separator `\n\n`; no document split.
+- hash each document's UTF-8 bytes with sha256; the id hash alone does not catch
+  identical text under different ids;
+- report total documents and bytes, distinct documents and bytes, the duplicate
+  share by count and by bytes, and the largest duplicate group;
+- keep the first occurrence in ascending `h` order and drop the rest; the choice
+  is deterministic and goes in the manifest;
+- the train cap is applied to the distinct stream. If distinct bytes are below
+  2,000 MB, stop: the corpus is smaller than the plan assumes, and choosing
+  between a smaller budget and another shard is the operator's decision, not a
+  silent shrink.
+
+This is not the near-duplicate cut in section 3. One hash per document is nearly
+free and decides whether the budget is real; near-duplicate detection (MinHash,
+shingle sketches) is a corpus-quality project and stays out. Counting exact
+duplicates also removes the class of leak where the same text lands in train and
+val under two ids.
+
+Cost: one full read plus 1.64M hashes, about 15-30 minutes.
+
+The same number bounds the follow-up arms. If distinct bytes are below
+4,000 MB, the C1 arm in 8.4 cannot be run as written, and the arm table is
+revised before the host run, not after outcome C.
+
+### 5.3 Carve rule
+
+Document-level, hash-based, built once, on the distinct stream from 5.2:
+
+- unit: one distinct document; separator `\n\n`; no document split.
 - `h = first 8 bytes of sha256(id)` as an integer.
 - `h % 1000` in `[0, 5)` -> val; `[5, 10)` -> test; otherwise train.
 - val cap 8 MB, test cap 8 MB, train cap 2,000 MB; the cap is applied at a
   document boundary, so the train file is at most 2,000 MB and may be a few
   bytes short.
+- **cap unit is the decimal MB: 2,000 MB = 2,000,000,000 bytes, not MiB.** This
+  is the unit behind 488,281 steps of 4,096 B; a MiB reading would give 512,000
+  steps and 5 % more wall clock.
 - order: ascending `h`, so each split is a uniform sample of the corpus rather
   than the first shard prefix. The order and the first and last document ids are
   part of the manifest.
@@ -155,7 +187,7 @@ Why 8 MB val: key 1 reads 128 fixed 512 B offsets (65,536 targets); 8 MB leaves
 16,384 candidate blocks and room for the 50-byte memorisation check without
 reusing the key-2 prompts.
 
-### 5.3 Census
+### 5.4 Census
 
 Run the existing census on each carved file, for example:
 
@@ -173,14 +205,14 @@ Run it on the carve, not on the 56.7 MB probe. Required outputs:
 | anomalous crops | 0 |
 | ASCII byte share | recorded; probe was 0.993 |
 | language marker rates (en, de) | recorded; probe was 209.2 / 0.24 per 1k |
-| exact-duplicate documents by id and by content hash | recorded; no gate |
 | non-ASCII document share | recorded |
 | license and attribution from the dataset card | recorded in the manifest |
 
-A non-zero anomalous-crop count blocks the run until the cause is named. A
-duplicate share above 5 % is recorded as a finding, not a block.
+A non-zero anomalous-crop count blocks the run until the cause is named. The
+exact-duplicate share is reported in 5.2 on the full corpus and is not repeated
+on the carved subset.
 
-### 5.4 Loader
+### 5.5 Loader
 
 Add `--dataset files` with `--train-file`, `--val-file`, `--test-file`. Do not
 reuse `textmix`: `_prepare_textmix` reads `mb * 1e6` bytes and then takes the
@@ -220,12 +252,33 @@ reproduce the registered number is not the same instrument.
 
 ### 6.3 Margin
 
-`key1_pass` iff `model_nll <= ngram6_nll - 0.10` nats/byte and the resolution
-precondition in 6.4 holds.
+`key1_pass` iff `model_nll <= ngram6_nll - margin_host` nats/byte and the
+resolution precondition in 6.4 holds.
 
-Rationale: the standard error on 65,536 targets is about 0.008 nats, so 0.10 is
-roughly twelve standard errors; it is 38 % of the 3.22B model's +0.2635 deficit.
-Both the raw counter NLL and the margin are frozen. Sensitivity at 0.05 and 0.20
+`margin_host` is **derived and frozen in the G0 record on the host carve.** The
+0.10 in earlier drafts is a prior, not a result: it is a practical effect size,
+38 % of the 3.22B model's +0.2635 deficit, and the legal `0.8519` was a different
+corpus with a different resolution and a different counter NLL. The legal run
+validates the counter code path (6.2); it does not set this margin.
+
+G0 derivation, before the host model exists:
+
+1. the 6-gram NLL and the order-6/4/0 resolution shares on the host val
+   positions;
+2. `SE_counter`, the bootstrap standard error of the counter's per-target NLL on
+   those positions (a property of the counter and the val text, not of any
+   model);
+3. `margin_host = max(0.10, 10 x SE_counter)`, unless the operator records a
+   different number with a written reason in the same record.
+
+The `max` is deliberate: noise can raise the bar, never lower it below the
+policy floor. A counter with heavy tails therefore demands a larger win. The
+paired standard error of the model-minus-counter delta is reported after the run
+as a check; if it is more than twice `SE_counter`, the record says the margin
+was noise-sensitive, and the frozen value still stands.
+
+The frozen margin, the counter NLL and the resolution shares are written before
+the run. The host score cannot change any of them. Sensitivity at 0.05 and 0.20
 is reported but cannot replace the frozen value.
 
 The rule is a lower bound, not a target. A host that beats the counter by 0.4
@@ -289,8 +342,8 @@ the long run starts.
 
 ### 7.2 Data volume
 
-2,000 MB, one pass, 488,281 steps of 4,096 B. This is the registered 100M/2 GB
-shape, at 20 bytes per parameter.
+2,000 MB (decimal, 2.0e9 B), one pass, 488,281 steps of 4,096 B. This is the
+registered 100M/2 GB shape, at 20 bytes per parameter.
 
 Why not 4 GB now: the first arm should be the cheapest that can land on a
 branch. If key 1 fails, 4 GB is the pre-registered C1 arm (section 8.4). If it
@@ -419,7 +472,8 @@ is recorded from this pass; it is currently "not run" in the key-2 freeze.
 
 ### 8.2 Key 1
 
-As section 6: `model_nll <= ngram6_nll - 0.10` with order-6 resolution >= 80 %.
+As section 6: `model_nll <= ngram6_nll - margin_host` (the host-derived margin
+frozen in G0) with order-6 resolution >= 80 %.
 
 ### 8.3 Outcomes
 
@@ -496,8 +550,34 @@ change. A wider scope is a new decision.
 
 Timing: build the integration during the host run, in a separate environment,
 with no GPU workload while training is active. The exactness gate needs the host
-checkpoint, so it runs after the run and before G4: all 133 prompts must decode
-bit-identically to the plain path, and the checkpoint bytes must be unchanged.
+checkpoint, so it runs after the run and before G4.
+
+The gate needs a pinned reference, because "bit-exact" is meaningless without
+saying against what. The reference is the plain path that produced the key-2
+generations:
+
+| dimension | reference value |
+|---|---|
+| weights | fp32 checkpoint, `--dtype auto`; bf16 is not the reference |
+| device | CUDA on the GB10, batch 1 |
+| decoding | greedy argmax, 256 new bytes, block 512, `collect_state=False` |
+| prompts | the frozen 133, exact bytes |
+| equality | all 133 output byte strings identical, byte for byte |
+
+`--dtype bfloat16` is not supported by the generator, so fp32 is the only
+registered reference today. If the engine cannot run the reference path on this
+box, that is a finding: the gate is not passed, and the failure is recorded. A
+bf16 serving comparison is a second, separately registered check and cannot be
+substituted for this one. The distinction matters: an engine-internal
+"draft equals plain" at bf16 does not show that the served model equals the
+model the verdict measured, because the plain path itself moved.
+
+Checkpoint integrity is part of the gate. The checkpoint sha256 is written to
+the verdict record the moment the run reports `done`, before any downstream
+process opens the file. The integration has read-only access. The gate re-hashes
+the checkpoint after the exactness run and requires equality; a changed hash
+fails the gate regardless of the token comparison.
+
 If the gate fails, serving stays on the plain path and the failure is recorded;
 the host verdict is unaffected.
 
@@ -531,39 +611,44 @@ G3. Record the deferral in the G0 note so it is a decision, not an omission.
 
 ## 12. Decisions requested
 
-1. **Data budget**: 2,000 MB train, 8 MB val, 8 MB test, document-hash carve.
+1. **Data budget**: 2,000 MB (decimal) train, 8 MB val, 8 MB test,
+   document-hash carve, exact-duplicate census on the full corpus first.
    Recommended. The 4 GB alternative must be chosen now, not after key 1.
 2. **Shape**: 100M, 4 layers, block 512, batch 8, compiled, 488,281 steps.
    Recommended.
 3. **Sampling**: shuffled single pass. Recommended; random crops with a
    registered 63 % unique coverage is the fallback.
-4. **Key-1 margin**: 0.10 nats/byte with the 80 % resolution precondition.
-   Recommended.
+4. **Key-1 margin**: derived on the host carve in G0 as
+   `max(0.10, 10 x SE_counter)`, with the 80 % resolution precondition. 0.10 is
+   the policy floor, not a transfer from the legal carve. Recommended.
 5. **Budget ceiling** (not a kill rule): 14 GPU-days, one follow-up arm, D4
    only on a diagnosis. The ceiling governs which arms may start; it does not
    end a running arm. Early termination is governed solely by the stop rule in
    8.5, which needs a numeric tolerance. Recommended.
 6. **Item 8**: defer to the first G3 pass. Recommended.
 7. **TensorFold**: build the serving integration during the run, with no GPU
-   workload while training is active; gate on bit-exact decoding and unchanged
-   checkpoint bytes after the run. Recommended.
+   workload while training is active; gate after the run on 133/133
+   byte-identical outputs against the pinned fp32 plain path and an unchanged
+   checkpoint hash. Recommended.
 
 ## 13. First actions, in order
 
-1. Build the carve and the manifest (~1 h).
-2. Census and exact-duplicate count on the carve (~1 h).
-3. Add `--dataset files`, `--data-order shuffled-onepass` and `--resume`; run
+1. Run the exact-duplicate census on the full corpus (~30 min).
+2. Build the carve and the manifest from the distinct stream (~1 h).
+3. Purity census on the carved files (~1 h).
+4. Add `--dataset files`, `--data-order shuffled-onepass` and `--resume`; run
    the 2,000-step smoke (~half day).
-4. Build the target-restricted counter; reproduce legal `0.8519`; score the
+5. Build the target-restricted counter; reproduce legal `0.8519`; score the
    3.22B to reproduce `1.1155` (~half day).
-5. Write and sign the G0 completion record with every hash (~1 h).
-6. Run the host (~3.9 d, measured at smoke).
-7. Score key 1, generate and score key 2, write the verdict record (~4 h).
-8. Name the branch and request the next plan (graft or C arm).
+6. Write and sign the G0 completion record with every hash and the host-derived
+   margin (~1 h).
+7. Run the host (~3.9 d, measured at smoke).
+8. Score key 1, generate and score key 2, write the verdict record (~4 h).
+9. Name the branch and request the next plan (graft or C arm).
 
-Step 6 does not start until step 5 is signed. If the smoke test contradicts the
+Step 7 does not start until step 6 is signed. If the smoke test contradicts the
 4-layer compiled estimate, the wall clock in this plan is replaced by the
-measured one before step 6, and only the cost table changes.
+measured one before step 7, and only the cost table changes.
 
 ## 14. Execution sequence and judge availability
 
