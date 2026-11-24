@@ -1,6 +1,6 @@
 # Host G0 completion record (2026-11-24)
 
-**Status: READY FOR SIGNATURE - no host training run has started.**
+**Status: FROZEN (G0). Signed by the operator on 2026-11-25, before the run.**
 
 This record freezes the host fields of G0 from
 `docs/plans/2026-11-24_host-training-plan.md` section 4. The key-2 half of G0 is
@@ -303,6 +303,12 @@ The 14 GPU-days are an authorisation ceiling, not a kill rule. Host 4.52 d plus
 C1 9.04 d = 13.56 d fits; C2 would exceed it and needs a new decision. A running
 arm is never terminated on the clock alone.
 
+Operator note at signature (2026-11-25): the earlier C1 estimate was 7.9 d; at
+the measured 799 ms/step it is 9.04 d, so host + C1 is 13.56 d against a 14 d
+ceiling (0.44 d margin). The ceiling is not raised here. If the rate holds, the
+two arms still fit; any extension of C1, or a slower measured rate, needs a new
+decision before C1 starts.
+
 Stop rule: a run stops early only if, over a trailing 50,000 steps, best val NLL
 improved by less than 0.005 nats **and** the key-1 delta is still worse than
 +0.20 nats/byte with no downward trend across the last three measurements.
@@ -365,16 +371,17 @@ committed; their hashes are in the manifest.
 
 | item | disposition |
 |---|---|
-| data: duplicates, carve, splits, census | proposed |
-| key-1 threshold 1.087674 and 80 % precondition | proposed |
-| 3.22B stack-drift finding (3.5) | proposed, named not silent |
-| prompt contamination (4) | proposed, sensitivity not substitution |
-| shape, sampling, measured 4.52 d | proposed |
+| data: duplicates, carve, splits, census | accepted |
+| key-1 threshold 1.087674 and 80 % precondition | accepted |
+| 3.22B stack-drift finding (3.5) | accepted as named, not silent |
+| prompt contamination (4) | accepted; sensitivity, not substitution |
+| shape, sampling, measured 4.52 d | accepted |
 | resume test (5.4) | passed: 1.4994 vs 1.4993, delta 0.0001 |
-| A/B/C, 14-day ceiling, stop rule | proposed |
-| item 8 deferral | proposed |
+| A/B/C, 14-day ceiling, stop rule | accepted, with the C1 arithmetic note in 6.3 |
+| item 8 deferral | accepted |
 | TensorFold gate | already authorized; timing restated |
 
-Operator approval: pending.
+Operator approval: 2026-11-25, in session, with the C1/ceiling qualification
+recorded in 6.3.
 
-Signed: ______________________  Date: ____________
+Signed: operator (session)  Date: 2026-11-25
