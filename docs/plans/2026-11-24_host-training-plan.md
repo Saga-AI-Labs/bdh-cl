@@ -93,7 +93,7 @@ One commit, before the run. Each row is a file or a number with a hash.
 | 2 | data manifest and carve rule | `data/host/carve_manifest.json` + three byte files | ~1 h |
 | 3 | purity census on the carve | `data/host/census.json` | ~1 h |
 | 4 | key-1 counter: 6-gram NLL, 4-gram, resolution shares | `out/host/key1_ngram.json` | ~1 h after the counter exists |
-| 5 | key-1 margin, derived on the host carve | in the G0 note | free |
+| 5 | key-1 margin 0.10, with the host counter NLL, resolution and SE | in the G0 note | free |
 | 6 | key-1 model scorer | `scripts/quinn/key1_score.py` + a dry run on the 3.22B | ~half day |
 | 7 | shape and sampling convention | in the G0 note | free |
 | 8 | A/B/C numbers and budget ceiling | in the G0 note | free |
@@ -252,34 +252,24 @@ reproduce the registered number is not the same instrument.
 
 ### 6.3 Margin
 
-`key1_pass` iff `model_nll <= ngram6_nll - margin_host` nats/byte and the
-resolution precondition in 6.4 holds.
+`key1_pass` iff `model_nll <= ngram6_nll - 0.10` nats/byte and the resolution
+precondition in 6.4 holds.
 
-`margin_host` is **derived and frozen in the G0 record on the host carve.** The
-0.10 in earlier drafts is a prior, not a result: it is a practical effect size,
-38 % of the 3.22B model's +0.2635 deficit, and the legal `0.8519` was a different
-corpus with a different resolution and a different counter NLL. The legal run
-validates the counter code path (6.2); it does not set this margin.
+The margin is **fixed at 0.10** (operator decision 2026-11-24). It is a practical
+effect size, 38 % of the 3.22B model's +0.2635 deficit. The legal `0.8519` is a
+different corpus: it validates the counter code path (6.2) and does not set or
+move this number.
 
-G0 derivation, before the host model exists:
+G0 still records, on the host val positions: the counter NLL, the order-6/4/0
+resolution shares, and `SE_counter` (the bootstrap standard error of the
+counter's per-target NLL). They are evidence about the counter, not inputs to the
+margin. If `SE_counter` is above 0.010, so that 0.10 is less than ten standard
+errors, the G0 record says the test is noise-limited; the margin still stands at
+0.10, and changing it is a new decision.
 
-1. the 6-gram NLL and the order-6/4/0 resolution shares on the host val
-   positions;
-2. `SE_counter`, the bootstrap standard error of the counter's per-target NLL on
-   those positions (a property of the counter and the val text, not of any
-   model);
-3. `margin_host = max(0.10, 10 x SE_counter)`, unless the operator records a
-   different number with a written reason in the same record.
-
-The `max` is deliberate: noise can raise the bar, never lower it below the
-policy floor. A counter with heavy tails therefore demands a larger win. The
-paired standard error of the model-minus-counter delta is reported after the run
-as a check; if it is more than twice `SE_counter`, the record says the margin
-was noise-sensitive, and the frozen value still stands.
-
-The frozen margin, the counter NLL and the resolution shares are written before
-the run. The host score cannot change any of them. Sensitivity at 0.05 and 0.20
-is reported but cannot replace the frozen value.
+Both the counter NLL and the margin are written before the run. The host score
+cannot change either. Sensitivity at 0.05 and 0.20 is reported but cannot replace
+0.10.
 
 The rule is a lower bound, not a target. A host that beats the counter by 0.4
 satisfies it; the record reports the measured delta.
@@ -472,8 +462,7 @@ is recorded from this pass; it is currently "not run" in the key-2 freeze.
 
 ### 8.2 Key 1
 
-As section 6: `model_nll <= ngram6_nll - margin_host` (the host-derived margin
-frozen in G0) with order-6 resolution >= 80 %.
+As section 6: `model_nll <= ngram6_nll - 0.10` with order-6 resolution >= 80 %.
 
 ### 8.3 Outcomes
 
@@ -618,9 +607,9 @@ G3. Record the deferral in the G0 note so it is a decision, not an omission.
    Recommended.
 3. **Sampling**: shuffled single pass. Recommended; random crops with a
    registered 63 % unique coverage is the fallback.
-4. **Key-1 margin**: derived on the host carve in G0 as
-   `max(0.10, 10 x SE_counter)`, with the 80 % resolution precondition. 0.10 is
-   the policy floor, not a transfer from the legal carve. Recommended.
+4. **Key-1 margin**: 0.10 nats/byte, fixed by operator decision 2026-11-24, with
+   the 80 % resolution precondition. The host counter NLL, resolution and SE are
+   recorded in G0 as evidence; they do not move the number. Accepted.
 5. **Budget ceiling** (not a kill rule): 14 GPU-days, one follow-up arm, D4
    only on a diagnosis. The ceiling governs which arms may start; it does not
    end a running arm. Early termination is governed solely by the stop rule in
