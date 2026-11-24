@@ -1,0 +1,35 @@
+{
+  "schema": "key2_generation",
+  "started_at": "2026-11-23T06:25:55+0100",
+  "checkpoint": "out/routed_probe/bdh_textmix_p3_mixed_best.pt",
+  "checkpoint_bytes": 38657073228,
+  "checkpoint_mtime": 1795408089,
+  "checkpoint_sha256": "ce24e0fde0a6a83db20a336b208e3aeedab05859ef9366fcf04e28dddb0e1874",
+  "prompts": "data/evals/key2_prompts_v1.json",
+  "prompts_sha256": "c1d9c62cafffa8299d860a344318d37f9d91f272870bdc5586d55be0bf12e23c",
+  "prompt_counts": {
+    "total": 133,
+    "gate": 100,
+    "diagnostic": 33,
+    "families": {
+      "explain": 50,
+      "describe": 50,
+      "argue": 33
+    }
+  },
+  "max_new_bytes": 256,
+  "decoding": "greedy argmax, temperature 0, one sample per prompt",
+  "block_size": 512,
+  "device": "cuda",
+  "dtype": "float32",
+  "torch": "2.14.1+cu130",
+  "cuda": "13.0",
+  "hostname": "spark-da5a",
+  "git_head": "4b7c036885b10ec15a48f9a20650db892c3ccac9",
+  "rows": 123,
+  "rows_resumed": 10,
+  "rows_written": 123,
+  "rows_total": 133,
+  "finished_at": "2026-11-23T14:42:14+0100",
+  "wall_s": 29779.5
+}

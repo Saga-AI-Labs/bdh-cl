@@ -1,0 +1,71 @@
+{
+  "schema": "key2_reference",
+  "version": "v1-draft",
+  "status": "DRAFT",
+  "date": "2026-11-20",
+  "source": {
+    "cert": "data/evals/judge_set_v1/cert_items_merged.json",
+    "cert_sha256": "8570d8cdd4e5227dddc9a6ae187bcc981d2e2f59c72ee1b7a33ece0122c6ce50",
+    "cert_status": "FROZEN",
+    "stage1": "data/evals/judge_set_v1/cert_items.json",
+    "stage1_sha256": "783427ee9064b5c5a0a4320e12b4a4e23bfa8eda7c74005ac4f98a294bdd3ed7",
+    "stage2": "data/evals/judge_set_v1/cert_items_stage2.json",
+    "stage2_sha256": "1b25f526db404f17842e3e1876df8264160b43ab34a6cecd27646b6085382281",
+    "prompts": "data/evals/key2_prompts_v1.json",
+    "prompts_sha256": "c1d9c62cafffa8299d860a344318d37f9d91f272870bdc5586d55be0bf12e23c"
+  },
+  "selection": {
+    "language": "en",
+    "items": 18,
+    "stage1": 10,
+    "stage2": 8,
+    "scale_rows": 108,
+    "positive_rows": 18,
+    "labels": [
+      "good",
+      "short_correct",
+      "long_wrong",
+      "planted_error",
+      "audience_violation",
+      "bad"
+    ]
+  },
+  "positive_band": {
+    "rule": "good variant, longest prefix <= 256 B ending on a word boundary",
+    "sample_bytes": 256,
+    "full_bytes": {
+      "min": 288,
+      "median": 588.5,
+      "max": 886,
+      "le_256": 0
+    },
+    "band_bytes": {
+      "min": 242,
+      "median": 252.0,
+      "max": 255
+    },
+    "format_constrained_items": [
+      "cert_en05",
+      "cert_en09",
+      "cert_en10",
+      "cert_en16"
+    ],
+    "sensitivity": "report M_d with and without the format-constrained items"
+  },
+  "role": {
+    "scale": "judge scale and dimension separation only; not key-2 gold",
+    "positive": "proxy positive band for M_d/F_d; instruction-response, not free generation",
+    "negative": "3.62B generations from key2_generate.py plus section-16 salad"
+  },
+  "caveats": [
+    "The cert set has 18 English items, not 20; the merged set is 18 en / 24 de / 18 zh.",
+    "The good variants are authored/reviewed reference answers, not human free generations.",
+    "The instructions are up to 195 B; the 128-B cap applies to the key-2 generation prompts, not to the judge calibration prompt.",
+    "The 256-B prefix may end mid-sentence; the judge prompt must say so.",
+    "A wrong-but-fluent cert answer can score high on key-2 dimensions; cert labels are not key-2 gold."
+  ],
+  "files": {
+    "scale": "out/key2_calibration/reference_scale.jsonl",
+    "positive": "out/key2_calibration/reference_positive.jsonl"
+  }
+}

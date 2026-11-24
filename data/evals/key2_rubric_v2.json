@@ -1,7 +1,7 @@
 {
  "schema": "key2_rubric",
  "version": "v2",
- "status": "DRAFT",
+ "status": "FROZEN",
  "date": "2026-11-23",
  "source": "docs/notes/2026-11-19_key2-coherence-rubric.md section 8, amended per docs/notes/2026-11-23_key2-instrument-gate-failure.md",
  "scope": {
@@ -82,7 +82,14 @@
   "approval": {
    "approved_by": "operator",
    "date": "2026-11-23",
-   "scope": "approved for re-scoring; G0 instrument freeze still pending"
+   "scope": "approved for re-scoring on 2026-11-23; G0 instrument freeze signed 2026-11-24"
+  },
+  "frozen": {
+   "date": "2026-11-24",
+   "by": "operator",
+   "record": "docs/notes/2026-11-24_key2-g0-freeze.md",
+   "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124",
+   "note": "status DRAFT -> FROZEN and provenance frozen block added; rubric text, anchors and system_prompt are unchanged from the scored file"
   }
  }
 }

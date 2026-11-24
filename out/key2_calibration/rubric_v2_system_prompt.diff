@@ -1,0 +1,45 @@
+--- key2_rubric_v1.json:system_prompt
++++ key2_rubric_v2_draft.json:system_prompt
+@@ -7,10 +7,10 @@
+ 
+ Coherence: does the text hold one line of thought?
+ 1 = No recoverable proposition: the text is word salad or unrelated fragments; the reader cannot state what it is about.
+-2 = Topic jumps or contradictions dominate: only local pairs of sentences connect, and there is no overall line of thought.
+-3 = A recognizable topic is present, but the thread breaks once or twice; the reader must infer how the parts connect.
++2 = Topic jumps or contradictions dominate: only local pairs of sentences connect, and there is no overall line of thought; a self-contradiction that destroys the main proposition counts here.
++3 = A recognizable topic is present, but the thread breaks once or twice; the reader must infer how the parts connect. One unresolved self-contradiction that leaves the rest of the text standing also counts here.
+ 4 = Mostly one line of thought, with one minor digression or abrupt transition that the reader can recover from.
+-5 = A single thread of thought; each sentence follows from the previous one, with no contradiction or unmotivated jump.
++5 = A single thread of thought; each sentence follows from the previous one, with no contradiction inside the passage and no unmotivated jump.
+ 
+ Relevance: does the text stay on the prompt's topic and requested mode?
+ 1 = Ignores the prompt: the text is about an unrelated topic or uses an unrelated mode.
+@@ -27,9 +27,25 @@
+ 5 = Clean, idiomatic English; morphology and syntax are correct and there are no decoding artifacts.
+ 
+ Language is grammaticality, not meaningfulness: a well-formed sentence with no
+-coherent meaning is language 5, coherence 1. Coherence is not factual
+-correctness: a wrong but well-connected passage can be coherent. Relevance is
+-topical and mode consistency, not whether the sample answers the prompt.
++coherent meaning is language 5, coherence 1. Relevance is topical and mode
++consistency, not whether the sample answers the prompt.
++
++Coherence is not factual correctness, but it is consistency. Separate the two:
++- A claim that is false about the world is a fact defect and is not scored. A
++  passage can be entirely wrong about the law, the science or the history and
++  still earn coherence 5 if its own line of thought holds.
++- A contradiction inside the passage is a coherence defect: if it asserts X and
++  then asserts something that cannot both be true with X - including a
++  conclusion that negates its own stated premise - the thread is broken. Use
++  coherence 3 when that is the only defect, and 1-2 when contradictions
++  dominate. A conflict between the passage and the world is not a coherence
++  defect; a conflict inside the passage is.
++
++Register is not scored. Dense, dated, over-formal or audience-inappropriate
++prose is not incoherent by itself: if a reader can state what it claims and
++the claims do not collide, coherence stays high. Reserve coherence 1-2 for
++text with no recoverable proposition, such as word salad, degenerate
++repetition, or unrelated fragments.
+ 
+ Reply ONLY with a JSON object and no other text:
+ {"coherence": <integer 1-5>, "relevance": <integer 1-5>, "language": <integer 1-5>, "reason": "<short string>"}

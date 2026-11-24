@@ -1,0 +1,527 @@
+{
+  "meta": {
+    "endpoint": "http://192.168.178.200:1234/v1",
+    "model": "gemma-4-31b-it",
+    "input": "out/key2_calibration/reference_positive.jsonl",
+    "input_sha256": "40d892dff20277c4594fec055f7e99ffaf73828b2da600d61bd2b66032d2b3e5",
+    "rubric": "data/evals/key2_rubric_v2.json",
+    "rubric_sha256": "2c1b797254ac6fde63434b638a89398e266c6d50bdbbdddf2cdb6266c34f6626",
+    "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124",
+    "temperature": 0.0,
+    "max_tokens": 2048,
+    "retry_tokens": 4096,
+    "endpoint_fingerprint": {
+      "model_list_sha256_16": "85c12327fcf7b0c0",
+      "model_count": 60
+    },
+    "started_at": "2026-11-24T01:43:17+0100",
+    "finished_at": "2026-11-24T01:54:17+0100",
+    "rows": 18
+  },
+  "rows": [
+    {
+      "id": "cert_pos_cert_en01",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "Why does common law require consideration for a binding contract, while civil-law systems do not?",
+      "sample": "In common law, consideration means a bargained-for exchange: each side must give something of legal value, which historically served as evidence that a promise was serious and made enforcement principled. Civil-law systems bind contracts through agreement",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The text is coherent, directly addresses the prompt's comparison between common law and civil law, and uses clean English.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 925,
+        "completion_tokens": 238,
+        "total_tokens": 1163,
+        "completion_tokens_details": {
+          "reasoning_tokens": 179
+        }
+      },
+      "latency_s": 37.5,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The text is coherent, directly addresses the prompt's comparison between common law and civil law, and uses clean English.\"}\n```",
+      "judge_reasoning": "The prompt asks for an explanation of why common law requires consideration while civil-law systems do not.\n\nThe text explains:\n1. What consideration is in common law (bargained-for exchange, legal value).\n2. Why it was historically used (evidence of seriousness/principled enforcement).\n3. How civil-law systems bind contracts (through agreement).\n\nCoherence: The text follows a single line of thought comparing the two systems. It's a clear progression. Score: 5.\nRelevance: The text directly addresses both parts of the prompt (common law consideration and civil-law approach). Score: 5.\nLanguage: The English is clean, grammatical, and idiomatic. Note that it ends mid-sentence (\"Civil-law systems bind contracts through agreement\"), but per instructions, incomplete final sentences are not penalized. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en02",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "What does the attention mechanism in a language model actually do?",
+      "sample": "Think of a hiring committee handling one open position: the recruiter scans every past candidate on file and decides whose record is most relevant, weighting each applicant's input accordingly. Attention does the same for words – while processing each",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The text uses a clear analogy to explain the attention mechanism and maintains a consistent line of thought.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 917,
+        "completion_tokens": 206,
+        "total_tokens": 1123,
+        "completion_tokens_details": {
+          "reasoning_tokens": 152
+        }
+      },
+      "latency_s": 32.6,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The text uses a clear analogy to explain the attention mechanism and maintains a consistent line of thought.\"}\n```",
+      "judge_reasoning": "The prompt asks \"What does the attention mechanism in a language model actually do?\".\nThe text provides an analogy of a hiring committee to explain how the attention mechanism works (scanning records and weighting relevance). It then explicitly connects this to words: \"Attention does the same for words – while processing each\".\n\nCoherence: The text follows a single line of thought, using an analogy to explain a concept. It is consistent. Score: 5.\nRelevance: The text directly addresses the prompt by explaining the attention mechanism via an analogy. Score: 5.\nLanguage: The English is clean and idiomatic. It ends mid-sentence (\"while processing each\"), but as per instructions, incomplete final sentences are not penalized. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en03",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "What is the KV cache in model serving, and why does it matter for long conversations?",
+      "sample": "When a model reads a conversation, it keeps the intermediate work it did for earlier words instead of recomputing everything for each new word – that memory is the KV cache. It trades memory for speed: the longer the conversation gets, the more cache",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The text is coherent, relevant to the prompt, and written in clear English.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 928,
+        "completion_tokens": 210,
+        "total_tokens": 1138,
+        "completion_tokens_details": {
+          "reasoning_tokens": 159
+        }
+      },
+      "latency_s": 33.23,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The text is coherent, relevant to the prompt, and written in clear English.\"}\n```",
+      "judge_reasoning": "The prompt asks \"What is the KV cache in model serving, and why does it matter for long conversations?\"\nThe text explains what the KV cache is (intermediate work kept to avoid recomputing) and mentions that it trades memory for speed, noting that as conversations get longer, more cache is needed.\n\nCoherence: The text follows a single line of thought explaining the KV cache and its relationship with conversation length. It ends mid-sentence (\"the more cache\"), but per instructions, incomplete final sentences are not penalized. Score: 5.\nRelevance: The text directly addresses both parts of the prompt (what it is and why it matters for long conversations). Score: 5.\nLanguage: The English is clean, grammatical, and idiomatic. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en04",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "A German supplier and a Chinese buyer have an arbitration clause (a private dispute-settlement forum) in their contract. How would an award actually be enforced?",
+      "sample": "Under a valid clause (for example CIETAC in China or DIS in Germany), a private tribunal hears the case instead of public courts and issues an award. Both countries belong to the New York Convention: an award made in either country can generally be",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The text is coherent, relevant to the prompt, and written in clean English, despite ending mid-sentence.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 943,
+        "completion_tokens": 266,
+        "total_tokens": 1209,
+        "completion_tokens_details": {
+          "reasoning_tokens": 209
+        }
+      },
+      "latency_s": 41.86,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The text is coherent, relevant to the prompt, and written in clean English, despite ending mid-sentence.\"}\n```",
+      "judge_reasoning": "The prompt asks how an arbitration award between a German supplier and a Chinese buyer would be enforced, given they have an arbitration clause.\n\nThe text explains that under a valid clause (mentioning CIETAC and DIS), a private tribunal issues an award. It then notes that both Germany and China are members of the New York Convention, which allows awards made in either country to be generally [enforced]. The text ends mid-sentence (\"can generally be\").\n\nCoherence: The text follows a logical progression from the nature of the arbitration clause/tribunal to the mechanism for enforcement (New York Convention). It is a single thread of thought. Score: 5.\nRelevance: The text directly addresses the prompt's question about how an award would be enforced by mentioning the New York Convention and the role of private tribunals. Score: 5.\nLanguage: The English is clean, grammatical, and idiomatic. It ends mid-sentence, but as per instructions, this should not be penalized. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en05",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "Translate this code comment to English and explain in two sentences what the code does: \"// bewahre den letzten gesetzten Wert je Schlüssel\" (written against a key/value store loop)",
+      "sample": "Translation: \"// keep the last-set value per key\". The code walks a loop and, whenever the same key shows up again, overwrites the earlier entry, so after the loop each key holds only the most recent write. That is deduplication by last occurrence, a",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The text is coherent, relevant to the prompt, and written in fluent English, despite ending mid-sentence.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 953,
+        "completion_tokens": 277,
+        "total_tokens": 1230,
+        "completion_tokens_details": {
+          "reasoning_tokens": 220
+        }
+      },
+      "latency_s": 43.62,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The text is coherent, relevant to the prompt, and written in fluent English, despite ending mid-sentence.\"}\n```",
+      "judge_reasoning": "The prompt asks for two things:\n1. Translate the German comment \"// bewahre den letzten gesetzten Wert je Schlüssel\" to English.\n2. Explain in two sentences what the code does (given it's against a key/value store loop).\n\nText provided:\n\"Translation: \"// keep the last-set value per key\". The code walks a loop and, whenever the same key shows up again, overwrites the earlier entry, so after the loop each key holds only the most recent write. That is deduplication by last occurrence, a\"\n\nEvaluation:\n- Coherence: The text follows a single line of thought (translation followed by explanation). It ends mid-sentence (\"a\"), but as per instructions, I should not penalize incomplete final sentences. Score: 5.\n- Relevance: The text provides the translation and starts explaining what the code does in the requested mode. It stays on topic throughout. Score: 5.\n- Language: The English is clean and idiomatic. No grammatical errors before it cuts off. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en06",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "Our SaaS app is transferring employees' contact data from China to servers abroad. Which legal route do we need, and when does it change?",
+      "sample": "You always need a legal basis (typically user consent or contract necessity) plus one official transfer route: a security assessment by the cyberspace regulator for large-volume or sensitive transfers, a filed standard contract for the ordinary case, or",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The text is coherent, directly relevant to the prompt, and written in clean English.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 934,
+        "completion_tokens": 209,
+        "total_tokens": 1143,
+        "completion_tokens_details": {
+          "reasoning_tokens": 157
+        }
+      },
+      "latency_s": 33.09,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The text is coherent, directly relevant to the prompt, and written in clean English.\"}\n```",
+      "judge_reasoning": "The prompt asks about the legal routes for transferring employee contact data from China to servers abroad and when these routes change.\n\nThe text provides information on the legal basis (consent/contract) and lists official transfer routes: security assessment (for large-volume/sensitive), filed standard contract (ordinary case). It ends mid-sentence (\"or\").\n\nCoherence: The text follows a single line of thought, explaining the requirements for data transfer. No contradictions or jumps. Score: 5.\nRelevance: The text directly addresses the prompt's question about legal routes for transferring data from China. Score: 5.\nLanguage: The English is clean and idiomatic. It ends mid-sentence, but per instructions, this should not be penalized. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en07",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "We ship a SaaS rollout to Chinese customers this quarter. How should we treat the Chinese public holidays in planning?",
+      "sample": "China's spring festival follows the lunisolar calendar — it lands late January to late February, and the public holiday block plus shifted workdays creates roughly a week of nationwide standstill; October's golden week behaves the same way. Freeze any",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The text is coherent, relevant to the prompt, and written in clean English.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 932,
+        "completion_tokens": 207,
+        "total_tokens": 1139,
+        "completion_tokens_details": {
+          "reasoning_tokens": 156
+        }
+      },
+      "latency_s": 32.78,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The text is coherent, relevant to the prompt, and written in clean English.\"}\n```",
+      "judge_reasoning": "The prompt asks for advice on how to treat Chinese public holidays when planning a SaaS rollout to Chinese customers.\n\nThe text discusses specific Chinese holidays (Spring Festival and Golden Week), explaining their timing and impact (nationwide standstill). It ends mid-sentence (\"Freeze any\").\n\nCoherence: The text follows a single line of thought regarding the nature of Chinese holidays. Each sentence builds on the previous one. Score: 5.\nRelevance: The text is directly addressing the prompt's topic (Chinese public holidays in planning) and mode (providing information/advice). Score: 5.\nLanguage: The English is clean, idiomatic, and grammatical. It ends mid-sentence, but as per instructions, this should not be penalized. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en08",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "We want to buy shares in a German GmbH from a US holding. What does the transfer formality look like?",
+      "sample": "German law requires the transfer of a GmbH share — and the clause obliging the seller to hand it over — to be signed before a German notary (§ 15 Abs. 3 GmbHG). A German notary is a public official who verifies each party's identity and authority,",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The text is coherent, directly addresses the prompt's question about transfer formalities for a GmbH, and is written in clean English.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 940,
+        "completion_tokens": 242,
+        "total_tokens": 1182,
+        "completion_tokens_details": {
+          "reasoning_tokens": 181
+        }
+      },
+      "latency_s": 38.15,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The text is coherent, directly addresses the prompt's question about transfer formalities for a GmbH, and is written in clean English.\"}\n```",
+      "judge_reasoning": "The prompt asks about the transfer formalities for buying shares in a German GmbH from a US holding company.\n\nThe text explains that German law requires the transfer of a GmbH share (and the obligation to hand it over) to be signed before a German notary, citing § 15 Abs. 3 GmbHG. It then describes what a German notary is.\n\n- Coherence: The text follows a single line of thought regarding the legal requirement for notarization in Germany. Each sentence flows logically from the previous one. (Score: 5)\n- Relevance: The prompt asks about transfer formalities for a GmbH share. The text directly addresses this by mentioning the need for a German notary and citing the relevant law. It stays on topic throughout. (Score: 5)\n- Language: The English is clean, grammatical, and idiomatic. No errors found. (Score: 5)",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en09",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "Why does the Goethe C1 exam feel predictably harder for Chinese learners than for German native speakers?",
+      "sample": "Reason one is listening decoding: German is stress-timed, its unstressed endings are reduced and words link across sound boundaries, while Mandarin moves in roughly equal, tone-bearing syllables — so spoken German resists clean word-by-word",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The text is coherent, directly addresses the prompt's question with a linguistic explanation, and uses fluent English.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 927,
+        "completion_tokens": 248,
+        "total_tokens": 1175,
+        "completion_tokens_details": {
+          "reasoning_tokens": 191
+        }
+      },
+      "latency_s": 38.99,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The text is coherent, directly addresses the prompt's question with a linguistic explanation, and uses fluent English.\"}\n```",
+      "judge_reasoning": "The prompt asks why the Goethe C1 exam feels harder for Chinese learners than for native speakers.\nThe text provides one reason: listening decoding, comparing stress-timed German with syllable/tone-based Mandarin and mentioning how this affects perception of spoken German.\n\nCoherence: The text follows a single line of thought (explaining the first reason). It ends mid-sentence (\"resists clean word-by-word\"), but as per instructions, incomplete final sentences are not penalized.\nRelevance: The text directly addresses the prompt by providing a linguistic reason why Chinese learners struggle with German listening.\nLanguage: The English is clean and idiomatic. \"listening decoding\" is slightly awkward but acceptable in a technical/linguistic context. Grammar is correct up to the cutoff.\n\nCoherence: 5 (Single thread of thought)\nRelevance: 5 (Stays on topic)\nLanguage: 5 (Clean, fluent English)",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en10",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "Should our Chinese sales team keep using WeChat groups, or move German counterparties to email?",
+      "sample": "Keep both channels, but make email the record of record.\n- Use WeChat for quick coordination and relationship maintenance; German counterparties rarely expect contract decisions there.\n- Move anything consequential (pricing, clauses, delivery dates) to",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The text is coherent, directly addresses the prompt's dilemma with a clear strategy, and uses fluent English.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 925,
+        "completion_tokens": 250,
+        "total_tokens": 1175,
+        "completion_tokens_details": {
+          "reasoning_tokens": 193
+        }
+      },
+      "latency_s": 39.28,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The text is coherent, directly addresses the prompt's dilemma with a clear strategy, and uses fluent English.\"}\n```",
+      "judge_reasoning": "The prompt asks whether a Chinese sales team should use WeChat groups or move German counterparties to email.\nThe text suggests keeping both channels but using email as the \"record of record\". It provides specific guidance on what goes where: WeChat for quick coordination/relationship maintenance, and consequential items (pricing, clauses, delivery dates) to... (text cuts off).\n\nCoherence: The text follows a single line of thought. It proposes a hybrid approach and explains the logic behind it. Even though it ends mid-sentence, the flow is consistent. Score: 5.\nRelevance: The text directly addresses the prompt's question about WeChat vs. email for Chinese sales teams dealing with German counterparties. Score: 5.\nLanguage: The English is clean and idiomatic. \"Record of record\" is a bit redundant but understandable in a business context (meaning the definitive source). No grammatical errors before it cuts off. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en11",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "I have worked for my employer for 14 months and I have just been dismissed. Can I bring a claim for unfair dismissal?",
+      "sample": "Almost certainly not: to bring an ordinary unfair dismissal claim you normally need at least two years of continuous service (s. 108 Employment Rights Act 1996). Your 14 months fall short of that qualifying period, so the tribunal has no jurisdiction over",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The text is coherent, directly relevant to the prompt, and written in clean English, despite ending mid-sentence.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 944,
+        "completion_tokens": 228,
+        "total_tokens": 1172,
+        "completion_tokens_details": {
+          "reasoning_tokens": 170
+        }
+      },
+      "latency_s": 36.03,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The text is coherent, directly relevant to the prompt, and written in clean English, despite ending mid-sentence.\"}\n```",
+      "judge_reasoning": "The prompt asks whether someone who worked for 14 months and was dismissed can bring a claim for unfair dismissal.\nThe text answers \"Almost certainly not\", explains the requirement of two years of continuous service (citing s. 108 Employment Rights Act 1996), and notes that 14 months is insufficient. It ends mid-sentence (\"the tribunal has no jurisdiction over\").\n\nCoherence: The text follows a single line of thought, explaining why the claim is likely not possible based on the length of service. (Score: 5)\nRelevance: The text directly addresses the prompt's question and stays on topic throughout. (Score: 5)\nLanguage: The English is clean, idiomatic, and grammatically correct up to the point where it cuts off. (Score: 5)",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en12",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "I bought a laptop online and it developed a fault on day 21. What can I do?",
+      "sample": "You can reject the laptop for a full refund under the short-term right: a fault appearing within 30 days entitles you to reject the goods for a full refund (s. 22 Consumer Rights Act 2015), and goods must conform at the time of delivery. Within the first",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The text is coherent, directly relevant to the prompt's scenario, and written in clear, grammatical English.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 944,
+        "completion_tokens": 219,
+        "total_tokens": 1163,
+        "completion_tokens_details": {
+          "reasoning_tokens": 162
+        }
+      },
+      "latency_s": 34.64,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The text is coherent, directly relevant to the prompt's scenario, and written in clear, grammatical English.\"}\n```",
+      "judge_reasoning": "The prompt asks for advice on what to do after a laptop bought online developed a fault on day 21.\nThe text provides legal advice regarding the \"short-term right\" under the Consumer Rights Act 2015, specifically mentioning the 30-day window for a full refund.\n\nCoherence: The text follows a single line of thought (explaining the right to reject goods). It ends mid-sentence (\"Within the first\"), but this is not penalized per instructions. Score: 5.\nRelevance: The text directly addresses the prompt's scenario (fault on day 21) by explaining the 30-day refund rule. Score: 5.\nLanguage: The English is clean, grammatical, and idiomatic. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en13",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "My landlord took my £1,200 deposit nine weeks ago and has not sent me anything about where it is being held. Is that a problem for him?",
+      "sample": "Yes: an assured shorthold tenancy deposit must be protected in a government-approved tenancy deposit scheme and the prescribed information given to you within 30 days of receiving it (Housing Act 2004, ss. 212–215). Nine weeks is already past that",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The text is coherent, directly relevant to the prompt, and written in clear, grammatical English.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 955,
+        "completion_tokens": 211,
+        "total_tokens": 1166,
+        "completion_tokens_details": {
+          "reasoning_tokens": 157
+        }
+      },
+      "latency_s": 33.46,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The text is coherent, directly relevant to the prompt, and written in clear, grammatical English.\"}\n```",
+      "judge_reasoning": "The prompt asks if a landlord not providing information about a £1,200 deposit after nine weeks is a problem for the landlord.\nThe text answers \"Yes\", explains the legal requirement (assured shorthold tenancy deposits must be protected and prescribed information given within 30 days), cites the Housing Act 2004, and notes that nine weeks exceeds this limit.\n\nCoherence: The text follows a single line of thought. It starts with an answer and provides the reasoning/legal basis. Score: 5.\nRelevance: The text directly addresses the prompt's question about whether it is a problem for the landlord and why. Score: 5.\nLanguage: The English is clean, grammatical, and idiomatic. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en14",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "I emailed my former employer a month ago asking for a copy of every email they hold about me. They have not responded. What does the law say about their timescale?",
+      "sample": "A data subject access request must be answered within one month of receipt; that response deadline is set by Article 12(3) UK GDPR. The one-month clock runs from receipt and does not move on its own. Where the request is complex or voluminous, the",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The text is coherent, directly relevant to the prompt's question about legal timescales for data requests, and written in clean English.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 950,
+        "completion_tokens": 222,
+        "total_tokens": 1172,
+        "completion_tokens_details": {
+          "reasoning_tokens": 161
+        }
+      },
+      "latency_s": 35.14,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The text is coherent, directly relevant to the prompt's question about legal timescales for data requests, and written in clean English.\"}\n```",
+      "judge_reasoning": "The prompt asks about the legal timescale for a former employer to respond to a request for emails (a Subject Access Request - SAR).\n\nThe text explains that a data subject access request must be answered within one month of receipt per Article 12(3) UK GDPR. It mentions the clock starts from receipt and notes an exception for complex or voluminous requests.\n\n- Coherence: The text follows a single line of thought regarding the deadline for SARs. It is consistent. (Score: 5)\n- Relevance: The text directly addresses the legal timescale requested in the prompt. (Score: 5)\n- Language: The English is clean, grammatical, and idiomatic. It ends mid-sentence, but as per instructions, this is not penalized. (Score: 5)",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en15",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "I offered to sell my car for £8,000; the buyer replied that she would pay £7,500, and I did not respond. She now says she \"accepted\" the £8,000 price. Has a contract formed?",
+      "sample": "No: a counter-offer, meaning a reply that proposes different terms, destroys the original offer, so it can no longer be accepted (Hyde v Wrench (1840) 3 Beav 334). Her reply of £7,500 was a counter-offer; your silence in the face of it is not an",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The text is coherent, directly relevant to the prompt, and written in clean English.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 989,
+        "completion_tokens": 246,
+        "total_tokens": 1235,
+        "completion_tokens_details": {
+          "reasoning_tokens": 194
+        }
+      },
+      "latency_s": 38.93,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The text is coherent, directly relevant to the prompt, and written in clean English.\"}\n```",
+      "judge_reasoning": "The prompt asks for a legal opinion on whether a contract has been formed after a counter-offer.\nThe text provides a clear \"No\" and explains the legal reasoning (counter-offer destroys original offer), citing a case (*Hyde v Wrench*). It identifies the specific facts of the scenario (£7,500 as a counter-offer) and starts to explain the effect of silence.\n\nCoherence: The text follows a single line of thought logically. It answers the question and provides supporting legal theory. (Score: 5)\nRelevance: The text directly addresses the prompt's scenario and requested mode (legal analysis). (Score: 5)\nLanguage: The English is clean, idiomatic, and grammatically correct up to the point where it cuts off. (Score: 5)\n\nThe sample ends mid-sentence (\"is not an\"), but per instructions, I should not penalize for incomplete final sentences.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en16",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "One of our directors wants to sell office supplies to the company through her side business. What must she do about her interest under the Companies Act 2006?",
+      "sample": "- Before the company enters into the planned transaction with her side business, she must declare the nature and extent of her interest to the board (s. 177(1) Companies Act 2006).\n- The declaration must be made at the first opportunity; for interests in",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The text is coherent, directly relevant to the prompt, and written in clean English.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 955,
+        "completion_tokens": 255,
+        "total_tokens": 1210,
+        "completion_tokens_details": {
+          "reasoning_tokens": 203
+        }
+      },
+      "latency_s": 40.26,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The text is coherent, directly relevant to the prompt, and written in clean English.\"}\n```",
+      "judge_reasoning": "The prompt asks about a director's obligations under the Companies Act 2006 when selling office supplies to her own company via a side business.\n\nThe text provides:\n1. A requirement to declare the nature and extent of the interest to the board before the transaction (citing s. 177(1)).\n2. A mention that the declaration must be made at the first opportunity.\n3. The text ends mid-sentence (\"for interests in\").\n\nCoherence: The text follows a single line of thought regarding the legal requirements for declaring an interest. It is consistent and logical. Score: 5.\nRelevance: The text directly addresses the prompt's question about the Companies Act 2006 and the director's interest. Score: 5.\nLanguage: The English is clean, grammatical, and idiomatic. The fact that it ends mid-sentence is explicitly noted in the instructions as something not to penalize. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en17",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "I have worked for the same employer for six years and they intend to dismiss me, giving one month of notice. Is that the notice the law requires?",
+      "sample": "Probably not: after two years of continuous employment the statutory minimum notice is one week per complete year of service, up to a maximum of twelve weeks (s. 86 Employment Rights Act 1996). With six years of service you are owed at least six weeks'",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The text is coherent, directly relevant to the prompt, and written in clean English.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 949,
+        "completion_tokens": 209,
+        "total_tokens": 1158,
+        "completion_tokens_details": {
+          "reasoning_tokens": 157
+        }
+      },
+      "latency_s": 33.12,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The text is coherent, directly relevant to the prompt, and written in clean English.\"}\n```",
+      "judge_reasoning": "The prompt asks whether one month of notice is legally required after six years of employment.\nThe text answers this by stating that the statutory minimum is one week per year of service (up to 12), and for six years, it should be at least six weeks.\n\nCoherence: The text follows a single line of thought. It starts with \"Probably not\" and explains why based on the law. Score: 5.\nRelevance: The text directly addresses the prompt's question about notice periods for someone employed for six years. Score: 5.\nLanguage: The English is clean, grammatical, and idiomatic. It ends mid-sentence (\"six weeks'\"), but as per instructions, incomplete final sentences are not penalized. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en18",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "An online commentary column published a piece damaging my professional reputation three years ago. Can I still sue for defamation in England and Wales?",
+      "sample": "Almost certainly not, because defamation claims are subject to a one-year limitation period (s. 4A Limitation Act 1980). The clock generally began running when the article was first published, not when you later discovered it. The court can disapply the",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The text is coherent, directly relevant to the prompt, and written in clean English, despite ending mid-sentence.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 942,
+        "completion_tokens": 238,
+        "total_tokens": 1180,
+        "completion_tokens_details": {
+          "reasoning_tokens": 180
+        }
+      },
+      "latency_s": 37.51,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The text is coherent, directly relevant to the prompt, and written in clean English, despite ending mid-sentence.\"}\n```",
+      "judge_reasoning": "The prompt asks about the possibility of suing for defamation in England and Wales three years after a piece was published.\n\nThe text provides a direct answer (\"Almost certainly not\"), cites a specific law (s. 4A Limitation Act 1980), explains the one-year limitation period, and mentions when the clock starts running. It ends mid-sentence (\"The court can disapply the\").\n\nCoherence: The text follows a single line of thought regarding the statute of limitations for defamation claims. No contradictions or jumps. (Score: 5)\nRelevance: The text directly addresses the prompt's question about suing for defamation in England and Wales after three years. It stays on topic throughout. (Score: 5)\nLanguage: The English is clean, idiomatic, and grammatically correct up to the point where it cuts off. (Score: 5)",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    }
+  ]
+}

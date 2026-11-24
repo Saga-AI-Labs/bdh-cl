@@ -1,0 +1,767 @@
+{
+  "meta": {
+    "endpoint": "http://192.168.178.51:8888/v1",
+    "model": "Qwen3.8-Flash-Next",
+    "input": "out/key2_calibration/dissociation_b.jsonl",
+    "input_sha256": "39ce00ef5f88b0c4c8dbbfb76994ac0e7da3f6173b96df6f841d28bd26f92269",
+    "rubric": "data/evals/key2_rubric_v2.json",
+    "rubric_sha256": "2c1b797254ac6fde63434b638a89398e266c6d50bdbbdddf2cdb6266c34f6626",
+    "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124",
+    "temperature": 0.0,
+    "max_tokens": 2048,
+    "retry_tokens": 4096,
+    "endpoint_fingerprint": {
+      "model_list_sha256_16": "2827717bfee8a19d",
+      "model_count": 1
+    },
+    "started_at": "2026-11-24T00:30:23+0100",
+    "finished_at": "2026-11-24T00:33:06+0100",
+    "rows": 24
+  },
+  "rows": [
+    {
+      "id": "k2_dissocb_01",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Explain how a router forwards a packet between two subnets.",
+      "sample": "Father Zossima raised his hand to bless him. Alyosha could make no protest, though he had a great longing to remain. He longed, moreover, to ask the significance of his bowing to Dmitri, the question was on the tip of his tongue, but he dared not ask it. He knew that the elder",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The passage is internally coherent and fluent, but it is entirely unrelated to the prompt about router packet forwarding.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 993,
+        "completion_tokens": 202,
+        "total_tokens": 1195,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 154
+        }
+      },
+      "latency_s": 4.34,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The passage is internally coherent and fluent, but it is entirely unrelated to the prompt about router packet forwarding.\"}",
+      "judge_reasoning": "We need answer user's request. Need produce JSON only. Need score sample against prompt. Prompt: Explain how a router forwards a packet between two subnets. Text: literary excerpt from Brothers Karamazov? Completely unrelated. Need coherence, relevance, language. Coherence: text holds a line of thought? It's a coherent narrative fragment: Father Zossima blesses him, Alyosha longing, knew elder. It is coherent internally, though incomplete. Score 5? It has one line of thought, no contradiction. Maybe abrupt? It's a fragment but coherent. Relevance: ignores prompt, unrelated topic/mode. Score 1. Language: clean idiomatic English. Score 5. Need JSON only. Ensure no extra.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_02",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Describe the steps to bake bread from scratch.",
+      "sample": "Alyosha sat down to the table and began to tell his story, but at the first words he lost his embarrassment and gained the whole of Lise’s attention as well. He spoke with deep feeling, under the influence of the strong impression he had just received, and he succeeded in",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The passage is a coherent, fluent narrative fragment, but it is entirely unrelated to the prompt about baking bread.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 980,
+        "completion_tokens": 390,
+        "total_tokens": 1370,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 341
+        }
+      },
+      "latency_s": 7.48,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The passage is a coherent, fluent narrative fragment, but it is entirely unrelated to the prompt about baking bread.\"}",
+      "judge_reasoning": "We need answer user's request. Need score sample against prompt. Need output JSON only. Need analyze coherence, relevance, language. Prompt: Describe steps to bake bread from scratch. Text: \"Alyosha sat down to the table and began to tell his story, but at the first words he lost his embarrassment and gained the whole of Lise’s attention as well. He spoke with deep feeling, under the influence of the strong impression he had just received, and he succeeded in\"\n\nThis is narrative excerpt, likely from Dostoevsky? Not about baking bread. Relevance: ignores prompt, unrelated topic/mode. Coherence: It holds a line of thought? It's a narrative fragment, incomplete final sentence. It is coherent locally: Alyosha sat, began story, lost embarrassment, gained attention, spoke with feeling, succeeded in... incomplete. No contradiction. Coherence 5? It is a single thread, though incomplete. Do not penalize incomplete final sentence. Language: clean idiomatic English, maybe \"sat down to the table\" slightly awkward but acceptable. 5 or 4? \"sat down to the table\" is okay? More idiomatic \"sat down at the table\". But minor awkward. Language 4? It says clean idiomatic; morphology syntax correct. \"sat down to the table\" is acceptable in older English. \"gained the whole of Lise’s attention\" okay. \"under the influence of the strong impression\" okay. Could be 5. Relevance 1. Coherence 5? It is not about prompt but coherence independent. It has recoverable proposition. Yes. Need JSON only.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_03",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "What causes the seasons to change through the year?",
+      "sample": "Mitya at once began talking to him, too, of his plans, nervously and excitedly asking advice in regard to Lyagavy, and talking all the way. The priest listened attentively, but gave little advice. He turned off Mitya’s questions with: “I don’t know. Ah, I can’t say. How",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The passage is coherent and fluent but entirely unrelated to the prompt about seasons.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 993,
+        "completion_tokens": 206,
+        "total_tokens": 1199,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 164
+        }
+      },
+      "latency_s": 4.44,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The passage is coherent and fluent but entirely unrelated to the prompt about seasons.\"}",
+      "judge_reasoning": "We need answer user's request. Need score sample against prompt. Need output JSON only. Need analyze coherence, relevance, language. Prompt: What causes seasons change? Text: Mitya at once began talking... priest... unrelated to seasons. It's a fragment from Dostoevsky? Coherence: It holds a line? It describes Mitya talking to priest, priest listened, turned off questions. It's coherent enough? It's a narrative fragment, one line of thought. Maybe coherence 4 or 5. It ends mid-sentence, don't penalize. Relevance: completely off topic, unrelated to seasons. 1. Language: clean English, maybe \"in regard to\" okay, fragment due truncation. 5. Need JSON only. Ensure no extra.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_04",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Explain how a compiler turns source code into a program.",
+      "sample": "He stepped forward, opened the door, and quickly went into the inner room. Perezvon flew after him. The doctor stood still for five seconds in amazement, looking at Alyosha; then, with a curse, he went out quickly to the carriage, repeating aloud, “This is ... this is ... I",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The passage is a coherent narrative fragment in fluent English, but it is entirely unrelated to the prompt about compilers.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 988,
+        "completion_tokens": 341,
+        "total_tokens": 1329,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 292
+        }
+      },
+      "latency_s": 6.64,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The passage is a coherent narrative fragment in fluent English, but it is entirely unrelated to the prompt about compilers.\"}",
+      "judge_reasoning": "We need answer user's request. Need score sample against prompt. Need output JSON only. Need analyze coherence, relevance, language. Prompt: Explain how a compiler turns source code into a program. Text: narrative fragment: \"He stepped forward, opened the door, and quickly went into the inner room. Perezvon flew after him. The doctor stood still for five seconds in amazement, looking at Alyosha; then, with a curse, he went out quickly to the carriage, repeating aloud, “This is ... this is ... I\" It is unrelated to compiler. Coherence: It's a narrative fragment, one line of thought? It describes actions, though incomplete. It holds a scene. Coherence likely 4 or 5? It is a coherent narrative fragment, no contradictions. But incomplete final sentence not penalized. It has abrupt? It's a sequence. Could be 5? \"He stepped... Perezvon flew... doctor stood... went out...\" It's coherent enough. Maybe 4 due abrupt? But single thread of action. Relevance: 1 ignores prompt, unrelated topic/mode. Language: clean English, though incomplete quote. 5? It has ellipsis and incomplete quote, but not penalize incomplete final sentence. \"Perezvon\" maybe proper noun. Clean. So {\"coherence\":5,\"relevance\":1,\"language\":5}. Need reason short. Ensure JSON only.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_05",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "How does a bicycle stay upright while moving?",
+      "sample": "I must mention, by the way, that I was no longer living in my former quarters. As soon as I resigned my commission, I took rooms with an old lady, the widow of a government clerk. My landlady’s servant waited upon me, for I had moved into her rooms simply because on my return",
+      "coherence": 4,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The passage is fluent and coherent as a narrative fragment, but it is entirely unrelated to the bicycle prompt.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 985,
+        "completion_tokens": 346,
+        "total_tokens": 1331,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 298
+        }
+      },
+      "latency_s": 6.95,
+      "judge_content": "{\"coherence\": 4, \"relevance\": 1, \"language\": 5, \"reason\": \"The passage is fluent and coherent as a narrative fragment, but it is entirely unrelated to the bicycle prompt.\"}",
+      "judge_reasoning": "We need answer user's request. Need score sample against prompt. Need output JSON only. Need analyze coherence, relevance, language. Prompt: \"How does a bicycle stay upright while moving?\" Text: \"I must mention, by the way, that I was no longer living in my former quarters. As soon as I resigned my commission, I took rooms with an old lady, the widow of a government clerk. My landlady’s servant waited upon me, for I had moved into her rooms simply because on my return\"\n\nSample is unrelated to bicycle. It is coherent narrative fragment? It holds one line of thought about moving into rooms. Coherence: recognizable topic, one line? It's a fragment but coherent. Maybe 4 or 5? It has abrupt \"by the way\" but okay. It ends mid-sentence, don't penalize. Coherence 4? It is a single thread: narrator changed quarters after resigning, took rooms with old lady, servant waited, moved because on return... It's coherent. Maybe 5? \"I must mention, by the way\" is digression but within narrative. It's one line. Could be 4 due abrupt transition? But no contradiction. Coherence 4 or 5. Relevance: completely off topic, unrelated mode? It's narrative, not explanation. 1. Language: clean English, fragment. 5. Need JSON only. Reason short. Ensure integers.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_06",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Explain what photosynthesis does for a plant.",
+      "sample": "He preferred to attribute it to the dead weight of instinct which he could not step over, again through weakness and meanness. He looked at his fellow prisoners and was amazed to see how they all loved life and prized it. It seemed to him that they loved and valued life more in",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The passage is fluent and internally coherent, but it is entirely unrelated to photosynthesis or plants.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 979,
+        "completion_tokens": 314,
+        "total_tokens": 1293,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 268
+        }
+      },
+      "latency_s": 6.1,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The passage is fluent and internally coherent, but it is entirely unrelated to photosynthesis or plants.\"}",
+      "judge_reasoning": "We need answer user's request. Need score sample against prompt. Need output JSON only. Need analyze coherence, relevance, language.\n\nPrompt: Explain what photosynthesis does for a plant.\nText: \"He preferred to attribute it to the dead weight of instinct which he could not step over, again through weakness and meanness. He looked at his fellow prisoners and was amazed to see how they all loved life and prized it. It seemed to him that they loved and valued life more in\"\n\nThis is unrelated to photosynthesis. It is narrative about prisoners, instinct, life. Relevance: ignores prompt, unrelated topic/mode. Score 1. Coherence: It has a line of thought? It seems from a novel, coherent narrative fragment. It holds one line: he attributes something to instinct, looks at prisoners, amazed they love life. Incomplete final sentence but don't penalize. Coherence 5? Need check contradictions? None. It is a recognizable narrative. Each sentence follows? \"He preferred to attribute it\" pronoun it unclear but local coherence okay. Could be 4 due abrupt? But no major break. Since incomplete final sentence not penalized. Coherence 5 maybe. Language: clean English, incomplete final sentence allowed. 5. Need reason short. JSON only.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_07",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Describe how a bank clears a payment between two accounts.",
+      "sample": "This idea sometimes even tormented his dreams, but it had never presented itself so vividly to him as on his way to Svidrigaïlov. The very thought moved him to gloomy rage. To begin with, this would transform everything, even his own position; he would have at once to confess",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The passage is internally coherent and fluent, but it is entirely unrelated to bank payment clearing.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 986,
+        "completion_tokens": 220,
+        "total_tokens": 1206,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 175
+        }
+      },
+      "latency_s": 4.82,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The passage is internally coherent and fluent, but it is entirely unrelated to bank payment clearing.\"}",
+      "judge_reasoning": "We need answer user's request. Need score sample against prompt. Need output JSON only. Need analyze coherence, relevance, language. Prompt: Describe how a bank clears a payment between two accounts. Text: literary excerpt about dreams, Svidrigaïlov, gloomy rage, transform everything, confess. It's unrelated to bank clearing. Coherence: It holds a line of thought? It's a fragment from Dostoevsky? It has coherent narrative: idea tormented dreams, presented vividly, moved him to rage, would transform everything, confess. It's coherent internally. Score 5? It's incomplete but not penalize. Relevance: ignores prompt, unrelated topic/mode. Score 1. Language: clean idiomatic English, maybe archaic but grammatical. Score 5. Need JSON only. Ensure no extra.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_08",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Why do metals conduct electricity better than wood?",
+      "sample": "It was not much more than three-quarters of a mile from the town to the monastery. Alyosha walked quickly along the road, at that hour deserted. It was almost night, and too dark to see anything clearly at thirty paces ahead. There were cross-roads half-way. A figure came into",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The passage is a coherent, fluent narrative fragment, but it is unrelated to the prompt about electrical conductivity.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 983,
+        "completion_tokens": 209,
+        "total_tokens": 1192,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 161
+        }
+      },
+      "latency_s": 4.47,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The passage is a coherent, fluent narrative fragment, but it is unrelated to the prompt about electrical conductivity.\"}",
+      "judge_reasoning": "We need answer user's request. Need produce JSON only. Need score sample against prompt. Prompt: Why do metals conduct electricity better than wood? Text: narrative about Alyosha walking to monastery, incomplete. Need coherence, relevance, language.\n\nCoherence: text is a coherent narrative fragment? It holds one line of thought: walking from town to monastery, dark, cross-roads, figure came into. It's incomplete but not penalize. No contradictions. Coherence 5? It is a single thread. Maybe abrupt? It's a fragment but coherent. 5.\n\nRelevance: prompt asks explanation of conductivity. Text is unrelated narrative. 1.\n\nLanguage: clean English, though incomplete final sentence. 5.\n\nNeed JSON only. Ensure no extra.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_09",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Explain how a thermostat keeps a room at a steady temperature.",
+      "sample": "At last he realized that the room was full of charcoal fumes from the stove, and that he might die of suffocation. And the drunken peasant still lay snoring. The candle guttered and was about to go out. Mitya cried out, and ran staggering across the passage into the forester’s",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The passage is a coherent literary fragment in fluent English, but it is unrelated to explaining a thermostat.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 988,
+        "completion_tokens": 257,
+        "total_tokens": 1245,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 210
+        }
+      },
+      "latency_s": 6.07,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The passage is a coherent literary fragment in fluent English, but it is unrelated to explaining a thermostat.\"}",
+      "judge_reasoning": "We need answer user's request. Need produce JSON only. Need score sample against prompt. Prompt: Explain how a thermostat keeps a room at a steady temperature. Text: literary excerpt about charcoal fumes, drunken peasant, candle, Mitya, forester's. It is unrelated to thermostat. Coherence? It is a narrative fragment, coherent enough? It describes a scene: realized room full of fumes, might die, peasant snoring, candle guttered, Mitya cried and ran. It holds a line of thought? It's a fragment but coherent narrative. Coherence likely 4 or 5? It's incomplete final sentence? \"forester’s\" incomplete. Do not penalize incomplete final sentence. It has one line of thought: danger in room, Mitya runs. Maybe 5? But abrupt? It's a coherent scene. Relevance: 1 ignores prompt, unrelated topic/mode. Language: clean literary English, 5. Need JSON only. Reason short. Ensure integers.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_10",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Describe how a ship stays afloat even though it is heavy.",
+      "sample": "Dounia at last became impatient and, leaving Sonia, went to her brother’s room to await him there; she kept thinking that he would come there first. When she had gone, Sonia began to be tortured by the dread of his committing suicide, and Dounia too feared it. But they had",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The passage is coherent and fluent but entirely unrelated to the prompt about ships staying afloat.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 987,
+        "completion_tokens": 250,
+        "total_tokens": 1237,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 205
+        }
+      },
+      "latency_s": 4.64,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The passage is coherent and fluent but entirely unrelated to the prompt about ships staying afloat.\"}",
+      "judge_reasoning": "We need answer user's request. Need score sample against prompt. Need output JSON only. Need analyze coherence, relevance, language. Prompt: Describe how a ship stays afloat even though it is heavy. Text: \"Dounia at last became impatient and, leaving Sonia, went to her brother’s room to await him there; she kept thinking that he would come there first. When she had gone, Sonia began to be tortured by the dread of his committing suicide, and Dounia too feared it. But they had\"\n\nThis is unrelated to ship, likely from Dostoevsky. Relevance 1? It ignores prompt, unrelated topic/mode. Coherence: It holds a line of thought? Characters Dounia, Sonia, brother, dread suicide. It is coherent narrative fragment, incomplete final sentence not penalized. Coherence 5? Single thread, no contradiction. Language: clean English, maybe literary. 5. Need JSON only. Ensure integers. reason short.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_11",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "How does a vaccine prepare the immune system?",
+      "sample": "A week later he died. The whole town followed him to the grave. The chief priest made a speech full of feeling. All lamented the terrible illness that had cut short his days. But all the town was up in arms against me after the funeral, and people even refused to see me. Some,",
+      "coherence": 4,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The fragment is a coherent narrative about a funeral and blame, but it is unrelated to the vaccine prompt and is fluent English.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 983,
+        "completion_tokens": 513,
+        "total_tokens": 1496,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 461
+        }
+      },
+      "latency_s": 10.46,
+      "judge_content": "{\"coherence\": 4, \"relevance\": 1, \"language\": 5, \"reason\": \"The fragment is a coherent narrative about a funeral and blame, but it is unrelated to the vaccine prompt and is fluent English.\"}",
+      "judge_reasoning": "We need answer user's request. Need score sample against prompt. Need output JSON only. Need analyze coherence, relevance, language.\n\nPrompt: How does a vaccine prepare the immune system?\nText: \"A week later he died. The whole town followed him to the grave. The chief priest made a speech full of feeling. All lamented the terrible illness that had cut short his days. But all the town was up in arms against me after the funeral, and people even refused to see me. Some,\"\n\nNeed score only JSON. Coherence: It's a narrative fragment about death/funeral/town angry at narrator. It holds a line? It is coherent as a story fragment, though abrupt and incomplete. No contradictions. Maybe coherence 4? It has one line of thought: someone died, funeral, town angry at narrator. It's a fragment but coherent. Could be 4 due abrupt transition? The sentences follow: death, funeral, speech, lament, town against me. It's mostly one line. Maybe 5? Each sentence follows previous, no contradiction. But \"But all the town was up in arms against me\" introduces conflict not explained, but still coherent. Since incomplete final sentence not penalized. Coherence 4 or 5. Need consider no overall line? It is a narrative fragment, topic jumps? It is about funeral and blame. It's coherent enough. Maybe 4 because abrupt shift to town against me without motivation? But can recover. Use 4.\n\nRelevance: Prompt asks vaccine immune system. Text is unrelated narrative. Maybe 1. It mentions illness, but not vaccine/immune system. Mostly off topic? It is about death from illness, but not prompt. Relevance 1 or 2. Anchors: 1 ignores prompt unrelated topic/mode. 2 mostly off topic; only word/phrase connects. There is \"illness\" maybe connects? But not vaccine. I'd say 1 because unrelated topic and mode. Could be 2 due illness? The prompt is explanatory, text narrative. No vaccine. Use 1.\n\nLanguage: grammatical fluent English, fragment at end not penalized. 5.\n\nNeed JSON only. Ensure integers. reason short.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_12",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Explain why ice floats on water.",
+      "sample": "And can it be a dream, that in the end man will find his joy only in deeds of light and mercy, and not in cruel pleasures as now, in gluttony, fornication, ostentation, boasting and envious rivalry of one with the other? I firmly believe that it is not and that the time is at",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The passage is coherent and fluent but entirely unrelated to explaining why ice floats on water.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 989,
+        "completion_tokens": 273,
+        "total_tokens": 1262,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 229
+        }
+      },
+      "latency_s": 5.22,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The passage is coherent and fluent but entirely unrelated to explaining why ice floats on water.\"}",
+      "judge_reasoning": "We need to score sample against prompt. Need output JSON only. Need analyze coherence, relevance, language. Prompt: Explain why ice floats on water. Text: \"And can it be a dream, that in the end man will find his joy only in deeds of light and mercy, and not in cruel pleasures as now, in gluttony, fornication, ostentation, boasting and envious rivalry of one with the other? I firmly believe that it is not and that the time is at\"\n\nThis is unrelated to ice floats. It is a coherent philosophical/religious passage, likely Dostoevsky? It holds one line of thought: asks if dream that man will find joy in light/mercy not cruel pleasures; believes not and time is at... incomplete but okay. Coherence: single thread? It is one question and answer, no contradiction. Maybe abrupt? It's coherent. Score 5? It is a single line of thought. Language: clean idiomatic English, archaic but grammatical. 5. Relevance: ignores prompt entirely. 1. Need JSON only.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_13",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Explain how a router forwards a packet between two subnets.",
+      "sample": "By that time Smerdyakov had been discharged from the hospital. Ivan knew his new lodging, the dilapidated little wooden house, divided in two by a passage on one side of which lived Marya Kondratyevna and her mother, and on the other, Smerdyakov. No one knew on what terms he",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The passage is grammatically fluent and internally coherent as a narrative fragment, but it is entirely unrelated to the prompt about router packet forwarding.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 993,
+        "completion_tokens": 273,
+        "total_tokens": 1266,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 219
+        }
+      },
+      "latency_s": 6.28,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The passage is grammatically fluent and internally coherent as a narrative fragment, but it is entirely unrelated to the prompt about router packet forwarding.\"}",
+      "judge_reasoning": "We need answer user's request. Need score sample against prompt. Need output JSON only. Need analyze coherence, relevance, language. Prompt: Explain how a router forwards a packet between two subnets. Text: literary excerpt about Smerdyakov, Ivan, lodging. It is coherent internally? It describes Smerdyakov discharged, Ivan knew lodging, house divided, no one knew on what terms he... incomplete. Coherence: recognizable topic? It's a narrative fragment, one line? It holds a line about Smerdyakov's lodging. But prompt asks router forwarding. Relevance: ignores prompt, unrelated topic/mode. Language: clean English, grammatical, though incomplete final sentence not penalized. So coherence maybe 4 or 5? It is a single thread? \"By that time... Ivan knew... No one knew...\" It's coherent enough. But sample is unrelated. Coherence 5? It has one line of thought, no contradiction. Maybe 5. Relevance 1. Language 5. Need JSON only. Ensure no extra.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_14",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Describe the steps to bake bread from scratch.",
+      "sample": "When Fyodor Pavlovitch, who first came into contact with Grushenka over a piece of speculation, ended to his own surprise by falling madly in love with her, old Samsonov, gravely ill as he was, was immensely amused. It is remarkable that throughout their whole acquaintance",
+      "coherence": 4,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The passage is grammatical and internally coherent as a literary fragment, but it is entirely unrelated to baking bread.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 983,
+        "completion_tokens": 335,
+        "total_tokens": 1318,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 286
+        }
+      },
+      "latency_s": 7.61,
+      "judge_content": "{\"coherence\": 4, \"relevance\": 1, \"language\": 5, \"reason\": \"The passage is grammatical and internally coherent as a literary fragment, but it is entirely unrelated to baking bread.\"}",
+      "judge_reasoning": "We need answer user's request. Need score sample against prompt. Need output JSON only. Need analyze coherence, relevance, language. Prompt: Describe steps to bake bread from scratch. Text: literary excerpt about Fyodor Pavlovitch, Grushenka, Samsonov. It is grammatical English? It seems from Brothers Karamazov translation, but ends mid-sentence. Language clean. Relevance: completely off topic, unrelated mode (narrative/literary) vs steps to bake bread. Coherence: It has a topic? It describes a situation: Fyodor falling in love, Samsonov amused. It is a fragment, incomplete final sentence. Does it hold one line of thought? It is a single sentence? Actually two sentences? \"When ... ended ... by falling madly in love with her, old Samsonov ... was immensely amused. It is remarkable that throughout their whole acquaintance\" incomplete. It is coherent as a fragment? It has a proposition: Samsonov amused by Fyodor's love. The second sentence incomplete but not penalize incomplete final sentence. Coherence likely 4 or 5? It is a recognizable topic, one line? The first sentence is complex but coherent. The second begins but incomplete; not penalize incomplete final sentence. But relevance 1. Language 5. Need JSON only. Ensure integers. Reason short.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_15",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "What causes the seasons to change through the year?",
+      "sample": "The story is told, for instance, that in the early days of Christianity one such novice, failing to fulfill some command laid upon him by his elder, left his monastery in Syria and went to Egypt. There, after great exploits, he was found worthy at last to suffer torture and a",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The passage is a coherent, fluent narrative fragment, but it is entirely unrelated to the prompt about seasons.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 980,
+        "completion_tokens": 217,
+        "total_tokens": 1197,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 169
+        }
+      },
+      "latency_s": 5.02,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The passage is a coherent, fluent narrative fragment, but it is entirely unrelated to the prompt about seasons.\"}",
+      "judge_reasoning": "We need answer user's request. Need score sample against prompt. Need output JSON only. Need analyze coherence, relevance, language. Prompt: What causes seasons change? Text: story about early Christianity novice leaving monastery Syria to Egypt, torture and a. It's unrelated to seasons. Coherence: It's a coherent narrative fragment? It holds one line of thought: story told, novice left monastery, went Egypt, found worthy to suffer torture. Incomplete final sentence but don't penalize. Coherence likely 5? It is a single thread, no contradiction. Language: clean English, incomplete final word? \"and a\" incomplete. Do not penalize incomplete final sentence. Language 5? It is grammatical up to cut. Relevance: ignores prompt, unrelated topic/mode. 1. Need JSON only.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_16",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Explain how a compiler turns source code into a program.",
+      "sample": "After describing the result of this conversation and the moment when the prisoner learnt that Grushenka had not remained at Samsonov’s, the sudden frenzy of the luckless man worn out with jealousy and nervous exhaustion, at the thought that she had deceived him and was now",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The fragment is fluent and internally coherent, but it is entirely unrelated to the prompt about compilers.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 979,
+        "completion_tokens": 975,
+        "total_tokens": 1954,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 929
+        }
+      },
+      "latency_s": 20.95,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The fragment is fluent and internally coherent, but it is entirely unrelated to the prompt about compilers.\"}",
+      "judge_reasoning": "We need answer user's request. Need produce JSON only. Need score sample against prompt. Prompt: Explain how a compiler turns source code into a program. Text: \"After describing the result of this conversation and the moment when the prisoner learnt that Grushenka had not remained at Samsonov’s, the sudden frenzy of the luckless man worn out with jealousy and nervous exhaustion, at the thought that she had deceived him and was now\"\n\nNeed score coherence, relevance, language. Sample is fragment from Dostoevsky? It is a sentence fragment, not about compiler. Coherence: It's a fragment but has a recoverable proposition? It describes a prisoner learning something and frenzy. It's incomplete but not word salad. It holds one line? It's a long fragment, maybe coherent as a narrative fragment. But prompt asks explain compiler; text is unrelated. Relevance: 1 ignores prompt. Language: grammatical? It's a fragment, but English is fluent, though incomplete. \"After describing ... the sudden frenzy ... at the thought that she had deceived him and was now\" It's a noun phrase? It may be grammatically incomplete due to missing main verb? \"After describing X and the moment when..., the sudden frenzy ... at the thought that...\" It lacks predicate. But instructions: may end mid-sentence; do not penalize incomplete final sentence. So language likely 5? It is clean idiomatic English, though fragment. Maybe 4 due awkward? But no errors. Coherence: Since it's a fragment, can state topic? It is about a prisoner's frenzy after learning deception. It is one line. But it's not a complete proposition? Coherence 1? \"No recoverable proposition: word salad or unrelated fragments; reader cannot state what it is about.\" It is a fragment but recoverable: a man in frenzy. However it's not a complete sentence. Do not penalize incomplete final sentence. It may be coherent as a fragment. But relevance 1. Need JSON only.\n\nNeed consider if coherence should be 1 because unrelated fragments? It is a single fragment, not multiple unrelated. It has a topic. But no complete proposition? It says \"After describing ... the sudden frenzy ... at the thought that she had deceived him and was now\". It's a noun phrase with modifiers. Reader can state it's about a prisoner's sudden frenzy. Coherence maybe 3? The thread breaks? It's incomplete. But instruction says don't penalize incomplete final sentence. It is one fragment. Could be 4? \"Mostly one line of thought, with one minor digression or abrupt transition\". It's just one fragment. Maybe 4 or 5. Since no contradiction, one line. But it's not a full explanation. Coherence not completeness. I'd give 4? It is a single fragment, but abrupt? It's a long prepositional phrase and noun phrase. It holds one line. Maybe 5? \"each sentence follows from previous\" only one sentence fragment. No contradiction. But it's not a complete proposition? It has proposition? \"the sudden frenzy ... at the thought that she had deceived him and was now\" incomplete. But not penalize incomplete. I'd say coherence 4 due fragmentary abruptness? The anchors: 5 single thread, each sentence follows previous, no contradiction. With one fragment, can be 5. But if it's not a recoverable proposition? It is recoverable. Maybe 4 because it's a fragment and not fully developed. But length not penalized. Incomplete final sentence not penalized. So 5? Need be careful: Coherence 1 if no recoverable proposition. It is recoverable. 2 topic jumps/contradictions. no. 3 recognizable topic but thread breaks once or twice. It doesn't break, just incomplete. 4 mostly one line with minor digression/abrupt transition. It is abrupt due fragment? But incomplete final sentence not penalized. So 5.\n\nRelevance: 1. Language: 5? It is grammatical? The fragment is grammatical as a fragment? It may be a sentence fragment, but not penalize incomplete. It is fluent. \"learnt\" British. \"Samsonov’s\" okay. \"worn out with jealousy and nervous exhaustion\" okay. \"at the thought that she had deceived him and was now\" incomplete but okay. Language 5.\n\nNeed final JSON only. Ensure no extra.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_17",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "How does a bicycle stay upright while moving?",
+      "sample": "Then old Maximov was summoned. He came in timidly, approached with little steps, looking very disheveled and depressed. He had, all this time, taken refuge below with Grushenka, sitting dumbly beside her, and “now and then he’d begin blubbering over her and wiping his eyes",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The passage is a coherent narrative fragment in fluent English, but it is entirely unrelated to the bicycle prompt.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 986,
+        "completion_tokens": 403,
+        "total_tokens": 1389,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 355
+        }
+      },
+      "latency_s": 7.07,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The passage is a coherent narrative fragment in fluent English, but it is entirely unrelated to the bicycle prompt.\"}",
+      "judge_reasoning": "We need answer user's request. Need score sample against prompt. Need output JSON only. Need analyze coherence, relevance, language. Prompt: \"How does a bicycle stay upright while moving?\" Text: \"Then old Maximov was summoned. He came in timidly, approached with little steps, looking very disheveled and depressed. He had, all this time, taken refuge below with Grushenka, sitting dumbly beside her, and “now and then he’d begin blubbering over her and wiping his eyes\"\n\nThis is unrelated narrative excerpt, likely from Brothers Karamazov. Relevance: ignores prompt, unrelated topic/mode. Coherence: It holds a narrative line? It describes Maximov summoned, came timidly, had taken refuge with Grushenka, blubbering. It is coherent as a fragment, though incomplete quote. One line of thought? Yes mostly. Language: clean English, minor punctuation quote unclosed? It ends mid-sentence? It has opening quote not closed, but sample may end mid-sentence; do not penalize incomplete final sentence. Language mostly clean. Maybe \"approached with little steps\" awkward but okay. Coherence 5? It is a single narrative thread. Relevance 1. Language 5 or 4? \"approached with little steps\" slightly awkward but idiomatic enough? \"looking very disheveled and depressed\" okay. \"He had, all this time, taken refuge below with Grushenka, sitting dumbly beside her, and “now and then he’d begin blubbering over her and wiping his eyes\" The quote starts but no close; incomplete final sentence not penalized. Maybe language 5. Need JSON only.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_18",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Explain what photosynthesis does for a plant.",
+      "sample": "It was by now seven o’clock, and it was getting dark as Alyosha entered the very spacious and convenient house in the High Street occupied by Katerina Ivanovna. Alyosha knew that she lived with two aunts. One of them, a woman of little education, was that aunt of her",
+      "coherence": 4,
+      "relevance": 1,
+      "language": 4,
+      "reason": "The passage is a coherent narrative fragment but is unrelated to the prompt about photosynthesis, and the final phrase is slightly awkward.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 987,
+        "completion_tokens": 471,
+        "total_tokens": 1458,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 419
+        }
+      },
+      "latency_s": 10.08,
+      "judge_content": "{\"coherence\": 4, \"relevance\": 1, \"language\": 4, \"reason\": \"The passage is a coherent narrative fragment but is unrelated to the prompt about photosynthesis, and the final phrase is slightly awkward.\"}",
+      "judge_reasoning": "We need answer user's request. Need score sample against prompt. Need output JSON only. Need analyze coherence, relevance, language. Prompt: Explain what photosynthesis does for a plant. Text: It was by now seven o’clock... Alyosha... Katerina Ivanovna... This is unrelated narrative, likely from Dostoevsky. Relevance: ignores prompt, unrelated topic/mode. Coherence: text holds a line? It's narrative fragment, coherent enough? It says entered house, knew she lived with two aunts, one of them... incomplete. It has a recoverable proposition: Alyosha entered house, knows she lived with two aunts. It's coherent as narrative fragment. But prompt asks explanation; relevance 1. Language: clean English, maybe \"that aunt of her\" awkward/incomplete? It ends mid-sentence? \"One of them, a woman of little education, was that aunt of her\" incomplete? It may be mid-sentence, do not penalize incomplete final sentence. But phrase \"that aunt of her\" is awkward, maybe translation. Language mostly clean? Could be 4 due awkward phrase. Coherence: 4? It's a single narrative thread, but abrupt? It's a fragment, but coherent. Since relevance 1, coherence maybe 4 or 5. It has one line of thought: Alyosha entering house and knowing about aunts. No contradiction. Maybe 5? But it's incomplete and \"that aunt of her\" maybe not fully coherent? It's a recognizable topic, but thread breaks? It's just narrative. I'd give coherence 4 due abrupt transition? Actually sentences: It was seven, getting dark as Alyosha entered house occupied by Katerina. Alyosha knew she lived with two aunts. One of them... was that aunt of her. It follows. Could be 5. But final incomplete not penalized. Language: \"that aunt of her\" unidiomatic, maybe 4. Need JSON only.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_19",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Describe how a bank clears a payment between two accounts.",
+      "sample": "Immediately after he had left it that evening, Fenya had rushed to the chief porter, Nazar Ivanovitch, and besought him, for Christ’s sake, “not to let the captain in again to-day or to-morrow.” Nazar Ivanovitch promised, but went upstairs to his mistress who had suddenly",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The passage is a coherent, fluent narrative fragment, but it is entirely unrelated to the prompt about bank payment clearing.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 986,
+        "completion_tokens": 222,
+        "total_tokens": 1208,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 172
+        }
+      },
+      "latency_s": 5.07,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The passage is a coherent, fluent narrative fragment, but it is entirely unrelated to the prompt about bank payment clearing.\"}",
+      "judge_reasoning": "We need answer user's request. Need score sample against prompt. Need output JSON only. Need analyze coherence, relevance, language. Prompt: Describe how a bank clears a payment between two accounts. Text: literary excerpt about Fenya, chief porter, Nazar Ivanovitch, captain, mistress. It is unrelated to bank clearing. Language is grammatical, fluent, though incomplete final sentence. Coherence: It holds a line? It describes Fenya rushed to porter, asked not let captain in, porter promised but went upstairs to mistress who had suddenly... It's coherent narrative fragment. Coherence likely 5? Single thread, no contradiction. Incomplete final sentence not penalized. Relevance: ignores prompt, unrelated topic/mode. 1. Language: clean idiomatic English, 5. Need JSON only. Ensure no extra text.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_20",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Why do metals conduct electricity better than wood?",
+      "sample": "But Father Zossima, on entering the portico, went first straight to the peasants who were crowded at the foot of the three steps that led up into the portico. Father Zossima stood on the top step, put on his stole, and began blessing the women who thronged about him. One crazy",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The passage is a coherent narrative fragment in fluent English, but it is entirely unrelated to the prompt about electrical conductivity.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 986,
+        "completion_tokens": 309,
+        "total_tokens": 1295,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 259
+        }
+      },
+      "latency_s": 5.84,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The passage is a coherent narrative fragment in fluent English, but it is entirely unrelated to the prompt about electrical conductivity.\"}",
+      "judge_reasoning": "We need answer user's request. Need score sample against prompt. Need output JSON only. Need analyze coherence, relevance, language. Prompt: Why do metals conduct electricity better than wood? Text: \"But Father Zossima, on entering the portico, went first straight to the peasants who were crowded at the foot of the three steps that led up into the portico. Father Zossima stood on the top step, put on his stole, and began blessing the women who thronged about him. One crazy\"\n\nThis is unrelated to prompt, from Dostoevsky? Coherence: It's a narrative fragment, one line of thought? It describes Father Zossima entering portico, blessing women, then \"One crazy\" incomplete. It holds a coherent scene, no contradictions. Incomplete final sentence not penalized. Coherence likely 5? It is a single thread, each sentence follows. Maybe abrupt \"One crazy\" incomplete but not penalize incomplete final sentence. Could be 4 due abrupt transition? It's just fragment. Coherence 5 maybe. Relevance: completely off topic, unrelated mode. 1. Language: clean English, fragment at end but not penalize incomplete final sentence. 5. Need JSON only.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_21",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Explain how a thermostat keeps a room at a steady temperature.",
+      "sample": "Alyosha found him sitting on his bed in a hospital dressing-gown, rather feverish, with a towel, soaked in vinegar and water, on his head. He looked at Alyosha as he came in with an undefined expression, but there was a shade of something like dread discernible in it. He had",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The passage is a coherent, fluent narrative fragment, but it is unrelated to explaining a thermostat.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 991,
+        "completion_tokens": 285,
+        "total_tokens": 1276,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 239
+        }
+      },
+      "latency_s": 5.04,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The passage is a coherent, fluent narrative fragment, but it is unrelated to explaining a thermostat.\"}",
+      "judge_reasoning": "We need answer user's request. Need score sample against prompt. Need output JSON only. Need analyze coherence, relevance, language. Prompt: Explain how a thermostat keeps a room at a steady temperature. Text: \"Alyosha found him sitting on his bed in a hospital dressing-gown, rather feverish, with a towel, soaked in vinegar and water, on his head. He looked at Alyosha as he came in with an undefined expression, but there was a shade of something like dread discernible in it. He had\"\n\nThis is a fragment from Dostoevsky? It is narrative, not explanation of thermostat. Relevance: ignores prompt, unrelated topic/mode. Coherence: It holds a narrative scene? It is incomplete final sentence, do not penalize. It has one line of thought: Alyosha finds him, he looks. Coherence likely 5? It is coherent narrative fragment. Language: clean idiomatic English, maybe \"with a towel, soaked in vinegar and water, on his head\" comma odd but acceptable. Language 5. Relevance 1. Need JSON only. Ensure integers. Reason short.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_22",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Describe how a ship stays afloat even though it is heavy.",
+      "sample": "They sat side by side, both mournful and dejected, as though they had been cast up by the tempest alone on some deserted shore. He looked at Sonia and felt how great was her love for him, and strange to say he felt it suddenly burdensome and painful to be so loved. Yes, it was a",
+      "coherence": 5,
+      "relevance": 2,
+      "language": 5,
+      "reason": "The passage is coherent and fluent, but it is a narrative fragment about love and mourning, not an explanation of buoyancy, with only incidental nautical imagery.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 991,
+        "completion_tokens": 267,
+        "total_tokens": 1258,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 208
+        }
+      },
+      "latency_s": 6.19,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 2, \"language\": 5, \"reason\": \"The passage is coherent and fluent, but it is a narrative fragment about love and mourning, not an explanation of buoyancy, with only incidental nautical imagery.\"}",
+      "judge_reasoning": "We need answer user's request. Need score sample against prompt. Need output JSON only. Need analyze coherence, relevance, language. Prompt: Describe how a ship stays afloat even though it is heavy. Text: literary excerpt about Sonia, love, tempest, deserted shore. It's not about ship staying afloat except tempest/shore maybe nautical imagery. Relevance: mostly off topic/wrong mode; only word tempest/shore connects? It's narrative fiction, not explanatory. Could be relevance 2? It has tempest, shore, cast up, but not ship afloat. Maybe 2. Coherence: It holds a line of thought? They sat mournful, he looked at Sonia, felt love burdensome. It's coherent narrative fragment. Ends mid-sentence \"Yes, it was a\" incomplete final sentence not penalized. Coherence 5? Single thread, no contradiction. Language: clean idiomatic English. 5. Need JSON only. Ensure integers. Reason short.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_23",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "How does a vaccine prepare the immune system?",
+      "sample": "Alyosha raised his downcast eyes and again flushed, and again smiled without knowing why. But the elder was no longer watching him. He had begun talking to a monk who, as mentioned before, had been awaiting his entrance by Lise’s chair. He was evidently a monk of the humblest,",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The passage is a coherent narrative excerpt but is entirely unrelated to the prompt about vaccines and the immune system.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 984,
+        "completion_tokens": 343,
+        "total_tokens": 1327,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 295
+        }
+      },
+      "latency_s": 6.68,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The passage is a coherent narrative excerpt but is entirely unrelated to the prompt about vaccines and the immune system.\"}",
+      "judge_reasoning": "We need answer user's request. Need score sample against prompt. Need output JSON only. Need analyze coherence, relevance, language. Prompt: \"How does a vaccine prepare the immune system?\" Text: \"Alyosha raised his downcast eyes and again flushed, and again smiled without knowing why. But the elder was no longer watching him. He had begun talking to a monk who, as mentioned before, had been awaiting his entrance by Lise’s chair. He was evidently a monk of the humblest,\"\n\nThis is unrelated narrative excerpt, likely from Brothers Karamazov. Relevance: ignores prompt, unrelated topic/mode. Score 1. Coherence: It holds a narrative line? It describes Alyosha, elder talking to monk. It is coherent enough? It is a fragment, incomplete final sentence. It has one line of thought? It's narrative, sentences connect. Coherence maybe 4 or 5? It is a recognizable narrative, no contradictions. But abrupt? \"He was evidently a monk of the humblest,\" incomplete. Do not penalize incomplete final sentence. It is coherent. Maybe 5? Each sentence follows previous? Alyosha raised eyes, elder no longer watching, began talking to monk, monk awaiting entrance, evidently monk of humblest. It's coherent. Language: clean idiomatic English, except incomplete final sentence not penalized. 5. Need JSON only. Ensure no extra.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_24",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Explain why ice floats on water.",
+      "sample": "He moved to one side to make way for the priest and server, who were coming up the stairs. They had come for the requiem service. By Svidrigaïlov’s orders it was sung twice a day punctually. Svidrigaïlov went his way. Raskolnikov stood still a moment, thought, and followed",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The passage is a coherent narrative fragment in fluent English, but it is entirely unrelated to explaining why ice floats on water.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 991,
+        "completion_tokens": 227,
+        "total_tokens": 1218,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 176
+        }
+      },
+      "latency_s": 4.74,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The passage is a coherent narrative fragment in fluent English, but it is entirely unrelated to explaining why ice floats on water.\"}",
+      "judge_reasoning": "We need answer user's request. Need produce JSON only. Need score sample against prompt. Prompt: Explain why ice floats on water. Text: excerpt from Dostoevsky? It is narrative about priest, server, requiem, Svidrigaïlov, Raskolnikov. Completely unrelated to ice floats. Coherence: text holds one line of thought? It's a narrative fragment, coherent enough: moved aside, priest/server coming, requiem, orders, Svidrigaïlov went, Raskolnikov followed. It's a single scene, no contradictions. Coherence 5? It is incomplete final sentence but don't penalize. Relevance: ignores prompt, unrelated topic/mode. 1. Language: clean English, maybe proper names, punctuation. 5. Need JSON only. Ensure integers. Reason short.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    }
+  ]
+}

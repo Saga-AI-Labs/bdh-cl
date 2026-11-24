@@ -183,6 +183,8 @@ def main():
     ap.add_argument("--margin", type=float, default=0.5)
     ap.add_argument("--date", default=datetime.date.today().isoformat(),
                     help="date recorded in the candidate JSON")
+    ap.add_argument("--status", default="CANDIDATE",
+                    help="status recorded in the candidate JSON")
     ap.add_argument("--format-ids", default=",".join(FORMAT_IDS))
     args = ap.parse_args()
 
@@ -274,12 +276,12 @@ def main():
                 vals = [m[rid].get(dim) for m in smaps]
                 if all(isinstance(v, int) for v in vals):
                     by_variant[lab][dim].append(min(vals))
-        for lab, dims in by_variant.items():
+        for lab, dims in sorted(by_variant.items()):
             scale[lab] = {dim: stats(vals) for dim, vals in dims.items()}
 
     out = {
         "schema": "key2_thresholds",
-        "status": "CANDIDATE",
+        "status": args.status,
         "date": args.date,
         "inputs": {
             "positive": [{"path": p, "sha256": sha256_file(p)} for p in args.positive],

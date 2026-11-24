@@ -1,0 +1,618 @@
+{
+  "schema": "key2_thresholds",
+  "status": "FROZEN",
+  "date": "2026-11-24",
+  "inputs": {
+    "positive": [
+      {
+        "path": "out/key2_calibration/qwen_positive_v2.json",
+        "sha256": "35786cccdeb4605e642be0e5994bd6e559ef58adad292ec3d322489af3d63a2e"
+      },
+      {
+        "path": "out/key2_calibration/gemma_positive_v2.json",
+        "sha256": "1fd10868980680388b41ffe623feae3e0e0f234904eca2a23d2f1205210a5979"
+      }
+    ],
+    "negative": {
+      "coherence": [
+        {
+          "path": "out/key2_calibration/qwen_negative_v2.json",
+          "sha256": "ad0a8c5c55fc6a0c8fefed4edad5587f4a0c1eee3ebadfbcfb688147619847a2"
+        }
+      ],
+      "language": [
+        {
+          "path": "out/key2_calibration/qwen_langbroken_v2.json",
+          "sha256": "2f3b22c7cf7d4cc6e631dbfc42c81a98cd0bc9d5a8ba6cd5acb2fbe170bf630c"
+        },
+        {
+          "path": "out/key2_calibration/gemma_langbroken_v2.json",
+          "sha256": "01aea60f687da9e855a3a77fe466a5ea9b3f7f3b442b3ad6cf94e22bcff1efbc"
+        }
+      ],
+      "relevance": [
+        {
+          "path": "out/key2_calibration/qwen_dissocb_v2.json",
+          "sha256": "bace845bbb51ce2e2f36b3527484ac128ed8bd8b61ccf88d4aedbf04750d42f7"
+        },
+        {
+          "path": "out/key2_calibration/gemma_dissocb_v2.json",
+          "sha256": "b8850102a856b32e93bcc30965c0dc304391e4870a58dab1b3a6993ba1a57a48"
+        }
+      ]
+    },
+    "scale": [
+      {
+        "path": "out/key2_calibration/qwen_scale_v2.json",
+        "sha256": "c2424f383e24ffb128eab5453fa13bf7ada0132974162d25310aed7b1fe2bff4"
+      },
+      {
+        "path": "out/key2_calibration/gemma_scale_v2.json",
+        "sha256": "c4e88b3667521c19efcd80302a47666ad41af43890d2aab659c859ecb342ed7e"
+      }
+    ]
+  },
+  "rule": {
+    "consensus": "min of the judges per item and dimension",
+    "F_d": "negative max + 1 when positive min > negative max; null on overlap",
+    "F_d_strict": "positive min only, when positive min > negative max",
+    "M_d": "positive mean - margin; margin 0.5 default",
+    "margin": 0.5
+  },
+  "bands": {
+    "coherence": {
+      "positive": {
+        "n": 18,
+        "mean": 5,
+        "min": 5,
+        "max": 5,
+        "p10": 5,
+        "median": 5.0
+      },
+      "negative": {
+        "n": 133,
+        "mean": 1,
+        "min": 1,
+        "max": 1,
+        "p10": 1,
+        "median": 1
+      },
+      "gap_min_minus_max": 4,
+      "F_d_candidate": 2,
+      "F_d_strict": 5,
+      "M_d_candidate": 4.5,
+      "M_d_by_margin": {
+        "0.3": 4.7,
+        "0.5": 4.5,
+        "0.7": 4.3
+      },
+      "overlap": false
+    },
+    "relevance": {
+      "positive": {
+        "n": 18,
+        "mean": 5,
+        "min": 5,
+        "max": 5,
+        "p10": 5,
+        "median": 5.0
+      },
+      "negative": {
+        "n": 24,
+        "mean": 1,
+        "min": 1,
+        "max": 1,
+        "p10": 1,
+        "median": 1.0
+      },
+      "gap_min_minus_max": 4,
+      "F_d_candidate": 2,
+      "F_d_strict": 5,
+      "M_d_candidate": 4.5,
+      "M_d_by_margin": {
+        "0.3": 4.7,
+        "0.5": 4.5,
+        "0.7": 4.3
+      },
+      "overlap": false
+    },
+    "language": {
+      "positive": {
+        "n": 18,
+        "mean": 4.833,
+        "min": 4,
+        "max": 5,
+        "p10": 4,
+        "median": 5.0
+      },
+      "negative": {
+        "n": 133,
+        "mean": 1.489,
+        "min": 1,
+        "max": 2,
+        "p10": 1,
+        "median": 1
+      },
+      "gap_min_minus_max": 2,
+      "F_d_candidate": 3,
+      "F_d_strict": 4,
+      "M_d_candidate": 4.33,
+      "M_d_by_margin": {
+        "0.3": 4.53,
+        "0.5": 4.33,
+        "0.7": 4.13
+      },
+      "overlap": false
+    }
+  },
+  "sensitivity_excluding_format": {
+    "coherence": {
+      "positive_without_format": {
+        "n": 14,
+        "mean": 5,
+        "min": 5,
+        "max": 5,
+        "p10": 5,
+        "median": 5.0
+      },
+      "F_d_candidate": 2,
+      "F_d_strict": 5,
+      "M_d_candidate": 4.5,
+      "gap_min_minus_max": 4
+    },
+    "relevance": {
+      "positive_without_format": {
+        "n": 14,
+        "mean": 5,
+        "min": 5,
+        "max": 5,
+        "p10": 5,
+        "median": 5.0
+      },
+      "F_d_candidate": 2,
+      "F_d_strict": 5,
+      "M_d_candidate": 4.5,
+      "gap_min_minus_max": 4
+    },
+    "language": {
+      "positive_without_format": {
+        "n": 14,
+        "mean": 4.857,
+        "min": 4,
+        "max": 5,
+        "p10": 4,
+        "median": 5.0
+      },
+      "F_d_candidate": 3,
+      "F_d_strict": 4,
+      "M_d_candidate": 4.36,
+      "gap_min_minus_max": 2
+    }
+  },
+  "scale": {
+    "audience_violation": {
+      "coherence": {
+        "n": 17,
+        "mean": 3.824,
+        "min": 1,
+        "max": 5,
+        "p10": 2,
+        "median": 4
+      },
+      "relevance": {
+        "n": 17,
+        "mean": 4.471,
+        "min": 3,
+        "max": 5,
+        "p10": 4,
+        "median": 5
+      },
+      "language": {
+        "n": 17,
+        "mean": 4.176,
+        "min": 4,
+        "max": 5,
+        "p10": 4,
+        "median": 4
+      }
+    },
+    "bad": {
+      "coherence": {
+        "n": 18,
+        "mean": 4.944,
+        "min": 4,
+        "max": 5,
+        "p10": 5,
+        "median": 5.0
+      },
+      "relevance": {
+        "n": 18,
+        "mean": 4.056,
+        "min": 2,
+        "max": 5,
+        "p10": 2,
+        "median": 5.0
+      },
+      "language": {
+        "n": 18,
+        "mean": 4.833,
+        "min": 4,
+        "max": 5,
+        "p10": 4,
+        "median": 5.0
+      }
+    },
+    "good": {
+      "coherence": {
+        "n": 18,
+        "mean": 5,
+        "min": 5,
+        "max": 5,
+        "p10": 5,
+        "median": 5.0
+      },
+      "relevance": {
+        "n": 18,
+        "mean": 5,
+        "min": 5,
+        "max": 5,
+        "p10": 5,
+        "median": 5.0
+      },
+      "language": {
+        "n": 18,
+        "mean": 4.944,
+        "min": 4,
+        "max": 5,
+        "p10": 5,
+        "median": 5.0
+      }
+    },
+    "long_wrong": {
+      "coherence": {
+        "n": 18,
+        "mean": 3.833,
+        "min": 2,
+        "max": 5,
+        "p10": 3,
+        "median": 4.0
+      },
+      "relevance": {
+        "n": 18,
+        "mean": 4.611,
+        "min": 3,
+        "max": 5,
+        "p10": 4,
+        "median": 5.0
+      },
+      "language": {
+        "n": 18,
+        "mean": 4.667,
+        "min": 4,
+        "max": 5,
+        "p10": 4,
+        "median": 5.0
+      }
+    },
+    "planted_error": {
+      "coherence": {
+        "n": 18,
+        "mean": 3.889,
+        "min": 2,
+        "max": 5,
+        "p10": 3,
+        "median": 4.0
+      },
+      "relevance": {
+        "n": 18,
+        "mean": 4.944,
+        "min": 4,
+        "max": 5,
+        "p10": 5,
+        "median": 5.0
+      },
+      "language": {
+        "n": 18,
+        "mean": 4.667,
+        "min": 4,
+        "max": 5,
+        "p10": 4,
+        "median": 5.0
+      }
+    },
+    "short_correct": {
+      "coherence": {
+        "n": 18,
+        "mean": 5,
+        "min": 5,
+        "max": 5,
+        "p10": 5,
+        "median": 5.0
+      },
+      "relevance": {
+        "n": 18,
+        "mean": 5,
+        "min": 5,
+        "max": 5,
+        "p10": 5,
+        "median": 5.0
+      },
+      "language": {
+        "n": 18,
+        "mean": 4.778,
+        "min": 4,
+        "max": 5,
+        "p10": 4,
+        "median": 5.0
+      }
+    }
+  },
+  "seat_policy": {
+    "coherence": {
+      "mode": "single-seat",
+      "files": [
+        {
+          "path": "out/key2_calibration/qwen_positive_v2.json",
+          "sha256": "35786cccdeb4605e642be0e5994bd6e559ef58adad292ec3d322489af3d63a2e"
+        }
+      ],
+      "deviation": "coherence has one effective seat; registered deviation per docs/notes/2026-11-23_key2-instrument-gate-failure.md"
+    },
+    "relevance": {
+      "mode": "min-of-two"
+    },
+    "language": {
+      "mode": "min-of-two"
+    }
+  },
+  "agreement": {
+    "positive": {
+      "coherence": {
+        "n": 18,
+        "exact_pct": 100.0,
+        "within_1_pct": 100.0
+      },
+      "relevance": {
+        "n": 18,
+        "exact_pct": 100.0,
+        "within_1_pct": 100.0
+      },
+      "language": {
+        "n": 18,
+        "exact_pct": 83.3,
+        "within_1_pct": 100.0
+      }
+    },
+    "negative": {
+      "coherence": {},
+      "language": {
+        "coherence": {
+          "n": 133,
+          "exact_pct": 100.0,
+          "within_1_pct": 100.0
+        },
+        "relevance": {
+          "n": 133,
+          "exact_pct": 97.7,
+          "within_1_pct": 100.0
+        },
+        "language": {
+          "n": 133,
+          "exact_pct": 54.1,
+          "within_1_pct": 97.7
+        }
+      },
+      "relevance": {
+        "coherence": {
+          "n": 24,
+          "exact_pct": 83.3,
+          "within_1_pct": 100.0
+        },
+        "relevance": {
+          "n": 24,
+          "exact_pct": 95.8,
+          "within_1_pct": 100.0
+        },
+        "language": {
+          "n": 24,
+          "exact_pct": 95.8,
+          "within_1_pct": 100.0
+        }
+      }
+    },
+    "scale": {
+      "coherence": {
+        "n": 107,
+        "exact_pct": 69.2,
+        "within_1_pct": 91.6
+      },
+      "relevance": {
+        "n": 107,
+        "exact_pct": 82.2,
+        "within_1_pct": 96.3
+      },
+      "language": {
+        "n": 107,
+        "exact_pct": 69.2,
+        "within_1_pct": 100.0
+      }
+    }
+  },
+  "nulls": {
+    "positive": {
+      "coherence": 0,
+      "relevance": 0,
+      "language": 0
+    },
+    "negative": {
+      "coherence": 0,
+      "relevance": 0,
+      "language": 0
+    }
+  },
+  "null_cap": {
+    "positive": {
+      "threshold_pct": 5.0,
+      "worst_pct": 0.0,
+      "status": "nulls-not-evaluable",
+      "per_judge": [
+        {
+          "path": "out/key2_calibration/qwen_positive_v2.json",
+          "rows": 18,
+          "nulls": {
+            "coherence": 0,
+            "relevance": 0,
+            "language": 0
+          },
+          "null_pct": {
+            "coherence": 0.0,
+            "relevance": 0.0,
+            "language": 0.0
+          }
+        },
+        {
+          "path": "out/key2_calibration/gemma_positive_v2.json",
+          "rows": 18,
+          "nulls": {
+            "coherence": 0,
+            "relevance": 0,
+            "language": 0
+          },
+          "null_pct": {
+            "coherence": 0.0,
+            "relevance": 0.0,
+            "language": 0.0
+          }
+        }
+      ]
+    },
+    "negative": {
+      "coherence": {
+        "threshold_pct": 5.0,
+        "worst_pct": 0.0,
+        "status": "nulls-not-evaluable",
+        "per_judge": [
+          {
+            "path": "out/key2_calibration/qwen_negative_v2.json",
+            "rows": 133,
+            "nulls": {
+              "coherence": 0,
+              "relevance": 0,
+              "language": 0
+            },
+            "null_pct": {
+              "coherence": 0.0,
+              "relevance": 0.0,
+              "language": 0.0
+            }
+          }
+        ]
+      },
+      "language": {
+        "threshold_pct": 5.0,
+        "worst_pct": 0.0,
+        "status": "nulls-not-evaluable",
+        "per_judge": [
+          {
+            "path": "out/key2_calibration/qwen_langbroken_v2.json",
+            "rows": 133,
+            "nulls": {
+              "coherence": 0,
+              "relevance": 0,
+              "language": 0
+            },
+            "null_pct": {
+              "coherence": 0.0,
+              "relevance": 0.0,
+              "language": 0.0
+            }
+          },
+          {
+            "path": "out/key2_calibration/gemma_langbroken_v2.json",
+            "rows": 133,
+            "nulls": {
+              "coherence": 0,
+              "relevance": 0,
+              "language": 0
+            },
+            "null_pct": {
+              "coherence": 0.0,
+              "relevance": 0.0,
+              "language": 0.0
+            }
+          }
+        ]
+      },
+      "relevance": {
+        "threshold_pct": 5.0,
+        "worst_pct": 0.0,
+        "status": "nulls-not-evaluable",
+        "per_judge": [
+          {
+            "path": "out/key2_calibration/qwen_dissocb_v2.json",
+            "rows": 24,
+            "nulls": {
+              "coherence": 0,
+              "relevance": 0,
+              "language": 0
+            },
+            "null_pct": {
+              "coherence": 0.0,
+              "relevance": 0.0,
+              "language": 0.0
+            }
+          },
+          {
+            "path": "out/key2_calibration/gemma_dissocb_v2.json",
+            "rows": 24,
+            "nulls": {
+              "coherence": 0,
+              "relevance": 0,
+              "language": 0
+            },
+            "null_pct": {
+              "coherence": 0.0,
+              "relevance": 0.0,
+              "language": 0.0
+            }
+          }
+        ]
+      }
+    },
+    "scale": {
+      "threshold_pct": 5.0,
+      "worst_pct": 0.9,
+      "status": "nulls-not-evaluable",
+      "per_judge": [
+        {
+          "path": "out/key2_calibration/qwen_scale_v2.json",
+          "rows": 108,
+          "nulls": {
+            "coherence": 1,
+            "relevance": 1,
+            "language": 1
+          },
+          "null_pct": {
+            "coherence": 0.9,
+            "relevance": 0.9,
+            "language": 0.9
+          }
+        },
+        {
+          "path": "out/key2_calibration/gemma_scale_v2.json",
+          "rows": 108,
+          "nulls": {
+            "coherence": 0,
+            "relevance": 0,
+            "language": 0
+          },
+          "null_pct": {
+            "coherence": 0.0,
+            "relevance": 0.0,
+            "language": 0.0
+          }
+        }
+      ]
+    }
+  }
+}

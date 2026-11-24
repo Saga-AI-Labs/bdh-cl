@@ -125,6 +125,23 @@ the same commit is accepted.
 ## 7. What did not change
 
 `F_d` = {coherence 2, relevance 2, language 3}; `M_d` = {4.50, 4.50, 4.33} at
-margin 0.5. The candidate JSON is unchanged and still dated 2026-11-24, sha256
-`0dbe35c1dee8b535b28e635d9ef41b862dfc6066bd70c4c5455aec786c1ce06d`. The note is
-still DRAFT; section 9 is still unsigned.
+margin 0.5. At the time of this response the note was DRAFT, section 9 was
+unsigned, and the candidate JSON was dated 2026-11-24 with sha256
+`0dbe35c1dee8b535b28e635d9ef41b862dfc6066bd70c4c5455aec786c1ce06d`.
+
+## 8. Postscript (2026-11-24, after sign-off)
+
+The operator signed the freeze the same day, with three additions: the `bad`
+coherence value above `M_d` is recorded as intentional, the
+`cert_en09_audience_violation` exception is named in section 4.1, and the human
+read row of the instrument gate records the GPT calibration read in its place.
+
+Consequences for section 7 above: the note is now `FROZEN` and signed; the
+rubric file was flipped to `FROZEN` (file hash `dc510274...b2235bd2`, system
+prompt unchanged at `9edfd92d...42124`); the calibration bytes were force-added
+with `out/key2_calibration/FROZEN_MANIFEST.json`; and the candidate JSON was
+regenerated with `status: FROZEN`, giving sha256
+`c341edb48c5fc446f1bd7f1567797df888ed82d04f032f11c0d7199f29c0d957`. The
+thresholds are numerically identical. Regeneration also sorts the `scale` keys,
+which the previous file did not, so re-running the analyzer now reproduces the
+same bytes.

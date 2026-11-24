@@ -1,0 +1,129 @@
+{
+ "schema": "key2_frozen_manifest",
+ "date": "2026-11-24",
+ "record": "docs/notes/2026-11-24_key2-g0-freeze.md",
+ "note": "Frozen bytes for the key-2 G0 record. Hashes are of the files as committed with this manifest.",
+ "files": [
+  {
+   "path": "data/evals/key2_rubric_v2.json",
+   "sha256": "dc51027426b7c3de9420d23ee4a68326a40b4c6d0c4f8e07f50b12fcb2235bd2",
+   "bytes": 8786
+  },
+  {
+   "path": "data/evals/key2_prompts_v1.json",
+   "sha256": "c1d9c62cafffa8299d860a344318d37f9d91f272870bdc5586d55be0bf12e23c",
+   "bytes": 36603
+  },
+  {
+   "path": "data/evals/key2_dissociation_b.json",
+   "sha256": "f5c6d020de2ebc34cff27ba7ae7d9b2fdb8be3568c3ab15d23266bec5ffdd16a",
+   "bytes": 18433
+  },
+  {
+   "path": "out/key2_calibration/reference_scale.jsonl",
+   "sha256": "1adc7ed43e30821fa3cec726bca3c5bc5ab9265aa25966c873e19930379f4de3",
+   "bytes": 96197
+  },
+  {
+   "path": "out/key2_calibration/reference_positive.jsonl",
+   "sha256": "40d892dff20277c4594fec055f7e99ffaf73828b2da600d61bd2b66032d2b3e5",
+   "bytes": 15711
+  },
+  {
+   "path": "out/key2_calibration/reference_manifest.json",
+   "sha256": "04b304744cb456e13afa92cd34ea54e1c73414424fa35bae38b23b80d4a9c5ce",
+   "bytes": 2462
+  },
+  {
+   "path": "out/key2_calibration/gen_3.62b.jsonl",
+   "sha256": "e763dd3202c618d104b2f41c9657e5ef85e62d59b8ffe74a389e8a0300d1f8e5",
+   "bytes": 171823
+  },
+  {
+   "path": "out/key2_calibration/gen_3.62b.meta.json",
+   "sha256": "11769b62a32b40154c6247cdba2e36e8f4a479083fdeed5d7995e2b13fbe92c7",
+   "bytes": 1041
+  },
+  {
+   "path": "out/key2_calibration/dissociation_b.jsonl",
+   "sha256": "39ce00ef5f88b0c4c8dbbfb76994ac0e7da3f6173b96df6f841d28bd26f92269",
+   "bytes": 13648
+  },
+  {
+   "path": "out/key2_calibration/qwen_scale_v2.json",
+   "sha256": "c2424f383e24ffb128eab5453fa13bf7ada0132974162d25310aed7b1fe2bff4",
+   "bytes": 482692
+  },
+  {
+   "path": "out/key2_calibration/gemma_scale_v2.json",
+   "sha256": "c4e88b3667521c19efcd80302a47666ad41af43890d2aab659c859ecb342ed7e",
+   "bytes": 332359
+  },
+  {
+   "path": "out/key2_calibration/qwen_positive_v2.json",
+   "sha256": "35786cccdeb4605e642be0e5994bd6e559ef58adad292ec3d322489af3d63a2e",
+   "bytes": 49745
+  },
+  {
+   "path": "out/key2_calibration/gemma_positive_v2.json",
+   "sha256": "1fd10868980680388b41ffe623feae3e0e0f234904eca2a23d2f1205210a5979",
+   "bytes": 40633
+  },
+  {
+   "path": "out/key2_calibration/qwen_negative_v2.json",
+   "sha256": "ad0a8c5c55fc6a0c8fefed4edad5587f4a0c1eee3ebadfbcfb688147619847a2",
+   "bytes": 336281
+  },
+  {
+   "path": "out/key2_calibration/gemma_negative_v2.json",
+   "sha256": "deadf585e2d21542a8e067a1a96c150997fcac946ff24dfc131f93beceed170e",
+   "bytes": 434408
+  },
+  {
+   "path": "out/key2_calibration/qwen_dissocb_v2.json",
+   "sha256": "bace845bbb51ce2e2f36b3527484ac128ed8bd8b61ccf88d4aedbf04750d42f7",
+   "bytes": 64413
+  },
+  {
+   "path": "out/key2_calibration/gemma_dissocb_v2.json",
+   "sha256": "b8850102a856b32e93bcc30965c0dc304391e4870a58dab1b3a6993ba1a57a48",
+   "bytes": 47686
+  },
+  {
+   "path": "out/key2_calibration/qwen_langbroken_v2.json",
+   "sha256": "2f3b22c7cf7d4cc6e631dbfc42c81a98cd0bc9d5a8ba6cd5acb2fbe170bf630c",
+   "bytes": 337337
+  },
+  {
+   "path": "out/key2_calibration/gemma_langbroken_v2.json",
+   "sha256": "01aea60f687da9e855a3a77fe466a5ea9b3f7f3b442b3ad6cf94e22bcff1efbc",
+   "bytes": 435585
+  },
+  {
+   "path": "out/key2_calibration/thresholds_candidate_v2.json",
+   "sha256": "c341edb48c5fc446f1bd7f1567797df888ed82d04f032f11c0d7199f29c0d957",
+   "bytes": 13639
+  },
+  {
+   "path": "out/key2_calibration/calibration_read_chatgpt.json",
+   "sha256": "2c770baf40072eb205c4ce36f195b92cc0ac6abea49307488bfb3e3559cf214f",
+   "bytes": 368
+  },
+  {
+   "path": "out/key2_calibration/disagreement_review.md",
+   "sha256": "f00c66221a8189a5f918f12342e134f0540a8f5b501299e6193d1717ecaa623f",
+   "bytes": 11546
+  },
+  {
+   "path": "out/key2_calibration/disagreement_review_key.json",
+   "sha256": "084d7ae46eaabed7b7e53fdbb45ba1b3bb438ab2a13429d7730e1e3a07436f95",
+   "bytes": 3752
+  },
+  {
+   "path": "out/key2_calibration/rubric_v2_system_prompt.diff",
+   "sha256": "da89457865e1a9766e1be147a23e3e993128b411307dc5ca7c7c926ccef2e4fc",
+   "bytes": 3261
+  }
+ ],
+ "total_bytes": 2958409
+}

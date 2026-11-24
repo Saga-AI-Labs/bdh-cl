@@ -1,0 +1,581 @@
+{
+  "meta": {
+    "endpoint": "http://192.168.178.51:8888/v1",
+    "model": "Qwen3.8-Flash-Next",
+    "input": "out/key2_calibration/reference_positive.jsonl",
+    "input_sha256": "40d892dff20277c4594fec055f7e99ffaf73828b2da600d61bd2b66032d2b3e5",
+    "rubric": "data/evals/key2_rubric_v2.json",
+    "rubric_sha256": "2c1b797254ac6fde63434b638a89398e266c6d50bdbbdddf2cdb6266c34f6626",
+    "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124",
+    "temperature": 0.0,
+    "max_tokens": 2048,
+    "retry_tokens": 4096,
+    "endpoint_fingerprint": {
+      "model_list_sha256_16": "2827717bfee8a19d",
+      "model_count": 1
+    },
+    "started_at": "2026-11-24T00:14:47+0100",
+    "finished_at": "2026-11-24T00:16:38+0100",
+    "rows": 18
+  },
+  "rows": [
+    {
+      "id": "cert_pos_cert_en01",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "Why does common law require consideration for a binding contract, while civil-law systems do not?",
+      "sample": "In common law, consideration means a bargained-for exchange: each side must give something of legal value, which historically served as evidence that a promise was serious and made enforcement principled. Civil-law systems bind contracts through agreement",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The passage stays on the prompt's topic, presents a clear line of thought, and uses fluent English despite being incomplete.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 974,
+        "completion_tokens": 247,
+        "total_tokens": 1221,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 196
+        }
+      },
+      "latency_s": 5.24,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The passage stays on the prompt's topic, presents a clear line of thought, and uses fluent English despite being incomplete.\"}",
+      "judge_reasoning": "We need answer user's request. Need produce JSON only. Need score sample. Prompt asks why common law requires consideration while civil-law systems do not. Text: \"In common law, consideration means a bargained-for exchange: each side must give something of legal value, which historically served as evidence that a promise was serious and made enforcement principled. Civil-law systems bind contracts through agreement\" It's incomplete but don't penalize incomplete final sentence. Coherence: one line of thought, explains common law consideration and civil-law agreement. It cuts off but coherent. 5? It has two sentences, second incomplete but still proposition? \"Civil-law systems bind contracts through agreement\" is complete enough? It ends mid-sentence? Actually no period, but grammatical clause. Coherence 5 likely. Relevance: directly on topic, requested mode explanatory. 5. Language: clean English, incomplete final sentence not penalized. 5. Need JSON only.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en02",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "What does the attention mechanism in a language model actually do?",
+      "sample": "Think of a hiring committee handling one open position: the recruiter scans every past candidate on file and decides whose record is most relevant, weighting each applicant's input accordingly. Attention does the same for words – while processing each",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The passage maintains a clear analogy to attention, stays on topic, and is fluent despite the incomplete final sentence.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 967,
+        "completion_tokens": 262,
+        "total_tokens": 1229,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 213
+        }
+      },
+      "latency_s": 5.14,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The passage maintains a clear analogy to attention, stays on topic, and is fluent despite the incomplete final sentence.\"}",
+      "judge_reasoning": "We need answer user's request. Need produce JSON only. Need score sample. Prompt: \"What does the attention mechanism in a language model actually do?\" Text: \"Think of a hiring committee handling one open position: the recruiter scans every past candidate on file and decides whose record is most relevant, weighting each applicant's input accordingly. Attention does the same for words – while processing each\"\n\nNeed evaluate coherence, relevance, language. Sample incomplete final sentence, do not penalize incomplete. It presents analogy: hiring committee scans past candidates, weights relevant. Attention does same for words – while processing each [cut]. Coherence: one line of thought, analogy to attention. Incomplete but okay. Maybe \"while processing each\" abrupt due truncation, not penalize. Coherence 5? It holds one line. Relevance: on topic, requested mode? Prompt asks what does attention do; text uses analogy, relevant. 5. Language: clean idiomatic English, incomplete final sentence not penalized. 5. Need JSON only.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en03",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "What is the KV cache in model serving, and why does it matter for long conversations?",
+      "sample": "When a model reads a conversation, it keeps the intermediate work it did for earlier words instead of recomputing everything for each new word – that memory is the KV cache. It trades memory for speed: the longer the conversation gets, the more cache",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The passage stays on topic, explains the KV cache clearly, and uses fluent English; the incomplete ending is not penalized.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 980,
+        "completion_tokens": 210,
+        "total_tokens": 1190,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 158
+        }
+      },
+      "latency_s": 3.98,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The passage stays on topic, explains the KV cache clearly, and uses fluent English; the incomplete ending is not penalized.\"}",
+      "judge_reasoning": "We need answer user's request. Need produce JSON only. Need score sample. Prompt asks KV cache in model serving and why matters for long conversations. Text: \"When a model reads a conversation, it keeps the intermediate work it did for earlier words instead of recomputing everything for each new word – that memory is the KV cache. It trades memory for speed: the longer the conversation gets, the more cache\" Ends mid-sentence. Need not penalize incomplete final sentence. Coherence: one line, clear. Maybe incomplete but okay. 5? It says longer conversation gets, the more cache [needed]. It's coherent. Relevance: on topic. Language: clean, idiomatic, incomplete final sentence not penalized. 5. Need JSON only.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en04",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "A German supplier and a Chinese buyer have an arbitration clause (a private dispute-settlement forum) in their contract. How would an award actually be enforced?",
+      "sample": "Under a valid clause (for example CIETAC in China or DIS in Germany), a private tribunal hears the case instead of public courts and issues an award. Both countries belong to the New York Convention: an award made in either country can generally be",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The passage stays on the arbitration enforcement topic, follows a clear line of thought, and is fluent despite ending mid-sentence.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 993,
+        "completion_tokens": 233,
+        "total_tokens": 1226,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 181
+        }
+      },
+      "latency_s": 4.76,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The passage stays on the arbitration enforcement topic, follows a clear line of thought, and is fluent despite ending mid-sentence.\"}",
+      "judge_reasoning": "We need answer user's request. Need produce JSON only. Need score sample. Prompt asks how award enforced. Text: \"Under a valid clause (for example CIETAC in China or DIS in Germany), a private tribunal hears the case instead of public courts and issues an award. Both countries belong to the New York Convention: an award made in either country can generally be\" incomplete. Need score coherence, relevance, language. Sample at most 256 bytes? It's short. Incomplete final sentence not penalize. Coherence: one line of thought, explains arbitration and NY Convention. Ends mid-sentence but okay. 5? It has no contradiction, each sentence follows. Maybe incomplete but not penalize. Relevance: on topic, requested mode explanatory. 5. Language: clean English, incomplete final sentence not penalized. 5. Need JSON only.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en05",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "Translate this code comment to English and explain in two sentences what the code does: \"// bewahre den letzten gesetzten Wert je Schlüssel\" (written against a key/value store loop)",
+      "sample": "Translation: \"// keep the last-set value per key\". The code walks a loop and, whenever the same key shows up again, overwrites the earlier entry, so after the loop each key holds only the most recent write. That is deduplication by last occurrence, a",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 4,
+      "reason": "The passage stays on topic, gives a clear translation and explanation, and is mostly fluent, with only a slightly awkward phrase and an incomplete final fragment.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 1003,
+        "completion_tokens": 370,
+        "total_tokens": 1373,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 313
+        }
+      },
+      "latency_s": 7.51,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 5, \"language\": 4, \"reason\": \"The passage stays on topic, gives a clear translation and explanation, and is mostly fluent, with only a slightly awkward phrase and an incomplete final fragment.\"}",
+      "judge_reasoning": "We need answer user's request. Need produce JSON only. Need score sample. Prompt: Translate code comment to English and explain in two sentences what code does. Text: Translation: \"// keep the last-set value per key\". The code walks a loop and, whenever the same key shows up again, overwrites the earlier entry, so after the loop each key holds only the most recent write. That is deduplication by last occurrence, a\n\nSample ends mid-sentence. Do not penalize incomplete final sentence. Need score coherence, relevance, language.\n\nCoherence: It has one line: translation and explanation. Last fragment \"a\" incomplete but not penalize. No contradictions. 5.\n\nRelevance: It translates and explains. Requested two sentences? It has maybe 3? First sentence Translation... Second The code... Third That is... But instruction says do not judge whether sample follows prompt as instruction? Relevance is topic/mode, not answer completeness. It stays on topic. Maybe minor drift? It includes translation and explanation. 5.\n\nLanguage: Mostly clean. Ends mid-sentence but not penalize. \"Translation:\" okay. \"The code walks a loop\" slightly awkward but understandable. \"whenever the same key shows up again\" okay. \"That is deduplication by last occurrence, a\" incomplete. Do not penalize incomplete final sentence. Language 4? Minor awkward phrase \"walks a loop\" maybe not idiomatic but okay. Could be 4. Need JSON only.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en06",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "Our SaaS app is transferring employees' contact data from China to servers abroad. Which legal route do we need, and when does it change?",
+      "sample": "You always need a legal basis (typically user consent or contract necessity) plus one official transfer route: a security assessment by the cyberspace regulator for large-volume or sensitive transfers, a filed standard contract for the ordinary case, or",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The passage stays on the prompt's topic and presents a clear, grammatical line of thought about legal bases and transfer routes; the incomplete ending is not penalized.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 987,
+        "completion_tokens": 267,
+        "total_tokens": 1254,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 207
+        }
+      },
+      "latency_s": 5.65,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The passage stays on the prompt's topic and presents a clear, grammatical line of thought about legal bases and transfer routes; the incomplete ending is not penalized.\"}",
+      "judge_reasoning": "We need answer user's request: score sample against prompt, output only JSON. Need analyze coherence, relevance, language. Sample: \"You always need a legal basis (typically user consent or contract necessity) plus one official transfer route: a security assessment by the cyberspace regulator for large-volume or sensitive transfers, a filed standard contract for the ordinary case, or\"\n\nPrompt asks legal route and when changes. Text is incomplete but not penalize incomplete final sentence. It is on topic: China data transfer legal routes. Coherence: single line, lists routes, no contradiction. Maybe incomplete but okay. Coherence 5? It has one line of thought. Relevance: on topic, requested mode? It answers legal route, but doesn't address when changes due truncation. Relevance is topical/mode, not completeness. It stays on topic. Maybe 5. Language: clean English, though ends with \"or\" incomplete. Do not penalize incomplete final sentence. 5. Need JSON only.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en07",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "We ship a SaaS rollout to Chinese customers this quarter. How should we treat the Chinese public holidays in planning?",
+      "sample": "China's spring festival follows the lunisolar calendar — it lands late January to late February, and the public holiday block plus shifted workdays creates roughly a week of nationwide standstill; October's golden week behaves the same way. Freeze any",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 4,
+      "reason": "The passage stays on topic and presents a coherent line about Chinese holiday planning, with only minor capitalization and phrasing issues.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 983,
+        "completion_tokens": 487,
+        "total_tokens": 1470,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 435
+        }
+      },
+      "latency_s": 9.81,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 5, \"language\": 4, \"reason\": \"The passage stays on topic and presents a coherent line about Chinese holiday planning, with only minor capitalization and phrasing issues.\"}",
+      "judge_reasoning": "We need answer user's request: score sample against prompt. Need output JSON only. Need analyze coherence, relevance, language. Prompt: SaaS rollout to Chinese customers this quarter. How should we treat Chinese public holidays in planning? Text: \"China's spring festival follows the lunisolar calendar — it lands late January to late February, and the public holiday block plus shifted workdays creates roughly a week of nationwide standstill; October's golden week behaves the same way. Freeze any\"\n\nSample ends mid-sentence. Do not penalize incomplete final sentence. Need score only coherence, relevance, language. Coherence: one line of thought about Chinese holidays and planning. It says Spring Festival follows lunisolar calendar, lands late Jan to late Feb, holiday block plus shifted workdays creates roughly a week of nationwide standstill; October's Golden Week behaves same way. Freeze any... incomplete. No contradiction. Coherence 5? It holds one line. Maybe \"behaves the same way\" slightly vague but coherent. 5.\nRelevance: on topic Chinese public holidays in planning. It mentions freeze any (likely freeze deployments). On topic. 5.\nLanguage: clean idiomatic English. \"China's spring festival\" should capitalize Spring Festival? Minor capitalization? \"spring festival\" lower-case maybe minor. \"October's golden week\" should Golden Week. But language mostly clean. Could be 4 due to capitalization? Language is grammaticality and fluency; capitalization minor. It says clean idiomatic English; morphology syntax correct. Maybe 5. But \"spring festival\" and \"golden week\" not proper nouns capitalized, but not grammar? Could be minor. Use 4? Need decide. The sample is short, mostly clean. \"China's spring festival follows the lunisolar calendar — it lands late January to late February\" idiomatic? \"lands late January\" maybe should \"lands in late January\". \"October's golden week behaves the same way\" okay. Minor awkward. Language 4. Coherence 5, relevance 5. Reason short.\nNeed JSON only. Ensure integers.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en08",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "We want to buy shares in a German GmbH from a US holding. What does the transfer formality look like?",
+      "sample": "German law requires the transfer of a GmbH share — and the clause obliging the seller to hand it over — to be signed before a German notary (§ 15 Abs. 3 GmbHG). A German notary is a public official who verifies each party's identity and authority,",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The passage stays on the prompt's topic, presents a clear and consistent line of thought about notarization requirements, and is fluent, grammatical English.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 993,
+        "completion_tokens": 261,
+        "total_tokens": 1254,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 204
+        }
+      },
+      "latency_s": 4.6,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The passage stays on the prompt's topic, presents a clear and consistent line of thought about notarization requirements, and is fluent, grammatical English.\"}",
+      "judge_reasoning": "We need answer user's request: score sample against prompt. Need output JSON only. Need analyze coherence, relevance, language. Prompt: \"We want to buy shares in a German GmbH from a US holding. What does the transfer formality look like?\" Text: \"German law requires the transfer of a GmbH share — and the clause obliging the seller to hand it over — to be signed before a German notary (§ 15 Abs. 3 GmbHG). A German notary is a public official who verifies each party's identity and authority,\"\n\nSample incomplete but don't penalize incomplete final sentence. It is on topic: transfer formality for GmbH shares, notarization. Coherence: single line, no contradiction. Maybe abrupt? It states requirement and explains notary. 5. Relevance: stays on topic, requested mode? It answers formality. 5. Language: clean idiomatic English, legal terms, em dash, correct. 5. Need JSON only.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en09",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "Why does the Goethe C1 exam feel predictably harder for Chinese learners than for German native speakers?",
+      "sample": "Reason one is listening decoding: German is stress-timed, its unstressed endings are reduced and words link across sound boundaries, while Mandarin moves in roughly equal, tone-bearing syllables — so spoken German resists clean word-by-word",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The fragment presents a clear, relevant explanation in fluent English; the incomplete ending is not penalized.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 979,
+        "completion_tokens": 582,
+        "total_tokens": 1561,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 535
+        }
+      },
+      "latency_s": 11.78,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The fragment presents a clear, relevant explanation in fluent English; the incomplete ending is not penalized.\"}",
+      "judge_reasoning": "We need answer user's request. Need produce JSON only. Need score sample against prompt. Need analyze coherence, relevance, language.\n\nPrompt: \"Why does the Goethe C1 exam feel predictably harder for Chinese learners than for German native speakers?\"\n\nText: \"Reason one is listening decoding: German is stress-timed, its unstressed endings are reduced and words link across sound boundaries, while Mandarin moves in roughly equal, tone-bearing syllables — so spoken German resists clean word-by-word\"\n\nSample ends mid-sentence; do not penalize incomplete final sentence. Need score only coherence, relevance, language.\n\nCoherence: It presents one line: reason one listening decoding, explains stress-timed German vs Mandarin syllables, consequence. Incomplete but not penalized. No contradictions. Probably 5? It is a fragment but coherent. \"resists clean word-by-word\" incomplete but recoverable? It says spoken German resists clean word-by-word [segmentation?]. Since incomplete final sentence not penalized. Coherence 5 maybe.\n\nRelevance: Directly addresses why harder for Chinese learners than German native speakers? It mentions Chinese/Mandarin and German listening decoding. It doesn't explicitly mention Goethe C1 or native speakers, but prompt topic is why exam feels harder for Chinese learners than German native speakers. It gives a reason relevant to Chinese learners. Mode explanatory. Could be 4 or 5. It stays on topic, but maybe not explicitly native speakers or exam. Relevance is topical and mode consistency, not whether answers prompt. It is on prompt's topic. Maybe 5? It doesn't mention exam but reason for difficulty. \"predictably harder\" maybe not addressed. But substantial connection. I'd say 4 due minor drift? It doesn't mention Goethe C1 or native speakers, but still on topic. The prompt asks why exam feels harder; text gives one reason. It is on topic. Maybe 5. Need be careful: Relevance 5 = stays on prompt's topic and requested mode throughout; no drift. It is explanatory, about Chinese learners vs German. It doesn't mention native speakers but comparison implicit? \"while Mandarin...\" It doesn't explicitly compare to native speakers, but Chinese learners. It's relevant. I'd give 5.\n\nLanguage: Mostly clean, idiomatic. Ends mid-sentence but not penalize. \"resists clean word-by-word\" incomplete but not penalize. Maybe \"word-by-word\" as adjective missing noun, but incomplete. No errors. 5.\n\nNeed JSON only. reason short. Ensure integers.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en10",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "Should our Chinese sales team keep using WeChat groups, or move German counterparties to email?",
+      "sample": "Keep both channels, but make email the record of record.\n- Use WeChat for quick coordination and relationship maintenance; German counterparties rarely expect contract decisions there.\n- Move anything consequential (pricing, clauses, delivery dates) to",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The passage stays on the prompt, gives a clear consistent recommendation, and is fluent despite ending mid-sentence.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 978,
+        "completion_tokens": 247,
+        "total_tokens": 1225,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 198
+        }
+      },
+      "latency_s": 4.62,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The passage stays on the prompt, gives a clear consistent recommendation, and is fluent despite ending mid-sentence.\"}",
+      "judge_reasoning": "We need answer user's request. Need produce JSON only. Need score sample. Prompt: \"Should our Chinese sales team keep using WeChat groups, or move German counterparties to email?\" Text: \"Keep both channels, but make email the record of record.\n- Use WeChat for quick coordination and relationship maintenance; German counterparties rarely expect contract decisions there.\n- Move anything consequential (pricing, clauses, delivery dates) to\"\nSample ends mid-sentence; do not penalize incomplete final sentence. Need score coherence, relevance, language.\nCoherence: clear line: keep both, email record, WeChat quick, move consequential to [email]. Incomplete but recoverable. 5? It has one line. Maybe abrupt due incomplete but not penalize. 5.\nRelevance: directly on prompt, mode advice. 5.\nLanguage: clean English, incomplete final sentence not penalized. 5.\nNeed JSON only.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en11",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "I have worked for my employer for 14 months and I have just been dismissed. Can I bring a claim for unfair dismissal?",
+      "sample": "Almost certainly not: to bring an ordinary unfair dismissal claim you normally need at least two years of continuous service (s. 108 Employment Rights Act 1996). Your 14 months fall short of that qualifying period, so the tribunal has no jurisdiction over",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The passage stays on the legal question, presents a single coherent line of thought, and is fluent English despite ending mid-sentence.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 995,
+        "completion_tokens": 227,
+        "total_tokens": 1222,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 174
+        }
+      },
+      "latency_s": 4.15,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The passage stays on the legal question, presents a single coherent line of thought, and is fluent English despite ending mid-sentence.\"}",
+      "judge_reasoning": "We need answer user's request. Need produce JSON only. Need score sample against prompt. Need analyze coherence, relevance, language. Prompt asks legal question: worked 14 months dismissed, can bring unfair dismissal claim? Text: \"Almost certainly not: to bring an ordinary unfair dismissal claim you normally need at least two years of continuous service (s. 108 Employment Rights Act 1996). Your 14 months fall short of that qualifying period, so the tribunal has no jurisdiction over\" It ends mid-sentence. Do not penalize incomplete final sentence. Coherence: single line, no contradiction. Maybe incomplete but okay. 5. Relevance: directly on topic, mode answer. 5. Language: clean English, incomplete final sentence not penalized. 5. Need JSON only. Ensure no extra text.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en12",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "I bought a laptop online and it developed a fault on day 21. What can I do?",
+      "sample": "You can reject the laptop for a full refund under the short-term right: a fault appearing within 30 days entitles you to reject the goods for a full refund (s. 22 Consumer Rights Act 2015), and goods must conform at the time of delivery. Within the first",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The passage stays on the prompt's topic, presents a single coherent line of thought, and is fluent English despite ending mid-sentence.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 995,
+        "completion_tokens": 239,
+        "total_tokens": 1234,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 185
+        }
+      },
+      "latency_s": 4.49,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The passage stays on the prompt's topic, presents a single coherent line of thought, and is fluent English despite ending mid-sentence.\"}",
+      "judge_reasoning": "We need answer user's request: score sample against prompt. Need output only JSON. Need analyze coherence, relevance, language. Sample: \"You can reject the laptop for a full refund under the short-term right: a fault appearing within 30 days entitles you to reject the goods for a full refund (s. 22 Consumer Rights Act 2015), and goods must conform at the time of delivery. Within the first\"\n\nPrompt asks laptop online fault day 21 what can I do. Text is legal advice, relevant. Coherence: one line of thought, incomplete final sentence but don't penalize. It says fault within 30 days entitles reject full refund, goods must conform at delivery. No contradiction. Coherence 5. Relevance 5. Language: clean English, incomplete final phrase but not penalize. 5. Need JSON only.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en13",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "My landlord took my £1,200 deposit nine weeks ago and has not sent me anything about where it is being held. Is that a problem for him?",
+      "sample": "Yes: an assured shorthold tenancy deposit must be protected in a government-approved tenancy deposit scheme and the prescribed information given to you within 30 days of receiving it (Housing Act 2004, ss. 212–215). Nine weeks is already past that",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The passage stays on the prompt's topic, gives a coherent legal point, and is fluent English despite the incomplete ending.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 1009,
+        "completion_tokens": 300,
+        "total_tokens": 1309,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 249
+        }
+      },
+      "latency_s": 6.09,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The passage stays on the prompt's topic, gives a coherent legal point, and is fluent English despite the incomplete ending.\"}",
+      "judge_reasoning": "We need answer user's request. Need produce JSON only. Need score sample against prompt. Need analyze coherence, relevance, language. Prompt asks landlord took £1,200 deposit nine weeks ago and hasn't sent info where held. Is that a problem for him? Text: \"Yes: an assured shorthold tenancy deposit must be protected in a government-approved tenancy deposit scheme and the prescribed information given to you within 30 days of receiving it (Housing Act 2004, ss. 212–215). Nine weeks is already past that\" It may end mid-sentence? It ends \"past that\" maybe incomplete? It says do not penalize incomplete final sentence. Coherence: single line, yes. Relevance: on topic, legal answer. Language: mostly clean, maybe missing period, but not penalize incomplete? It is grammatical enough. Score 5,5,5? Need consider \"Nine weeks is already past that\" maybe awkward but understandable. Could be language 4 due to abrupt/incomplete? But instruction: do not penalize incomplete final sentence. It is not broken morphosyntax. Maybe 5. Need JSON only.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en14",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "I emailed my former employer a month ago asking for a copy of every email they hold about me. They have not responded. What does the law say about their timescale?",
+      "sample": "A data subject access request must be answered within one month of receipt; that response deadline is set by Article 12(3) UK GDPR. The one-month clock runs from receipt and does not move on its own. Where the request is complex or voluminous, the",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The passage stays on the legal timescale for a data subject access request, presents a consistent line of thought, and is fluent English despite ending mid-sentence.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 1002,
+        "completion_tokens": 229,
+        "total_tokens": 1231,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 170
+        }
+      },
+      "latency_s": 4.33,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The passage stays on the legal timescale for a data subject access request, presents a consistent line of thought, and is fluent English despite ending mid-sentence.\"}",
+      "judge_reasoning": "We need answer user's request: score sample against prompt. Need output JSON only. Need analyze coherence, relevance, language. Prompt asks law timescale for employer response to email copy request (DSAR). Text: \"A data subject access request must be answered within one month of receipt; that response deadline is set by Article 12(3) UK GDPR. The one-month clock runs from receipt and does not move on its own. Where the request is complex or voluminous, the\" ends mid-sentence. Do not penalize incomplete final sentence. Coherence: single thread about DSAR deadline, no contradiction. Incomplete but okay. 5. Relevance: on topic law timescale, mode explanatory. 5. Language: clean English, incomplete final sentence not penalized. 5. Need JSON only.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en15",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "I offered to sell my car for £8,000; the buyer replied that she would pay £7,500, and I did not respond. She now says she \"accepted\" the £8,000 price. Has a contract formed?",
+      "sample": "No: a counter-offer, meaning a reply that proposes different terms, destroys the original offer, so it can no longer be accepted (Hyde v Wrench (1840) 3 Beav 334). Her reply of £7,500 was a counter-offer; your silence in the face of it is not an",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The passage stays on the contract-formation issue, presents a single coherent legal line, and is fluent English despite ending mid-sentence.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 1040,
+        "completion_tokens": 307,
+        "total_tokens": 1347,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 253
+        }
+      },
+      "latency_s": 5.22,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The passage stays on the contract-formation issue, presents a single coherent legal line, and is fluent English despite ending mid-sentence.\"}",
+      "judge_reasoning": "We need answer user's request. Need produce JSON only. Need score sample against prompt. Need analyze coherence, relevance, language. Sample: \"No: a counter-offer, meaning a reply that proposes different terms, destroys the original offer, so it can no longer be accepted (Hyde v Wrench (1840) 3 Beav 334). Her reply of £7,500 was a counter-offer; your silence in the face of it is not an\"\nIt ends mid-sentence. Do not penalize incomplete final sentence. It is coherent: states no, counter-offer destroys original offer, cannot be accepted, her reply was counter-offer, silence not an [acceptance]. One line. Relevance: directly on prompt legal contract formation. Language: mostly clean, incomplete final sentence not penalized. Maybe \"your silence in the face of it is not an\" incomplete but not penalize. Score 5,5,5? Need consider if incomplete final sentence could be language? instruction says do not penalize incomplete final sentence. So language 5. Coherence 5. Relevance 5. Reason short.\nNeed final JSON only. Ensure no extra text.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en16",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "One of our directors wants to sell office supplies to the company through her side business. What must she do about her interest under the Companies Act 2006?",
+      "sample": "- Before the company enters into the planned transaction with her side business, she must declare the nature and extent of her interest to the board (s. 177(1) Companies Act 2006).\n- The declaration must be made at the first opportunity; for interests in",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The sample stays on the prompt's topic in a clear bullet-list mode, presents a coherent line of thought, and uses clean English; the final fragment is not penalized.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 1006,
+        "completion_tokens": 329,
+        "total_tokens": 1335,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 267
+        }
+      },
+      "latency_s": 6.5,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The sample stays on the prompt's topic in a clear bullet-list mode, presents a coherent line of thought, and uses clean English; the final fragment is not penalized.\"}",
+      "judge_reasoning": "We need answer user's request. Need produce JSON only. Need score sample against prompt. Need analyze coherence, relevance, language. Sample:\n\"- Before the company enters into the planned transaction with her side business, she must declare the nature and extent of her interest to the board (s. 177(1) Companies Act 2006).\n- The declaration must be made at the first opportunity; for interests in\"\nIt ends mid-sentence. Do not penalize incomplete final sentence. It is on topic: director's interest under Companies Act 2006, mode likely bullet list. Coherence: one line of thought, first bullet complete, second starts but incomplete. No contradiction. Maybe coherence 5? It has a recognizable single thread. Incomplete final sentence not penalized. Relevance 5. Language: first sentence clean. Second fragment due truncation; not penalize incomplete final sentence? It says do not penalize incomplete final sentence. But language? It is grammatical up to cut? \"The declaration must be made at the first opportunity; for interests in\" is incomplete, but not penalize. Could be language 5? Maybe minor? Since incomplete final sentence not penalized. It is clean English. So 5. Need JSON only.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en17",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "I have worked for the same employer for six years and they intend to dismiss me, giving one month of notice. Is that the notice the law requires?",
+      "sample": "Probably not: after two years of continuous employment the statutory minimum notice is one week per complete year of service, up to a maximum of twelve weeks (s. 86 Employment Rights Act 1996). With six years of service you are owed at least six weeks'",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 4,
+      "reason": "The passage stays on the legal notice topic and follows one clear line of thought; it is mostly fluent, with only a minor truncation/possessive issue at the end.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 1000,
+        "completion_tokens": 400,
+        "total_tokens": 1400,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 337
+        }
+      },
+      "latency_s": 8.36,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 5, \"language\": 4, \"reason\": \"The passage stays on the legal notice topic and follows one clear line of thought; it is mostly fluent, with only a minor truncation/possessive issue at the end.\"}",
+      "judge_reasoning": "We need answer user's request. Need produce JSON only. Need score sample. Prompt asks legal notice. Text: \"Probably not: after two years of continuous employment the statutory minimum notice is one week per complete year of service, up to a maximum of twelve weeks (s. 86 Employment Rights Act 1996). With six years of service you are owed at least six weeks'\" It ends mid-sentence? It has apostrophe maybe missing notice. Need score coherence, relevance, language. Coherence: single line, no contradiction. 5. Relevance: on topic legal notice. 5. Language: mostly clean, ends incomplete? \"six weeks'\" missing word maybe due truncation. Do not penalize incomplete final sentence. But apostrophe? \"six weeks'\" maybe possessive? Could be minor. Language 4 or 5? It says do not penalize incomplete final sentence. The text is grammatical except missing noun after weeks? It ends with weeks' maybe could be \"weeks' notice\" truncated. Since incomplete final sentence not penalized. But \"six weeks'\" with apostrophe maybe awkward. I'd give 4? Need calibration. It is clean idiomatic except truncation. Maybe language 5? The final apostrophe is a decoding artifact? It says no decoding artifacts. But incomplete final sentence allowed. \"six weeks'\" is not a complete phrase but if truncated from \"six weeks' notice\" it's okay. However as given, it ends with possessive marker without noun, which is a minor error/artifact. Language 4. Coherence 5, relevance 5. JSON only.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "cert_pos_cert_en18",
+      "dataset": "reference_positive.jsonl",
+      "family": null,
+      "gate": null,
+      "label": "good",
+      "prompt": "An online commentary column published a piece damaging my professional reputation three years ago. Can I still sue for defamation in England and Wales?",
+      "sample": "Almost certainly not, because defamation claims are subject to a one-year limitation period (s. 4A Limitation Act 1980). The clock generally began running when the article was first published, not when you later discovered it. The court can disapply the",
+      "coherence": 5,
+      "relevance": 5,
+      "language": 5,
+      "reason": "The passage stays on the legal topic, presents a single coherent line of thought, and is fluent English; the incomplete final sentence is not penalized.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 993,
+        "completion_tokens": 441,
+        "total_tokens": 1434,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 384
+        }
+      },
+      "latency_s": 9.45,
+      "judge_content": "{\"coherence\": 5, \"relevance\": 5, \"language\": 5, \"reason\": \"The passage stays on the legal topic, presents a single coherent line of thought, and is fluent English; the incomplete final sentence is not penalized.\"}",
+      "judge_reasoning": "We need answer user's request. Need produce JSON only. Need score sample against prompt. Need analyze coherence, relevance, language. Sample: \"Almost certainly not, because defamation claims are subject to a one-year limitation period (s. 4A Limitation Act 1980). The clock generally began running when the article was first published, not when you later discovered it. The court can disapply the\"\n\nPrompt asks legal question: can still sue for defamation in England and Wales after 3 years. Text is legal commentary, relevant. Coherence: one line of thought, incomplete final sentence but don't penalize. It says almost certainly not due one-year limitation, clock began when published not discovered, court can disapply the... incomplete. No contradiction? It says almost certainly not, but court can disapply limitation? That could be a slight tension: if court can disapply, maybe not almost certainly not. But incomplete. Is that a contradiction? It asserts almost certainly not, then says court can disapply the [limitation period]. That could undermine main proposition but not necessarily contradiction because disapplication is exceptional. Coherence likely 4 or 5. It holds one line mostly. The abrupt incomplete sentence not penalized. Maybe minor digression? It's coherent. Relevance: on topic, mode legal answer. Language: clean English, incomplete final sentence not penalized. Score 5? Need consider \"The court can disapply the\" incomplete, but instruction says do not penalize incomplete final sentence. Language clean. Coherence: if incomplete, can't judge final proposition. It has one line. Maybe 5. But \"almost certainly not\" and \"court can disapply\" could be a contradiction? It doesn't assert court will disapply. It says can, which is consistent with almost certainly not. So 5. Need JSON only.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    }
+  ]
+}

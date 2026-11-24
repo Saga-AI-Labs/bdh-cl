@@ -1,0 +1,695 @@
+{
+  "meta": {
+    "endpoint": "http://192.168.178.200:1234/v1",
+    "model": "gemma-4-31b-it",
+    "input": "out/key2_calibration/dissociation_b.jsonl",
+    "input_sha256": "39ce00ef5f88b0c4c8dbbfb76994ac0e7da3f6173b96df6f841d28bd26f92269",
+    "rubric": "data/evals/key2_rubric_v2.json",
+    "rubric_sha256": "2c1b797254ac6fde63434b638a89398e266c6d50bdbbdddf2cdb6266c34f6626",
+    "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124",
+    "temperature": 0.0,
+    "max_tokens": 2048,
+    "retry_tokens": 4096,
+    "endpoint_fingerprint": {
+      "model_list_sha256_16": "85c12327fcf7b0c0",
+      "model_count": 60
+    },
+    "started_at": "2026-11-24T04:48:48+0100",
+    "finished_at": "2026-11-24T05:00:46+0100",
+    "rows": 24
+  },
+  "rows": [
+    {
+      "id": "k2_dissocb_01",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Explain how a router forwards a packet between two subnets.",
+      "sample": "Father Zossima raised his hand to bless him. Alyosha could make no protest, though he had a great longing to remain. He longed, moreover, to ask the significance of his bowing to Dmitri, the question was on the tip of his tongue, but he dared not ask it. He knew that the elder",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The text is a coherent narrative excerpt with perfect grammar, but it completely ignores the prompt about network routing.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 937,
+        "completion_tokens": 182,
+        "total_tokens": 1119,
+        "completion_tokens_details": {
+          "reasoning_tokens": 126
+        }
+      },
+      "latency_s": 28.95,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The text is a coherent narrative excerpt with perfect grammar, but it completely ignores the prompt about network routing.\"}\n```",
+      "judge_reasoning": "The prompt asks for an explanation of how a router forwards a packet between two subnets (technical networking topic).\nThe text is a narrative excerpt about Father Zossima and Alyosha (literary fiction, likely from *The Brothers Karamazov*).\n\nCoherence: The text is a coherent narrative. It follows a single line of thought regarding the interaction between characters. Score: 5.\nRelevance: The text completely ignores the prompt. It discusses religious/familial interactions instead of networking. Score: 1.\nLanguage: The English is clean, grammatical, and fluent. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_02",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Describe the steps to bake bread from scratch.",
+      "sample": "Alyosha sat down to the table and began to tell his story, but at the first words he lost his embarrassment and gained the whole of Lise’s attention as well. He spoke with deep feeling, under the influence of the strong impression he had just received, and he succeeded in",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The text is grammatically perfect and coherent as a narrative snippet, but it completely ignores the prompt's request for bread-baking instructions.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 928,
+        "completion_tokens": 187,
+        "total_tokens": 1115,
+        "completion_tokens_details": {
+          "reasoning_tokens": 123
+        }
+      },
+      "latency_s": 29.69,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The text is grammatically perfect and coherent as a narrative snippet, but it completely ignores the prompt's request for bread-baking instructions.\"}\n```",
+      "judge_reasoning": "The prompt asks for a description of the steps to bake bread from scratch.\nThe text is a narrative snippet about characters named Alyosha and Lise, describing Alyosha telling a story.\n\nCoherence: The text is a coherent piece of narrative prose. It follows one line of thought (Alyosha starting to tell his story). Score: 5.\nRelevance: The text completely ignores the prompt's request for bread-baking steps. It is about characters in a story. Score: 1.\nLanguage: The English is clean, grammatical, and fluent. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_03",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "What causes the seasons to change through the year?",
+      "sample": "Mitya at once began talking to him, too, of his plans, nervously and excitedly asking advice in regard to Lyagavy, and talking all the way. The priest listened attentively, but gave little advice. He turned off Mitya’s questions with: “I don’t know. Ah, I can’t say. How",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The text is a coherent narrative snippet with perfect grammar, but it completely ignores the prompt about the seasons.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 940,
+        "completion_tokens": 187,
+        "total_tokens": 1127,
+        "completion_tokens_details": {
+          "reasoning_tokens": 131
+        }
+      },
+      "latency_s": 29.68,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The text is a coherent narrative snippet with perfect grammar, but it completely ignores the prompt about the seasons.\"}\n```",
+      "judge_reasoning": "The prompt asks \"What causes the seasons to change through the year?\" (a scientific question about astronomy/geography).\nThe text is a narrative snippet describing a conversation between Mitya and a priest (\"Mitya at once began talking to him...\").\n\nCoherence: The text is a coherent piece of storytelling. It follows one line of thought (Mitya talking to the priest). Score: 5.\nRelevance: The text has absolutely nothing to do with the seasons or why they change. It ignores the prompt entirely. Score: 1.\nLanguage: The English is clean, grammatical, and fluent. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_04",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Explain how a compiler turns source code into a program.",
+      "sample": "He stepped forward, opened the door, and quickly went into the inner room. Perezvon flew after him. The doctor stood still for five seconds in amazement, looking at Alyosha; then, with a curse, he went out quickly to the carriage, repeating aloud, “This is ... this is ... I",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The text is a coherent narrative snippet with perfect grammar, but it completely ignores the prompt about compilers.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 934,
+        "completion_tokens": 187,
+        "total_tokens": 1121,
+        "completion_tokens_details": {
+          "reasoning_tokens": 132
+        }
+      },
+      "latency_s": 29.71,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The text is a coherent narrative snippet with perfect grammar, but it completely ignores the prompt about compilers.\"}\n```",
+      "judge_reasoning": "The prompt asks for an explanation of how a compiler turns source code into a program.\nThe text provided is a narrative snippet: \"He stepped forward, opened the door...\". It describes characters (Perezvon, Alyosha) and actions in a story.\n\nCoherence: The text is a coherent piece of storytelling. Each sentence follows logically from the previous one within the context of a scene. Score: 5.\nRelevance: The text has absolutely nothing to do with compilers or source code. It ignores the prompt entirely. Score: 1.\nLanguage: The English is clean, grammatical, and fluent. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_05",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "How does a bicycle stay upright while moving?",
+      "sample": "I must mention, by the way, that I was no longer living in my former quarters. As soon as I resigned my commission, I took rooms with an old lady, the widow of a government clerk. My landlady’s servant waited upon me, for I had moved into her rooms simply because on my return",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The text is a coherent narrative fragment in perfect English, but it completely ignores the prompt about bicycles.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 934,
+        "completion_tokens": 225,
+        "total_tokens": 1159,
+        "completion_tokens_details": {
+          "reasoning_tokens": 170
+        }
+      },
+      "latency_s": 35.57,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The text is a coherent narrative fragment in perfect English, but it completely ignores the prompt about bicycles.\"}\n```",
+      "judge_reasoning": "The prompt asks \"How does a bicycle stay upright while moving?\".\nThe text is: \"I must mention, by the way, that I was no longer living in my former quarters. As soon as I resigned my commission, I took rooms with an old lady, the widow of a government clerk. My landlady’s servant waited upon me, for I had moved into her rooms simply because on my return\"\n\nCoherence: The text is a narrative about moving house and resigning a commission. It follows a single line of thought (narrative). Score: 5.\nRelevance: The prompt asks about bicycles. The text talks about living arrangements and a landlady. There is absolutely no connection to the prompt. Score: 1.\nLanguage: The English is clean, grammatical, and fluent. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_06",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Explain what photosynthesis does for a plant.",
+      "sample": "He preferred to attribute it to the dead weight of instinct which he could not step over, again through weakness and meanness. He looked at his fellow prisoners and was amazed to see how they all loved life and prized it. It seemed to him that they loved and valued life more in",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The text is a coherent narrative passage with perfect grammar, but it completely ignores the prompt about photosynthesis.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 926,
+        "completion_tokens": 173,
+        "total_tokens": 1099,
+        "completion_tokens_details": {
+          "reasoning_tokens": 118
+        }
+      },
+      "latency_s": 27.5,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The text is a coherent narrative passage with perfect grammar, but it completely ignores the prompt about photosynthesis.\"}\n```",
+      "judge_reasoning": "The prompt asks for an explanation of what photosynthesis does for a plant.\nThe text is a narrative passage about someone reflecting on instinct, weakness, meanness, and fellow prisoners' love for life.\n\nCoherence: The text follows a single line of thought (a character's internal reflection/observation). It is coherent within itself. Score: 5.\nRelevance: The text has absolutely nothing to do with photosynthesis or plants. It ignores the prompt entirely. Score: 1.\nLanguage: The English is clean, grammatical, and fluent. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_07",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Describe how a bank clears a payment between two accounts.",
+      "sample": "This idea sometimes even tormented his dreams, but it had never presented itself so vividly to him as on his way to Svidrigaïlov. The very thought moved him to gloomy rage. To begin with, this would transform everything, even his own position; he would have at once to confess",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The text is a coherent literary passage but completely ignores the prompt about bank payments.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 932,
+        "completion_tokens": 194,
+        "total_tokens": 1126,
+        "completion_tokens_details": {
+          "reasoning_tokens": 143
+        }
+      },
+      "latency_s": 30.88,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The text is a coherent literary passage but completely ignores the prompt about bank payments.\"}\n```",
+      "judge_reasoning": "The prompt asks for a description of how a bank clears a payment between two accounts.\nThe text is a literary passage (likely from Dostoevsky's *Crime and Punishment*) describing a character's internal state and thoughts about a specific person (Svidrigaïlov).\n\nCoherence: The text follows a single line of thought regarding the character's mental state and his reaction to an idea. It is coherent within itself. Score: 5.\nRelevance: The text has absolutely nothing to do with bank payment clearing. It ignores the prompt entirely. Score: 1.\nLanguage: The English is clean, idiomatic, and grammatically correct. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_08",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Why do metals conduct electricity better than wood?",
+      "sample": "It was not much more than three-quarters of a mile from the town to the monastery. Alyosha walked quickly along the road, at that hour deserted. It was almost night, and too dark to see anything clearly at thirty paces ahead. There were cross-roads half-way. A figure came into",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The text is a coherent narrative fragment with perfect grammar, but it completely ignores the prompt's question about conductivity.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 932,
+        "completion_tokens": 183,
+        "total_tokens": 1115,
+        "completion_tokens_details": {
+          "reasoning_tokens": 125
+        }
+      },
+      "latency_s": 29.12,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The text is a coherent narrative fragment with perfect grammar, but it completely ignores the prompt's question about conductivity.\"}\n```",
+      "judge_reasoning": "The prompt asks \"Why do metals conduct electricity better than wood?\" (a scientific question).\nThe text is a narrative description of someone named Alyosha walking from a town to a monastery (\"It was not much more than three-quarters of a mile...\").\n\nCoherence: The text is a consistent narrative. It follows one line of thought (Alyosha's walk). Score: 5.\nRelevance: The text completely ignores the prompt about metals and wood. It is an unrelated story. Score: 1.\nLanguage: The English is clean, grammatical, and fluent. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_09",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Explain how a thermostat keeps a room at a steady temperature.",
+      "sample": "At last he realized that the room was full of charcoal fumes from the stove, and that he might die of suffocation. And the drunken peasant still lay snoring. The candle guttered and was about to go out. Mitya cried out, and ran staggering across the passage into the forester’s",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The text is a coherent narrative excerpt but completely ignores the prompt's request to explain how a thermostat works.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 934,
+        "completion_tokens": 186,
+        "total_tokens": 1120,
+        "completion_tokens_details": {
+          "reasoning_tokens": 129
+        }
+      },
+      "latency_s": 29.6,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The text is a coherent narrative excerpt but completely ignores the prompt's request to explain how a thermostat works.\"}\n```",
+      "judge_reasoning": "The prompt asks for an explanation of how a thermostat keeps a room at a steady temperature.\nThe text is a narrative excerpt describing a character (Mitya) realizing there are charcoal fumes in a room, a snoring peasant, and Mitya running across a passage.\n\nCoherence: The text is a coherent piece of storytelling. It follows a sequence of events/observations within a scene. Score: 5.\nRelevance: The text has absolutely nothing to do with thermostats or temperature control. It ignores the prompt entirely. Score: 1.\nLanguage: The English is clean, grammatical, and fluent. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_10",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Describe how a ship stays afloat even though it is heavy.",
+      "sample": "Dounia at last became impatient and, leaving Sonia, went to her brother’s room to await him there; she kept thinking that he would come there first. When she had gone, Sonia began to be tortured by the dread of his committing suicide, and Dounia too feared it. But they had",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The text is a coherent narrative excerpt but completely ignores the prompt's topic of buoyancy.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 936,
+        "completion_tokens": 188,
+        "total_tokens": 1124,
+        "completion_tokens_details": {
+          "reasoning_tokens": 135
+        }
+      },
+      "latency_s": 29.94,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The text is a coherent narrative excerpt but completely ignores the prompt's topic of buoyancy.\"}\n```",
+      "judge_reasoning": "The prompt asks for a description of how a ship stays afloat despite being heavy (Archimedes' principle/buoyancy).\nThe text is a narrative excerpt about characters named Dounia and Sonia, discussing their fear that someone might commit suicide.\n\n- Coherence: The text is a coherent piece of narrative prose. It follows a clear line of thought regarding the characters' actions and feelings. (Score: 5)\n- Relevance: The text has absolutely nothing to do with ships or buoyancy. It ignores the prompt entirely. (Score: 1)\n- Language: The English is clean, grammatical, and fluent. (Score: 5)",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_11",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "How does a vaccine prepare the immune system?",
+      "sample": "A week later he died. The whole town followed him to the grave. The chief priest made a speech full of feeling. All lamented the terrible illness that had cut short his days. But all the town was up in arms against me after the funeral, and people even refused to see me. Some,",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The text is a coherent narrative fragment in perfect English, but it completely ignores the prompt about vaccines.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 931,
+        "completion_tokens": 175,
+        "total_tokens": 1106,
+        "completion_tokens_details": {
+          "reasoning_tokens": 120
+        }
+      },
+      "latency_s": 27.84,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The text is a coherent narrative fragment in perfect English, but it completely ignores the prompt about vaccines.\"}\n```",
+      "judge_reasoning": "The prompt asks \"How does a vaccine prepare the immune system?\".\nThe text is a narrative snippet: \"A week later he died. The whole town followed him to the grave...\".\n\nCoherence: The text follows a consistent narrative thread (a funeral and subsequent social ostracization). It's coherent as a story fragment. Score: 5.\nRelevance: The text has absolutely nothing to do with vaccines or the immune system. It ignores the prompt entirely. Score: 1.\nLanguage: The English is clean, grammatical, and fluent. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_12",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Explain why ice floats on water.",
+      "sample": "And can it be a dream, that in the end man will find his joy only in deeds of light and mercy, and not in cruel pleasures as now, in gluttony, fornication, ostentation, boasting and envious rivalry of one with the other? I firmly believe that it is not and that the time is at",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The text is coherent and grammatically correct, but it completely ignores the prompt about ice floating on water.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 934,
+        "completion_tokens": 180,
+        "total_tokens": 1114,
+        "completion_tokens_details": {
+          "reasoning_tokens": 124
+        }
+      },
+      "latency_s": 28.64,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The text is coherent and grammatically correct, but it completely ignores the prompt about ice floating on water.\"}\n```",
+      "judge_reasoning": "The prompt asks for an explanation of why ice floats on water.\nThe text provided is a philosophical/religious reflection on human joy, deeds of light, mercy, and vices (gluttony, fornication, etc.).\n\nCoherence: The text follows a single line of thought regarding the nature of human joy and morality. It's a coherent passage. Score: 5.\nRelevance: The text has absolutely nothing to do with ice floating on water. It ignores the prompt entirely. Score: 1.\nLanguage: The English is clean, grammatical, and fluent. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_13",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Explain how a router forwards a packet between two subnets.",
+      "sample": "By that time Smerdyakov had been discharged from the hospital. Ivan knew his new lodging, the dilapidated little wooden house, divided in two by a passage on one side of which lived Marya Kondratyevna and her mother, and on the other, Smerdyakov. No one knew on what terms he",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The text is a coherent narrative excerpt from a novel, but it completely ignores the prompt about network routing.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 939,
+        "completion_tokens": 195,
+        "total_tokens": 1134,
+        "completion_tokens_details": {
+          "reasoning_tokens": 139
+        }
+      },
+      "latency_s": 31.05,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The text is a coherent narrative excerpt from a novel, but it completely ignores the prompt about network routing.\"}\n```",
+      "judge_reasoning": "The prompt asks for an explanation of how a router forwards a packet between two subnets.\nThe text is a passage from a novel (likely *The Brothers Karamazov*), describing characters named Smerdyakov, Ivan, and Marya Kondratyevna and their living arrangements.\n\nCoherence: The text is a coherent narrative snippet. It follows one line of thought regarding the location and status of Smerdyakov. Score: 5.\nRelevance: The text has absolutely nothing to do with routers or networking. It ignores the prompt entirely. Score: 1.\nLanguage: The English is clean, grammatical, and fluent. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_14",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Describe the steps to bake bread from scratch.",
+      "sample": "When Fyodor Pavlovitch, who first came into contact with Grushenka over a piece of speculation, ended to his own surprise by falling madly in love with her, old Samsonov, gravely ill as he was, was immensely amused. It is remarkable that throughout their whole acquaintance",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The text is a coherent narrative snippet with perfect grammar, but it completely ignores the prompt about baking bread.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 928,
+        "completion_tokens": 180,
+        "total_tokens": 1108,
+        "completion_tokens_details": {
+          "reasoning_tokens": 124
+        }
+      },
+      "latency_s": 28.59,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The text is a coherent narrative snippet with perfect grammar, but it completely ignores the prompt about baking bread.\"}\n```",
+      "judge_reasoning": "The prompt asks for steps to bake bread from scratch.\nThe text provided is a snippet of a narrative (likely from Dostoevsky's *The Brothers Karamazov*), discussing Fyodor Pavlovitch and Grushenka.\n\nCoherence: The text is a coherent piece of narrative prose. It follows one line of thought within the snippet. Score: 5.\nRelevance: The text has absolutely nothing to do with baking bread. It ignores the prompt entirely. Score: 1.\nLanguage: The English is clean, idiomatic, and grammatically correct. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_15",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "What causes the seasons to change through the year?",
+      "sample": "The story is told, for instance, that in the early days of Christianity one such novice, failing to fulfill some command laid upon him by his elder, left his monastery in Syria and went to Egypt. There, after great exploits, he was found worthy at last to suffer torture and a",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The text is a coherent narrative fragment in perfect English, but it completely ignores the prompt about the seasons.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 929,
+        "completion_tokens": 230,
+        "total_tokens": 1159,
+        "completion_tokens_details": {
+          "reasoning_tokens": 174
+        }
+      },
+      "latency_s": 36.34,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The text is a coherent narrative fragment in perfect English, but it completely ignores the prompt about the seasons.\"}\n```",
+      "judge_reasoning": "The prompt asks \"What causes the seasons to change through the year?\".\nThe text provided is: \"The story is told, for instance, that in the early days of Christianity one such novice, failing to fulfill some command laid upon him by his elder, left his monastery in Syria and went to Egypt. There, after great exploits, he was found worthy at last to suffer torture and a\"\n\nCoherence: The text follows a single narrative thread (a story about a novice monk). It is coherent within itself. Score: 5.\nRelevance: The prompt asks about the cause of seasons. The text talks about a Christian novice in Syria and Egypt. There is absolutely no connection to the prompt. Score: 1.\nLanguage: The English is clean, grammatical, and fluent (though it ends mid-sentence). Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_16",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Explain how a compiler turns source code into a program.",
+      "sample": "After describing the result of this conversation and the moment when the prisoner learnt that Grushenka had not remained at Samsonov’s, the sudden frenzy of the luckless man worn out with jealousy and nervous exhaustion, at the thought that she had deceived him and was now",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The text is a coherent narrative fragment with perfect grammar, but it completely ignores the prompt about compilers.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 927,
+        "completion_tokens": 204,
+        "total_tokens": 1131,
+        "completion_tokens_details": {
+          "reasoning_tokens": 149
+        }
+      },
+      "latency_s": 32.38,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The text is a coherent narrative fragment with perfect grammar, but it completely ignores the prompt about compilers.\"}\n```",
+      "judge_reasoning": "The prompt asks for an explanation of how a compiler turns source code into a program.\nThe text describes a scene involving a prisoner, Grushenka, Samsonov, and feelings of jealousy/exhaustion (likely from Dostoevsky's *Crime and Punishment*).\n\nCoherence: The text is a fragment of a narrative description. It follows one line of thought within its own context (describing a sequence of events/emotions), although it ends mid-sentence. Score: 5.\nRelevance: The text has absolutely nothing to do with compilers or source code. It ignores the prompt entirely. Score: 1.\nLanguage: The English is clean, grammatical, and fluent. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_17",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "How does a bicycle stay upright while moving?",
+      "sample": "Then old Maximov was summoned. He came in timidly, approached with little steps, looking very disheveled and depressed. He had, all this time, taken refuge below with Grushenka, sitting dumbly beside her, and “now and then he’d begin blubbering over her and wiping his eyes",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The text is a coherent narrative excerpt but completely ignores the prompt about bicycles.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 936,
+        "completion_tokens": 177,
+        "total_tokens": 1113,
+        "completion_tokens_details": {
+          "reasoning_tokens": 127
+        }
+      },
+      "latency_s": 28.16,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The text is a coherent narrative excerpt but completely ignores the prompt about bicycles.\"}\n```",
+      "judge_reasoning": "The prompt asks \"How does a bicycle stay upright while moving?\" (a scientific/technical question).\nThe text is a narrative excerpt describing a character named Maximov approaching someone, mentioning Grushenka and emotional distress.\n\n- Coherence: The text describes a scene with characters and actions. It follows a single line of thought (Maximov's arrival and state). Score: 5.\n- Relevance: The text has absolutely nothing to do with bicycles or physics. It ignores the prompt entirely. Score: 1.\n- Language: The English is clean, grammatical, and fluent. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_18",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Explain what photosynthesis does for a plant.",
+      "sample": "It was by now seven o’clock, and it was getting dark as Alyosha entered the very spacious and convenient house in the High Street occupied by Katerina Ivanovna. Alyosha knew that she lived with two aunts. One of them, a woman of little education, was that aunt of her",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The text is a coherent narrative excerpt but completely ignores the prompt about photosynthesis.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 929,
+        "completion_tokens": 169,
+        "total_tokens": 1098,
+        "completion_tokens_details": {
+          "reasoning_tokens": 119
+        }
+      },
+      "latency_s": 26.89,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The text is a coherent narrative excerpt but completely ignores the prompt about photosynthesis.\"}\n```",
+      "judge_reasoning": "The prompt asks for an explanation of what photosynthesis does for a plant.\nThe text is a narrative excerpt describing Alyosha entering Katerina Ivanovna's house (likely from *The Brothers Karamazov*).\n\nCoherence: The text is a coherent narrative snippet. It follows one line of thought (Alyosha arriving at a house). Score: 5.\nRelevance: The text has absolutely nothing to do with photosynthesis or plants. It ignores the prompt entirely. Score: 1.\nLanguage: The English is clean, grammatical, and fluent. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_19",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Describe how a bank clears a payment between two accounts.",
+      "sample": "Immediately after he had left it that evening, Fenya had rushed to the chief porter, Nazar Ivanovitch, and besought him, for Christ’s sake, “not to let the captain in again to-day or to-morrow.” Nazar Ivanovitch promised, but went upstairs to his mistress who had suddenly",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The text is a coherent narrative snippet with perfect grammar, but it completely ignores the prompt about bank payments.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 935,
+        "completion_tokens": 176,
+        "total_tokens": 1111,
+        "completion_tokens_details": {
+          "reasoning_tokens": 120
+        }
+      },
+      "latency_s": 27.98,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The text is a coherent narrative snippet with perfect grammar, but it completely ignores the prompt about bank payments.\"}\n```",
+      "judge_reasoning": "The prompt asks for a description of how a bank clears a payment between two accounts.\nThe text is a narrative snippet about characters named Fenya and Nazar Ivanovitch, involving a request not to let a captain in.\n\nCoherence: The text is a coherent piece of storytelling (narrative). It follows one line of thought within the snippet. Score: 5.\nRelevance: The text has absolutely nothing to do with bank payments. It ignores the prompt entirely. Score: 1.\nLanguage: The English is clean, grammatical, and idiomatic. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_20",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Why do metals conduct electricity better than wood?",
+      "sample": "But Father Zossima, on entering the portico, went first straight to the peasants who were crowded at the foot of the three steps that led up into the portico. Father Zossima stood on the top step, put on his stole, and began blessing the women who thronged about him. One crazy",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The text is a coherent narrative snippet with perfect grammar, but it completely ignores the prompt about electricity and metals.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 934,
+        "completion_tokens": 167,
+        "total_tokens": 1101,
+        "completion_tokens_details": {
+          "reasoning_tokens": 110
+        }
+      },
+      "latency_s": 26.57,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The text is a coherent narrative snippet with perfect grammar, but it completely ignores the prompt about electricity and metals.\"}\n```",
+      "judge_reasoning": "The prompt asks \"Why do metals conduct electricity better than wood?\".\nThe text is a narrative snippet describing Father Zossima entering a portico and blessing peasants.\n\nCoherence: The text follows a single line of thought (Father Zossima's actions). It is coherent within itself. Score: 5.\nRelevance: The text has absolutely nothing to do with metals, electricity, or wood. It ignores the prompt entirely. Score: 1.\nLanguage: The English is clean and grammatical. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_21",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Explain how a thermostat keeps a room at a steady temperature.",
+      "sample": "Alyosha found him sitting on his bed in a hospital dressing-gown, rather feverish, with a towel, soaked in vinegar and water, on his head. He looked at Alyosha as he came in with an undefined expression, but there was a shade of something like dread discernible in it. He had",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The text is a coherent narrative excerpt with perfect grammar, but it completely ignores the prompt about thermostats.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 935,
+        "completion_tokens": 186,
+        "total_tokens": 1121,
+        "completion_tokens_details": {
+          "reasoning_tokens": 131
+        }
+      },
+      "latency_s": 29.5,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The text is a coherent narrative excerpt with perfect grammar, but it completely ignores the prompt about thermostats.\"}\n```",
+      "judge_reasoning": "The prompt asks for an explanation of how a thermostat keeps a room at a steady temperature.\nThe text is a narrative excerpt describing a character named Alyosha finding someone in a hospital gown with a vinegar towel on their head.\n\nCoherence: The text is a coherent piece of narrative prose. It follows one line of thought (Alyosha entering the room and observing the person). Score: 5.\nRelevance: The text has absolutely nothing to do with thermostats or temperature control systems. It ignores the prompt entirely. Score: 1.\nLanguage: The English is clean, idiomatic, and grammatically correct. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_22",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Describe how a ship stays afloat even though it is heavy.",
+      "sample": "They sat side by side, both mournful and dejected, as though they had been cast up by the tempest alone on some deserted shore. He looked at Sonia and felt how great was her love for him, and strange to say he felt it suddenly burdensome and painful to be so loved. Yes, it was a",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The text is a coherent narrative excerpt with perfect grammar, but it completely ignores the prompt's request to explain how ships float.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 937,
+        "completion_tokens": 213,
+        "total_tokens": 1150,
+        "completion_tokens_details": {
+          "reasoning_tokens": 152
+        }
+      },
+      "latency_s": 33.67,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The text is a coherent narrative excerpt with perfect grammar, but it completely ignores the prompt's request to explain how ships float.\"}\n```",
+      "judge_reasoning": "The prompt asks for a description of how a ship stays afloat despite being heavy (buoyancy/Archimedes' principle).\nThe text is a narrative snippet about two characters, Sonia and another person, feeling mournful and dejected. It reads like a piece of fiction (likely Dostoevsky).\n\n    *   Coherence: The text follows a single line of thought (emotional state of the characters). Score: 5.\n    *   Relevance: The text completely ignores the prompt about ships staying afloat. It is an unrelated topic and mode (narrative vs. descriptive/explanatory). Score: 1.\n    *   Language: The English is clean, idiomatic, and grammatically correct. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_23",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "How does a vaccine prepare the immune system?",
+      "sample": "Alyosha raised his downcast eyes and again flushed, and again smiled without knowing why. But the elder was no longer watching him. He had begun talking to a monk who, as mentioned before, had been awaiting his entrance by Lise’s chair. He was evidently a monk of the humblest,",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The text is a coherent narrative excerpt with perfect grammar, but it completely ignores the prompt about vaccines.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 932,
+        "completion_tokens": 181,
+        "total_tokens": 1113,
+        "completion_tokens_details": {
+          "reasoning_tokens": 126
+        }
+      },
+      "latency_s": 28.77,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The text is a coherent narrative excerpt with perfect grammar, but it completely ignores the prompt about vaccines.\"}\n```",
+      "judge_reasoning": "The prompt asks \"How does a vaccine prepare the immune system?\".\nThe text is a narrative excerpt describing characters (Alyosha, an elder, a monk) and their interactions. It appears to be from a novel (likely *The Brothers Karamazov*).\n\nCoherence: The text is a coherent narrative snippet. Each sentence follows logically in terms of storytelling. Score: 5.\nRelevance: The text has absolutely nothing to do with vaccines or the immune system. It ignores the prompt entirely. Score: 1.\nLanguage: The English is clean, grammatical, and fluent. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    },
+    {
+      "id": "k2_dissocb_24",
+      "dataset": "dissociation_b.jsonl",
+      "family": null,
+      "gate": null,
+      "label": null,
+      "prompt": "Explain why ice floats on water.",
+      "sample": "He moved to one side to make way for the priest and server, who were coming up the stairs. They had come for the requiem service. By Svidrigaïlov’s orders it was sung twice a day punctually. Svidrigaïlov went his way. Raskolnikov stood still a moment, thought, and followed",
+      "coherence": 5,
+      "relevance": 1,
+      "language": 5,
+      "reason": "The text is a coherent narrative passage with perfect grammar, but it completely ignores the prompt about ice floating on water.",
+      "finish_reason": "stop",
+      "attempts": 1,
+      "usage": {
+        "prompt_tokens": 940,
+        "completion_tokens": 193,
+        "total_tokens": 1133,
+        "completion_tokens_details": {
+          "reasoning_tokens": 135
+        }
+      },
+      "latency_s": 30.59,
+      "judge_content": "```json\n{\"coherence\": 5, \"relevance\": 1, \"language\": 5, \"reason\": \"The text is a coherent narrative passage with perfect grammar, but it completely ignores the prompt about ice floating on water.\"}\n```",
+      "judge_reasoning": "The prompt asks for an explanation of why ice floats on water.\nThe text is a narrative passage describing characters (Svidrigaïlov, Raskolnikov) and a religious service (requiem). It appears to be from a novel (likely *Crime and Punishment*).\n\nCoherence: The text is a coherent narrative sequence. Each sentence follows the previous one logically within the context of a story. Score: 5.\nRelevance: The text has absolutely nothing to do with ice floating on water. It ignores the prompt entirely. Score: 1.\nLanguage: The English is clean, grammatical, and fluent. Score: 5.",
+      "error": null,
+      "system_prompt_sha256": "9edfd92daeb3d221ee9c95ffca8bff63cbe42f337c934ea0168571f2e2a42124"
+    }
+  ]
+}
