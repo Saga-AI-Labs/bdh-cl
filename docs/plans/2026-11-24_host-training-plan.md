@@ -446,15 +446,34 @@ Order fixed: C1 then C2. Key 2 is run on a C arm only if key 1 passes. C1 fits
 the cap in 8.5. C2 does not, so it is not authorized here: it runs only after a
 new decision, and then only if C1 shows the direction is right.
 
-### 8.5 Budget and kill rules
+### 8.5 Budget and stop rules
 
-- cap for this leg: 14 GPU-days, including the smoke, the host arm and one
+The 14 GPU-days are an **authorisation ceiling, not a kill rule**. It bounds which
+arms may start without a new decision; it does not end a run that is still
+learning. The two are separate:
+
+| | what it governs | when it fires |
+|---|---|---|
+| **ceiling** | which arms are authorised | before an arm starts |
+| **stop rule** | whether a running arm continues | continuously, from the curves |
+
+- ceiling for this leg: 14 GPU-days, including the smoke, the host arm and one
   follow-up arm (D4 or C1), but not scoring. Host 3.9 + C1 7.9 = 11.8 fits;
-  a second follow-up arm (C2) would exceed the cap and needs a new decision;
-- key-2 scoring: about 3 h per pass for both seats;
-- kill a run early if val loss is flat for 50,000 steps **and** the key-1 delta
-  is still worse than +0.20 (the model more than 0.20 nats above the counter,
-  with no trend);
+  a second follow-up arm (C2) would exceed the ceiling and needs a new decision.
+  An arm whose measured wall clock would cross the ceiling is not started until
+  the operator re-authorises; a running arm is never terminated on the clock
+  alone;
+- key-2 scoring: 2-6 h per pass for both seats (measured range; Gemma is the
+  binding seat at ~50-160 s per call, Qwen ~5-10 s). The "about 3 h" figure in
+  earlier notes is the median of that range, not a bound;
+- **stop rule, with a numeric tolerance.** A run stops early only if *both* hold
+  over a trailing 50,000 steps: `best val NLL` has improved by less than 0.005
+  nats over that window, **and** the key-1 delta is worse than +0.20 nats/byte
+  with no downward trend across the last three measurement points;
+- the stop rule runs inside the training session, not on an external timer.
+  Nothing outside the run may terminate it: no scheduler, no lease expiry, no
+  idle timeout, no judge-host shutdown. Section 14 states this as a hard
+  requirement on every launch path;
 - a run is only a run if the command, git sha, data hashes and checkpoint hashes
   are in its record. Otherwise it is a probe.
 
@@ -520,8 +539,10 @@ G3. Record the deferral in the G0 note so it is a decision, not an omission.
    registered 63 % unique coverage is the fallback.
 4. **Key-1 margin**: 0.10 nats/byte with the 80 % resolution precondition.
    Recommended.
-5. **Budget cap**: 14 GPU-days, one follow-up arm, D4 only on a diagnosis.
-   Recommended.
+5. **Budget ceiling** (not a kill rule): 14 GPU-days, one follow-up arm, D4
+   only on a diagnosis. The ceiling governs which arms may start; it does not
+   end a running arm. Early termination is governed solely by the stop rule in
+   8.5, which needs a numeric tolerance. Recommended.
 6. **Item 8**: defer to the first G3 pass. Recommended.
 7. **TensorFold**: build the serving integration during the run, with no GPU
    workload while training is active; gate on bit-exact decoding and unchanged
@@ -543,3 +564,99 @@ G3. Record the deferral in the G0 note so it is a decision, not an omission.
 Step 6 does not start until step 5 is signed. If the smoke test contradicts the
 4-layer compiled estimate, the wall clock in this plan is replaced by the
 measured one before step 6, and only the cost table changes.
+
+## 14. Execution sequence and judge availability
+
+The constraint that produced this section: **the judge hosts (.51 Qwen,
+.200 Gemma) may be used elsewhere or switched off for part of the ~14-day window.**
+The run must therefore never depend on a judge being reachable mid-training,
+and a judge's availability must never become a reason to stop a training run.
+
+### 14.1 The invariant
+
+**Training is one uninterrupted chain from launch to `done`.** Nothing between
+launch and completion may query a judge, a lease, a scheduler, or an external
+timer. The only thing that may end a run is its own stop rule (8.5), evaluated
+inside the process from data it already has.
+
+Consequences, stated as hard requirements:
+
+| path | requirement |
+|---|---|
+| every launch (`pipeline.run train`, smoke, arms, resume) | the full command must fit one `setsid`/`nohup` invocation with no post-launch dependency; nothing may be left running that has to react |
+| key-2 scoring | runs **only after** a run reports `done`; it is never scheduled inside training |
+| key-1 measurement | CPU-only on the carve, can run while judges are unavailable; it must not be blocked by them |
+| stop rule | internal to the training process; no cron, no watchdog, no external kill |
+| monitor | read-only polling of logs/GPU; it may restart a *crashed* run but may not terminate a healthy one |
+
+### 14.2 Sequence
+
+Four phases per arm. Each phase ends at a named artifact, and the next starts
+from that artifact rather than from a timer.
+
+```
+P1  TRAIN        smoke 2,000 steps            -> done marker + log
+P2  WAIT         judge endpoints reachable?   -> readiness gate (never blocks P1)
+P3  KEY 1        6-gram NLL vs val carve     -> key1_ngram.json
+P4  GENERATE+JUDGE  133 prompts x 2 seats    -> verdict record
+```
+
+**P2 is a wait, not a trigger.** A run that reaches `done` writes its marker and
+stops. Readiness is checked afterwards. If the endpoints are not up, the run
+waits; the host is already complete, so nothing is lost except calendar time.
+
+**Key 1 never waits for a judge.** It is a CPU counter on the carve (section 6).
+It runs first in P3 regardless of endpoint state, because key 2 is conditional
+on it passing.
+
+**Key 2 is the only judge consumer**, and it is skipped entirely when key 1
+fails. Under 8.4, a failed key 1 sends the run to branch B or C; the follow-up arm
+then repeats P1-P4 from its own `done` marker.
+
+### 14.3 Judge demand, concretely
+
+Measured range, both seats in parallel:
+
+| seat | endpoint | per call | 133 calls |
+|---|---|---|---|
+| Qwen | `192.168.178.51:8888` | ~5-10 s | ~0.5 h |
+| Gemma | `192.168.178.200:1234` | ~50-160 s | **~2-6 h** |
+
+Gemma binds. Per key-2 pass: **2-6 h wall clock**, 133 requests per seat, no GPU
+on the Spark (judges live on .51 and .200).
+
+**Total judge demand across the authorised leg:**
+
+| when | what | judge hours |
+|---|---|---|
+| host arm `done` (~day 4) | key 2, if key 1 passes | 2-6 h |
+| C1 arm `done` (~day 12, if authorised) | key 2, if key 1 passes | 2-6 h |
+| **total** | | **4-12 h, spread over two days** |
+
+The two judge days do not need to coincide with the training days. **They need a
+2-6 hour window each, and Gemma is the only seat that matters for planning.**
+Qwen finishes inside any window that fits Gemma.
+
+### 14.4 Calendar, with the constraint made explicit
+
+```
+day 0      launch host arm (smoke first, then full)
+day 0-4    TRAINING          - no judges
+day 4      done -> key 1 (CPU) -> key 2 needs a 2-6 h judge window
+day 4-12   if key 1 passed and C1 authorised: C1 TRAINING - no judges
+day 12     done -> key 1 -> key 2 needs another 2-6 h window
+day 12+    branch decision
+```
+
+**The judge windows are not tied to the training days.** If the endpoints are
+unavailable on day 4, key 2 for the host arm simply moves later; the host
+checkpoint is already final. **Nothing in the training chain is affected.**
+
+### 14.5 What this forbids
+
+- a training command that polls a judge host or sleeps waiting for it;
+- a timeout, lease, or idle-kill on the training process longer than the arm's
+  own wall clock plus a documented crash-recovery window;
+- key 1 being deferred because a judge was slow (it does not use judges);
+- scoring key 2 on a checkpoint that did not come from a `done` marker;
+- treating a judge outage as a run failure.
